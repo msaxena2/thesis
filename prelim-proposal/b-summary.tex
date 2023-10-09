@@ -1,0 +1,208 @@
+\noindent {\bf \large Overview:}
+
+\noindent Preventable medical errors, characterized by adverse events due to human and
+system factors (as opposed to diseases), are the third leading cause of mortality
+in the United States \cite{MakaryBMJ16}. To mitigate these errors,
+medical associations routinely publish evidence-based statements for various scenarios called
+Best Practice Guidelines (\BPGs{}) \cite{field1990clinical}. For \BPGs{} to be
+effective, they must integrated into care flow, and be readily available.
+To this end, hospitals develop and employ systems that assist Healthcare Professionals
+(\HCPs{}) adhere to \BPGs{}, called Clinical Guidance Systems (\CGSs{}).
+Evidence from multi-center trials suggests \CGSs{} are effective at preventing medical
+errors \cite{BenettJAMIA16,SahotaJIS11}.
+
+Research on \CGSs{} generally falls into two categories. The first
+is the development and evaluation of \CGSs{} for various \BPGs{}. This typically
+involes translation of the \emph{informal}, \emph{non-executable} \BPG{} to executable code (\BPGLogic)
+that is coupled with hospital-specific components such as a Graphical User
+Interface (GUI), sensors, etc to build a holistic system.
+Howerver, existing work hasn't been aimed at:
+\begin{enumerate*}[label=(\alph*)]
+  \item developing a modular architecture that allows sharing \BPGLogic{}
+    \emph{safely} across different components, and,
+  \item establishing semantic equivalence between the \BPGLogic{} and the
+    \BPG{}.
+\end{enumerate*}
+The second category focuses on the development
+and use of formal techniques to model and analyze \BPGs{}
+to improve their quality. This has lead
+the use of existing, and development of new languages
+for expressing \BPGs{} that support efficient analysis. But, these
+languages arent't intended to be used by physicians, and
+rely on computer scientists to comprehend the \BPG{} and build a
+model in the underlying formal language for analysis.
+While such work has improved \BPG-quality, it's goal is not to address the gap between the \BPG{}
+and the analyzed model.
+This proposal attempts to complement existing research
+by introducing:
+\begin{enumerate*}[label=(\roman*)]
+  \item a new Domain Specific Language (DSL),
+    for expressing \BPGs{} that is \emph{\underline{comprehensible by physicians}}, and
+    \emph{\underline{executable}}
+    to enable medical associations to publish executable \BPGs{} that can serve as
+    \BPGLogic{} in \CGSs{}, and,
+ \item a \emph{\underline{modular}} architecture that allows said
+   \BPGs{} to be combined with hospital-specific components while maintaining \emph{\underline{holistic system safety}}.
+\end{enumerate*}
+%As shown in \cite{SahotaJIS11}, often multiple \CGSs{} are
+%developed for the same \BPG{}, with slight differences to cater to hospital's specific
+%needs. The second category focuses on the development of use of formal analysis
+%techniques to verify properties (such as completeness, correctness) of \BPGs{}.
+%\begin{enumerate*}[label=(\roman*)]
+%  \item development of \CGS{} for specific \BPGs{} and studying their
+%    effectiveness , and,
+%  \item development and application of formal analysis techniques to verify
+%    properties (such as completeness, correctness) of \BPGs{}.
+%\end{enumerate*}
+
+%Such errors can be ensuring that treatment conforms to
+%Best Practice Guidelines (\BPGs{}). These are systematically developed, evidence-based
+%statements for handling various patient conditions published by medical associations
+%\cite{field1990clinical}. Software systems that assist Healthcare Professionals
+%(\HCPs{}) adhere to \BPGs{}, called Clinical Guidance Systems (\CGSs{}), have
+%demonstrated effectiveness in this
+%
+%
+%
+%Systems (\CGSs{}) that help Healthcare Professionals (\HCPs{}) adhere to
+%Best Practice Guidelines (\BPGs{}). \BPGs{} are systematically developed,
+%evidence-based statements for handling various patient conditions routinely published by
+%medical associatoins \cite{
+%Correct actions can be obtained from
+%Best Practice Guidelines (\BPG{}). These are systematically developed statements
+%for handling various patient conditions routinely published by medical
+%associations. Strategies to reduce deaths from medical errors include:
+%\begin{enumerate*}[label=(\roman*)]
+%  \item making deviations from \BPGs{} more visible,
+%  \item having remedies at hand to mitigate adverse events from deviations, and,
+%  \item engineering barriers to prevent deviations from occuring \cite{MakaryBMJ16}.
+%\end{enumerate*}
+%These strategies are implemented by Clinical Decision Support Systems
+%(\CDSSs{}): computer programs that assist healthcare providers
+%conform to \BPGs{}. \CDSSs{} suggest appropriate actions as specified in the \BPG{}, and
+%detecting and generating warnings for deviations.
+%\CDSSs{} can also tackle adverse events from deviations from \BPGs{} by ensuring
+%conformance to appropriate remedial \BPGs{}.
+%The effectiveness of \CDSSs{} is supported favorably by existing
+%research \cite{BenettJAMIA16,SahotaJIS11}.
+%
+%Developing a \CDSSs{} for a \BPG{} is a cross-disciplinary endeavor.
+%Physicians communicate the \BPG{} to software developers, who
+%translate it into executable code (\BPGLogic{}). This \BPGLogic{}
+%is combined with other components, such as Graphical User Interface (GUI),
+%to obtain a complete system. This results in a gap between the system
+%specification, i.e. the \BPG{}, and its implementation, i.e. the \BPGLogic{}.
+%Manual inspection of the code is used to gain confidence in the conformance of \BPGLogic{}
+%to the underlying \BPG{}. Despite their critical nature, there exists no
+%\emph{standardized} way of developing \CDSSs{}.
+
+%\noindent Best Practice Guidelines (\BPGs{}) are evidence-based statements
+%published by domain experts at medical institutions that codify recommended treatment
+%in various clinical circumstances \cite{ClinicalGuidelinesURL}.
+%Compliance to \BPGs, while desirable, is a significant challenge to
+%achieve in practice. This is reflected in the fact that medical errors arising
+%from unintended deviations from \BPGs{} (as opposed to diseases) are the third leading cause of mortality in the United States \cite{MakaryBMJ16}.
+%These errors can be prevented through the use of Decision Support Systems that assist Healthcare Providers
+%(\HCPs{}) in achieving compliance to \BPGs{}, called Clinical Guidance Systems
+%(\CGSs{}). Such systems, according to the Centres for Disease Control and Prevention (CDC),
+%have a strong evidence base supporting their effectiveness \cite{ClinicalDecisionSupportURL}.
+%
+
+%In practice, strict compliance
+%to guidelines is difficult to achieve, and deviations may occur, especially in acute
+%care. Such compliance-related \emph{preventable} medical errors are the third-leading cause of
+%mortality in the United States, accounting for more than 250,000 deaths every year
+%\cite{makary2016medical}. For example, the American Heart Association (AHA)
+%
+%\noindent Errors attribute to human and system factors (as
+%opposed to diseases), called medical errors, are the
+%third leading cause of mortality in the United States \cite{MakaryBMJ16}.
+%Some of these errors can be avoided by ensuring compliance to Clinical Best
+%Practice Guidelines (\BPGs{}). Produced by domain experts,
+%\BPGs{} are systematically developed statements that codify
+%recommended treatment in various clinical circumstances
+%\cite{ClinicalGuidelinesURL}. To maximize their effectiveness,
+%software systems that assist in compliance to \BPGs{}, called Clinical Guidance
+%Systems (\CGSs{}) are employed. \CGSs{} have demonstrated
+
+
+\noindent {\bf \large Intellectual Merit:}
+
+\noindent Our proposed DSL needs to be \emph{physician-friendly}, \emph{executable}
+and well supported by a suite of formal analysis tools such as a
+\emph{model-checker} and \emph{program-verifier}. Satisfying such diverse
+requirements is challenging. To ensure \emph{physician-friendliness}, we
+support common characteristics of existing \BPGs{}, such as use of flowchart-like
+notation, concurrent workflows, and tables in the DSL. This makes our DSL-based \BPGs{}
+similar to their paper-based counterparts familiar to \emph{physicians}.
+By formalizing the semantics of our DSL in a rewrite-based language framework
+called $\K{}$, we obtain \emph{correct-by-construction} tools such as an
+interpreter, program-verifier and model-checker, which can be used to both
+analyze the \BPG{} for correctness, and execute it as \emph{correct-by-construction} \BPGLogic{} in a \CGS{}.
+
+Our proposed architecture allows the \BPGLogic{} to be combined with different
+hospital-specific components, like \GUIs. While such components may not be specified
+in our DSL, they still affect safety. To ensure the entire system
+(not just the \BPGLogic{}) is safe, we intend to specify \emph{intended behavior}
+as \emph{correctness specification} in our DSL that are used to generate
+runtime monitors that enforce \emph{conformance}. Under the assumption
+execution satisfies these \emph{conformance monitors}, we intend to
+demonstrate holistic \emph{safety}. Generating
+such \emph{semantically-correct} monitors is an open problem intend to address in this
+proposal.
+
+
+%\noindent Our proposed approach presents several challenges.
+%Our proposed DSL for expressing \BPGs{} needs to \emph{physician-friendly} to
+%find adoption. To this end, we intend to find common characteristics of \BPGs{},
+%and support them in our language. These include multiple concurrent workflows,
+%interactions with heterogenous agents (such as sensor, healthcare records, and
+%\HCPs{}), and timing-related constructs. At the same time, since the DSL is intended to be used in
+%safety-critical settings, it must have formally defined semantics,
+%and a suite of formal analysis tool such as deductive verifiers, model checkers, etc.
+%While there are languages that excel at some of these characteristics, developing a language
+%that supports all of the diverse set of requirements above presents
+%a significant challenge.
+
+%Our proposed plug-and-play architecture also presents unique challenges.
+%While the decoupling allows reusing components while developing a \CGS{}, the safety
+%of the entire system may be compromised if any of the individual components
+%malfunction. To address this, we intend to use our DSL to specify expected
+%behavior for components, and generate runtime monitors to enforce conformance.
+%The generation of semantically correct monitors is a problem we intend to address in this proposal.
+%
+\noindent {\bf \large Broader Impacts: }
+
+\noindent \CGSs{} have demonstrated effectiveness at reducing preventable
+medical errors. Our work is aimed at making developing \emph{safe} \CGSs{}
+\emph{easier}, \emph{cheaper}, and increase \HCP{} \emph{confidence} in them.
+To this end, we aim to make our DSL the \emph{de-facto}
+that medical associations can use to publish \BPGs{} that hospitals can employ
+with our architecture to obtain \emph{safe} \CGSs{}. By making the
+\BPG{} \emph{executable}, and \emph{re-usable} across \CGSs{},
+cost required for developing an executable \BPGLogic{} for a \BPG, and ensuring
+it mirrors the \BPG{} is lowered, hastening \CGSs{} adoption,
+even in places with fewer resources, such as rural areas and developing
+countries.
+
+
+%Ensuring
+%our language is comprehensible to \HCPs{} should also increase confidence
+%in such systems, and hasten their adoption.
+%A combination of lower development costs and increased
+%confidence should increase prevalence of such system in healthcare, including in
+%places with fewer resources such as rural areas, and developing countries.
+
+
+%\noindent The immediate outcome of this project would be a novel way of
+%developing \emph{correct-by-construction} \CGS{} that eliminates the gap between
+%the \BPG{}, and its implementation in a \CGS{}. Apart from improving safety, our approach
+%reduces the cost of developing a \CGS by reducing time required in validating
+%the \CGS{}'s \BPGLogic{} mirrors the \BPG{}. This can lead to greater adoption, and subsequently reduced mortality. Beyond the immediate
+%outcome, our DSL can serve as the \emph{de-facto standard} for
+%expressing \BPGs{}, leading to a \emph{standardized}
+%library of executable \BPGs{} that is maintained by medical
+%associations and institutions. Our work precludes the need for hospitals to develop
+%\CGSs{} from scratch, allowing establishments with fewer resources (for
+%instance, in rural areas or the developing world) to adopt \CGSs{} in patient care.
+
