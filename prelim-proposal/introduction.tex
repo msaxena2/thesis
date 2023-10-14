@@ -43,15 +43,14 @@ Such systems have been shown to improve \BPG{}-adherence \cite{GargJAMA06,Kawamo
 suggests that they reduce \PMEs{} \cite{BenettJAMIA16,SahotaJIS11}.
 Thus, guideline-based \CDSSs{} are now considered imperative to the
 future of medical decision making in general \cite{JamesNEJM01}.
-
 A guidelines-based \CDSS{} typically consists of:
-\begin{enumerate}
+\begin{enumerate*}[label=(\roman*)]
   \item a translation of the guideline to an executable medium, called the
   \BPGLogic{},
   \item an interface for user-interaction, and,
   \item additional infrastructure that integrates with external data sources
   such as sensors, health records \cite{SuttonNature20}.
-\end{enumerate}
+\end{enumerate*}
 Typically, to develop a \CDSS{}, domain experts in medicine
 collaborate with computer scientists to develop requirements documentation
 that presents the \BPGs{}'s
@@ -89,14 +88,28 @@ engines, and deductive verifiers. The difficulties of formal analysis are furthe
 by the fact that \CDSSs{} are concurrent systems involving interactions with
 heterogeneous external agents such as sensors and
 \HCPs{}, making their analysis challenging.
-We address these by introducing \MediK{} (pronounced Medi-kay),
-a \DSL{} for expressing a \CDSS{}'s \BPGLogic{} as concurrently-executing state machines. \MediK{}
-provides:
-\begin{enumerate}
-  \item A \stress{complete executable formal semantics} specified in the $\K{}$
-  semantics framework.
-  \item A \stress{correct-by-construction interpreter}, and \stress{analysis
-  tools} such as a model-checker and deductive verifier.
-  \item A uniform way of modeling \stress{heterogeneous agents} for both
-  \emph{execution} and \emph{analysis}.
-\end{enumerate}
+
+This proposal aims to utlilize the \emph{semantics-first} approach to developing safe
+\CDSSs{}. This approach dictates that instead of
+implementing tools for a language such as interpreters, model checkers and
+deductive verifiers in an ad-hoc manner, the semantics of the language should
+be formally defined, and aforementioned tools derived from the semantics.
+At the core of our approach is new language for expressing medical
+logic called \MediK{}. \MediK{}'s semantics have been formally defined in
+the $\K$-semantics framework, and, as its interpreter is derived from
+its formal semantics, it's correct-by-construction.
+
+
+%We address these by introducing \MediK{} (pronounced Medi-kay),
+%a \DSL{} for expressing a \CDSS{}'s \BPGLogic{} as concurrently-executing state machines. \MediK{}
+%provides:
+%\begin{enumerate}
+%  \item A \stress{complete executable formal semantics} specified in the $\K{}$
+%  semantics framework.
+%  \item A \stress{correct-by-construction interpreter}, and \stress{analysis
+%  tools} such as a model-checker and deductive verifier.
+%  \item A uniform way of modeling \stress{heterogeneous agents} for both
+%  \emph{execution} and \emph{analysis}.
+%\end{enumerate}
+
+
