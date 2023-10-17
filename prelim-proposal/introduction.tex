@@ -89,15 +89,47 @@ by the fact that \CDSSs{} are concurrent systems involving interactions with
 heterogeneous external agents such as sensors and
 \HCPs{}, making their analysis challenging.
 
-This proposal aims to utlilize the \emph{semantics-first} approach to developing safe
-\CDSSs{}. This approach dictates that instead of
-implementing tools for a language such as interpreters, model checkers and
-deductive verifiers in an ad-hoc manner, the semantics of the language should
-be formally defined, and aforementioned tools derived from the semantics.
-At the core of our approach is new language for expressing medical
-logic called \MediK{}. \MediK{}'s semantics have been formally defined in
-the $\K$-semantics framework, and, as its interpreter is derived from
-its formal semantics, it's correct-by-construction.
+This proposal aims to utilize the \emph{semantics-first} approach
+to building \emph{safe} \CDSSs{}. By \emph{semantics-first}, we
+mean that:
+\begin{enumerate*}[label=(\alph*)]
+  \item the \BPGLogic{} of the \CDSS{} is semantically accurate, and,
+  \item the execution semantics of the underlying programming language
+    is formally defined, from which tools such as an interpreter, model checker,
+    and deductive verifier are derived in a \emph{correct-by-construction}
+    manner.
+\end{enumerate*}
+At the core of our approach is new language Domain Specific Language (DSL)
+for \CIGs{} called \MediK{}. By emphasizing \HCP{}-\emph{comprehensibility},
+\MediK{} enables \HCPs{} to verify the semantic correctness of a \CDSSs{}' \BPGLogic{}.
+It has a complete formal executable semantics specified in the $\K{}$ framework,
+from which a correct-by-construction interpreter and analysis tools
+such as a model checker and deductive verifier for its programs are derived.
+
+A comprehensive \MediK{}-based approach for building \CDSSs{}
+needs to address the following research challenges (RCs):
+
+\paragraph{RC 1:} Is \MediK{}'s design conducive to expressing diverse
+\BPGs{}?
+
+\BPGs{} can vary greatly by scope and purpose. For instance,
+consider differences between the \BPGs{} for managing cardiac
+arrest and sepsis. While the \BPG{} for cardiac arrest can be
+succinctly depicted by a single workflow, the \BPG{} for
+management of sepsis involves multiple workflows with complex
+inter-workflow interactions. This proposal seek to answer whether \MediK{}'s
+design can adequately accomodate diversity in \BPGs{}, without
+compromising on readiability.
+
+\paragraph{RC 2:} Can \MediK{}'s toolchain be used to establish
+appropriate safety and liveness properties?
+
+\MediK{} has a comprehesive suite of \emph{correct-by-construction}
+analysis tools derived from its semantics. But, as real-world \BPGs{}
+are complex, establishing appropriate safety and liveness properties using
+said tools presents various challenges. The proposal seeks to build on
+\MediK{}'s toolchain to support verification of desired safety and liveness
+properties.
 
 
 %We address these by introducing \MediK{} (pronounced Medi-kay),
