@@ -1,32 +1,33 @@
-\section{Motivating Examples}
 
-We use \BPGs{} for screening and mitigation of
-sepsis in pediatric \textit{Emergency Departments (EDs)}, and management of cardiac arrest
-at pediatric Intensive Care Units (ICUs) to illustrate challenges in specifying
-BPGs, and developing CGSs for them.
+\section{Motivating Example}
 
-\paragraph{Screening and Mitigation of Sepsis:}
-
-Sepsis is a life threatening condition characterized by an
-overwhelming immune response to an injury or infection. In severe cases,
-sepsis may lead to organ failure and death. It is
+In this section, we introduce a real world \BPG{} for management of sepsis
+in pediatric cases to motivate the need for Guidelines-based Clinical Decision Support Systems,
+and to illustrate characteristics that are desired of a framework for building
+\CDSSs{}.
+Sepsis is life-threatening condition caused by the body's extreme response to
+an infection \cite{RhodesICM17}, and is
 a major cause of morbidity and mortality in children \cite{Eisenberg2021JP}.
-Adverse outcomes, however, can be mitigated through early
+Adverse outcomes can, however, be mitigated through timely
 identification and prompt treatment with antibiotics and
-intravenous (IV) fluids \cite{Weiss2014CCM}\cite{Evans2018JAMA}. Thus, early
-identification and prompt treatment is vital for managing sepsis. To this end,
-guidance systems for automated screening can be employed to detect the onset of
-sepsis. Evidence suggests such systems outperform
-manual screening \cite{EisenbergAAP21},
-leading to their adoption in many \EDs{} \cite{Balamuth2017EM} \cite{Sepanski2014FP}.
-Next, we present a \BPG{} for sepsis screening, and use it to identify characteristics
-common to \BPGs{} in general.
+intravenous (IV) fluids \cite{Weiss2014CCM,Evans2018JAMA}.
+\BPGs{} for screening and management of sepsis in pediatric Emergency
+Departments (EDs) have shown effectiveness in screening and management of sepsis \cite{Eisenberg2021JP},
+leading to their adoption in many pediatric EDs \cite{Balamuth2017EM,Sepanski2014FP}.
 
-In \figurename \ref{fig:sepsis-screening}, we present a simplified version of the \BPG{} for
-sepsis screening. The \BPG{} specifies the sequence of steps that the \emph{Healthcare
-Provider (HCP)} must take in order to evaluate a patient arriving at the \ED{} for
-the possibility of sepsis. In essence, when a patient exhibits
-a fever or infection, the \HCP{} is supposed to obtain
+
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.45\textwidth]{sepsis-screening-osf}
+  %\includegraphics[width=0.5\textwidth]{screening-vitals}
+  \caption{Pediatric sepsis screening \BPG{}}\label{fig:sepsis-screening}
+\end{figure}
+
+In \figurename{} \ref{fig:sepsis-screening}, we present a simplified version of
+the screening section of OSF's sepsis management guideline.
+In essence, when a patient arrives at the
+\ED{} with a fever or an infection, the \HCP{} is supposed to obtain
 \begin{enumerate*}[label=(\alph*)]
   \item the patient's age,
   \item any conditions, such as cancer, immunosuppresssion, etc,
@@ -34,113 +35,91 @@ a fever or infection, the \HCP{} is supposed to obtain
   \item the patient's vital signs, such as heart rate, systolic blood
     pressure, respiratory rate, etc.
 \end{enumerate*}
-
-
-\begin{wraptable}{r}{0.51\textwidth}
-  \footnotesize
-  \begin{tabular}{ | c || c | c | c | }
-    \hline
-    \textbf{Age}            & \textbf{Heart Rate}   & \textbf{Systolic BP} & \textbf{Temp}  \\
-    \hline
-    $0d - 1m$               & $>205$                & $<60$                & $<36 \text{ or } >38$ \\
-    \hline
-    $\geq 1m - 3m$          & $>205$                & $<70$                & $<36 \text{ or } >38$ \\
-    \hline
-    $\geq 3m - 1y$          & $>190$                & $<70$                & $<36 \text{ or } >38.5$ \\
-    \hline
-    $\dots$                 & $\dots$               & $\dots$              & $\dots$ \\
-    \hline
-    $\geq 13y$              & $>100$                & $<90$                & $<36 \text{ or } >38.5$ \\
-    \hline
-  \end{tabular}
-  \caption{Vital Signs Chart}\label{table:vital-signs}
-\end{wraptable}
-
-This information is then used to check for an abnormality
-in clusters of linked information, called buckets. For instance, if
-the patient's heart rate is abnormal, then bucket 1 is said to
+This information is then used to check for abnormalities
+in clusters of linked information, called \say{buckets}. For instance, if
+the patient's heart rate is abnormal, then \say{bucket 1} is said to
 have an abnormal value.
-Checking for an abnormality involves use of charts,
-such as \tablename{} \ref{table:vital-signs} containing normal ranges indexed by age.
-\footnote{For brevity, we omit some age ranges and vital signs from \tablename{} \ref{table:vital-signs}}
-If the patient has at least one abnormal value in each of the three buckets,
+Checking for such abnormalities often involves the use of tables, such as
+\tablename{} \ref{table:vital-signs}, that contain normal ranges indexed by
+\emph{age}.
+%\footnote{For brevity, we omit some age ranges and vital signs from table
+%\ref{table:vital-signs}}.
+If the patient has at least one abnormal value in every \say{bucket},
 then he/she is flagged as potentially septic.
 
-\begin{figure}[h]
+
+The \BPG{}-recommended treatment for
+sepsis involves multiple concurrent workflows, such as
+screening for septic shock, fluid resuscitation, and administering antibiotics.
+In \figurename{} \ref{fig:fluid-therapy}, we provide
+a version of the fluid resuscitation guideline used
+at OSF. Briefly, if the patient is flagged as potentially septic, the guideline suggests
+\begin{enumerate*}[label=(\roman*)]
+  \item obtaining any fluid-overload risks,
+  \item administering normal saline (typically over a period of 15 minutes),
+    where the dosage is dictated by risks determined in previous step,
+  \item assessing signs of fluid-overload,
+  \item evaluating patient responsiveness to normal saline upon completion of
+    the administering process, and,
+  \item determining whether another fluid bolus should be administered based on
+    information from previous steps.
+\end{enumerate*}
+\begin{figure}[b]
   \centering
-    \includegraphics[width=0.75\textwidth]{sepsis-screening-osf}
-    \caption{Pediatric Sepsis Screening}\label{fig:sepsis-screening}
+  \includegraphics[scale=0.45]{FluidWorkflow-fmcad.pdf}
+  \caption{Fluid Resuscitation Guideline}\label{fig:fluid-therapy}
 \end{figure}
 
-If a patient is flagged as potentially septic, then the guidelines for
-sepsis resuscitation should be followed.
-It involves multiple \emph{concurrent} workflows, such as
-performing diagnostic tests and administering antibiotics.
-Fluid Bolus Therapy \emph{(FBT)}, is one such workflow
-recommended for sepsis resuscitation \cite{Carcillo2002CCM}. In \figurename
-\ref{fig:fluid-therapy}, we provide a version of the \emph{FBT} guidelines used at a
-major pediatric hospital. Briefly, if the patient is flagged as
-potentially septic, \BPG{} for \emph{FBT} suggests
-\begin{enumerate*}[label=(\alph*)]
-  \item obtaining any fluid-overdose related risks,
-  \item administering normal saline, where the dosage is dictated
-    by risks determined in previous step,
-  \item waiting for 15 minutes before asking a physician to
-    evaluate patient responsiveness.
-\end{enumerate*}
-
-If the physician determines that the patient is responding to
-administered fluids, then \emph{FBT} can be ended by
-shifting the patient to maintainance fluids.
-If the patient does not respond to administered fluids and
-total fluid administered $\geq 40\ ml/kg$, then ionotropic therapy
-should be considered instead. Otherwise, another cycle of
-Fluid Bolus Therapy should be followed.
-
-\begin{wrapfigure}[16]{r}{0.5\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{fluid-therapy}
-  \caption{Fluid Bolus Therapy \BPG{}}\label{fig:fluid-therapy}
-\end{wrapfigure}
-
-Note the following characteristics exhibited sepsis screening and mitigation \BPG{}:
-\begin{itemize}[leftmargin=*]
-  \item Comprises \textbf{multiple concurrent} workflows described using
-\emph{flowchart}-like notation.
-  \item Use \textbf{tables} to depict normal
-ranges and values for various parameters such as heart rate, blood pressure etc,
-indexed by age or weight.
-  \item Relies on \textbf{timing constructs} to instruct the \HCP{} about
-    durations of treatments and procedures.
-  \item Involves  \textbf{multiple heterogenous agents} such as sensors,
-    healthcare records and hospital databases.
+This real-world \BPG{} exhibits characteristics common
+across many \BPGs{}. Specifically \BPGs{} typically:
+\begin{itemize}
+  \item Involve \stress{concurrent} workflows, such as administering drugs,
+    monitoring vitals, performing treatment, etc. There may also be
+    inter-workflow interactions. For instance, a diagnosis of sepsis during the
+    screening may require modifications to an ongoing course antibiotics.
+  \item Often specified in a \stress{flowchart-like}
+    notation. See \cite{AHAFlowcharts} and \cite{CancerCareFlowcharts} for other flowchart-based \BPGs{} for management of \emph{cardiac arrest}, and
+    screening, risk-reduction, treatment and survivorship in
+    cancer care respectively.
+  \item Require communication between \stress{heterogeneous agents} such as
+     monitors and Electronic Health Records (EHRs).
+  \item Often use \stress{tables} indexed by parameters such as age, weight,
+    etc to present normal/abnormal ranges for measurements, or recommended dosages for drugs.
 \end{itemize}
-Next, we describe a \BPG{} for management of cardiac arrest in pediatric \EDs,
-and use it to demonstrate that aforementioned characteristics are not
-specific to a particular \BPG{}.
 
-\paragraph{Cardiac Arrest Management:}
+\begin{footnotesize}
+  \begin{table}
+    \centering
+    \begin{tabular}{ | c || c | c | c | }
+      \hline
+      \textbf{Age}            & \textbf{Heart Rate}   & \textbf{Systolic BP} & \textbf{Temp}  \\
+      \hline
+      $0d - 1m$               & $>205$                & $<60$                & $<36 \text{ or } >38$ \\
+      \hline
+      $\geq 1m - 3m$          & $>205$                & $<70$                & $<36 \text{ or } >38$ \\
+      \hline
+      $\geq 3m - 1y$          & $>190$                & $<70$                & $<36 \text{ or } >38.5$ \\
+      \hline
+      $\dots$                 & $\dots$               & $\dots$              & $\dots$ \\
+      \hline
+      $\geq 13y$              & $>100$                & $<90$                & $<36 \text{ or } >38.5$ \\
+      \hline
+    \end{tabular}
+    \caption{Vital Signs Chart}\label{table:vital-signs}
+  \end{table}
+\end{footnotesize}
 
-Cardiac arrest is an abrupt loss of heart function, breath or consciousness.
-In-hospital cardiac arrest is common, and associated with high mortality
-\cite{AndersenJAMA19}. To mitigate risk of medical errors in managing cardiac
-arrest, the American Heart Association (AHA) publishes guidelines that specify
-the best practice in managing cardiac arrest, called Advanced Cardiac
-Life Support (ACLS). In \figurename \ref{fig:aha-acls},
-we show a version of the ACLS \BPG{} from AHA's webiste \cite{acls-url}.
-Essentially, the \BPG{} suggests
-\begin{enumerate*}[label=(\roman*)]
-  \item attaching a defibrilator/monitor and checking if the rhythm is
-    shockable,
-  \item administering a shock if the rhythm is shockable, followed by
-    Cardio Pulmonary Resuscitation (CPR)
-    and appropriate medication (like epinephrine), or,
-    administering CPR and medication immediately if the rhythm is not shockable.
+Note that the aforementioned characteristics are \emph{not} specific
+to one guideline. According to a review paper on \CIGs{} \cite{ClerqAIM03},
+such \DSLs{} should additionally
+\begin{enumerate*}[label=(\alph*)]
+  \item be formally defined, i.e, have a formal syntax and semantics, and
+  \item have an execution engine to provide decision support.
 \end{enumerate*}
-The process is repeated based on the rhythm, until spontaneous circulation is restored.
 
-\begin{wrapfigure}{l}{0.5\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{acls-algorithm}
-  \caption{Advanced Cardiac Life Support (ACLS) \BPG{}}\label{fig:aha-acls}
-\end{wrapfigure}
+
+%In the following sections, we describe how these characteristics dictate the
+%design philosophy behind \MediK{}. We argue that this philosophy
+%makes \MediK{} both intuitive to \HCPs{}, and suitable for expressing
+%complex guidelines.
+
