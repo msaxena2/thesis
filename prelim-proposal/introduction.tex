@@ -54,11 +54,11 @@ formalizations of \BPGs{} used to construct \CDSSs{}.
 Existing work is classified into one of eight themes spanning
 the entire development cycle of a \CIG{}. The themes and relations between them
 are shown in \figurename{} \ref{fig:cpg-research-topics}.
-
-\begin{wrapfigure}{l}{0.5\textwidth}
-  \includegraphics[width=\linewidth]{cpg-topics}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\linewidth]{cpg-topics}
   \caption{\CDSSs{} Research Themes}\label{fig:cpg-research-topics}
-\end{wrapfigure}
+\end{figure}
 
 According to the author in \cite{PelegJBI13}, \CIGs{} are usually based on previously published non-executable
 \BPGs{}. To develop a \CIG{}, a language is identified in (1). Teams of
@@ -87,27 +87,33 @@ specification, i.e., the \BPG{}. To address this, the \CIG{} is tested by
 putting the \CDSS{} through clinical simulations. But, while testing reduces
 the risk of non-conformance, it does not completely eliminate it.
 
-\paragraph{Safe Modularity:}
+%\paragraph{Safe Modularity:}
+%
+%While developing \CDSSs{} is both complex and cost-intensive,
+%the development effort can be reduced by sharing \CDSSs{} across hospitals \cite{PelegAMIA00}.
+%But, even for the same \BPG{}, hospitals develop their own \CDSSs{} to address
+%their needs, resulting in duplicated work.
+%For instance, for the \ACLS{} \BPG{}, multiple \CDSSs{} have been developed by different
+%different hospitals in a span of just six years years \cite{FullCodePro,PediAppRREST2020,
+%PediAppRREST2021,GuidingPad2017,GuidingPad2019, GuidingPad2020,DST2014,DST2019,ROSCo2021,TeamScreen2019,Wu2017}.
+%\CDSSs{} based on the same \BPG{} typically have the same \CIG{}, but may differ
+%in their Graphical User Interfaces (\GUIs), or integration with external
+%devices, to address hospital-specific needs.
+%To enable safe sharing of knowledge, we need a mechanism that:
+%\begin{enumerate*}[label=(\alph*)]
+%  \item allows a stable, formally-verfied \CIG{} that is \emph{decoupled} from other
+%    components, and,
+%  \item supports hospital-specific customizations without compromising system
+%    \emph{safety}.
+%\end{enumerate*}
 
-While developing \CDSSs{} is both complex and cost-intensive,
-the development effort can be reduced by sharing \CDSSs{} across hospitals \cite{PelegAMIA00}.
-But, even for the same \BPG{}, hospitals develop their own \CDSSs{} to address
-their needs, resulting in duplicated work.
-For instance, for the \ACLS{} \BPG{}, multiple \CDSSs{} have been developed by different
-different hospitals in a span of just six years years \cite{FullCodePro,PediAppRREST2020,
-PediAppRREST2021,GuidingPad2017,GuidingPad2019, GuidingPad2020,DST2014,DST2019,ROSCo2021,TeamScreen2019,Wu2017}.
-\CDSSs{} based on the same \BPG{} typically have the same \CIG{}, but may differ
-in their Graphical User Interfaces (\GUIs), or integration with external
-devices, to address hospital-specific needs.
-To enable safe sharing of knowledge, we need a mechanism that:
-\begin{enumerate*}[label=(\alph*)]
-  \item allows a stable, formally-verfied \CIG{} that is \emph{decoupled} from other
-    components, and,
-  \item supports hospital-specific customizations without compromising system
-    \emph{safety}.
-\end{enumerate*}
+\paragraph{Tools with Correctness Guarantees}
 
-\paragraph{Holistic System Safety:}
+Since \CIGs{} are safety-critical, it is vital that tools
+such as interpreters, compilers, model-checkers, et. cetera
+have correctness guarantees.
+
+\paragraph{Correctness:}
 
 Actions performed by a \CDSS{} can either be \emph{programming-oriented}
 or \emph{clinically-oriented} \cite{BoxwalaJBI04}. \emph{programming-oriented}
@@ -120,20 +126,12 @@ for a certain length of time. Such actions can only be performed by clinicians,
 an the \CDSS{} assumes that the recommended action was indeed performed before
 moving resuming guidance.
 
-For holistic system safety, both categories of actions must be completed
+For correctness, both categories of actions must be completed
 successfully. While traditional formal reasoning techniques can be employed
 to establish correctness of \emph{programming-oriented} actions, the same
 cannot be used to reason about \emph{clinically-oriented} ones.
 Thus, a mechanism that allows some guarantees about clinically-oriented is
 desirable.
-
-
-\paragraph{Formal Semantics:}
-
-Since \CIGs{} are safety-critical, it is vital that the
-language in which they're developed has complete formal semantics that
-can be used to derive tools such as semantically-correct interpreters,
-deductive program verifiers, and model-checkers.
 
 %Thus, guideline-based \CDSSs{} are now considered imperative to the
 %future of medical decision making in general \cite{JamesNEJM01}.
@@ -305,17 +303,11 @@ none of the aforementioned approaches have:
 %heterogeneous external agents such as sensors and
 %\HCPs{}, making their analysis challenging.
 
-This proposal aims to utilize the \emph{semantics-first} approach
-to building \emph{safe} \CDSSs{}. By \emph{semantics-first}, we
-mean that:
-\begin{enumerate*}[label=(\alph*)]
-  \item the \BPGLogic{} of the \CDSS{} is semantically accurate, and,
-  \item the execution semantics of the underlying programming language
-    is formally defined, from which tools such as an interpreter, model checker,
-    and deductive verifier are derived in a \emph{correct-by-construction}
-    manner.
-\end{enumerate*}
-At the core of our approach is new language Domain Specific Language (DSL)
+This proposal aims to address these limitations using a \emph{semantics-first} approach.
+By \emph{semantics-first}, we mean that \CIG{} language we
+use to is formally defined, from which tools such as an interpreter, model checker,
+and deductive verifier are derived in a \emph{correct-by-construction}
+manner. At the core of our approach is new language Domain Specific Language (DSL)
 for \CIGs{} called \MediK{}. By emphasizing \HCP{}-\emph{comprehensibility},
 \MediK{} enables \HCPs{} to verify the semantic correctness of a \CDSSs{}' \BPGLogic{}.
 It has a complete formal executable semantics specified in the $\K{}$ framework,
