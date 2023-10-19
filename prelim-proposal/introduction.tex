@@ -33,6 +33,10 @@ of IHCA in 30\% of adult, and 17\% of pediatric cases deviates from the
 AHA-prescribed \BPG, resulting in worse patient outcomes \cite{Ornato2012DeviationAdult,Wolfe2020DeviationPediatric,
 Crowley2020DeviationAdult,Honarmand2018Adherence,Mcevoy2014Adherence}.
 
+\begin{wrapfigure}{l}{0.5\textwidth}
+  \includegraphics[width=\textwidth]{cpg-topics}
+  \caption{\CDSSs{} Research Themes}\label{fig:cpg-research-topics}
+\end{wrapfigure}
 
 While \BPG{}-adherence is difficult to achieve in
 practice \cite{RandJAMA99,DavisCMAJ97},
@@ -54,11 +58,6 @@ formalizations of \BPGs{} used to construct \CDSSs{}.
 Existing work is classified into one of eight themes spanning
 the entire development cycle of a \CIG{}. The themes and relations between them
 are shown in \figurename{} \ref{fig:cpg-research-topics}.
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.5\linewidth]{cpg-topics}
-  \caption{\CDSSs{} Research Themes}\label{fig:cpg-research-topics}
-\end{figure}
 
 According to the author in \cite{PelegJBI13}, \CIGs{} are usually based on previously published non-executable
 \BPGs{}. To develop a \CIG{}, a language is identified in (1). Teams of
@@ -107,19 +106,27 @@ the risk of non-conformance, it does not completely eliminate it.
 %    \emph{safety}.
 %\end{enumerate*}
 
-\paragraph{Tools with Correctness Guarantees}
 
-Since \CIGs{} are safety-critical, it is vital that tools
-such as interpreters, compilers, model-checkers, et. cetera
-have correctness guarantees.
+\paragraph{Formal semantics and analysis tools:}
 
-\paragraph{Correctness:}
+Given the safety-critical nature of \CDSSs{}, it is vital for \CIG{} languages
+to have complete formal semantics and formally-verified execution engines and
+analysis tools. This need has already been recognized in existing literature
+\cite{SuttonAMIA03, ShaharAMIA96}. It's also vital to ensure that
+associated tools are kept up to date as the language evolves.
+
+\paragraph{Holistic system safety:}
+
+While the safety critical nature of \CDSSs{} neccessitates
+\CIG{} languages to have comprehensive support for verification using
+tools like model checkers and deductive verifiers, certain challenges
+specific to \CDSSs{} require support beyond traditional techniques.
 
 Actions performed by a \CDSS{} can either be \emph{programming-oriented}
-or \emph{clinically-oriented} \cite{BoxwalaJBI04}. \emph{programming-oriented}
+or \emph{clinically-oriented} \cite{BoxwalaJBI04}. \emph{Programming-oriented}
 actions are peformed by executing the \CIG{} itself. For example,
 using patient parameters, or health records to make a reccomendation or diagnosis,
-or to raise a warning. \emph{clinically-oriented} actions on the other hand
+or to raise a warning. \emph{Clinically-oriented} actions on the other hand
 are ones that involve a clinician. For example, in the case of \ACLS{},
 the \CDSS{} recommends that Cardiopulmonary Resuscitation (\CPR{}) be performed
 for a certain length of time. Such actions can only be performed by clinicians,
@@ -133,35 +140,31 @@ cannot be used to reason about \emph{clinically-oriented} ones.
 Thus, a mechanism that allows some guarantees about clinically-oriented is
 desirable.
 
-%Thus, guideline-based \CDSSs{} are now considered imperative to the
-%future of medical decision making in general \cite{JamesNEJM01}.
-%A guidelines-based \CDSS{} typically consists of:
-%\begin{enumerate*}[label=(\roman*)]
-%  \item a translation of the guideline to an executable medium, called the
-%  \BPGLogic{},
-%  \item an interface for user-interaction, and,
-%  \item additional infrastructure that integrates with external data sources
-%  such as sensors, health records \cite{SuttonNature20}.
-%\end{enumerate*}
-%Typically, to develop a \CDSS{}, domain experts in medicine
-%collaborate with computer scientists to develop requirements documentation
-%that presents the \BPGs{}'s
-%semantics in a manner amenable to software development \cite{PelegJBI13}.
-%This documentation is then utilized to develop the \BPGLogic{}, which is subsequently integrated with data sources (such as patient-parameter sensors and health records),
-%and a User Interface (UI) to obtain a complete system. Thus, the \BPG{}
-%serves as a functional specification for the \CDSS{}'s \BPGLogic{}.
-%But, the aforementioned process has several limitations.
-%First, the implementation, i.e., the \BPGLogic{} may not concur with its specification,
-%i.e., the text-based \BPG{}. \BPGs{} are specified as long, complex textual documents,
-%where the exact meaning of terms may not be explicitly stated, and recommendations may be ambiguous \cite{ClerqAIM03}.
-%Capturing and communicating these complexities via requirements documentation
-%is challenging, and incorrect or incomplete documentation has resulted in failed
-%implementations \cite{KubbenBook19}. Second, as \BPGs{} evolve to reflect
-%new evidence or local adaptions, corresponding updates must be made to the
-%\CDSS{} as well. However, due to the gap between the \BPG{} and the \BPGLogic{},
-%effort must be expended into bringing the \BPGLogic{} to reflect said updates.
-
 \subsection{Limitations of Existing Approaches}
+\begin{center}
+\renewcommand{\arraystretch}{0.5}
+%\setlength\extrarowheight{-9pt}
+  \begin{table}
+  \begin{tabularx}{\textwidth}{
+      >{\centering\arraybackslash}X
+    || >{\centering\arraybackslash}X
+    | >{\centering\arraybackslash}X
+    | >{\centering\arraybackslash}X
+    | >{\centering\arraybackslash}X
+  }
+                 & Implementation-Specification Gap & Complete Formal Semantics & Formal Analysis Tools & Holistic Safety  \\
+    Arden Syntax & $\greencheck$                               & $\redcross$               & $\redcross$           & $\redcross$ \\
+    GLIF         & $\greencheck$                               & $\redcross$               & $\redcross$           & $\redcross$ \\
+    Asbru        & $\greencheck$                               & $\cancelcheck$            & $\greencheck$         & $\redcross$ \\
+    PROForma     & $\greencheck$                               & $\greencheck$             & $\redcross$           & $\redcross$ \\
+    GLARE        & $\greencheck$                               & $\cancelcheck$            & $\cancelcheck$        & $\cancelcheck$ \\
+    Promela/SPIN & $\redcross$                                 & $\greencheck$             & $\greencheck$         & $\cancelcheck$ \\
+    AMSs         & $\redcross$                                 & $\greencheck$             & $\greencheck$         & $\redcross$ \\
+    SAGE         & $\greencheck$                               & $\redcross$               & $\redcross$           & $\redcross$ \\
+  \end{tabularx}
+  \caption{Comparison of Existing Approaches}\label{table:existing-approaches}
+  \end{table}
+\end{center}
 
 While existing approaches have been imperative to increasing \CGS{} adoption, to the
 best of our knowledge, none of them address all of the aforementioned
@@ -188,7 +191,7 @@ the gap between the \BPG{}, i.e. the specification, and the \CIG{}, i.e. impleme
 they're meant to be either directly used by clinicians (or in collaboration with
 computer scientists) to express \BPGs{} in an executable medium. \CIGs{}
 expressed in them are meant to be shared across hospitals, and are thus modular.
-However, neither formalism has complete formal semantics, or comprehensiev support for
+However, neither formalism has complete formal semantics, or comprehensive support for
 rigorous formal analysis.
 
 The need for formal analysis is identified by Asbru: a formalism with formally
@@ -211,7 +214,6 @@ The plan defines constraints on their enactment, and circumstances
 for termination (for example, exceptions) \cite{SuttonAMIA03}. But, despite
 having complete formal semantics, it does not have a comprehensive suite of
 formal analysis tools such as model checkers, deductive verifiers.
-
 
 The SAGE guideline model \cite{TuSAGE04} uses the Prot\'eg\'e knowledge
 representation framework \cite{NoyAMIA03} to model guidelines,
@@ -238,84 +240,22 @@ In \tablename{} \ref{table:existing-approaches}, we provide an overview of
 the strengths and limitations of existing approaches. Note that we use
 \greencheck{}, \cancelcheck{}, and \redcross{} to depict that an approach
 fully-addresses, partly-addresses, or doesn't address a limitation respectively.
-To the best of our knowledge,
-none of the aforementioned approaches have:
-\begin{itemize}[leftmargin=*]
-  \setlength\itemsep{0em}
-  \item An interpreter or execution engine with \emph{\underline{correctness guarantees}}.
-  \item A Rich Suite of \emph{\underline{formal analysis tools}} such as a deductive program
-    verifier, model checker, and symbolic execution engine that can be used to
-    reason about the guidelines. Since a \CIG{} can comprise multiple
-    processes that are \emph{parallel}, \emph{sequential}, or a mix of both,
-    reasoning about them can be challenging. But, existing work in modeling
-    and reasoning about distributed systems can provide solutions.
-  \item Ability to reason about agents that perform \emph{\underline{external
-    agents}}. These include clinicians responsible for \emph{clinically-defined}
-    actions, or \emph{monitors} for \emph{patient parameters}. While it may seem
-    impossible to reason about systems that depend heavily on actions of
-    external agents, solutions to similar problems in other domains, such as
-    the Simplex Architecture \cite{BakRTAS09} in Real-Time Systems (\RTSs), can be looked at for directions.
-\end{itemize}
 
-\begin{center}
-\renewcommand{\arraystretch}{0.5}
-%\setlength\extrarowheight{-9pt}
-  \begin{table}
-  \begin{tabularx}{\textwidth}{
-      >{\centering\arraybackslash}X
-    || >{\centering\arraybackslash}X
-    | >{\centering\arraybackslash}X
-    | >{\centering\arraybackslash}X
-    | >{\centering\arraybackslash}X
-  }
-                 & Implementation-Specification Gap & Complete Formal Semantics & Formal Analysis Tools & Holistic Safety  \\
-    Arden Syntax & $\greencheck$                               & $\redcross$               & $\redcross$           & $\redcross$ \\
-    GLIF         & $\greencheck$                               & $\redcross$               & $\redcross$           & $\redcross$ \\
-    Asbru        & $\greencheck$                               & $\cancelcheck$            & $\greencheck$         & $\redcross$ \\
-    PROForma     & $\greencheck$                               & $\greencheck$             & $\redcross$           & $\redcross$ \\
-    GLARE        & $\greencheck$                               & $\cancelcheck$            & $\cancelcheck$        & $\cancelcheck$ \\
-    Promela/SPIN & $\redcross$                                 & $\greencheck$             & $\greencheck$         & $\cancelcheck$ \\
-    AMSs         & $\redcross$                                 & $\greencheck$             & $\greencheck$         & $\redcross$ \\
-    SAGE         & $\greencheck$                               & $\redcross$               & $\redcross$           & $\redcross$ \\
-  \end{tabularx}
-  \caption{Comparison of Existing Approaches}\label{table:existing-approaches}
-  \end{table}
-\end{center}
-
-
-%To address above mentioned limitations, several Domain Specific Languages
-%(\DSLs{}) for directly expressing \BPGLogic{} as Computer Interpretable
-%Guidelines (\CIGs{}) have been introduced. By providing mechanisms to facilitate
-%representation of medical knowledge, such \DSLs{} allow the \CIG{} to serve
-%as both the system specification, i.e. the \BPG{}, and implementation, i.e. the
-%\BPGLogic{}. This ensures that there is no gap between the \BPG{} and
-%its executable counterpart.
-%Given the safety-critical nature of \CDSSs{}, the need for formally verified
-%execution engines and analysis tools has been recognized.
-%To this end, some existing \DSLs{} have partially-defined semantics and
-%support for verification via model-checking.
-%However, as identified by the authors of \cite{SuttonAMIA03, ShaharAMIA96},
-%existing languages lack a complete formal and executable semantics,
-%interpreters or compilers with correctness guarantees,
-%and a comprehensive suite of accompanying tools such as model-checkers, symbolic-execution
-%engines, and deductive verifiers. The difficulties of formal analysis are further compounded
-%by the fact that \CDSSs{} are concurrent systems involving interactions with
-%heterogeneous external agents such as sensors and
-%\HCPs{}, making their analysis challenging.
-
-This proposal aims to address these limitations using a \emph{semantics-first} approach.
+This proposal aims to address these limitations comprehensively
+using a \emph{semantics-first} approach.
 By \emph{semantics-first}, we mean that \CIG{} language we
 use to is formally defined, from which tools such as an interpreter, model checker,
 and deductive verifier are derived in a \emph{correct-by-construction}
 manner. At the core of our approach is new language Domain Specific Language (DSL)
 for \CIGs{} called \MediK{}. By emphasizing \HCP{}-\emph{comprehensibility},
-\MediK{} enables \HCPs{} to verify the semantic correctness of a \CDSSs{}' \BPGLogic{}.
-It has a complete formal executable semantics specified in the $\K{}$ framework,
-from which a correct-by-construction interpreter and analysis tools
-such as a model checker and deductive verifier for its programs are derived.
+\MediK{} enables \HCPs{} to verify the semantic correctness of a \CIG{}.
+\MediK{} provides a uniform way of modeling diverse external agents, enabling reasoning about
+safety of the entire system.
+
 \MediK{} has been used to implement a real-word \CDSS{} for screening and
 mangement of pediatric sepsis, and establish said \CDSS{} satisfies desired
-safety properties.
+safety properties. To the best of our knowledge, it is the first system
+for sepsis management with formal safety guarantees.
 
 While \MediK{} presents a promising direction towards developing safe real-world
 systems, realizing its full potential requires addressing the following research
