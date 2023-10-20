@@ -1,6 +1,108 @@
 \section{Background}
 In this section, we go over relevant background work.
 
+\subsection{Limitations of Existing Approaches}
+\begin{center}
+\renewcommand{\arraystretch}{0.5}
+%\setlength\extrarowheight{-9pt}
+  \begin{table}
+  \begin{tabularx}{\textwidth}{
+      >{\centering\arraybackslash}X
+    || >{\centering\arraybackslash}X
+    | >{\centering\arraybackslash}X
+    | >{\centering\arraybackslash}X
+    | >{\centering\arraybackslash}X
+  }
+                 & Implementation-Specification Gap & Complete Formal Semantics & Formal Analysis Tools & Holistic Safety  \\
+    Arden Syntax & $\greencheck$                               & $\redcross$               & $\redcross$           & $\redcross$ \\
+    GLIF         & $\greencheck$                               & $\redcross$               & $\redcross$           & $\redcross$ \\
+    Asbru        & $\greencheck$                               & $\cancelcheck$            & $\greencheck$         & $\redcross$ \\
+    PROForma     & $\greencheck$                               & $\greencheck$             & $\redcross$           & $\redcross$ \\
+    GLARE        & $\greencheck$                               & $\cancelcheck$            & $\cancelcheck$        & $\cancelcheck$ \\
+    Promela/SPIN & $\redcross$                                 & $\greencheck$             & $\greencheck$         & $\cancelcheck$ \\
+    AMSs         & $\redcross$                                 & $\greencheck$             & $\greencheck$         & $\redcross$ \\
+    SAGE         & $\greencheck$                               & $\redcross$               & $\redcross$           & $\redcross$ \\
+  \end{tabularx}
+  \caption{Comparison of Existing Approaches}\label{table:existing-approaches}
+  \end{table}
+\end{center}
+
+While existing approaches have been imperative to increasing \CGS{} adoption, to the
+best of our knowledge, none of them address all of the aforementioned
+limitations. We briefly describe notable approaches, their successes, and their limitations.
+
+The Arden Syntax \cite{HripcsakCBM94} a widely used medium for
+expressing \CIGs{}.  Guidelines as described using Medical
+Logic Modules that contains information related to guideline's purpose
+, maintainance, and medical knowledge. The modules are modular to allow
+re-use and sharing across hospitals. But, Arden Syntax
+is focused on describing simple, modular, and independent
+guidelines (such as reminders), and not on guidelines with complex logic (such
+as treatment protocols) \cite{PelegJBI01}.
+Arden Syntax's limitation in modeling complexity is addressed by
+GLIF \cite{BoxwalaJBI04}: a language that uses flowcharts to expressed
+guidelines. A multi-level approach is
+employed to manage complexity: at the top is the conceptual level, where
+only high-level details relevant for human-comprehension are present. In the
+middle is a computable-level, where details of guideline execution flow
+and patient data elements are specified. At the bottom is the implementable
+level, where institution-specific details and mappings into patient data are
+specified. Both Arden Syntax and GLIF  eliminate
+the gap between the \BPG{}, i.e. the specification, and the \CIG{}, i.e. implementation as
+they're meant to be either directly used by clinicians (or in collaboration with
+computer scientists) to express \BPGs{} in an executable medium. \CIGs{}
+expressed in them are meant to be shared across hospitals, and are thus modular.
+However, neither formalism has complete formal semantics, or comprehensive support for
+rigorous formal analysis.
+
+The need for formal analysis is identified by Asbru: a formalism with formally
+defined syntax and semantics \cite{ShaharAMIA96}. In Asbru, a guideline is modeled as a plan
+that contains:
+\begin{enumerate*}[label=(\roman*)]
+  \item intentions that define aims,
+  \item conditions that specify when the plan is applicable,
+  \item effects that define expected behavior during execution, and,
+  \item a body containing other subplans.
+\end{enumerate*}
+Apart from an execution engine, the Asbru ecosystem also contains
+other tools, such as a model checker for verification \cite{BaumlerSPIN06}.
+However, the formal semantics of Asbru have been only partially defined, and
+is insufficient to implement tools for the language \cite{SuttonAMIA03}.
+The importance of a complete formal-semantics is identified and addressed
+by PROforma \cite{SuttonAMIA03}, another formalism that uses plans to
+model guidelines. A PROforma plan is made of a sequence of tasks.
+The plan defines constraints on their enactment, and circumstances
+for termination (for example, exceptions) \cite{SuttonAMIA03}. But, despite
+having complete formal semantics, it does not have a comprehensive suite of
+formal analysis tools such as model checkers, deductive verifiers.
+
+The SAGE guideline model \cite{TuSAGE04} uses the Prot\'eg\'e knowledge
+representation framework \cite{NoyAMIA03} to model guidelines,
+and improves on aforementioned approaches by
+enabling seamless integration into hospitals' existing Clinical Information Systems
+(\CISs). But, it lacks complete formal semantics, and analysis tools
+such as deductive verifiers and model checkers.
+The GLARE formalism \cite{TerenzianiBook04} uses an actions based approach
+to represent guidelines, and addresses clnician-comprehensibility and
+modularity. For formal analysis, GLARE guidelines can be translated to
+Promela: the SPIN model checker's specification language \cite{GiordanoAMIA06}.
+The approach partly addresses holistic safety as
+external agents (such as clinicians) can be modelled and analyzed.
+But, the scenario where the external agent's behavior
+deviates from the model during system execution isn't addressed.
+Non medical-domain specific languages can also be used to reason about
+medical systems. For example, in \cite{ArcainiMEMCODE15}, Abstract State
+Machines (\ASMs) are used to validate and verify a system for measuring
+patients' stereoacuity in the diagnosis of amyblyopia. But such a
+formalism, while suitable for formal verification, may
+not be easily comprehensible to clinicians for validation.
+
+In \tablename{} \ref{table:existing-approaches}, we provide an overview of
+the strengths and limitations of existing approaches. Note that we use
+\greencheck{}, \cancelcheck{}, and \redcross{} to depict that an approach
+fully-addresses, partly-addresses, or doesn't address a limitation respectively.
+
+
 \subsection{Semantics-First Approach}
 
 The semantics first approach dictates that the semantics
