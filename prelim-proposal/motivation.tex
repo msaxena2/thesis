@@ -15,13 +15,32 @@ intravenous (IV) fluids \cite{Weiss2014CCM,Evans2018JAMA}.
 Departments (EDs) have shown effectiveness in screening and management of sepsis \cite{Eisenberg2021JP},
 leading to their adoption in many pediatric EDs \cite{Balamuth2017EM,Sepanski2014FP}.
 
-
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.45\textwidth]{sepsis-screening-osf}
-  %\includegraphics[width=0.5\textwidth]{screening-vitals}
-  \caption{Pediatric sepsis screening \BPG{}}\label{fig:sepsis-screening}
+\begin{figure}
+  \begin{subfigure}[b]{0.5\textwidth}
+    \centering
+    \includegraphics[width=0.65\textwidth]{sepsis-screening-osf}
+    %\includegraphics[width=0.5\textwidth]{screening-vitals}
+    \caption{Pediatric sepsis screening \BPG{}}\label{fig:sepsis-screening}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.3\textwidth}
+    \tiny
+      \begin{tabular}{ | c || c | c | c | }
+        \hline
+        \textbf{Age}            & \textbf{Heart Rate}   & \textbf{Systolic BP} & \textbf{Temp}  \\
+        \hline
+        $0d - 1m$               & $>205$                & $<60$                & $<36 \text{ or } >38$ \\
+        \hline
+        $\geq 1m - 3m$          & $>205$                & $<70$                & $<36 \text{ or } >38$ \\
+        \hline
+        $\geq 3m - 1y$          & $>190$                & $<70$                & $<36 \text{ or } >38.5$ \\
+        \hline
+        $\dots$                 & $\dots$               & $\dots$              & $\dots$ \\
+        \hline
+        $\geq 13y$              & $>100$                & $<90$                & $<36 \text{ or } >38.5$ \\
+        \hline
+      \end{tabular}
+      \caption{Vital Signs Chart}\label{table:vital-signs}
+  \end{subfigure}
 \end{figure}
 
 In \figurename{} \ref{fig:sepsis-screening}, we present a simplified version of
@@ -46,7 +65,6 @@ Checking for such abnormalities often involves the use of tables, such as
 %\ref{table:vital-signs}}.
 If the patient has at least one abnormal value in every \say{bucket},
 then he/she is flagged as potentially septic.
-
 
 The \BPG{}-recommended treatment for
 sepsis involves multiple concurrent workflows, such as
@@ -86,37 +104,36 @@ across many \BPGs{}. Specifically \BPGs{} typically:
   \item Often use \stress{tables} indexed by parameters such as age, weight,
     etc to present normal/abnormal ranges for measurements, or recommended dosages for drugs.
 \end{itemize}
+%\begin{footnotesize}
+%  \begin{table}
+%    \centering
+%    \begin{tabular}{ | c || c | c | c | }
+%      \hline
+%      \textbf{Age}            & \textbf{Heart Rate}   & \textbf{Systolic BP} & \textbf{Temp}  \\
+%      \hline
+%      $0d - 1m$               & $>205$                & $<60$                & $<36 \text{ or } >38$ \\
+%      \hline
+%      $\geq 1m - 3m$          & $>205$                & $<70$                & $<36 \text{ or } >38$ \\
+%      \hline
+%      $\geq 3m - 1y$          & $>190$                & $<70$                & $<36 \text{ or } >38.5$ \\
+%      \hline
+%      $\dots$                 & $\dots$               & $\dots$              & $\dots$ \\
+%      \hline
+%      $\geq 13y$              & $>100$                & $<90$                & $<36 \text{ or } >38.5$ \\
+%      \hline
+%    \end{tabular}
+%    \caption{Vital Signs Chart}\label{table:vital-signs}
+%  \end{table}
+%\end{footnotesize}
 
-\begin{footnotesize}
-  \begin{table}
-    \centering
-    \begin{tabular}{ | c || c | c | c | }
-      \hline
-      \textbf{Age}            & \textbf{Heart Rate}   & \textbf{Systolic BP} & \textbf{Temp}  \\
-      \hline
-      $0d - 1m$               & $>205$                & $<60$                & $<36 \text{ or } >38$ \\
-      \hline
-      $\geq 1m - 3m$          & $>205$                & $<70$                & $<36 \text{ or } >38$ \\
-      \hline
-      $\geq 3m - 1y$          & $>190$                & $<70$                & $<36 \text{ or } >38.5$ \\
-      \hline
-      $\dots$                 & $\dots$               & $\dots$              & $\dots$ \\
-      \hline
-      $\geq 13y$              & $>100$                & $<90$                & $<36 \text{ or } >38.5$ \\
-      \hline
-    \end{tabular}
-    \caption{Vital Signs Chart}\label{table:vital-signs}
-  \end{table}
-\end{footnotesize}
-
-Note that the aforementioned characteristics are \emph{not} specific
-to one guideline. According to a review paper on \CIGs{} \cite{ClerqAIM03},
-such \DSLs{} should additionally
-\begin{enumerate*}[label=(\alph*)]
-  \item be formally defined, i.e, have a formal syntax and semantics, and
-  \item have an execution engine to provide decision support.
-\end{enumerate*}
-
+%Note that the aforementioned characteristics are \emph{not} specific
+%to one guideline. According to a review paper on \CIGs{} \cite{ClerqAIM03},
+%such \DSLs{} should additionally
+%\begin{enumerate*}[label=(\alph*)]
+%  \item be formally defined, i.e, have a formal syntax and semantics, and
+%  \item have an execution engine to provide decision support.
+%\end{enumerate*}
+%An ideal framework for
 
 %In the following sections, we describe how these characteristics dictate the
 %design philosophy behind \MediK{}. We argue that this philosophy

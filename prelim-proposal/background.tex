@@ -1,2 +1,19 @@
 \section{Background}
-Here we described what we have done earlier.
+In this section, we go over relevant background work.
+
+\subsection{Semantics-First Approach}
+
+The semantics first approach dictates that the semantics
+of a language should be formally defined. Tools for the language
+such as interpreters, compilers, model checkers and deductive
+verifiers should be derived from the semantics in a
+\emph{correct-by-construction} fashion, instead of being implemented
+from scratch in an ad-hoc manner.
+
+For a language like \MediK{}, the semantics first approach has many benefits. First,
+since \MediK{} is meant to be used in safety-critical settings,
+it's vital that its interpreter has correctness guarantees, which
+the approach ensures. Second, \MediK{} has to evolve quickly
+to incorporate feedback that it receives from domain experts.
+Such changes in the semantics-first approach only require changes to
+the semantics, and all tools are updated automatically.
