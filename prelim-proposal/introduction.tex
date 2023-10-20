@@ -1,4 +1,4 @@
-\section{Introduction}
+\section{Introduction}\label{sec:introduction}
 
 Preventable Medical Errors (\PMEs{}) characterized by
 incorrect intended treatment, or incorrect executions of intended
@@ -60,6 +60,10 @@ Thus, it's vital that:
 \end{enumerate*}
 While research on \CDSSs{} has resulted in progress towards addressing
 these challenges, more work is needed to realize their full potential.
+Moreover, recent advances in Artificial Intelligence (AI) and blockchains
+have the potential to significantly enhance \CDSS{} effectiveness.
+But, incorporating such technologies into \CDSSs{} safely remains a challenge.
+
 We briefly provide an overview of existing research on \CDSSs{} to explain
 both progress made and challenges remaining in context of \CDSSs{}.
 In \cite{PelegJBI13}, the author provides a methodological review of
@@ -96,27 +100,6 @@ specification, i.e., the \BPG{}. To address this, the \CIG{} is tested by
 putting the \CDSS{} through clinical simulations. But, while testing reduces
 the risk of non-conformance, it does not completely eliminate it.
 
-%\paragraph{Safe Modularity:}
-%
-%While developing \CDSSs{} is both complex and cost-intensive,
-%the development effort can be reduced by sharing \CDSSs{} across hospitals \cite{PelegAMIA00}.
-%But, even for the same \BPG{}, hospitals develop their own \CDSSs{} to address
-%their needs, resulting in duplicated work.
-%For instance, for the \ACLS{} \BPG{}, multiple \CDSSs{} have been developed by different
-%different hospitals in a span of just six years years \cite{FullCodePro,PediAppRREST2020,
-%PediAppRREST2021,GuidingPad2017,GuidingPad2019, GuidingPad2020,DST2014,DST2019,ROSCo2021,TeamScreen2019,Wu2017}.
-%\CDSSs{} based on the same \BPG{} typically have the same \CIG{}, but may differ
-%in their Graphical User Interfaces (\GUIs), or integration with external
-%devices, to address hospital-specific needs.
-%To enable safe sharing of knowledge, we need a mechanism that:
-%\begin{enumerate*}[label=(\alph*)]
-%  \item allows a stable, formally-verfied \CIG{} that is \emph{decoupled} from other
-%    components, and,
-%  \item supports hospital-specific customizations without compromising system
-%    \emph{safety}.
-%\end{enumerate*}
-
-
 \paragraph{Formal semantics and analysis tools:}
 
 Given the safety-critical nature of \CDSSs{}, it is vital for \CIG{} languages
@@ -140,7 +123,7 @@ or to raise a warning. \emph{Clinically-oriented} actions on the other hand
 are ones that involve a clinician. For example, in the case of \ACLS{},
 the \CDSS{} recommends that Cardiopulmonary Resuscitation (\CPR{}) be performed
 for a certain length of time. Such actions can only be performed by clinicians,
-an the \CDSS{} assumes that the recommended action was indeed performed before
+and the \CDSS{} assumes that the recommended action was indeed performed before
 moving resuming guidance.
 
 For correctness, both categories of actions must be completed
@@ -162,7 +145,7 @@ for \CIGs{} called \MediK{}. By emphasizing \HCP{}-\emph{comprehensibility},
 safety of the entire system.
 
 \MediK{} has been used to implement a real-word \CDSS{} for screening and
-mangement of pediatric sepsis, and establish said \CDSS{} satisfies desired
+management of pediatric sepsis, and establish said \CDSS{} satisfies desired
 safety properties. To the best of our knowledge, it is the first system
 for sepsis management with formal safety guarantees.
 
