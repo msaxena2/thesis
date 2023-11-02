@@ -83,24 +83,21 @@ bugs can have life-threatening consequences. Thus, its desirable to have
 \begin{enumerate*}[label=(\alph*)]
   \item execution engines (interpreters and compilers) with \emph{correctness guarantees}, and,
   \item suite of formal analysis tools (such as model checkers, deductive
-    verifiers) to verify correctness guarantees.
+    verifiers) to verify desired \emph{correctness} properties.
 \end{enumerate*}
-Moreover, reasoning tools must be able to handle \emph{concurrency} and
-\emph{external agents} aspect of \CDSSs{}
+\emph{Complexity} of \CDSSs{} adds to the challenge of verifying
+\CDSSs{} as tools must be able to handle both the \emph{concurrency} and
+\emph{external agent} aspects of \CDSSs{}.
 
 \paragraph{Holistic Safety:} Recent breakthroughs in Artificial Intelligence
-(AI) and blockchains have the potential to significantly enhance quality
-of care. AI-based systems have the potential to infer diagnoses from patient
+(AI) have the potential to significantly enhance effectiveness
+of \CDSSs{}. AI-based systems have the potential to infer diagnoses from patient
 vitals and history \emph{earlier} and \emph{more accurately} than regular
-care, and \emph{individualize treatment} to a patient's need. Blockchains
-can improve \emph{availability} of health records, and improve
-\emph{sharing} between medical institutions, without compromising
-\emph{cofidentiality}. But, despite their potential, reluctance to use such technologies stems
-from concerns of \emph{safety} from issues such as \emph{hallucinations}
-in AI,
-
-
-
+care, and \emph{individualize treatment} to a patient's need.
+But, despite their potential, reluctance to use AI-based approaches
+stems from concerns of \emph{safety} from issues such as \emph{hallucinations}.
+Building \CDSSs{} that utilize such breakthroughs \emph{safely} remains
+a challenge.
 
 %While the potential of \CDSS{} has been recognized, wider adoption
 %is still hampered by significant challenges. \CDSSs{} are safety-critical -
@@ -193,7 +190,7 @@ in AI,
 
 \subsection{Proposed Approach}
 
-This proposal aims to address these challenges
+This proposal aims to systematically address aforementioned challenges
 using a \emph{semantics-first} approach. At the core of this approach
 is a novel language for writing \BPGs{} in a \emph{computer interpretable}
 manner called \MediK{}. By being \emph{comprehensible} to domain experts in medicine, \MediK{}-based
@@ -244,7 +241,7 @@ This proposal seeks to answer whether \MediK{}'s
 design can adequately accomodate diversity in \BPGs{}, without
 compromising on readability. To this end, we plan to collaborate with
 experts in medicine to ensure that the language meets their needs.
-Note that the \emph{semantics-first} approach is particularly
+The \emph{semantics-first} approach is particularly
 well-suited for designing the language, as updates to the language
 only require changes to the semantics. As tools are derived from the semantics,
 they update automatically.
@@ -271,14 +268,14 @@ such as semantics-based compilation that can be used to extract information such
 as basic blocks from code to generate \emph{correct-by-construction} visual
 representation of programs in any language.
 
-\paragraph{RC 3 (Applications):} Can \MediK{} be used to build real-world
-\CDSS{}? How can \MediK{} improve \CDSSs{} effectiveness?
+\paragraph{RC 3 (Applications):} Can our approach be used to build real-world
+\CDSSs{}? How can \MediK{} improve \CDSSs{} effectiveness?
 
-This proposal
-seeks to establish that our approach can be used to build systems with real
-world applications. To this end, we plan to build \CDSSs{} that are
+While \MediK{} has been used to implement a real-world,
+this proposal seeks to establish that our approach can be used to build
+other real-world \CDSSs{}. By real-world, we mean \CDSSs{} that are
 capable of consideration for clinical trials at hospitals. Note that we
-intend to use clinical-trial worthiness as an indicator of the effectivenss
+intend to use clinical-trial worthiness as an indicator of the effectiveness
 of \MediK{}, not the result of the trial itself.
 Clinical-trial worth systems need to be integrated into existing hospital care-flow.
 This involves handle hospital-specific variations, such as
