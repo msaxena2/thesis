@@ -33,11 +33,6 @@ of IHCA in 30\% of adult, and 17\% of pediatric cases deviates from the
 AHA-prescribed \BPG, resulting in worse patient outcomes \cite{Ornato2012DeviationAdult,Wolfe2020DeviationPediatric,
 Crowley2020DeviationAdult,Honarmand2018Adherence,Mcevoy2014Adherence}.
 
-\begin{wrapfigure}{l}{0.5\textwidth}
-  \includegraphics[width=\textwidth]{cpg-topics}
-  \caption{\CDSSs{} Research Themes}\label{fig:cpg-research-topics}
-\end{wrapfigure}
-
 While \BPG{}-adherence is difficult to achieve in
 practice \cite{RandJAMA99,DavisCMAJ97},
 integrating \BPGs{} with existing patient care-flow,
@@ -49,100 +44,184 @@ suggests that they reduce \PMEs{} \cite{BenettJAMIA16,SahotaJIS11}.
 Thus, guideline-based \CDSSs{} are now considered imperative to the
 future of medical decision making in general \cite{JamesNEJM01}.
 
-While the potential of \CDSS{} has been recognized, wider adoption
-is still hampered by significant challenges. \CDSSs{} are safety-critical -
-bugs can have serious (sometimes life-threatening) consequences.
-Thus, it's vital that:
+But despite their transformative promise, wider adoption
+of \CDSSs{} is hindered by the challenges encoutered during their development:
+
+\paragraph{Specification-Implementation Gap:} Typically, to develop
+a \CDSS{}, domain experts in medicine collaborate with software developers
+to translate medical knowledge encoded in a \BPG{} to a computable medium,
+referred to as the \CDSSs{}'s \BPGLogic. Additional software is then
+added to connect components such as such as
+\emph{medical sensors} and \emph{User Interfaces} to complete the
+\CDSS{}. Thus, the \BPG{} acts as a functional specification for the \BPGLogic, i.e. the
+implementation. However, as medical knowledge in a \BPG{} is complex,
+it's possible for it to be inaccurately captured in the \BPGLogic{}, or,
+for the implementation to diverge from the specification. Morover,
+as \BPGs{} evolve to reflect latest clinical evidence, the \BPGLogic{} has
+to be updated accordingly, further incresing the likelihood of a
+\emph{specification-implementation} divergence.
+
+\paragraph{Complexity:} \BPGs{} often involve \emph{concurrent} workflows,
+with complex inter-workflow interactions. Consider the example of management
+of sepsis in pediatric cases from \figurename{} \ref{fig:sepsis-screening}.
+Sepsis is a life threatening condition characterized by the body's
+extreme's immune response to an infection. Once a patient is flagged as
+potential septic, several workflows, such as screening the patient for septic shock
+and administering fluids, antibiotics and
+inotropes have to be performed simultaneously, where the type of inotrope
+to be administered is influenced by whether the patient is cold or warm shock.
+Any \CDSS{} must be capable of handling such concurrent workflows, and their
+interactions.
+
+Moreover, a \CDSS{} also must interact with \emph{diverse external agents}
+such as sensor for patient parameters  and databases holding electronic health
+records. Satisfying such a diverse set of requirements adds to the challenge of
+building \CDSSs{}.
+
+\paragraph{Formal Analysis:} \CDSS{} are \emph{safety-critical} -
+bugs can have life-threatening consequences. Thus, its desirable to have
 \begin{enumerate*}[label=(\alph*)]
-  \item the system is formally verified to satisfy desired correctness
-    properties, and,
-  \item \HCPs{} can trust the medical knowledge embedded in the system.
+  \item execution engines (interpreters and compilers) with \emph{correctness guarantees}, and,
+  \item suite of formal analysis tools (such as model checkers, deductive
+    verifiers) to verify correctness guarantees.
 \end{enumerate*}
-While research on \CDSSs{} has resulted in progress towards addressing
-these challenges, more work is needed to realize their full potential.
-Moreover, recent advances in Artificial Intelligence (AI) and blockchains
-have the potential to significantly enhance \CDSS{} effectiveness.
-But, incorporating such technologies into \CDSSs{} safely remains a challenge.
+Moreover, reasoning tools must be able to handle \emph{concurrency} and
+\emph{external agents} aspect of \CDSSs{}
 
-We briefly provide an overview of existing research on \CDSSs{} to explain
-both progress made and challenges remaining in context of \CDSSs{}.
-In \cite{PelegJBI13}, the author provides a methodological review of
-existing work on Computer Interpretable Guidelines (\CIGs{}): executable
-formalizations of \BPGs{} used to construct \CDSSs{}.
-Existing work is classified into one of eight themes spanning
-the entire development cycle of a \CIG{}. The themes and relations between them
-are shown in \figurename{} \ref{fig:cpg-research-topics}.
+\paragraph{Holistic Safety:} Recent breakthroughs in Artificial Intelligence
+(AI) and blockchains have the potential to significantly enhance quality
+of care. AI-based systems have the potential to infer diagnoses from patient
+vitals and history \emph{earlier} and \emph{more accurately} than regular
+care, and \emph{individualize treatment} to a patient's need. Blockchains
+can improve \emph{availability} of health records, and improve
+\emph{sharing} between medical institutions, without compromising
+\emph{cofidentiality}. But, despite their potential, reluctance to use such technologies stems
+from concerns of \emph{safety} from issues such as \emph{hallucinations}
+in AI,
 
-According to the author in \cite{PelegJBI13}, \CIGs{} are usually based on previously published non-executable
-\BPGs{}. To develop a \CIG{}, a language is identified in (1). Teams of
-software developers and clinicians then collaborate to express medical knowledge
-in the \BPG{} in the identified language. In (3), the \CIG{}
-is integrated with components such as a Graphical User
-Interface (\GUI{}), Electronic Health Records (\EHRs{}) and external devices
-(such as monitors for patient parameters) to obtain a \CDSS. Before adoption
-in the real-world, it is imperative to ensure that the \CIG{} \emph{mirrors}
-the underlying \BPG{}. This validation occurs by \emph{testing} the \CDSS{}
-using execution capabilities of the modeling language from (1) in (5).
-Additionally, formal verification may be used to establish other desired
-properties hold. Inconsistencies identified in (5) are fixed through developer-clinician
-collaboration in (2),  re-validation and
-verification. While the aforementioned development cycle has resulted in several
-effective \CDSSs{}, it has some limitations:
 
-\paragraph{Gap between specification and implementation:}
 
-To develop the \CIG{}, software developers rely on clinicians to interpret the
-non-executable \BPG{} and communicate
-the intended semantics to them. Thus, the non-executable \BPG{} serves as a functional specification for
-the \CIG{}, i.e. the implementation. In such safety-critical systems, it is
-imperative that the implementation, i.e. the \CIG{}, conforms to its
-specification, i.e., the \BPG{}. To address this, the \CIG{} is tested by
-putting the \CDSS{} through clinical simulations. But, while testing reduces
-the risk of non-conformance, it does not completely eliminate it.
 
-\paragraph{Formal semantics and analysis tools:}
+%While the potential of \CDSS{} has been recognized, wider adoption
+%is still hampered by significant challenges. \CDSSs{} are safety-critical -
+%bugs can have serious (sometimes life-threatening) consequences.
+%Thus, it's vital that:
+%\begin{enumerate*}[label=(\alph*)]
+%  \item the system is formally verified to satisfy desired correctness
+%    properties, and,
+%  \item \HCPs{} can trust the medical knowledge embedded in the system.
+%\end{enumerate*}
+%While research on \CDSSs{} has resulted in progress towards addressing
+%these challenges, more work is needed to realize their full potential.
+%Moreover, recent advances in Artificial Intelligence (AI) and blockchains
+%have the potential to significantly enhance \CDSS{} effectiveness.
+%But, incorporating such technologies into \CDSSs{} safely remains a challenge.
+%
+%We briefly provide an overview of existing research on \CDSSs{} to explain
+%both progress made and challenges remaining in context of \CDSSs{}.
+%In \cite{PelegJBI13}, the author provides a methodological review of
+%existing work on Computer Interpretable Guidelines (\CIGs{}): executable
+%formalizations of \BPGs{} used to construct \CDSSs{}.
+%Existing work is classified into one of eight themes spanning
+%the entire development cycle of a \CIG{}. The themes and relations between them
+%are shown in \figurename{} \ref{fig:cpg-research-topics}.
+%
+%According to the author in \cite{PelegJBI13}, \CIGs{} are usually based on previously published non-executable
+%\BPGs{}. To develop a \CIG{}, a language is identified in (1). Teams of
+%software developers and clinicians then collaborate to express medical knowledge
+%in the \BPG{} in the identified language. In (3), the \CIG{}
+%is integrated with components such as a Graphical User
+%Interface (\GUI{}), Electronic Health Records (\EHRs{}) and external devices
+%(such as monitors for patient parameters) to obtain a \CDSS. Before adoption
+%in the real-world, it is imperative to ensure that the \CIG{} \emph{mirrors}
+%the underlying \BPG{}. This validation occurs by \emph{testing} the \CDSS{}
+%using execution capabilities of the modeling language from (1) in (5).
+%Additionally, formal verification may be used to establish other desired
+%properties hold. Inconsistencies identified in (5) are fixed through developer-clinician
+%collaboration in (2),  re-validation and
+%verification. While the aforementioned development cycle has resulted in several
+%effective \CDSSs{}, it has some limitations:
+%
+%\begin{wrapfigure}{l}{0.5\textwidth}
+%  \includegraphics[width=\textwidth]{cpg-topics}
+%  \caption{\CDSSs{} Research Themes}\label{fig:cpg-research-topics}
+%\end{wrapfigure}
+%
+%\paragraph{Gap between specification and implementation:}
+%
+%To develop the \CIG{}, software developers rely on clinicians to interpret the
+%non-executable \BPG{} and communicate
+%the intended semantics to them. Thus, the non-executable \BPG{} serves as a functional specification for
+%the \CIG{}, i.e. the implementation. In such safety-critical systems, it is
+%imperative that the implementation, i.e. the \CIG{}, conforms to its
+%specification, i.e., the \BPG{}. To address this, the \CIG{} is tested by
+%putting the \CDSS{} through clinical simulations. But, while testing reduces
+%the risk of non-conformance, it does not completely eliminate it.
+%
+%\paragraph{Formal semantics and analysis tools:}
+%
+%Given the safety-critical nature of \CDSSs{}, it is vital for \CIG{} languages
+%to have complete formal semantics and formally-verified execution engines and
+%analysis tools. This need has already been recognized in existing literature
+%\cite{SuttonAMIA03, ShaharAMIA96}. It's also vital to ensure that
+%associated tools are kept up to date as the language evolves.
+%
+%\paragraph{Holistic system safety:}
+%
+%While the safety critical nature of \CDSSs{} neccessitates
+%\CIG{} languages to have comprehensive support for verification using
+%tools like model checkers and deductive verifiers, certain challenges
+%specific to \CDSSs{} require support beyond traditional techniques.
+%
+%Actions performed by a \CDSS{} can either be \emph{programming-oriented}
+%or \emph{clinically-oriented} \cite{BoxwalaJBI04}. \emph{Programming-oriented}
+%actions are peformed by executing the \CIG{} itself. For example,
+%using patient parameters, or health records to make a reccomendation or diagnosis,
+%or to raise a warning. \emph{Clinically-oriented} actions on the other hand
+%are ones that involve a clinician. For example, in the case of \ACLS{},
+%the \CDSS{} recommends that Cardiopulmonary Resuscitation (\CPR{}) be performed
+%for a certain length of time. Such actions can only be performed by clinicians,
+%and the \CDSS{} assumes that the recommended action was indeed performed before
+%moving resuming guidance.
+%
+%For correctness, both categories of actions must be completed
+%successfully. While traditional formal reasoning techniques can be employed
+%to establish correctness of \emph{programming-oriented} actions, the same
+%cannot be used to reason about \emph{clinically-oriented} ones.
+%Thus, a mechanism that allows some guarantees about clinically-oriented is
+%desirable.
 
-Given the safety-critical nature of \CDSSs{}, it is vital for \CIG{} languages
-to have complete formal semantics and formally-verified execution engines and
-analysis tools. This need has already been recognized in existing literature
-\cite{SuttonAMIA03, ShaharAMIA96}. It's also vital to ensure that
-associated tools are kept up to date as the language evolves.
+\subsection{Proposed Approach}
 
-\paragraph{Holistic system safety:}
+This proposal aims to address these challenges
+using a \emph{semantics-first} approach. At the core of this approach
+is a novel language for writing \BPGs{} in a \emph{computer interpretable}
+manner called \MediK{}. By being \emph{comprehensible} to domain experts in medicine, \MediK{}-based
+Computer Interpretable Guidelines (\CIGs{}) can serve as both the
+non-executable \BPG{}, and the \BPGLogic{} of a \CDSS{}, eliminating any
+\emph{specification-implementation gap}. Morover, any changes to the
+\CIG{} are reflected immediately in the \CDSS{}.
 
-While the safety critical nature of \CDSSs{} neccessitates
-\CIG{} languages to have comprehensive support for verification using
-tools like model checkers and deductive verifiers, certain challenges
-specific to \CDSSs{} require support beyond traditional techniques.
+\MediK{} merges the state-of-art in modeling and verifying concurrent systems and
+\CIG{} languages to address the \emph{complexity} of \CDSSs{}.
+A \MediK{} program consists of concurrently executing instances of
+Finite State Machines (\FSMs{}) that interact by passing messages.
+This enables a medical workflow, typically expressed using a flowchart-like
+notation, to be naturally translated to \FSM{}. Event passing between machines
+enables modeling inter-workflow interactions. \MediK{} treats
+external agents as \FSMs{} - any external interaction occurs
+through messages. This provides a \emph{uniform way} of incorporating
+\emph{external agent}. For analysis, external agents are modeled as \emph{ghost}
+\FSMs{} that support \emph{non-determinism}. \emph{Ghost} machines are discarded
+at runtime, and any properties established using such machines are guaranteed
+to hold as long as the external components conform to their \emph{ghost models}.
 
-Actions performed by a \CDSS{} can either be \emph{programming-oriented}
-or \emph{clinically-oriented} \cite{BoxwalaJBI04}. \emph{Programming-oriented}
-actions are peformed by executing the \CIG{} itself. For example,
-using patient parameters, or health records to make a reccomendation or diagnosis,
-or to raise a warning. \emph{Clinically-oriented} actions on the other hand
-are ones that involve a clinician. For example, in the case of \ACLS{},
-the \CDSS{} recommends that Cardiopulmonary Resuscitation (\CPR{}) be performed
-for a certain length of time. Such actions can only be performed by clinicians,
-and the \CDSS{} assumes that the recommended action was indeed performed before
-moving resuming guidance.
-
-For correctness, both categories of actions must be completed
-successfully. While traditional formal reasoning techniques can be employed
-to establish correctness of \emph{programming-oriented} actions, the same
-cannot be used to reason about \emph{clinically-oriented} ones.
-Thus, a mechanism that allows some guarantees about clinically-oriented is
-desirable.
-
-This proposal aims to address these limitations comprehensively
-using a \emph{semantics-first} approach.
-By \emph{semantics-first}, we mean that \CIG{} language we
-use to is formally defined, from which tools such as an interpreter, model checker,
+By \emph{semantics-first}, we mean that \MediK{}
+has a \emph{complete, formal semantics}  from which tools such as an interpreter, model checker,
 and deductive verifier are derived in a \emph{correct-by-construction}
-manner. At the core of our approach is new language Domain Specific Language (DSL)
-for \CIGs{} called \MediK{}. By emphasizing \HCP{}-\emph{comprehensibility},
-\MediK{} enables \HCPs{} to verify the semantic correctness of a \CIG{}.
-\MediK{} provides a uniform way of modeling diverse external agents, enabling reasoning about
-safety of the entire system.
+manner. \MediK{} can rapidly evolve to incorporate feedback from
+medical domain experts, as once the formal semantics are updated, the
+tools evolve automatically.
 
 \MediK{} has been used to implement a real-word \CDSS{} for screening and
 management of pediatric sepsis, and establish said \CDSS{} satisfies desired
