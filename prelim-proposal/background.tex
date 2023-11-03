@@ -1,16 +1,26 @@
 \section{Background}
 
-We first describe an example Best Practice Guidelines (\BPG{}) to
-explain characteristics that a \CIG{} language needs to have. We then
-explain limitations in existing approaches, and introduce our
-\emph{semantics-first} methodology.
+%We first describe an example Best Practice Guidelines (\BPG{}) to
+%explain characteristics that a \CIG{} language needs to have. We then
+%explain limitations in existing approaches, and introduce our
+%\emph{semantics-first} methodology.
+
+We first introduce relevant background work before discussing research challenges.
+In section \ref{utilizes a real-world \BPG} for management of sepsis
+in pediatric cases to introduce Guidelines-based \CDSSs{} and illustrate
+characteristics desirable of a framework for building \CDSSs{}.
+In section \ref{subsec:related-work} progress made by existing approaches and their limitations.
+Section \ref{subsec:semantics-first} introduces the \emph{semantics-first}
+philosophy. In section \ref{subsec:medik}, the \MediK{} \DSL{} is introduced,
+and its \emph{semantics-first} foundation is discussed.
+Section \ref{subsec:sepsis-cdss} discusses the \MediK{}-based \emph{executable}
+\BPG{} for management of sepsis and the corresponding \CDSS{}.
 
 \subsection{Guidelines-based Clinical Decision Support Systems}
 
 In this section, we introduce a real world \BPG{} for management of sepsis
 in pediatric cases to motivate the need for Guidelines-based Clinical Decision Support Systems (\CDSSs{}),
-and to illustrate characteristics that are desired of a framework for building
-\CDSSs{}.
+and to illustrate
 Sepsis is life-threatening condition caused by the body's extreme response to
 an infection \cite{RhodesICM17}, and is
 a major cause of morbidity and mortality in children \cite{Eisenberg2021JP}.
@@ -136,7 +146,7 @@ across many \BPGs{}. Specifically \BPGs{} typically:
   \end{table}
 %\end{center}
 
-\subsection{Limitations of Existing Approaches}
+\subsection{Related Work}\label{subsec:related-work}
 
 Existing research on \CDSSs{} has been instrumental in exposing
 their transformative potential and enabling wider adoption.
@@ -150,7 +160,7 @@ challenges in building \CDSSs{}:
     of the \CIG{} language must be formally defined to which tools
     such as execution engines must comply with.
 
-  \item \textbf{Formal Analysis Tools:} The langauge must have
+  \item \textbf{Formal Analysis Tools:} The language must have
     a suite of formal analysis tools (such as a model checker, deductive verifier)
     that enable correctness verification of complex, real-world \CDSSs{}
 
@@ -169,7 +179,7 @@ build towards addressing aforementioned challenges.
 The Arden Syntax \cite{HripcsakCBM94} a widely used medium for
 expressing \CIGs{}.  Guidelines as described using Medical
 Logic Modules that contains information related to guideline's purpose
-, maintainance, and medical knowledge. The modules are modular to allow
+, maintenance, and medical knowledge. The modules are modular to allow
 re-use and sharing across hospitals. But, Arden Syntax
 is focused on describing simple, modular, and independent
 guidelines (such as reminders), and not on guidelines with complex logic (such
@@ -218,7 +228,7 @@ enabling seamless integration into hospitals' existing Clinical Information Syst
 (\CISs). But, it lacks complete formal semantics, and analysis tools
 such as deductive verifiers and model checkers.
 The GLARE formalism \cite{TerenzianiBook04} uses an actions based approach
-to represent guidelines, and addresses clnician-comprehensibility and
+to represent guidelines, and addresses clinician-comprehensibility and
 modularity. For formal analysis, GLARE guidelines can be translated to
 Promela: the SPIN model checker's specification language \cite{GiordanoAMIA06}.
 The approach partly addresses holistic safety as
@@ -236,7 +246,7 @@ This proposal aim to build on progress made by existing work to comprehensively
 address all challenges mentioned earlier. Next, we describe the
 \emph{semantics-first} approach to building systems.
 
-\subsection{Semantics-First Approach}
+\subsection{Semantics-First Approach}\label{subsec:semantics-first}
 
 The semantics first approach dictates that the semantics
 of a language should be formally defined. Tools for the language
@@ -252,3 +262,12 @@ the approach ensures. Second, \MediK{} has to evolve quickly
 to incorporate feedback that it receives from domain experts.
 Such changes in the semantics-first approach only require changes to
 the semantics, and all tools are updated automatically.
+
+\subsection{\MediK{}}\label{subsec:medik}
+Here we discuss sepsis guideline in \MediK{}
+
+
+\subsection{Pediatric Sepsis Executable \BPG{}}\label{subsec:sepsis-cdss}
+Pediatric sepsis \CDSS{} in \MediK{}
+
+
