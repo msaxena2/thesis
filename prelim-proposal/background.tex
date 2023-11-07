@@ -6,21 +6,24 @@
 %\emph{semantics-first} methodology.
 
 We first introduce relevant background work before discussing research challenges.
-In section \ref{utilizes a real-world \BPG} for management of sepsis
-in pediatric cases to introduce Guidelines-based \CDSSs{} and illustrate
+In section \ref{subsec:cdss}, a real-world \BPG{} for management of sepsis
+in pediatric cases is used to introduce Guidelines-based \CDSSs{} and illustrate
 characteristics desirable of a framework for building \CDSSs{}.
-In section \ref{subsec:related-work} progress made by existing approaches and their limitations.
-Section \ref{subsec:semantics-first} introduces the \emph{semantics-first}
-philosophy. In section \ref{subsec:medik}, the \MediK{} \DSL{} is introduced,
-and its \emph{semantics-first} foundation is discussed.
-Section \ref{subsec:sepsis-cdss} discusses the \MediK{}-based \emph{executable}
-\BPG{} for management of sepsis and the corresponding \CDSS{}.
+In section \ref{subsec:related-work}, we desribe progress
+made towards addressing said challenges by existing approaches and their limitations.
+Central to our approach is the \emph{semantics-first} philosophy,
+which is introduced in section \ref{subsec:semantics-first}.
+Section \ref{subsec:medik} introduces the \MediK{} \DSL{} for
+\emph{executable} \BPGs{} and explains how its design satisfies aforementioned
+characteristics. Section \ref{subsec:sepsis-cdss} discusses the \MediK{}-based
+\emph{executable} \BPG{} for management of sepsis and the corresponding \CDSS{}.
 
-\subsection{Guidelines-based Clinical Decision Support Systems}
+\subsection{Guidelines-based Clinical Decision Support Systems}\label{subsec:cdss}
 
-In this section, we introduce a real world \BPG{} for management of sepsis
-in pediatric cases to motivate the need for Guidelines-based Clinical Decision Support Systems (\CDSSs{}),
-and to illustrate
+We use a real-world \BPG{} for management of sepsis
+in pediatric cases used at the Children's Hospital of Illinois at OSF St.
+Francis Medical Center (OSF) to introduce \BPGs{} and Guidelines-based Clinical Decision
+Support Systems (\CDSSs{}), and illustrate characteristics desirable of a framework for such system.
 Sepsis is life-threatening condition caused by the body's extreme response to
 an infection \cite{RhodesICM17}, and is
 a major cause of morbidity and mortality in children \cite{Eisenberg2021JP}.
@@ -125,22 +128,25 @@ across many \BPGs{}. Specifically \BPGs{} typically:
 %\renewcommand{\arraystretch}{0.5}
 %\setlength\extrarowheight{-9pt}
   \begin{table}
+    \tiny
   \begin{tabularx}{\textwidth}{
       >{\centering\arraybackslash}X
     || >{\centering\arraybackslash}X
     | >{\centering\arraybackslash}X
     | >{\centering\arraybackslash}X
     | >{\centering\arraybackslash}X
+    | >{\centering\arraybackslash}X
   }
-                 & Implementation-Specification Gap & Complete Formal Semantics & Formal Analysis Tools & Holistic Safety  \\
-    Arden Syntax & $\greencheck$                               & $\redcross$               & $\redcross$           & $\redcross$ \\
-    GLIF         & $\greencheck$                               & $\redcross$               & $\redcross$           & $\redcross$ \\
-    Asbru        & $\greencheck$                               & $\cancelcheck$            & $\greencheck$         & $\redcross$ \\
-    PROForma     & $\greencheck$                               & $\greencheck$             & $\redcross$           & $\redcross$ \\
-    GLARE        & $\greencheck$                               & $\cancelcheck$            & $\cancelcheck$        & $\cancelcheck$ \\
-    Promela/SPIN & $\redcross$                                 & $\greencheck$             & $\greencheck$         & $\cancelcheck$ \\
-    AMSs         & $\redcross$                                 & $\greencheck$             & $\greencheck$         & $\redcross$ \\
-    SAGE         & $\greencheck$                               & $\redcross$               & $\redcross$           & $\redcross$ \\
+                 & Specification-Implementation Gap  & Complex Workflows  & Diverse Agents   & Formal Analysis  & Holistic Safety  \\
+    Arden Syntax & $\greencheck$                     & $\redcross$        & $\redcross$    & $\redcross$        & $\redcross$ \\
+    GLIF         & $\greencheck$                     & $\greencheck$      & $\redcross$    & $\redcross$        & $\redcross$ \\
+    Asbru        & $\greencheck$                     & $\greencheck$      & $\redcross$    & $\greencheck$      & $\redcross$ \\
+    PROForma     & $\greencheck$                     & $\greencheck$      & $\redcross$    & $\redcross$        & $\redcross$ \\
+    GLARE        & $\greencheck$                     & $\greencheck$      & $\redcross$    & $\cancelcheck$     & $\cancelcheck$ \\
+    SAGE         & $\greencheck$                     & $\greencheck$      & $\greencheck$  & $\redcross$        & $\redcross$ \\
+    Promela/SPIN & $\redcross$                       & $\greencheck$      & $\redcross$    & $\greencheck$      & $\cancelcheck$ \\
+    AMSs         & $\redcross$                       & $\greencheck$      & $\redcross$    & $\greencheck$      & $\redcross$ \\
+    P            & $\redcross$                       & $\greencheck$      & $\greencheck$  & $\greencheck$      & $\redcross$ \\
   \end{tabularx}
   \caption{Comparison of Existing Approaches}\label{table:existing-approaches}
   \end{table}
@@ -148,42 +154,50 @@ across many \BPGs{}. Specifically \BPGs{} typically:
 
 \subsection{Related Work}\label{subsec:related-work}
 
-Existing research on \CDSSs{} has been instrumental in exposing
-their transformative potential and enabling wider adoption.
 Recall from section \ref{sec:introduction} the following
 challenges in building \CDSSs{}:
 \begin{itemize}
-  \item \textbf{Implementation-Specification Gap:} The specification,
+  \item \textbf{Specification-Implementation Gap:} The specification,
     i.e., the \BPG{}, may differ from its translation in a computable
     medium, i.e. \CIG{}.
-  \item \textbf{Formal Semantics:} The semantics
-    of the \CIG{} language must be formally defined to which tools
-    such as execution engines must comply with.
-
-  \item \textbf{Formal Analysis Tools:} The language must have
-    a suite of formal analysis tools (such as a model checker, deductive verifier)
-    that enable correctness verification of complex, real-world \CDSSs{}
-
+  \item \textbf{Complexity:} \BPGs{} encode complex medical knowledge,
+    involving multiple \emph{concurrent} workflows and \emph{inter-workflow}
+    interactions. Moroever, $\CDSSs{}$ interact with \emph{diverse
+    external agents} such as medical sensors and patient records.
+  \item \textbf{Formal Analysis:} As \CDSSs{} are \emph{safety-critical},
+    it's desirable to have execution engines with \emph{correctness guarantees}
+    and a suite of formal analysis tools such as model checkers and deductive
+    verifiers that can handle aforementioned complexity.
   \item \textbf{Holistic Safety:} A mechanism for establishing the safety
     of the entire system must exist. This includes reasoning about external
     components, and safely integrating AI-enabled components.
 \end{itemize}
 
-In \tablename{} \ref{table:existing-approaches}, we provide an overview of
+Existing research has been instrumental in both recognizing aforementioned
+challenges and adressing them to various degrees, leading to greater \CDSS{}
+adoption. In \tablename{} \ref{table:existing-approaches}, we provide an overview of
 how existing work addresses aforementioned challenges. We use
 \greencheck{}, \cancelcheck{}, and \redcross{} to depict that an approach
 fully-addresses, partly-addresses, or doesn't address a limitation respectively.
-We next go over existing approaches, and describe how they incrementally
-build towards addressing aforementioned challenges.
+We next go over notable approaches, and describe how they incrementally
+address said challenges.
 
-The Arden Syntax \cite{HripcsakCBM94} a widely used medium for
-expressing \CIGs{}.  Guidelines as described using Medical
+\paragraph{Arden Syntax:}
+
+The Arden Syntax \cite{HripcsakCBM94} is a widely used medium for
+writing executable \BPGs{}. First proposed in 1989, it was among the
+first languages to recognize and address the \emph{specification-implementation
+gap} by emphasizing \emph{comprehensibility} to non-experts in Computer Science \cite{SamwaldJBI12}.
+Guidelines are described using Medical
 Logic Modules that contains information related to guideline's purpose
 , maintenance, and medical knowledge. The modules are modular to allow
 re-use and sharing across hospitals. But, Arden Syntax
 is focused on describing simple, modular, and independent
 guidelines (such as reminders), and not on guidelines with complex logic (such
 as treatment protocols) \cite{PelegJBI01}.
+
+\paragraph{GLIF:}
+
 Arden Syntax's limitation in modeling complexity is addressed by
 GLIF \cite{BoxwalaJBI04}: a language that uses flowcharts to expressed
 guidelines. A multi-level approach is
@@ -200,6 +214,8 @@ expressed in them are meant to be shared across hospitals, and are thus modular.
 However, neither formalism has complete formal semantics, or comprehensive support for
 rigorous formal analysis.
 
+\paragraph{Asbru:}
+
 The need for formal analysis is identified by Asbru: a formalism with formally
 defined syntax and semantics \cite{ShaharAMIA96}. In Asbru, a guideline is modeled as a plan
 that contains:
@@ -213,6 +229,9 @@ Apart from an execution engine, the Asbru ecosystem also contains
 other tools, such as a model checker for verification \cite{BaumlerSPIN06}.
 However, the formal semantics of Asbru have been only partially defined, and
 is insufficient to implement tools for the language \cite{SuttonAMIA03}.
+
+\paragraph{PROForma:}
+
 The importance of a complete formal-semantics is identified and addressed
 by PROforma \cite{SuttonAMIA03}, another formalism that uses plans to
 model guidelines. A PROforma plan is made of a sequence of tasks.
@@ -221,6 +240,7 @@ for termination (for example, exceptions) \cite{SuttonAMIA03}. But, despite
 having complete formal semantics, it does not have a comprehensive suite of
 formal analysis tools such as model checkers, deductive verifiers.
 
+\paragraph{SAGE:}
 The SAGE guideline model \cite{TuSAGE04} uses the Prot\'eg\'e knowledge
 representation framework \cite{NoyAMIA03} to model guidelines,
 and improves on aforementioned approaches by
@@ -235,11 +255,18 @@ The approach partly addresses holistic safety as
 external agents (such as clinicians) can be modelled and analyzed.
 But, the scenario where the external agent's behavior
 deviates from the model during system execution isn't addressed.
-Non medical-domain specific languages can also be used to reason about
+
+
+Languages outside the medical domain can also be used to reason about
 medical systems. For example, in \cite{ArcainiMEMCODE15}, Abstract State
 Machines (\ASMs) are used to validate and verify a system for measuring
-patients' stereoacuity in the diagnosis of amyblyopia. But such a
-formalism, while suitable for formal verification, may
+patients' stereoacuity in the diagnosis of amyblyopia.
+Along similar lines, the P language \cite{DesaiPLDI13}
+and analysis of large concurrent systems provides a convenient medium
+for expressing multiple workflows and interactions as concurrently
+executing Finite State Machines (FSMs). External agents can be modeled
+using \emph{ghost} that are used for formal analysis, but discarded at runtime.
+But such formalisms, while suitable for formal verification, may
 not be easily comprehensible to clinicians for validation.
 
 This proposal aim to build on progress made by existing work to comprehensively
