@@ -269,26 +269,43 @@ using \emph{ghost} that are used for formal analysis, but discarded at runtime.
 But such formalisms, while suitable for formal verification, may
 not be easily comprehensible to clinicians for validation.
 
-This proposal aim to build on progress made by existing work to comprehensively
-address all challenges mentioned earlier. Next, we describe the
-\emph{semantics-first} approach to building systems.
+This proposal aims to build on progress made by existing work to
+address aforementioned challenges using the \emph{semantics-first} approach,
+which we describe in the following section.
 
 \subsection{Semantics-First Approach}\label{subsec:semantics-first}
-
-The semantics first approach dictates that the semantics
-of a language should be formally defined. Tools for the language
-such as interpreters, compilers, model checkers and deductive
-verifiers should be derived from the semantics in a
-\emph{correct-by-construction} fashion, instead of being implemented
-from scratch in an ad-hoc manner.
+\begin{wrapfigure}{l}{0.6\textwidth}
+  \centering
+  \includegraphics[width=0.5\textwidth]{k-overview}
+  \caption{\emph{Semantics-first} Approach} \label{fig:k-overview}
+\end{wrapfigure}
+Recall from section \ref{sec:introduction} that at the core of our approach
+is a new \DSL{} for writing executable \BPGs{} called \MediK{}.
+The \emph{semantics-first} approach dictates that instead of
+implementing tools such as interpreters, model checkers and deductive verifiers
+from scratch in an ad-hoc way, the semantics of the language should
+be formally defined and utilized to derive said tools in a
+\emph{correct-by-construction} fashion, as shown in \figurename{} \ref{fig:k-overview}.
 
 For a language like \MediK{}, the semantics first approach has many benefits. First,
 since \MediK{} is meant to be used in safety-critical settings,
-it's vital that its interpreter has correctness guarantees, which
-the approach ensures. Second, \MediK{} has to evolve quickly
-to incorporate feedback that it receives from domain experts.
-Such changes in the semantics-first approach only require changes to
-the semantics, and all tools are updated automatically.
+it's vital that its interpreter has correctness guarantees and formal analysis
+tools such as model checkers and deductive verifiers, which the approach ensures.
+Second, \MediK{} has to evolve quickly to incorporate feedback that it receives from domain experts.
+Had we implemented all tools from scratch, any update to the language would
+require updates to the tools as well. With our approach, only the formal semantics
+need updating. Since the tools are derived from the semantics, they reflect all
+changes automatically.
+
+\MediK{}'s semantics have been formalized in the the $\K{}$-framework, which
+we describe next.
+
+\subsubsection{The $\K{}$ Framework}
+$\K$ is a rewrite-based executable semantics framework in which
+programming languages, type systems and formal analysis tools can be defined
+using configurations and rules \cite{KFrameworkURL}.
+
+
 
 \subsection{\MediK{}}\label{subsec:medik}
 Here we discuss sepsis guideline in \MediK{}
