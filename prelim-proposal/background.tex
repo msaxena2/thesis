@@ -302,10 +302,72 @@ we describe next.
 
 \subsubsection{The $\K{}$ Framework}
 $\K$ is a rewrite-based executable semantics framework in which
-programming languages, type systems and formal analysis tools can be defined
-using configurations and rules \cite{KFrameworkURL}.
+programming languages can be defined
+using configurations and rules \cite{KFrameworkURL}. Semantics
+defined in $\K$ typically consist of the following three components:
+\begin{itemize}
+  \item \textbf{Syntax:} Defined using BNF-like notation, and utilized
+    by $\K{}$ to generate a parser for the language.
+  \item \textbf{Configuration:} Organizes the program execution state into
+    units called \emph{cells} that be nested.
+  \item \textbf{Rules:} Operate over configuration segments and define
+    program evolution.
+\end{itemize}
 
+\begin{figure}[H]
+  \centering
+  \begin{lstlisting}[style=ksty, language=k,  multicols=2,
+  basicstyle=\ttfamily\scriptsize, numbers=left
+  ,framexleftmargin=1.5em
+  ,showspaces=false
+  ,xleftmargin=2em]
+module IMP-SYNTAX
+  imports DOMAINS-SYNTAX
+  syntax Exp ::=
+      Int
+    | Id
+    | Exp "+" Exp    [left, strict]
+    | Exp "-" Exp    [left, strict]
+    | "(" Exp ")"    [bracket]
 
+  syntax Stmt ::=
+      Id "=" Exp ";" [strict(2)]
+    | "if" "(" Exp ")"
+        Stmt Stmt    [strict(1)]
+    | "while" "(" Exp ")" Stmt
+    | "{" Stmt "}"   [bracket]
+    | "{" "}"
+    > Stmt Stmt      [left, strict(1)]
+  syntax Pgm ::= "int" Ids ";" Stmt
+  syntax Ids ::= List{Id,","}
+endmodule
+module IMP imports IMP-SYNTAX
+  imports DOMAINS
+  syntax KResult ::= Int
+  configuration
+   <T> <k> $PGM:Pgm </k>
+       <state> .Map </state> </T>
+  rule <k> X:Id => I ...</k>
+       <state>... X |-> I ...</state>
+  rule I1 + I2 => I1 +Int I2
+  rule I1 - I2 => I1 -Int I2
+  rule <k> X = I:Int => I ...</k>
+       <state>... X |-> (_ => I) ...</state>
+  rule {} S:Stmt => S
+  rule if(I) S _ => S requires I =/=Int 0
+  rule if(0) _ S => S
+  rule while(B) S => if(B) {S while(B) S} {}
+  rule <k> int (X, Xs => Xs) ; S </k>
+       <state>... (. => X |-> 0) </state>
+  rule int .Ids ; S => S
+endmodule
+\end{lstlisting}
+  \caption{IMP Semantics in $\K$}\label{fig:imp-semantics}
+\end{figure}
+
+In \figurename{} \ref{fig:imp-semantics}, we provide the $\K$ semantics
+for Imp, a simple imperative language that supports arithmetic expressions and
+statements such as variable declaration and assignment, branching (\inlineimp{if}) and looping (\inlineimp{while}).
 
 \subsection{\MediK{}}\label{subsec:medik}
 Here we discuss sepsis guideline in \MediK{}
