@@ -306,12 +306,12 @@ programming languages can be defined
 using configurations and rules \cite{KFrameworkURL}. Semantics
 defined in $\K$ typically consist of the following three components:
 \begin{itemize}
-  \item \textbf{Syntax:} Defined using BNF-like notation, and utilized
+  \item \emph{Syntax:} Defined using BNF-like notation, and utilized
     by $\K{}$ to generate a parser for the language.
-  \item \textbf{Configuration:} Organizes the program execution state into
+  \item \emph{Configuration:} Organizes the program execution state into
     units called \emph{cells} that be nested.
-  \item \textbf{Rules:} Operate over configuration segments and define
-    program evolution.
+  \item \emph{Rules:} Operate over configuration segments and define
+    program evolution via rewrites.
 \end{itemize}
 
 \begin{figure}[H]
@@ -350,7 +350,7 @@ module IMP imports IMP-SYNTAX
        <state>... X |-> I ...</state>
   rule I1 + I2 => I1 +Int I2
   rule I1 - I2 => I1 -Int I2
-  rule <k> X = I:Int => I ...</k>
+  rule <k> X = I:Int ; => . ...</k>
        <state>... X |-> (_ => I) ...</state>
   rule {} S:Stmt => S
   rule if(I) S _ => S requires I =/=Int 0
@@ -373,7 +373,7 @@ syntax, and \inlinek{IMP-SEMANTICS} containing the \inlinek{configuration} (line
 and rewrite rules (lines 27-39). Note that \inlinek{module IMP} imports
 \inlinek{module IMP-SYNTAX}, allowing rules to utilize the language's syntax.
 
-Syntax in $\K{}$ is defined in BNF-like notation, where terminals are enclosed
+\emph{Syntax} in $\K{}$ is defined using BNF-like notation; terminals are enclosed
 in quotes, and non-terminals begin with an uppercase. For example,
 consider the declaration of Imp expressions on lines 3-8. On lines 4-5,
 $\K$'s builtin support for integers (\inlinek{Int}) and program identifiers
@@ -395,7 +395,32 @@ declarations (\inlinek{"int" Ids ";"}) followed by other statements, where
  \inlinek{List\{Id, ","\}} is used on line 19 to define \inlinek{Ids}, the comma-separated list of
 program identifiers.
 
+Once the \emph{syntax} has been defined, $\K$ can utilize it to generate a
+parser for programs in the language. To impart semantics,
+we must describe how the program's \emph{execution state} evolves during execution,
+Said \emph{execution state} is organized using a \emph{configuration}.
+The configuration is an unordered list of (potentially nested) \emph{cells},
+specified using an XML-like notation. When writing \emph{rules} (as rewrites)
+over this state, any subset of the \emph{cells} present in the configuration
+can be mentioned. Thus, only parts of the state \emph{relevant} to the rule
+need to be mentioned; the rest of the state is assumed to remain unchanged.
+The keyword \inlinek{configuration} (line 24)  defines a \emph{configuration},
+followed by xml-like notation for the $\K$ \emph{cells}. For instance,
+\inlinek{<foo> <bar> ...  </bar> </foo>} corresponds to $\K$ \emph{cells} with
+the names \inlinek{foo} and \inlinek{bar} respectively, where \inlinek{bar}
+is nested under \inlinek{foo}.
 
+The configuration for Imp (lines 24-26) consists of a \emph{top} cell
+that contains a \inlinek{<k>} cell (line 25) and a \inlinek{<state>} cell (line 26).
+Typically,
+the program to be executed is placed in the \inlinek{<k>} cell. At
+runtime, \inlinek{$PGM} is replaced by the Abstract Syntax Tree (AST) of the program.
+On line 25, \inlinek{$PGM:Pgm} signifies that the program must parse as the
+sort \inlinek{Pgm} defined on line 18. The dot (\inlinek{.}) in \K is used to
+indicate \emph{empty}. For instance, \inlinek{.Map} on line 26 defines
+the contents of the \inlinek{<state>} cell to be an \emph{empty} map.
+Said map will be utilized to keep track of values assigned to program
+identifiers during execution.
 
 \subsection{\MediK{}}\label{subsec:medik}
 Here we discuss sepsis guideline in \MediK{}
