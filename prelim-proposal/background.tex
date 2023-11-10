@@ -317,8 +317,7 @@ defined in $\K$ typically consist of the following three components:
 \begin{figure}[H]
   \centering
   \begin{lstlisting}[style=ksty, language=k,  multicols=2,
-  basicstyle=\ttfamily\scriptsize, numbers=left
-  ,framexleftmargin=1.5em
+  basicstyle=\ttfamily\notsotiny, numbers=left
   ,showspaces=false
   ,xleftmargin=2em]
 module IMP-SYNTAX
@@ -368,6 +367,35 @@ endmodule
 In \figurename{} \ref{fig:imp-semantics}, we provide the $\K$ semantics
 for Imp, a simple imperative language that supports arithmetic expressions and
 statements such as variable declaration and assignment, branching (\inlineimp{if}) and looping (\inlineimp{while}).
+In $\K{}$ code must be placed inside a \inlinek{module}. The Imp definition
+consists of two such modules: \inlinek{IMP-SYNTAX} (lines 1-20) defining the language's
+syntax, and \inlinek{IMP-SEMANTICS} containing the \inlinek{configuration} (lines 24-26)
+and rewrite rules (lines 27-39). Note that \inlinek{module IMP} imports
+\inlinek{module IMP-SYNTAX}, allowing rules to utilize the language's syntax.
+
+Syntax in $\K{}$ is defined in BNF-like notation, where terminals are enclosed
+in quotes, and non-terminals begin with an uppercase. For example,
+consider the declaration of Imp expressions on lines 3-8. On lines 4-5,
+$\K$'s builtin support for integers (\inlinek{Int}) and program identifiers
+(\inlinek{Id}) is used to support arithmetic expressions over program variables.
+On lines 6 and 7, the attribute \inlinek{left} is used to declare the
+corresponding operator as left associative. The \inlinek{strict} attribute is used
+to assign \emph{evaluation strategies}. On lines 6 and 7, the attribute
+signifies that both operand sub-expressions must be completely evaluted before the
+before the operator (\inlinek{+}, \inlinek{-}) can be evaluted. Similarly, for
+an assignment statement on line 12,
+the \inlinek{strict(2)} indicates that the second argument, i.e., the
+expression to the right of the \inlineimp{=} sign must be evaluated before
+the identifier on the left of the \inlineimp{=} is updated. On line 17,
+the \inlinek{>} signifies that block of \inlinek{Stmt} productions preceding
+the sign (lines 11-16) have a higher precedence, i.e. bind tighter,
+than the production on line 17.
+On line 18, an Imp program is defined to start with a list of program variable
+declarations (\inlinek{"int" Ids ";"}) followed by other statements, where
+ \inlinek{List\{Id, ","\}} is used on line 19 to define \inlinek{Ids}, the comma-separated list of
+program identifiers.
+
+
 
 \subsection{\MediK{}}\label{subsec:medik}
 Here we discuss sepsis guideline in \MediK{}
