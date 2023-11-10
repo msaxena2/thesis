@@ -97,3 +97,7 @@
 \lstset{ literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1} }
 
 \makeatother
+\let\oldBox\Box
+\renewcommand{\Box}[1][0pt]{%
+  \mathrel{\raisebox{#1}{$\oldBox$}}%
+}

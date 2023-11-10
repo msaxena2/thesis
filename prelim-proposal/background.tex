@@ -410,17 +410,67 @@ followed by xml-like notation for the $\K$ \emph{cells}. For instance,
 the names \inlinek{foo} and \inlinek{bar} respectively, where \inlinek{bar}
 is nested under \inlinek{foo}.
 
-The configuration for Imp (lines 24-26) consists of a \emph{top} cell
+The configuration for Imp (lines 24-26) consists of a top cell \inlinek{<T>}
 that contains a \inlinek{<k>} cell (line 25) and a \inlinek{<state>} cell (line 26).
 Typically,
 the program to be executed is placed in the \inlinek{<k>} cell. At
-runtime, \inlinek{$PGM} is replaced by the Abstract Syntax Tree (AST) of the program.
-On line 25, \inlinek{$PGM:Pgm} signifies that the program must parse as the
-sort \inlinek{Pgm} defined on line 18. The dot (\inlinek{.}) in \K is used to
-indicate \emph{empty}. For instance, \inlinek{.Map} on line 26 defines
+runtime, \inlinek{PGM} is replaced by the Abstract Syntax Tree (AST) of the program.
+On line 25, \inlinek{PGM:Pgm} signifies that the program must parse as the
+sort \inlinek{Pgm} defined on line 18. The dot (\inlinek{.}) in $\K$
+indicates \emph{empty}. For instance, \inlinek{.Map} on line 26 defines
 the contents of the \inlinek{<state>} cell to be an \emph{empty} map.
 Said map will be utilized to keep track of values assigned to program
 identifiers during execution.
+
+$\K$ \emph{rules} operate over configuration segments and define evolution of
+program state. A rule is begins with the keyword \inlinek{rule}
+and is a statement of the form $\varphi \rightarrow \psi$, where
+$\varphi$, $\psi$ are patterns over configuration terms and $\K$ variables.
+We say $\varphi$ is the LHS and $\psi$ is the RHS of the rule.
+We define a \emph{substitution} $\theta$ be a map from $\K$-variables to terms.
+Say, for given pattern $\varphi$ and \emph{substitution} $\theta$,
+$\varphi\theta$ is the pattern obtained by replacing every variable $v$ in
+$\varphi$ with $\theta(v)$. We pattern $\varphi$ matches
+term $\tau$ iff there exists a substitution $\theta$ s.t. $\tau = \varphi\theta$.
+During execution, if the current configuration term
+$\tau$ \emph{matches} the LHS $\varphi$ of rule $\varphi \rightarrow \psi$
+with substitution $\theta$, then $C$ is rewritten to $\psi\theta$.
+Consider the rule for program variable assignment on lines 31-32.
+$\K$-variables always begin with an uppercase, and may be suffixed with
+\inlinek{:S}, where \inlinek{S} is the variable's sort.
+The rule in considerations uses two variables \inlinek{X} and \inlinek{I}
+having sorts \inlinek{Id} and \inlinek{Int} respectively. Suppose
+we're trying to evaluate the statement \inlineimp{x = 2 + 3;}.
+Recall that the \inlinek{<k>} cell typically contains the
+the program. Thus, we have would have \inlinek{x = 2 + 3;} at the start
+of the cell. Note that in $\K$, \inlinek{...} is used to represent
+parts of the configuration \emph{not relevant} to the rule. Said parts remain
+\emph{unchanged} during the rewrite. Since variable $I$ is suffixed with the sort
+\inlinek{Int}, the variable assignment rule will \emph{not} match the
+configuration. Since the assignment statement is \inlinek{strict} in
+the second argument (line 11), $\K$ will \emph{heat}, or pull-out the second
+argument for evaluation. This results in a configuration term of the form
+\inlinek{<k> 2 + 3} $\curvearrowright$ \inlinek{ x =\ }$ \Box[-1pt]$\inlinek{ ;
+...</k>}, where  $\curvearrowright$ to mean \emph{followed-by}, i.e.
+the evaluation of \inlinek{2 + 3} must occur \emph{before} the evaluation
+of \inlinek{x = \ }$\Box[-1pt]$\inlinek{;}. $\Box[-1pt]$
+denotes a \emph{hole} left in place of the argument that was \emph{heated}.
+\inlinek{<k> 2 + 3} $\curvearrowright$ \inlinek{x =\ } $\Box[-1pt]$\inlinek{ ;
+...</k>} is re-written to \inlinek{<k> 5} $\curvearrowright$ \inlinek{x =\ }$
+\Box[-1pt]$\inlinek{ ;
+...</k>} by an application of the arithemtic addition rule on line 29. On
+line 23, we specify any term of sort \inlinek{Int} to be a \inlinek{KResult}.
+This signifies that the term can no longer be evaluted, and is \emph{cooled}
+or plugged-back into the original, resulting in \inlinek{<k> x = 5; ...</k>}
+Now the LHS of the assignment rule can \emph{match} with substitution $\theta =
+($\inlinek{X}\ $ \mapsto $ \inlinek{x}$,$ \inlinek{I} $\mapsto\ $ \inlinek{5}$)$, resulting in the value that identifier \inlinek{x}
+is bound to in the \inlinek{<state>} cell to be rewritten to \inlinek{5}.
+Note the difference between program identifiers and $\K$ variables. While
+program variables are simply terms belonging to sort \inlinek{Id},
+$\K$ variables have logical meaning. If multiple rules can match
+the configuration term, then one rule is non-deterministically chosen.
+Execution is a sequence of rule applications that continues until no
+rule can match the configuration.
 
 \subsection{\MediK{}}\label{subsec:medik}
 Here we discuss sepsis guideline in \MediK{}
