@@ -12,7 +12,7 @@ characteristics desirable of a framework for building \CDSSs{}.
 In section \ref{subsec:related-work}, we desribe progress
 made towards addressing said challenges by existing approaches and their limitations.
 Central to our approach is the \emph{semantics-first} philosophy,
-which is introduced in section \ref{subsec:semantics-first}.
+which is introduced in section \ref{subsec:semantics-first-and-k}.
 Section \ref{subsec:medik} introduces the \MediK{} \DSL{} for
 \emph{executable} \BPGs{} and explains how its design satisfies aforementioned
 characteristics. Section \ref{subsec:sepsis-cdss} discusses the \MediK{}-based
@@ -273,7 +273,7 @@ This proposal aims to build on progress made by existing work to
 address aforementioned challenges using the \emph{semantics-first} approach,
 which we describe in the following section.
 
-\subsection{Semantics-First Approach}\label{subsec:semantics-first}
+\subsection{Semantics-First Approach and the $\K$ Framework}\label{subsec:semantics-first-and-k}
 \begin{wrapfigure}{l}{0.6\textwidth}
   \centering
   \includegraphics[width=0.5\textwidth]{k-overview}
@@ -298,10 +298,7 @@ need updating. Since the tools are derived from the semantics, they reflect all
 changes automatically.
 
 \MediK{}'s semantics have been formalized in the the $\K{}$-framework, which
-we describe next.
-
-\subsubsection{The $\K{}$ Framework}
-$\K$ is a rewrite-based executable semantics framework in which
+we describe next. $\K$ is a rewrite-based executable semantics framework in which
 programming languages can be defined
 using configurations and rules \cite{KFrameworkURL}. Semantics
 defined in $\K$ typically consist of the following three components:
@@ -397,8 +394,8 @@ program identifiers.
 
 Once the \emph{syntax} has been defined, $\K$ can utilize it to generate a
 parser for programs in the language. To impart semantics,
-we must describe how the program's \emph{execution state} evolves during execution,
-Said \emph{execution state} is organized using a \emph{configuration}.
+we must describe how the program's \emph{execution state} evolves during
+execution. In $\K$ \emph{state} is organized into a \emph{configuration}.
 The configuration is an unordered list of (potentially nested) \emph{cells},
 specified using an XML-like notation. When writing \emph{rules} (as rewrites)
 over this state, any subset of the \emph{cells} present in the configuration
@@ -472,11 +469,101 @@ the configuration term, then one rule is non-deterministically chosen.
 Execution is a sequence of rule applications that continues until no
 rule can match the configuration.
 
+\subsubsection{Evaluating $\K$ for \MediK}
+
+The choice to use $\K{}$ as the basis of our approach was not arbitrary.
+While $\K$ has been successfully used to define several other languages
+such as C \cite{HathhornPLDI15}, Java \cite{BogdanasPOPL15} and Javascript
+\cite{ParkPLDI15}, we answered the following questions while evaluating $\K$
+as the basis of our approach:
+
+\textbf{Do $\K$ semantics and derived tools compare favorably against language-specific ones?}
+
+To derive maximum benefit from the $\K$ semantics, it is important that:
+\begin{enumerate*}[label=(\roman*)]
+  \item the $\K$ semantics is descriptive enough to implement language-specific
+    tools such as interpreters, model checkers, etc, and,
+  \item $\K$-derived tools compare favorably against their language-specific
+    counterparts.
+\end{enumerate*}
+In \MediK{}'s case, we needed to ensure that the interpreter,
+in particular, is appropriate for
+use in a \CDSS{}. The concern for performance stems from the fact
+that being language-agnostic, $\K{}$ derived tools
+cannot accommodate language-specific optimizations.
+
+To evaluate the feasibility of $\K$ semantics and derived tools, we
+drew upon our work of defining the semantics of a real-world language
+(unrelated to \MediK{}), where the $\K$ semantics and derived tools offer
+are viable alternatives to their language-specific counterparts.
+
+In \cite{HildenbrandtCSF18},
+we completely defined the semantics of the Ethereum Virtual Machine (EVM)
+in $\K{}$. The EVM is a low-level stack-based language
+that forms backbone of the Ethereum Blockchain. Unlike \MediK{},
+EVM had an existing informal paper-based semantics
+called the Yellow Paper \cite{evmYellowpaperUrl},
+and a reference implementation in C++ \cite{cppEthereumUrl}.
+This allowed us to compare the $\K$ based semantics
+and interpreter against mature language-specific ones.
+
+
+We based our $\K$ semantics on the Yellow Paper, and
+found several inconsistencies that were confirmed by its developers \cite{HildenbrandtCSF18}.
+This stems from the fact that unlike the $\K$ semantics,
+the Yellow Paper is an informal document in natural language.
+Often, the Yellow Paper was found to be unclear, underspecified
+or inconsistent with the behavior of actual implementations.
+As the $\K$ semantics are executable, all details have to
+considered for our interpreter to pass all tests in the reference
+test-suite. We utilized the developer documentation for our semantics
+to generate an alternative to the Yellow Paper itself, called the Jello Paper
+\cite{evmJellopaperUrl}. The Jello Paper has been well-received by the
+community, with discussions to designate it as the \emph{canonical document}
+instead of the Yellow Paper. For more details, we refer the reader to
+section VII of \cite{HildenbrandtCSF18}.
+
+\begin{wrapfigure}{l}{0.6\textwidth}
+      \begin{tabular}{ l l l l }
+          \textbf{Test Set} (no. tests) & \textbf{Lem EVM} & \textbf{KEVM} & \textbf{cpp-ethereum} \\
+          Lem (40665)                   & 288:39           & 34:23         & 3:06                  \\
+          VMStress (18)                 & -                & 72:31         & 2:25                  \\
+          VMNormal (40665)              & -                & 27:10         & 2:17                  \\
+          VMAll (40683)                 & -                & 99:41         & 4:42                  \\
+          GSNormal(22705)               & -                & 35:00         & 1:30                  \\
+          GSQuad (250)                  & -                & 855:24        & 0:21                  \\
+          GSAll (22955)                 & -                & 889:00        & 1:51                  \\
+      \end{tabular}
+  \caption{Lem EVM vs KEVM vs cpp-ethereum}\label{fig:evm-comparison}
+\end{wrapfigure}
+\figurename{} \ref{fig:evm-comparison} compares the $\K{}$-generated interpreter
+against the reference implementation (\textbf{cpp-ethereum}) and
+another formalization (\textbf{Lem EVM}) of the EVM semantics \cite{HiraiWSTC17} in Lem \cite{MulliganACM14}
+on the official test that implementations are expected to pass.
+All execution times are given as the full sequential CPU time (in MM:SS format) on an Intel i5-3330 processor (3GHz on 4 hardware threads) and 24 GB of RAM.
+By comparing to the C++ reference implementation, we show the feasibility of using the KEVM formal semantics for prototyping, development, and test-suite evaluation.
+
+The row Lem indicates a run of all the tests that the Lem semantics can run (a subset of the VMTests).
+The row VMStress indicates a run of all 18 stress tests in the test-suite, to compare the performance of KEVM with the C++ implementation.
+The row VMNormal is a run of all the non-stress tests in the test-suite (\textit{not} the same set of tests as Lem).
+VMAll is the addition of the second and third rows and is included for completeness.
+The last three rows indicate a runs of the GeneralStateTests; GSNormal are the non-stress tests, GSQuad are the stress tests, and GSAll is the addition of the two.
+Under the GeneralStateTests, our tools performs well except in the case of QuadraticStateTests (250 out of 22955).
+
+As shown in the comparison, not only did the $\K$ gnerated interpreter significantly
+outperformed the Lem-based formal executable EVM semantics, it performs
+favorably when compared to the language-specific reference implementation.
+It was under 30 times slower on the stress tests, roughly 20 times
+slower on all tests, and only 11 times slower on VMNormal tests.
+Note that since the publication of the paper, newer versions
+of $\K$ have been introduced with significant performance improvements.
+Thus, our experience of defining EVM in $\K{}$ provides confidence
+in using $\K$ as the basis of our approach.
+
 \subsection{\MediK{}}\label{subsec:medik}
 Here we discuss sepsis guideline in \MediK{}
 
 
 \subsection{Pediatric Sepsis Executable \BPG{}}\label{subsec:sepsis-cdss}
 Pediatric sepsis \CDSS{} in \MediK{}
-
 
