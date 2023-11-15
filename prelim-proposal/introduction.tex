@@ -193,118 +193,180 @@ a challenge.
 This proposal aims to systematically address aforementioned challenges
 using a \emph{semantics-first} approach. At the core of this approach
 is a novel language for writing \BPGs{} in a \emph{computer interpretable}
-manner called \MediK{}. By being \emph{comprehensible} to domain experts in medicine, \MediK{}-based
+manner called \MediK{}. \MediK{} builds on the existing state-of-art
+for modeling large concurrent systems and other \CIG{} languages to enable expressing \emph{complex}
+\BPGs{} naturally. By being \emph{comprehensible} to domain experts in medicine, \MediK{}-based
 Computer Interpretable Guidelines (\CIGs{}) can serve as both the
 non-executable \BPG{}, and the \BPGLogic{} of a \CDSS{}, eliminating any
 \emph{specification-implementation gap}. Morover, any changes to the
 \CIG{} are reflected immediately in the \CDSS{}.
 
-\MediK{} merges the state-of-art in modeling and verifying concurrent systems and
-\CIG{} languages to address the \emph{complexity} of \CDSSs{}.
-A \MediK{} program consists of concurrently executing instances of
-Finite State Machines (\FSMs{}) that interact by passing messages.
-This enables a medical workflow, typically expressed using a flowchart-like
-notation, to be naturally translated to \FSM{}. Event passing between machines
-enables modeling inter-workflow interactions. \MediK{} treats
-external agents as \FSMs{} - any external interaction occurs
-through messages. This provides a \emph{uniform way} of incorporating
-\emph{external agent}. For analysis, external agents are modeled as \emph{ghost}
-\FSMs{} that support \emph{non-determinism}. \emph{Ghost} machines are discarded
-at runtime, and any properties established using such machines are guaranteed
-to hold as long as the external components conform to their \emph{ghost models}.
+%\MediK{} merges the state-of-art in modeling and verifying concurrent systems and
+%\CIG{} languages to address the \emph{complexity} of \CDSSs{}.
+%A \MediK{} program consists of concurrently executing instances of
+%Finite State Machines (\FSMs{}) that interact by passing messages.
+%This enables a medical workflow, typically expressed using a flowchart-like
+%notation, to be naturally translated to \FSM{}. Event passing between machines
+%enables modeling inter-workflow interactions. \MediK{} treats
+%external agents as \FSMs{} - any external interaction occurs
+%through messages. This provides a \emph{uniform way} of incorporating
+%\emph{external agent}. For analysis, external agents are modeled as \emph{ghost}
+%\FSMs{} that support \emph{non-determinism}. \emph{Ghost} machines are discarded
+%at runtime, and any properties established using such machines are guaranteed
+%to hold as long as the external components conform to their \emph{ghost models}.
 
-By \emph{semantics-first}, we mean that \MediK{}
-has a \emph{complete, formal semantics}  from which tools such as an interpreter, model checker,
+By \emph{semantics-first}, we mean that our proposed
+has a \emph{complete, formal semantics} from which tools such as an interpreter, model checker,
 and deductive verifier are derived in a \emph{correct-by-construction}
-manner. \MediK{} can rapidly evolve to incorporate feedback from
+manner, addressing the \emph{formal analysis} aspect of building \CDSSs{}.
+This also enable rapid incorporation feedback from
 medical domain experts, as once the formal semantics are updated, the
 tools evolve automatically.
 
-\MediK{} has been used to implement a real-word \CDSS{} for screening and
-management of pediatric sepsis, and establish said \CDSS{} satisfies desired
-safety properties. To the best of our knowledge, it is the first system
-for sepsis management with formal safety guarantees.
+In essence, our approach can be broken down into the following research
+questions (RQs):
 
-While \MediK{} presents a promising direction towards developing safe real-world
-systems, realizing its full potential requires addressing the following research
-challenges (RCs):
-
-\paragraph{RC 1 (Design):} Is \MediK{}'s design conducive to expressing diverse \BPGs{}?
-
-\BPGs{} can vary greatly by scope and purpose. For instance,
+\textbf{RQ 1 (Language Design):}  \BPGs{} can vary greatly by scope and purpose.
+For instance,
 consider differences between the \BPGs{} for managing cardiac
-arrest and sepsis. The \BPG{} for cardiac arrest can be
+arrest \cite{acls-url} and sepsis \cite{RhodesICM17}. The \BPG{} for cardiac arrest can be
 succinctly depicted by a single workflow. On the other hand, the \BPG{} for
 screening and management of sepsis involves multiple workflows with complex
-inter-workflow interactions.
-This proposal seeks to answer whether \MediK{}'s
+inter-workflow interactions. Can \MediK{}'s
 design can adequately accomodate diversity in \BPGs{}, without
-compromising on readability. To this end, we plan to collaborate with
-experts in medicine to ensure that the language meets their needs.
-The \emph{semantics-first} approach is particularly
-well-suited for designing the language, as updates to the language
-only require changes to the semantics. As tools are derived from the semantics,
-they update automatically.
+compromising on comprehensibility?
 
-\paragraph{RC 2 (Ecosystem):} Does \MediK{} have a mature
-set of tools that enable building safe \CDSSs{}?
+\textbf{RQ 2 (Applications):} Can our approach be used to build real-world
+\CDSSs{} for complex clinical scenarios? By real-world, we mean systems that are capable of consideration
+for use in hospitals.
+%\emph{semantics-first} approach. In particular, our approach
+%enables the following capabilities:
+%
+%\begin{itemize}
+%  \item \textbf{Guideline Adherence Proofs:} Execution of a
+%\MediK{} \BPG{} is simply a proof in Matching Logic (ML), the logic
+%underlying the $\K{}$ framework, using the semantic rules as axioms.
+%Said proofs can be checked by an external ML proof-checker.
+%In \MediK{}'s case, execution proofs can serve as evidence of adherence to best practices during treatment.
+%Moreoever, zero-knowledge proofs can allow hospitals to establish
+%conformance to best practices, without divulging sensitive information
+%such as \emph{patient data} or \emph{specific treatment}
+%  \item \textbf{Safe Incorporation of Artificial Intelligence (AI):}
+%Advances in AI have applications in medicine. AI-based components
+%can enable early detection and targed treatment of medical conditions.
+%However, integrating such systems \emph{safely} remains a challenge,
+%\emph{hallucinations} in AI-based systems can lead to serious consequences.
+%We seek to explore \emph{safe} incorporation of AI-based systems into cafe-flow using
+%a simplex-based approach, where recommendations from an AI-based component are
+%\emph{checked} against known best practices before they're enacted.
+%If the recommendation is determined to be unsafe, a fallback action is enacted
+%instead.
 
-\MediK{} has a complete executable formal semantics, from which
-its tools are derived in a \emph{correct-by-construction} fashion.
-But, as real-world \BPGs{} are complex, establishing appropriate safety and liveness properties using
-said tools presents various challenges. The proposal seeks to build on
-\MediK{}'s toolchain to support verification of desired safety and liveness
-properties of large \BPGs{}.
-
-While $\K$ derived tools enable execution and analysis of \MediK{} programs,
-certain \BPG{}-specific requirements may not have direct $\K{}$ equivalents.
-In such cases, this proposal seeks to develop new semantics-based tools within
-the $\K{}$ ecosystem, that are vital in \MediK's context, but may also have
-applications for other $\K$-based languages.
-For instance, visual representations of \MediK{} programs can
-significantly improve comprehensibility of \MediK{} programs to medical domain
-experts. This proposal seeks to expand on techniques
-such as semantics-based compilation that can be used to extract information such
-as basic blocks from code to generate \emph{correct-by-construction} visual
-representation of programs in any language.
-
-\paragraph{RC 3 (Applications):} Can our approach be used to build real-world
-\CDSSs{}? How can \MediK{} improve \CDSSs{} effectiveness?
-
-While \MediK{} has been used to implement a real-world,
-this proposal seeks to establish that our approach can be used to build
-other real-world \CDSSs{}. By real-world, we mean \CDSSs{} that are
-capable of consideration for clinical trials at hospitals. Note that we
-intend to use clinical-trial worthiness as an indicator of the effectiveness
-of \MediK{}, not the result of the trial itself.
-Clinical-trial worth systems need to be integrated into existing hospital care-flow.
-This involves handle hospital-specific variations, such as
-diversity in data sources and health records. This proposal seeks to
-develop the \MediK{} ecosystem to a point where it can be used to build
-such systems.
-
-This proposal also seeks to develop new \CDSS{} capabilities enabled by the
-\emph{semantics-first} approach. In particular, our approach
-enables the following capabilities:
-
+\textbf{RQ 3 (Ecosystem):} Do semantics derived tools work well for \CDSSs{}?
+If the tools derived from the semantics cannot be used to execute and analyze
+\CDSS{} code, then the purpose of having said semantics defined in an executable
+manner is defeated. Thus, we seek to establish that:
 \begin{itemize}
-  \item \textbf{Guideline Adherence Proofs:} Execution of a
-\MediK{} \BPG{} is simply a proof in Matching Logic (ML), the logic
-underlying the $\K{}$ framework, using the semantic rules as axioms.
-Said proofs can be checked by an external ML proof-checker.
-In \MediK{}'s case, execution proofs can serve as evidence of adherence to best practices during treatment.
-Moreoever, zero-knowledge proofs can allow hospitals to establish
-conformance to best practices, without divulging sensitive information
-such as \emph{patient data} or \emph{specific treatment}
-  \item \textbf{Safe Incorporation of Artificial Intelligence (AI):}
-Advances in AI have applications in medicine. AI-based components
-can enable early detection and targed treatment of medical conditions.
-However, integrating such systems \emph{safely} remains a challenge,
-\emph{hallucinations} in AI-based systems can lead to serious consequences.
-We seek to explore \emph{safe} incorporation of AI-based systems into cafe-flow using
-a simplex-based approach, where recommendations from an AI-based component are
-\emph{checked} against known best practices before they're enacted.
-If the recommendation is determined to be unsafe, a fallback action is enacted
-instead.
+  \item The interpreter is performant enough for use in a \CDSS{}.
+  \item The model checker, deductive verifier can support verification of real
+    world \CDSSs{}
 \end{itemize}
+Apart from existing tools, we may need to develop additional tools/techniques or
+adapt existing ones for  \CDSS{}-specific functionalities.
+    Notably, we seek to develop the following capabilities:
+\begin{itemize}
+  \item Generation visual representations of programs to aid medical domain experts comprehend said programs.
+  \item Utilization of formal proofs of execution as evidence of conformance to
+    prescribed best practices.
+\end{itemize}
+
+%To ensure \MediK{}
+%
+%\MediK{} has been used to implement a real-word \CDSS{} for screening and
+%management of pediatric sepsis, and establish said \CDSS{} satisfies desired
+%safety properties. To the best of our knowledge, it is the first system
+%for sepsis management with formal safety guarantees.
+%
+%While \MediK{} presents a promising direction towards developing safe real-world
+%systems, realizing its full potential requires addressing the following research
+%challenges (RCs):
+%
+%\paragraph{RC 1 (Design):} Is \MediK{}'s design conducive to expressing diverse \BPGs{}?
+%
+%\BPGs{} can vary greatly by scope and purpose. For instance,
+%consider differences between the \BPGs{} for managing cardiac
+%arrest and sepsis. The \BPG{} for cardiac arrest can be
+%succinctly depicted by a single workflow. On the other hand, the \BPG{} for
+%screening and management of sepsis involves multiple workflows with complex
+%inter-workflow interactions.
+%This proposal seeks to answer whether \MediK{}'s
+%design can adequately accomodate diversity in \BPGs{}, without
+%compromising on readability. To this end, we plan to collaborate with
+%experts in medicine to ensure that the language meets their needs.
+%The \emph{semantics-first} approach is particularly
+%well-suited for designing the language, as updates to the language
+%only require changes to the semantics. As tools are derived from the semantics,
+%they update automatically.
+%
+%\paragraph{RC 2 (Ecosystem):} Does \MediK{} have a mature
+%set of tools that enable building safe \CDSSs{}?
+%
+%\MediK{} has a complete executable formal semantics, from which
+%its tools are derived in a \emph{correct-by-construction} fashion.
+%But, as real-world \BPGs{} are complex, establishing appropriate safety and liveness properties using
+%said tools presents various challenges. The proposal seeks to build on
+%\MediK{}'s toolchain to support verification of desired safety and liveness
+%properties of large \BPGs{}.
+%
+%While $\K$ derived tools enable execution and analysis of \MediK{} programs,
+%certain \BPG{}-specific requirements may not have direct $\K{}$ equivalents.
+%In such cases, this proposal seeks to develop new semantics-based tools within
+%the $\K{}$ ecosystem, that are vital in \MediK's context, but may also have
+%applications for other $\K$-based languages.
+%For instance, visual representations of \MediK{} programs can
+%significantly improve comprehensibility of \MediK{} programs to medical domain
+%experts. This proposal seeks to expand on techniques
+%such as semantics-based compilation that can be used to extract information such
+%as basic blocks from code to generate \emph{correct-by-construction} visual
+%representation of programs in any language.
+%
+%\paragraph{RC 3 (Applications):} Can our approach be used to build real-world
+%\CDSSs{}? How can \MediK{} improve \CDSSs{} effectiveness?
+%
+%While \MediK{} has been used to implement a real-world,
+%this proposal seeks to establish that our approach can be used to build
+%other real-world \CDSSs{}. By real-world, we mean \CDSSs{} that are
+%capable of consideration for clinical trials at hospitals. Note that we
+%intend to use clinical-trial worthiness as an indicator of the effectiveness
+%of \MediK{}, not the result of the trial itself.
+%Clinical-trial worth systems need to be integrated into existing hospital care-flow.
+%This involves handle hospital-specific variations, such as
+%diversity in data sources and health records. This proposal seeks to
+%develop the \MediK{} ecosystem to a point where it can be used to build
+%such systems.
+%
+%This proposal also seeks to develop new \CDSS{} capabilities enabled by the
+%\emph{semantics-first} approach. In particular, our approach
+%enables the following capabilities:
+%
+%\begin{itemize}
+%  \item \textbf{Guideline Adherence Proofs:} Execution of a
+%\MediK{} \BPG{} is simply a proof in Matching Logic (ML), the logic
+%underlying the $\K{}$ framework, using the semantic rules as axioms.
+%Said proofs can be checked by an external ML proof-checker.
+%In \MediK{}'s case, execution proofs can serve as evidence of adherence to best practices during treatment.
+%Moreoever, zero-knowledge proofs can allow hospitals to establish
+%conformance to best practices, without divulging sensitive information
+%such as \emph{patient data} or \emph{specific treatment}
+%  \item \textbf{Safe Incorporation of Artificial Intelligence (AI):}
+%Advances in AI have applications in medicine. AI-based components
+%can enable early detection and targed treatment of medical conditions.
+%However, integrating such systems \emph{safely} remains a challenge,
+%\emph{hallucinations} in AI-based systems can lead to serious consequences.
+%We seek to explore \emph{safe} incorporation of AI-based systems into cafe-flow using
+%a simplex-based approach, where recommendations from an AI-based component are
+%\emph{checked} against known best practices before they're enacted.
+%If the recommendation is determined to be unsafe, a fallback action is enacted
+%instead.
+%\end{itemize}
 
