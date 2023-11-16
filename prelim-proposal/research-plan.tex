@@ -2,14 +2,57 @@
 
 In this section, we discuss challenges we plan to address through this work.
 
-\subsection{Generation of Visual Representations of \MediK{} Programs}
+\paragraph{Semantics-based Compilation of \MediK{} programs}
 
-Our experience of implementing pediatric sepsis management in \MediK{}
-revealed the importance of \emph{visual representations} to improve
-comprehensibility of \MediK{} programs to medical domain experts.
-\MediK{} programs structurally resemble flowhcharts by design, but
-if visualized, they resemble existing \BPGs{} found in medical
-literature that \HCPs{} are already familiar with.
+Semantics-based compilation (\SBC{}) addresses many problems
+in the context of \MediK{}. Some, such as \emph{performance improvements}
+for execution and analysis, are not specific to \MediK{}, but vital
+nevertheless. Others, such as \emph{enhancing comprehensibility} of programs
+to non-experts in Computer Science by enabling visual program summaries that only
+present \emph{relevant semantic information} is very benefecial in
+\MediK-centric settings.
 
-To achieve this, we plan to utilize \emph{semantics-based compilation}.
-Our approach
+Semantics-based compilation can be considered a generalization of
+established techniques for established techniques for program optimization
+such as partial evaluation of programs \cite{Jones93Book}.
+
+For a given language $L$, let $\llbracket\_\rrbracket_{L}$ be the
+intepreter for L. Say, for given $p \in L$--$\text{Program}$, and inputs
+$\text{in}_1, \text{in}_2$,
+$\text{output} = \llbracket p \rrbracket_{L}\left[\text{in}_1,\text{in}_2\right]$
+if $p$ terminates.
+We can now express partial evaluation of program p, using another
+program $\mix$, called so since performs a mix of both execution and code
+generation as follows:
+  $$\llbracket \llbracket \mix \rrbracket \left[p, \text{in}_1\right] \rrbracket
+  \left[\text{in}_2\right]
+  = \llbracket p \rrbracket \left[\text{in}_1, \text{in}_2\right]$$
+Now, for given program $p$, if $\text{in}_1$ is statically known (at stage 1),
+and $\text{in}_2$ is dynamically known (at stage 2), then, executing the
+entire program in one stage as:
+$$ \llbracket p \rrbracket \left[\text{in}_1, \text{in}_2\right] $$ can be more
+expensive than computing partially evaluating $p$ on $\text{in}_1$,
+i.e. $p_{\text{in}_1} = \llbracket p \rrbracket \left [ \text{in}_1 \right]$ and
+re-utilizing it for phase 2, i.e.
+$\llbracket p \rrbracket \left [\text{in}_1, \text{in}_2 \right] = \llbracket
+p_{\text{in}_1} \rrbracket \left [ \text{in}_2 \right]$
+
+
+%Our experience of implementing pediatric sepsis management in \MediK{}
+%revealed the importance of \emph{visual representations} to improve
+%comprehensibility of \MediK{} programs to medical domain experts.
+%\MediK{} programs structurally resemble flowhcharts by design, but
+%if visualized, they resemble existing \BPGs{} found in medical
+%literature that \HCPs{} are already familiar with.
+%
+%We plan to utilize a technique called semantics-based compilation (SBC) to generate
+%visual representations.
+
+\subsection{Formal Analysis of Best Practice Guidelines}
+
+\paragraph{Responsiveness Verification}
+
+\paragraph{Liveness Verification}
+
+
+\paragraph{Generation of Formal Proofs of Execution (optional)}
