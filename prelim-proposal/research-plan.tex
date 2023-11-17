@@ -2,41 +2,68 @@
 
 In this section, we discuss challenges we plan to address through this work.
 
-\paragraph{Semantics-based Compilation of \MediK{} programs}
+\paragraph{Systematic Generation of Visual Program Represenations}
 
-Semantics-based compilation (\SBC{}) addresses many problems
-in the context of \MediK{}. Some, such as \emph{performance improvements}
-for execution and analysis, are not specific to \MediK{}, but vital
-nevertheless. Others, such as \emph{enhancing comprehensibility} of programs
-to non-experts in Computer Science by enabling visual program summaries that only
-present \emph{relevant semantic information} is very benefecial in
-\MediK-centric settings.
+Extremely vital to the success of \MediK{}, the the ability
+to generate visual representation of \MediK{} programs to aid
+comprehensibility to medical domain experts, enabling them to verify
+accuracy of encoded medical knowledge. Even though \MediK{} code
+structurally resembles paper-based guidelines, pictorial
+representation can futher improve comprhensibility as medical
+domain experts are already familiar with the paper-based counterparts.
 
-Semantics-based compilation can be considered a generalization of
-established techniques for established techniques for program optimization
-such as partial evaluation of programs \cite{Jones93Book}.
+The visual representations that we plan to generate utilize
+as their basis the program's control flow graph (\CFG).
+While generating \CFGs{} might seem like a simple task,
+there does not actually exists a \emph{canonical} understanding of
+what \CFGs{} are. In \cite{KoppelICFP22}, the authors
+illustrate this by using three different \CFG{} generators
+on the same program, and obtaining three different \CFGs{}, each
+tailored to the objectives of the generator.
 
-For a given language $L$, let $\llbracket\_\rrbracket_{L}$ be the
-intepreter for L. Say, for given $p \in L$--$\text{Program}$, and inputs
-$\text{in}_1, \text{in}_2$,
-$\text{output} = \llbracket p \rrbracket_{L}\left[\text{in}_1,\text{in}_2\right]$
-if $p$ terminates.
-We can now express partial evaluation of program p, using another
-program $\mix$, called so since performs a mix of both execution and code
-generation as follows:
-  $$\llbracket \llbracket \mix \rrbracket \left[p, \text{in}_1\right] \rrbracket
-  \left[\text{in}_2\right]
-  = \llbracket p \rrbracket \left[\text{in}_1, \text{in}_2\right]$$
-Now, for given program $p$, if $\text{in}_1$ is statically known (at stage 1),
-and $\text{in}_2$ is dynamically known (at stage 2), then, executing the
-entire program in one stage as:
-$$ \llbracket p \rrbracket \left[\text{in}_1, \text{in}_2\right] $$ can be more
-expensive than computing partially evaluating $p$ on $\text{in}_1$,
-i.e. $p_{\text{in}_1} = \llbracket p \rrbracket \left [ \text{in}_1 \right]$ and
-re-utilizing it for phase 2, i.e.
-$\llbracket p \rrbracket \left [\text{in}_1, \text{in}_2 \right] = \llbracket
-p_{\text{in}_1} \rrbracket \left [ \text{in}_2 \right]$
 
+%But, despite use in tools such as compilers and model checkers,
+%there does not exist a \emph{canonical} definition of what CFGs are.
+%For example, in \cite{KoppelICFP22}, the authors demonstrates such descrepancies by
+%using running different CFG tools on the same code, each resulting in different
+%results, to suit specific applications.
+
+
+
+
+%Some, such as \emph{performance improvements}
+%for execution and analysis, are not specific to \MediK{}, but vital
+%nevertheless. Others, such as \emph{enhancing comprehensibility} of programs
+%to non-experts in Computer Science by enabling visual program summaries that only
+%present \emph{relevant semantic information} is very benefecial in
+%\MediK-centric settings.
+
+
+%Semantics-based compilation can be considered a generalization of
+%established techniques for established techniques for program optimization
+%such as partial evaluation of programs \cite{Jones93Book}.
+%
+%For a given language $L$, let $\llbracket\_\rrbracket_{L}$ be the
+%intepreter for L. Say, for given $p \in L$--$\text{Program}$, and inputs
+%$\text{in}_1, \text{in}_2$,
+%$\text{output} = \llbracket p \rrbracket_{L}\left[\text{in}_1,\text{in}_2\right]$
+%if $p$ terminates.
+%We can now express partial evaluation of program p, using another
+%program $\mix$, called so since performs a mix of both execution and code
+%generation as follows:
+%  $$\llbracket \llbracket \mix \rrbracket \left[p, \text{in}_1\right] \rrbracket
+%  \left[\text{in}_2\right]
+%  = \llbracket p \rrbracket \left[\text{in}_1, \text{in}_2\right]$$
+%Now, for given program $p$, if $\text{in}_1$ is statically known (at stage 1),
+%and $\text{in}_2$ is dynamically known (at stage 2), then, executing the
+%entire program in one stage as:
+%$$ \llbracket p \rrbracket \left[\text{in}_1, \text{in}_2\right] $$ can be more
+%expensive than computing partially evaluating $p$ on $\text{in}_1$,
+%i.e. $p_{\text{in}_1} = \llbracket p \rrbracket \left [ \text{in}_1 \right]$ and
+%re-utilizing it for phase 2, i.e.
+%$\llbracket p \rrbracket \left [\text{in}_1, \text{in}_2 \right] = \llbracket
+%p_{\text{in}_1} \rrbracket \left [ \text{in}_2 \right]$
+%
 
 %Our experience of implementing pediatric sepsis management in \MediK{}
 %revealed the importance of \emph{visual representations} to improve
@@ -49,10 +76,13 @@ p_{\text{in}_1} \rrbracket \left [ \text{in}_2 \right]$
 %visual representations.
 
 \subsection{Formal Analysis of Best Practice Guidelines}
+To be completed
 
 \paragraph{Responsiveness Verification}
+To be completed
 
 \paragraph{Liveness Verification}
+To be completed
 
 
 \paragraph{Generation of Formal Proofs of Execution (optional)}

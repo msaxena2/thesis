@@ -71,7 +71,7 @@ In essence, when a patient arrives at the
 \ED{} with a fever or an infection, the \HCP{} is supposed to obtain
 \begin{enumerate*}[label=(\alph*)]
   \item the patient's age,
-  \item any conditions, such as cancer, immunosuppresssion, etc,
+  \item any conditions, such as cancer, immunosuppression, etc,
     that increase likelihood of sepsis, and
   \item the patient's vital signs, such as heart rate, systolic blood
     pressure, respiratory rate, etc.
@@ -165,7 +165,7 @@ challenges in building \CDSSs{}:
     medium, i.e. \CIG{}.
   \item \textbf{Complexity:} \BPGs{} encode complex medical knowledge,
     involving multiple \emph{concurrent} workflows and \emph{inter-workflow}
-    interactions. Moroever, $\CDSSs{}$ interact with \emph{diverse
+    interactions. Moreover, $\CDSSs{}$ interact with \emph{diverse
     external agents} such as medical sensors and patient records.
   \item \textbf{Formal Analysis:} As \CDSSs{} are \emph{safety-critical},
     it's desirable to have execution engines with \emph{correctness guarantees}
@@ -177,7 +177,7 @@ challenges in building \CDSSs{}:
 \end{itemize}
 
 Existing research has been instrumental in both recognizing aforementioned
-challenges and adressing them to various degrees, leading to greater \CDSS{}
+challenges and addressing them to various degrees, leading to greater \CDSS{}
 adoption. In \tablename{} \ref{table:existing-approaches}, we provide an overview of
 how existing work addresses aforementioned challenges. We use
 \greencheck{}, \cancelcheck{}, and \redcross{} to depict that an approach
@@ -226,7 +226,7 @@ that contains:
   \item intentions that define aims,
   \item conditions that specify when the plan is applicable,
   \item effects that define expected behavior during execution, and,
-  \item a body containing other subplans.
+  \item a body containing other sub-plans.
 \end{enumerate*}
 Apart from an execution engine, the Asbru ecosystem also contains
 other tools, such as a model checker for verification \cite{BaumlerSPIN06}.
@@ -300,7 +300,7 @@ require updates to the tools as well. With our approach, only the formal semanti
 need updating. Since the tools are derived from the semantics, they reflect all
 changes automatically.
 
-\MediK{}'s semantics have been formalized in the the $\K{}$-framework, which
+\MediK{}'s semantics have been formalized in the $\K{}$-framework, which
 we describe next. $\K$ is a rewrite-based executable semantics framework in which
 programming languages can be defined
 using configurations and rules \cite{KFrameworkURL}. Semantics
@@ -441,7 +441,7 @@ $\K$-variables always begin with an uppercase, and may be suffixed with
 The rule in considerations uses two variables \inlinek{X} and \inlinek{I}
 having sorts \inlinek{Id} and \inlinek{Int} respectively. Suppose
 we're trying to evaluate the statement \inlineimp{x = 2 + 3;}.
-Recall that the \inlinek{<k>} cell typically contains the
+Recall that the \inlinek{<k>} cell typically contains
 the program. Thus, we have would have \inlinek{x = 2 + 3;} at the start
 of the cell. Note that in $\K$, \inlinek{...} is used to represent
 parts of the configuration \emph{not relevant} to the rule. Said parts remain
@@ -458,9 +458,9 @@ denotes a \emph{hole} left in place of the argument that was \emph{heated}.
 \inlinek{<k> 2 + 3} $\curvearrowright$ \inlinek{x =\ } $\Box[-1pt]$\inlinek{ ;
 ...</k>} is re-written to \inlinek{<k> 5} $\curvearrowright$ \inlinek{x =\ }$
 \Box[-1pt]$\inlinek{ ;
-...</k>} by an application of the arithemtic addition rule on line 29. On
+...</k>} by an application of the arithmetic addition rule on line 29. On
 line 23, we specify any term of sort \inlinek{Int} to be a \inlinek{KResult}.
-This signifies that the term can no longer be evaluted, and is \emph{cooled}
+This signifies that the term can no longer be evaluated, and is \emph{cooled}
 or plugged-back into the original, resulting in \inlinek{<k> x = 5; ...</k>}
 Now the LHS of the assignment rule can \emph{match} with substitution $\theta =
 ($\inlinek{X}\ $ \mapsto $ \inlinek{x}$,$ \inlinek{I} $\mapsto\ $ \inlinek{5}$)$, resulting in the value that identifier \inlinek{x}
