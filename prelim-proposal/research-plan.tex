@@ -2,24 +2,42 @@
 
 In this section, we discuss challenges we plan to address through this work.
 
-\paragraph{Systematic Generation of Visual Program Represenations}
+\paragraph{Control Flow Graphs Generation}
 
 Extremely vital to the success of \MediK{}, the the ability
 to generate visual representation of \MediK{} programs to aid
 comprehensibility to medical domain experts, enabling them to verify
 accuracy of encoded medical knowledge. Even though \MediK{} code
-structurally resembles paper-based guidelines, pictorial
-representation can futher improve comprhensibility as medical
-domain experts are already familiar with the paper-based counterparts.
+structurally resembles paper-based guidelines, said
+representations aid comprehensibility for medical
+domain experts as the representations resemble their paper-based counterparts,
+imparting a sense of familiarity.
 
-The visual representations that we plan to generate utilize
-as their basis the program's control flow graph (\CFG).
-While generating \CFGs{} might seem like a simple task,
-there does not actually exists a \emph{canonical} understanding of
-what \CFGs{} are. In \cite{KoppelICFP22}, the authors
-illustrate this by using three different \CFG{} generators
+Control Flow Graphs (CFGs) form the basis of not only such visual
+representations, but other important analyses. For example,
+flow-sensitive analyzers can be used to verify that a medical procedure
+is performed on both treatment branches.
+\CGSs{} form use in applications from compilers to model checkers.
+But, despite their importance, \CGSs{} are not well understood.
+To illustrate the lack of a \emph{canonical} definition of a \CGS{},
+in \cite{KoppelICFP22}, the authors
+used three different \CFG{} generators
 on the same program, and obtaining three different \CFGs{}, each
 tailored to the objectives of the generator.
+
+Thus, generation of \CFGs{} that present \emph{all relevant} information,
+with \emph{minimal} intervention during generation, in a
+\emph{correct-by-construction} fashion, is indeed challenging.
+The authors in \cite{KoppelICFP22} argue that while, intuitively, individual
+steps of an operational semantics should correspond to edges of a control
+flow graph, it is indeed not the case. Instead, the authors utilize
+an algorithm that transforms the operational semantics into an abstract machine
+style. However, evaluation even under these semantics would lead to
+an infinite transition system, requiring manual specification of abstract
+semantics to collapse the system into a finite one. To this end, the
+authors utilize a \emph{value irrelevance} abstration, where all values
+are replaced by a single abstract value representing all of them: \bigstartext.
+This makes the system finite without direct changes to the semantics.
 
 
 %But, despite use in tools such as compilers and model checkers,
