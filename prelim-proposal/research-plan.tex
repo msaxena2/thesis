@@ -2,7 +2,7 @@
 
 In this section, we discuss challenges we plan to address through this work.
 
-\paragraph{Control Flow Graphs Generation}
+\paragraph{Semantics Based Control Flow Graphs Generation}
 
 Extremely vital to the success of \MediK{}, the the ability
 to generate visual representation of \MediK{} programs to aid
@@ -28,17 +28,31 @@ tailored to the objectives of the generator.
 Thus, generation of \CFGs{} that present \emph{all relevant} information,
 with \emph{minimal} intervention during generation, in a
 \emph{correct-by-construction} fashion, is indeed challenging.
-The authors in \cite{KoppelICFP22} argue that while, intuitively, individual
-steps of an operational semantics should correspond to edges of a control
-flow graph, it is indeed not the case. Instead, the authors utilize
-an algorithm that transforms the operational semantics into an abstract machine
-style. However, evaluation even under these semantics would lead to
-an infinite transition system, requiring manual specification of abstract
-semantics to collapse the system into a finite one. To this end, the
-authors utilize a \emph{value irrelevance} abstration, where all values
-are replaced by a single abstract value representing all of them: \bigstartext.
-This makes the system finite without direct changes to the semantics.
+In \cite{KoppelICFP22} that authors argue that operational semantics
+are not suitable to be used directly for generation of \CFGs{} by demonstrating
+that many control flow edges correspond to different halves of the same rule,
+while some correspond to none. To address this, the authors translate
+the operational semantics to an Abstract Machines (AM) style.
 
+
+flow graph, it is indeed not the case. Instead, the authors developed an
+algorithm to transform the operational semantics into an abstract machine
+style. However, this still requires manual specification of abstract
+semantics to collapse the inifinite transition system into a finite one.
+To this end, the
+authors utilize a \emph{value irrelevance} abstration, where all values
+are replaced by a single abstract value representing all of them: \startext.
+This makes the system finite without direct changes to the semantics.
+This approach enables them to canonically define any \CFG{} as a projection
+of the transition system an abstracted abstract state machine, where their
+treatment of Abstract Machine matches the one in \cite{VanhornArxiv10}.
+
+In this work, we plan to utilize ideas presented in \cite{KoppelICFP22}
+in conjunction with a technique called semantics-based compilation (SBC).
+Instead of transforming the semantics to an abstract machine, we plan
+to utilize SBC to provide a transition system \say{tailored} to the
+program itself. To make the transition system itself finite, we plan
+to utilize
 
 %But, despite use in tools such as compilers and model checkers,
 %there does not exist a \emph{canonical} definition of what CFGs are.
