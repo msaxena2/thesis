@@ -2,7 +2,7 @@
 
 In this section, we discuss challenges we plan to address through this work.
 
-\paragraph{Semantics Based Control Flow Graphs Generation}
+\subsection{Semantics Based Control Flow Graphs Generation}
 
 Extremely vital to the success of \MediK{}, the the ability
 to generate visual representation of \MediK{} programs to aid
@@ -80,7 +80,7 @@ handling $\left\langle \left(e, \left[ \star \mapsto \star \right] \right)\;\mid
 \right\rangle$, which can be matched by any expression rule. To handle this,
 $\left\langle \left(e, \left[ \star \mapsto \star \right] \right)\;\mid\; k \right\rangle$
 is over-approximated to $\left \langle \left(\star, \left[ \star \mapsto \star \right] \right)\;\mid\; k \right\rangle$
-as evaluating any such $e$ eventually evaluate to $\star$.
+as evaluating any such $e$ would eventually result in $\star$.
 
 
 %However, this still requires manual specification of abstract
@@ -93,74 +93,157 @@ as evaluating any such $e$ eventually evaluate to $\star$.
 %of the transition system an abstracted abstract state machine, where their
 %treatment of Abstract Machine matches the one in \cite{VanhornArxiv10}.
 
-In this work, we plan to utilize ideas presented in \cite{KoppelICFP22}
-in conjunction with a technique called semantics-based compilation (SBC).
-Instead of transforming the semantics to an abstract machine, we plan
-to utilize SBC to provide a transition system \say{tailored} to the
-program itself. To make the transition system itself finite, we plan
-to utilize
+In this work, we plan to utilize ideas from \cite{KoppelICFP22}
+in conjunction with the $\K{}$-Summarizer toolchain. The $\K{}$-
+Summarizer is an effort to improve performance of semantics-based tools
+by modifying the $\K$-definition itself. One of the primary objectives
+of the summarizer is to enable semantics-based compilation.
+Semantics-based compilation can be considered a generalization of
+established techniques for established techniques for program optimization
+such as partial evaluation of programs \cite{Jones93Book}.
 
-%But, despite use in tools such as compilers and model checkers,
-%there does not exist a \emph{canonical} definition of what CFGs are.
-%For example, in \cite{KoppelICFP22}, the authors demonstrates such descrepancies by
-%using running different CFG tools on the same code, each resulting in different
-%results, to suit specific applications.
-
-
-
-
-%Some, such as \emph{performance improvements}
-%for execution and analysis, are not specific to \MediK{}, but vital
-%nevertheless. Others, such as \emph{enhancing comprehensibility} of programs
-%to non-experts in Computer Science by enabling visual program summaries that only
-%present \emph{relevant semantic information} is very benefecial in
-%\MediK-centric settings.
-
-
-%Semantics-based compilation can be considered a generalization of
-%established techniques for established techniques for program optimization
-%such as partial evaluation of programs \cite{Jones93Book}.
-%
-%For a given language $L$, let $\llbracket\_\rrbracket_{L}$ be the
-%intepreter for L. Say, for given $p \in L$--$\text{Program}$, and inputs
-%$\text{in}_1, \text{in}_2$,
-%$\text{output} = \llbracket p \rrbracket_{L}\left[\text{in}_1,\text{in}_2\right]$
-%if $p$ terminates.
-%We can now express partial evaluation of program p, using another
-%program $\mix$, called so since performs a mix of both execution and code
-%generation as follows:
+For a given language $L$, let $\llbracket\_\rrbracket$ be the
+intepreter for L. Say, for given $p \in L$--$\text{Program}$, and inputs
+$\text{in}_1, \text{in}_2$,
+$\text{output} = \llbracket p \rrbracket_{L}\left[\text{in}_1,\text{in}_2\right]$
+if $p$ terminates.
+We can now express partial evaluation of program p, using another
+program $\mix$, called so since performs a mix of both execution and code
+generation. Now, we get a two stage execution process:
+$$ p_{\text{in}_1} = \llbracket \mix \rrbracket [p, \text{in}_1]$$
+$$ \text{output} = \llbracket p_{\text{in}_1} \rrbracket \text{in}_2$$
 %  $$\llbracket \llbracket \mix \rrbracket \left[p, \text{in}_1\right] \rrbracket
 %  \left[\text{in}_2\right]
 %  = \llbracket p \rrbracket \left[\text{in}_1, \text{in}_2\right]$$
-%Now, for given program $p$, if $\text{in}_1$ is statically known (at stage 1),
-%and $\text{in}_2$ is dynamically known (at stage 2), then, executing the
-%entire program in one stage as:
-%$$ \llbracket p \rrbracket \left[\text{in}_1, \text{in}_2\right] $$ can be more
-%expensive than computing partially evaluating $p$ on $\text{in}_1$,
-%i.e. $p_{\text{in}_1} = \llbracket p \rrbracket \left [ \text{in}_1 \right]$ and
-%re-utilizing it for phase 2, i.e.
-%$\llbracket p \rrbracket \left [\text{in}_1, \text{in}_2 \right] = \llbracket
-%p_{\text{in}_1} \rrbracket \left [ \text{in}_2 \right]$
-%
+Now, for given program $p$, if $\text{in}_1$ is statically known (at stage 1),
+and $\text{in}_2$ is dynamically known (at stage 2), then,
+$\llbracket p_{\text{in}_1} \rrbracket$ can be computed \emph{once}, and
+re-used for any new $\text{in}_2$.
+Semantics-based compilation can be seen as a generalization of this idea.
+Say $L$ is a $\K$ definition. We can generate a new definition
+$L^{p_{\text{in}_1}}$ that directly implements $\llbracket p_{\text{in}_1}
+\rrbracket$. At runtime, only the dynamically determined input $\text{in}_2$
+to complete execution.
 
-%Our experience of implementing pediatric sepsis management in \MediK{}
-%revealed the importance of \emph{visual representations} to improve
-%comprehensibility of \MediK{} programs to medical domain experts.
-%\MediK{} programs structurally resemble flowhcharts by design, but
-%if visualized, they resemble existing \BPGs{} found in medical
-%literature that \HCPs{} are already familiar with.
-%
-%We plan to utilize a technique called semantics-based compilation (SBC) to generate
-%visual representations.
+Conceptually, the summarization process results in a \CFG{}, where
+each basic block is summarized as a $\K$ rule. But, in \MediK{}'s
+case, the inherent concurrency presents additional challenges
+that we intend to tackle.
+
+While \SBC{} is one of the primary goals of the $\K{}$-Summarizer
+project, it has also been used to optimize $\K$ definitions
+by \emph{merging} multiple rules that take smaller steps into
+one rule that \emph{summarizes} all of them. This is similar
+to the translation from \SOS{} to abstract machine presented in
+\cite{KoppelICFP22}. In our work, we plan to generate such
+\emph{summaries} soundly, and utilize them to generate visualizations
+of \MediK{} programs. Note, that both $\K$ Summarizer and the work
+in \cite{KoppelICFP22} have been tried in \emph{deterministic} settings.
+We plan to address additional challenges from \emph{non-determinism} in our
+work.
 
 \subsection{Formal Analysis of Best Practice Guidelines}
-To be completed
 
-\paragraph{Responsiveness Verification}
-To be completed
+\paragraph{Responsiveness Verification:}
 
-\paragraph{Liveness Verification}
-To be completed
+In \cite{SaxenaFMCAD23}, we implemented a real-world \CDSS{} for management of
+sepsis in pediatric cases, and verified a desired safety property holds.
+Recall that a \MediK{} program consists of a concurrently executing instances
+of \FSMs{}. During excution, an instance may be considered \emph{stuck} if
+the event at the head of its input buffer does not have an associated handler,
+rendering it \emph{unresponsive}. For this reason, languages such as P
+\cite{DesaiPLDI13} raise an exception in such cases. One way to ensure
+\emph{responsiveness} is to define event handlers for all events
+in all states. But, for \MediK{} we found that:
+\begin{enumerate*}[label=(\alph*)]
+  \item it is tedious and error prone to define handlers for all events in all
+  states, and,
+  \item comprehensibility of programs is reduced as many handlers may never fire
+  during execution.
+\end{enumerate*}
 
+Thus, we employed a weaker notion of responsiveness. We verified that all
+possible events that a state can potentially receive have associated handlers.
+it. This presents a challenge for reactive systems, or systems involve interactions
+with the external world, such as \MediK{}-based \CDSSs, as exploring
+the system's state space requires modeling the external components.
+In \MediK{}, we address this by specifying external components
+as \emph{ghost} machines - a technique also used by other state machine
+formalisms such as P \cite{DesaiPLDI13}.
+For program analysis, \emph{ghost} machines substitute external agents,
+permitting exploration of the state space.
+During execution, \emph{ghosts} are discarded and replaced by actual external agents.
+Due to this, ghosts machines may have statements to express non-determinism
+in processes. Consider, for instance, on a positive sepsis diagnosis, a
+\HCP{} may chose to either administer fluids first, followed by antibiotics, or
+vice-versa. \MediK{} supports such non-determinism using \inlinemedik{either-or}
+statements as follows:
+\begin{lstlisting}[style=mediksty
+,language=medik
+,basicstyle=\ttfamily\scriptsize
+,numberstyle=\tiny
+,framexleftmargin=1.5em
+,xleftmargin=2em
+]
+either {
+  broadcast StartFluidTherapy;
+  broadcast StartAntibioticTherapy;
+} or {
+  broadcast StartAntibioticTherapy;
+  broadcast StartFluidTherapy;
+}
+\end{lstlisting}
+
+To do so, we added a rule that takes a machine instance in an active state
+with an unhandled event at the head of the input buffer to a terminal \emph{stuck}
+state. This permits us to $\K$'s search capability to check if the \emph{stuck}
+state is reachable along any path.
+While in the ideal case, we would have symbolically executed the program while
+search for the \emph{stuck} pattern, we ran into performance issues
+with $\K$'s haskell backend that at the time of writing was the only backend
+that supported symbolic execution. Thus, as a fallback, we
+use an abstraction to
+encompass all possible values that may be encountered during execution.
+For instance, when modeling entering a parameter such as the Heart Rate,
+we use an abstract value to represent all possible concrete values.
+This also means we needed to add the following rules to the semantics to
+handle the abstraction.
+\begin{lstlisting}[
+  style=ksty
+  ,language=k
+  ,basicstyle=\ttfamily\scriptsize
+  ,numbers=left
+  ,numberstyle=\tiny
+  ,framexleftmargin=1.5em
+  ,showspaces=false
+  ,xleftmargin=2em
+  ]
+  rule #nondet + _:Val    => #nondet
+  rule _:Val   <= #nondet => #nondet
+  rule #nondet && _       => #nondet
+  rule if (#nondet) Block => Block
+  rule if (#nondet) _     => .
+\end{lstlisting}
+
+This abstraction mechanism enables us to use $\K$'s LLVM backend
+that only supports concrete execution to search for the \emph{stuck}
+state. However, we recognize that the inability to perform symbolic
+reasoning is a limitation. In this proposal, we plan to
+address performance issues to enable symbolic execution.
+We also plan to prove that our abstraction-based methodology
+that allows us to use concrete execution is indeed sound, i.e.,
+to show that if the abstract program satisfies the responsiveness
+property, then the corresponding concrete program will also satisfy it.
 
 \paragraph{Generation of Formal Proofs of Execution (optional)}
+
+\subsection{Building \CDSSs{}}
+
+While \MediK{} has been used to implement one real-world, complex
+\CDSSs{} for management of sepsis in pediatric cases, it remains
+to be seen if it is a convenient medium for building \CDSSs{} in general.
+To answer this, we plan to implement at least one more real-world \CDSS{}
+using \MediK{}.
+
+
+
