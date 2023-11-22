@@ -2,7 +2,7 @@
 
 In this section, we discuss challenges we plan to address through this work.
 
-\subsection{Semantics Based Control Flow Graphs Generation}
+\subsection{Semantics Based Control Flow Graphs Generation}\label{subsec:visual-representation-generation}
 
 Extremely vital to the success of \MediK{}, the the ability
 to generate visual representation of \MediK{} programs to aid
@@ -142,7 +142,7 @@ in \cite{KoppelICFP22} have been tried in \emph{deterministic} settings.
 We plan to address additional challenges from \emph{non-determinism} in our
 work.
 
-\subsection{Formal Analysis of Best Practice Guidelines}
+\subsection{Formal Analysis of Best Practice Guidelines}\label{subsec:formal-analysis}
 
 \paragraph{Responsiveness Verification:}
 
@@ -237,13 +237,21 @@ property, then the corresponding concrete program will also satisfy it.
 
 \paragraph{Generation of Formal Proofs of Execution (optional)}
 
-\subsection{Building \CDSSs{}}
+\subsection{Applicability to other \CDSSs{}}\label{subsec:applicability}
 
 While \MediK{} has been used to implement one real-world, complex
 \CDSSs{} for management of sepsis in pediatric cases, it remains
 to be seen if it is a convenient medium for building \CDSSs{} in general.
 To answer this, we plan to implement at least one more real-world \CDSS{}
-using \MediK{}.
-
+using \MediK{}. To this end, we plan to express the American Heart Institute's
+(AHA) \BPG{} for management of cardiac arrest \cite{AHAUrl}. Our choice
+is motivated by the following reasons:
+\begin{enumerate*}[label=(\roman*)]
+  \item an effective \CDSS{} for cardiac arrest can significantly improve
+    outcomes,
+  \item enables us to evaluate the \MediK{} code against directly encoding
+    the guideline in $\K$, as we had used the same \BPG{} for a $\K$-based \CDSSs{}
+    (see section \ref{subsec:BPG-in-K}).
+\end{enumerate*}
 
 

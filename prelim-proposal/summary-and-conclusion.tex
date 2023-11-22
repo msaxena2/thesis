@@ -1,0 +1,63 @@
+\section{Summary and Conclusion}
+
+Preventable Medical Errors remain a challenge in medicine, but
+can be mitigated through the use of Guidelines-based Clinical Decision Support
+Systems (\CDSSs{}). Such systems codify Best Practice Guidelines (\BPGs{}) and
+support Healthcare Providers (\HCPs) with situation-specific advice.
+While such systems have shown to improve clinical outcomes, developing
+them is challenging, which limits their adoption.
+
+Our proposal intends to address these challenges using a \emph{semantics-first}
+approach. At the core of our approach is a new language for expressing
+\BPGs{} in an executable manner called \MediK{}. \MediK{} has a formal semantics
+defined in the $\K$-framework, and thus has a \emph{correct-by-construction}
+interpreter and analysis tools.
+
+In section \ref{sec:introduction}, we identified research questions (RQs)
+that we plan to address through this work. We now summarize how our
+current progress and proposed work addresses them.
+
+\paragraph{(RQ1) Language Design:} How do we design a language to accomodate
+expressing complex \BPGs{} that is also comprehensible to Healthcare Providers
+(\HCPs{})?
+
+To answer this, we identified common characteristics of \BPGs{} that are
+desirable of a language for expressing them in an executable manner.
+In \cite{SaxenaFMCAD23}, we explain how our language is built around
+these characteristics. Our work build on the state-of-art in modeling
+large concurrent systems, but adapts it to specific needs of \BPGs{}.
+
+\paragraph{(RQ2) Applications:} Can we build real-world \CDSSs{} using our
+approach?
+
+To answer this, we collaborated with the OSF Healthcare Children's Hospital of Illinois
+in Peoria to build a \CDSS{} for management of sepsis in pediatric
+cases based on their \BPG{}. Our tool has been approved by the hospital
+Institutional Review Board, and is slated to under clinical simulations.
+Thus, we argue our approach does indeed enable building real-world systems.
+To further answer this question, in section \ref{subsec:applicability} we
+identify another \BPG{} that we intend to encode in \MediK{}, and demonstrate
+that our approach works for another \BPG{}.
+
+\paragraph{(RQ3) Ecosystem:} Do the semantics-derived tools work well for
+our purposes? Can we use these tools for execution and formal analysis?
+
+The interpreter generated from the semantics is able to satisfy performance
+needs of the sepsis management system. This \CDSS{} is based on a complex
+\BPG{}, involving multiple workflows that are encoded as \MediK{} machines.
+However, as discussed in section \ref{subsec:formal-analysis},
+we ran into performance issues while utilizing $\K$'s symbolic
+execution capabilities due to the size of the program. To get around this,
+we utilized an abstraction to check that the sepsis management \CDSS{} satisfies
+desired responsiveness properties. We propose to prove the soundness
+of our abstraction-based technique and investigate using symbolic execution
+to further make analyzing programs easier.
+
+In section \ref{subsec:visual-representation-generation}, we propose to
+implement a semantics-derived solution to generate visual representations
+of \MediK{} programs. Such representations are vital to ensure that
+\HCPs{} can comprehend \MediK{} code to validate accuracy of medical knowledge.
+
+Thus, with these questions answered, we demonstrate an advancement over
+the existing state-of-art in building \CDSSs{} discussed in section \ref{subsec:related-work}.
+
