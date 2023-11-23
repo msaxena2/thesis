@@ -1,9 +1,14 @@
 \section{Current Results}
+In this section, we describe progress made towards goals listed
+in section \ref{sec:introduction}. In section \ref{subsec:evaluating-k},
+we describe our  experience with the semantics-first approach in $\K$ that provided
+confidence in using $\K$ as the basis of our solution. We then briefly
+describe our experience of using a $\K$ definition directly to encode
+medical guidelines in section \ref{subsec:BPG-in-K}, followed by
+a discussion on the \MediK{} DSL in section \ref{subsec:medik}
 
-We briefly go over progress made towards addressing RCs from
-section \ref{sec:introduction}.
 
-\subsection{Evaluating $\K$ for our approach}
+\subsection{Evaluating $\K$ for our approach}\label{subsec:evaluating-k}
 
 To derive maximum benefit from the $\K$ semantics, it is important that:
 \begin{enumerate*}[label=(\roman*)]
@@ -120,6 +125,290 @@ $\K$, and healthcare professionals. Although this work \emph{failed} to address
 the objectives from section \ref{sec:introduction}, it emphasized the importance
 of comprehensibility to \HCPs{} for future endeavors.
 
-\subsection{\MediK{}}
-To be completed
+\subsection{\MediK{}}\label{subsec:medik}
 
+In \cite{SaxenaFMCAD23} we presented the \MediK{} DSL for expressing
+\BPGs{} that are both executable and comprehensible to \HCPs{}. This
+enables \HCPs{} to validate the correctness of medical knowledge encoded
+in \MediK{} code. Recall from section \ref{subsec:cdss} the following
+characteristics of \BPGs{}:
+\begin{enumerate*}[label=(\alph*)]
+  \item involve \emph{concurrent} workflows with inter-workflow dependencies,
+  \item are often specified using a \emph{flowchart-like} notation, and,
+  \item require communication between heterogeneous \emph{external} agents such
+    as sensors, monitors and Electronic Health Records.
+\end{enumerate*}
+
+\begin{wrapfigure}{l}{0.45\textwidth}
+    \caption{\MediK{} \FSM{} Skeleton}\label{fig:medik-skeleton}
+\begin{lstlisting}[style=mediksty
+,language=medik
+,basicstyle=\ttfamily\notsotiny
+,numbers=left
+,numberstyle=\tiny
+,framexleftmargin=1.5em
+,xleftmargin=2em
+]
+[init] machine <IDENTIFIER>
+  receives <IDENTIFIER_LIST> {
+  vars <IDENTIFIER_LIST>;
+
+  [init] state <IDENTIFIER> {
+    entry [(IDENTIFIER_LIST)] {
+      <STMT> // entry block
+    }
+    on <IDENTIFIER> [(IDENTIFIER_LIST)] do {
+      <STMT> // event handler
+    }
+  }
+}
+\end{lstlisting}
+\end{wrapfigure}
+
+\MediK{} has been designed to account for aforementioned characteristics.
+In \MediK{}, like in P, programs are expressed as concurrently
+executing instances of state machines that communicate via passing messages.
+Given a \BPG{} where each workflow is expressed as a flowchart,
+we express said flowcharts as State Machines in \MediK{}. Each flowchart node
+in the \BPG{} is represented as a state in a state machine, and
+edges are represented as state transitions. During execution,
+instances of these machines are created, which interact with each other by
+passing events. Note the distinction between
+machine and its instance. A machine
+is analogous to an Object Oriented Programming (OOP) class, whereas
+its instance is analogous to an OOP object.
+
+As \FSMs{} are central to our approach,  we provide a skeleton
+of a \MediK{} machine in \figurename{} \ref{fig:medik-skeleton} before explaining how \BPGs{} are
+encoded in \MediK{} code.
+Note that we use \inlinemedik{[...]} to denote
+optional constructs, \inlinemedik{<...>} for mandatory constructs, lowercase for
+terminals, and uppercase for non-terminals.
+
+A \MediK{} program consists of a set of machine definitions.
+A machine definition starts with the keyword \inlinemedik{machine},
+followed by its name (line 1). On line 2, following the
+\inlinemedik{receives} keyword, is a comma-separated list of identifiers
+signifying the events that the machine can receive from other machines.
+One machine in a program can be
+prefixed with the \inlinemedik{init} keyword. This machine is referred to as the
+initial machine.
+On line 3, following the keyword
+\inlinemedik{vars}, another comma-separated list of identifiers signifies
+the instance-variables. During execution, each instance maintains a mapping from
+these variables to values. Each machine defines a set of states, such as
+the one in lines 5-11. A state
+ has a name, an optional entry block (lines 6-8),
+and a set of event handlers (lines 9-11). The entry block
+begins with the keyword \inlinemedik{entry}, and may contain a list of variables
+that are bound to values when the state is entered during execution.
+One state in the machine may be prefixed with \inlinemedik{init}, specifying the
+initial state. When execution begins, an implicit instance
+of the initial machine is created, and the \inlinemedik{entry} block of
+its initial state is executed. When an instance of a machine is dynamically
+created during runtime, the \inlinemedik{entry} block of its initial state is executed.
+Event handlers within a state begin with \inlinemedik{on} followed by the event name
+and an optional list of variables. When the event handler is executed, data from
+the received event's payload is bound to aforementioned variables which
+can be used in the code block that follows the \inlinemedik{do} keyword.
+
+To handle interaction with heterogeneous external sources, \MediK{}
+models them as interfaces. An interface is a \FSM{} that has its
+transition system defined externally. For example, certain measurements
+such as the heart rate are often obtained from sensors.
+The code in \figurename{} \ref{fig:interface} shows the process
+of obtaining external measurements in \MediK{}.
+
+\begin{figure}[b]
+  \begin{subfigure}[b]{0.5\textwidth}
+\begin{lstlisting}[
+  style=mediksty
+  ,language=medik
+  ,basicstyle=\ttfamily\tiny
+  ,numbers=left
+  ,numberstyle=\tiny
+  ,framexleftmargin=1.5em
+  ,xleftmargin=2em
+  ]
+interface HeartRateSensor { }
+
+machine TreatmentMachine { ...
+  var hrSensor = createFromInterface(HeartRateSensor,
+                              "heartRateSensor");
+  var heartRate = obtainFrom(hrSensor, "heartRate");
+}
+\end{lstlisting}\caption{External Sources}\label{fig:interface}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.47\textwidth}
+\begin{lstlisting}[
+  style=mediksty
+  ,language=medik
+  ,basicstyle=\ttfamily\tiny
+  ,numbers=left
+  ,numberstyle=\tiny
+  ,framexleftmargin=1.5em
+  ,xleftmargin=2em
+  ]
+fun isHeartRateNormal() {
+  days(age) in {
+    interval(days(0)  , months(1)): return hr > 205;
+    interval(months(1), months(3)): return hr > 205;
+    // omitting other cases
+    default                       : return hr > 100;
+  }
+}
+\end{lstlisting}
+  \caption{Checking abnormality using tables}\label{fig:hr-check-fun}
+  \end{subfigure}
+  \caption{Executable \BPGs{} in \MediK{}}
+\end{figure}
+
+Since we don't have the transition system for
+the heart rate sensor, we declare it as an interface (line 1).
+Next, instead of using \inlinemedik{new} to create an instance, we use
+a builtin \MediK{} construct \inlinemedik{createFromInterface}, which takes as
+arguments
+\begin{enumerate*}[label=(\alph*)]
+  \item the inteface name (lines 4),
+  \item a unique identifier string used to identify the
+    instance outside the \MediK{} process.
+\end{enumerate*}
+All other \MediK{} machines can interact with external sensor using
+variable \inlinemedik{hrSensor}. There is no need to make any distinction
+between external, and \MediK{}-based machines.
+To deal with external interactions, input and output
+pipes are provided to the \MediK{} process at launch.
+When the \inlinemedik{send} construct is used on an external machine,
+\MediK{} will write
+a JSON \cite{jsonUrl} message with the event data, the
+identifier from line 5, and a unique transaction id
+to the \emph{write-end} of the output pipe. At the
+\emph{read-end}, we need to write external code (in any programming language)
+to handle the JSON message. In the example above, this involves reading from
+the external heart rate sensor. To send data to \MediK{}, a JSON message in
+a pre-specified format needs to be written to the \emph{write-end} of the
+input pipe.
+
+%\begin{figure}[H]
+%  \begin{subfigure}[b]{0.43\textwidth}
+%    \begin{lstlisting}[style=mediksty
+%    ,language=medik
+%    ,basicstyle=\ttfamily\tiny
+%    ,numbers=left
+%    ,numberstyle=\tiny
+%    ]
+%    [init] machine <IDENTIFIER>
+%      receives <IDENTIFIER_LIST> {
+%      vars <IDENTIFIER_LIST>;
+%
+%      [init] state <IDENTIFIER> {
+%        entry [(IDENTIFIER_LIST)] {
+%          <STMT> // entry block
+%        }
+%        on <IDENTIFIER> [(IDENTIFIER_LIST)] do {
+%          <STMT> // event handler
+%        }
+%      }
+%    }
+%    \end{lstlisting}
+% \end{subfigure}
+%  \begin{subfigure}[b]{0.55\textwidth}
+%    \begin{lstlisting}[
+%      style=ksty
+%      ,language=k
+%      ,basicstyle=\ttfamily\tiny
+%      ,numbers=left
+%      ,numberstyle=\tiny
+%      ,showspaces=false
+%      ]
+%    syntax Exp ::= Id | Val | "this"
+%      | Exp "." Exp
+%      | "obtainFrom" "(" Exp "," Exp ")"
+%      | "interval" "(" Exp "," Exp ")"
+%      | Exp "in" Exp
+%
+%    syntax Stmt ::= Exp "=" Exp ";"
+%      | "if" "(" Exp ")" Block "else" Block
+%      | "new" Id "(" Exps ")" ";"
+%      | "createFromInterface" "(" Id "," String ")" ";"
+%      | "sleep" "(" Exp ")" ";"
+%      | "send" Exp "," Id "," "(" Exps ")" ";"
+%      | "broadcast" Id "," "(" Exps ")" ";"
+%      | "goto" Id "(" Exps ")" ";"
+%      | Exp "in" "{" CaseDecl "}"
+%    \end{lstlisting}
+%  \end{subfigure}
+%\end{figure}
+
+
+\begin{figure}[H]
+  \begin{lstlisting}[style=mediksty, language=medik,  multicols=2,
+  basicstyle=\ttfamily\tiny, numbers=left
+  ,showspaces=false
+  ,xleftmargin=2em]
+machine SepsisScreening receives .. {
+  init state Start {
+    on StartScreening do {
+      goto ObtainAge;
+    }
+  }
+  state ObtainAge {
+    entry {
+      send tablet, Instruct, ("get age");
+    } on ConfirmAgeEntered do {
+      goto ObtainWeight;
+    }
+  }
+  state ObtainWeight { ... }
+  state ObtainHighRiskConditions { ... }
+  state CalculateScore {
+      var hrAbnormal = !isInNormalRange("HR", ...);
+      var bucket1    = hrAbnormal ||  ...
+      var bucket3    = mentalStatusAbnormal || ...
+
+      var sepsisSuspected
+        = bucket1 && bucket2 && bucket3;
+
+      send tablet, SepsisDiagnosis
+        , (sepsisSuspected);
+  }
+}
+\end{lstlisting}
+  \caption{Sepsis Screening in \MediK{}}\label{fig:medik-sepsis-screening}
+\end{figure}
+
+Recall from \ref{subsec:cdss} the guideline for sepsis screening shown in
+\figurename{} \ref{fig:sepsis-screening}.
+In \figurename{} \ref{fig:medik-sepsis-screening}, we show
+\MediK{} code corresponding to the sepsis screening guideline.
+When modeled in \MediK{}, a flowchart in the guideline is represented using
+a \MediK{} machine. \emph{Nodes} in the flowchart are represented as
+\emph{states} in a \MediK{} machine, while flowchart \emph{edges} as \emph{state-transitions}.
+Note that we use \emph{node} to refer to constructs
+in the flowchart, and \emph{state} to refer to counterparts in \MediK{}.
+Also, while it's desirable to represent each flowchart \emph{node} as a
+state machine \emph{state}, the task in the flowchart \emph{node} may warrant using
+multiple state-machine \emph{states}. For example,
+in \figurename{} \ref{fig:sepsis-screening}, the step \say{Obtain Patient Age,
+Weight, and High Risk Conditions} is translated to states \inlinemedik{ObtainAge} (lines
+7-13), \inlinemedik{ObtainWeight} (line 14), and
+\inlinemedik{ObtainHighRiskConditions} (line 15) in \figurename{} \ref{fig:medik-sepsis-screening}.
+Within each of these states, the code
+permits communication with heterogeneous external agents for obtaining
+required parameters. For instance, on line 9, an
+\inlinemedik{Instruct} event is sent to an external \inlinemedik{tablet} machine
+with the payload \inlinemedik{"get age"}. The recipient process
+runs on a tablet held by the Healthcare Provider, and handles
+the event by prompting the provider to enter the patient's age.
+A \inlinemedik{ConfirmAgeEntered} event, emitted once the age
+is obtained, enables the screening machine to proceed to the next
+step (lines 11-13). Once all appropriate measurements have been obtained,
+they are checked for abnormality (lines 18-26) using tables shown in \figurename{}
+\ref{fig:hr-check-fun} to arrive upon a diagnosis.
+
+We draw attention to the fact that the program in \MediK{} structurally
+resembles the paper-based \BPG{} from \figurename{} \ref{fig:sepsis-screening}.
+As demonstrated in \cite{SaxenaFMCAD23}, our \MediK{}-based approach allowed
+us to conveniently model all screening and treatment workflows from section
+\ref{subsec:cdss} to build a functioning \CDSS{} that is being considered for
+clinical simulations.

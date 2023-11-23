@@ -85,19 +85,20 @@ bugs can have life-threatening consequences. Thus, its desirable to have
   \item suite of formal analysis tools (such as model checkers, deductive
     verifiers) to verify desired \emph{correctness} properties.
 \end{enumerate*}
+This need has already been recognized in existing literature \cite{SuttonAMIA03, ShaharAMIA96}.
 \emph{Complexity} of \CDSSs{} adds to the challenge of verifying
 \CDSSs{} as tools must be able to handle both the \emph{concurrency} and
 \emph{external agent} aspects of \CDSSs{}.
 
-\paragraph{Holistic Safety:} Recent breakthroughs in Artificial Intelligence
-(AI) have the potential to significantly enhance effectiveness
-of \CDSSs{}. AI-based systems have the potential to infer diagnoses from patient
-vitals and history \emph{earlier} and \emph{more accurately} than regular
-care, and \emph{individualize treatment} to a patient's need.
-But, despite their potential, reluctance to use AI-based approaches
-stems from concerns of \emph{safety} from issues such as \emph{hallucinations}.
-Building \CDSSs{} that utilize such breakthroughs \emph{safely} remains
-a challenge.
+%\paragraph{Holistic Safety:} Recent breakthroughs in Artificial Intelligence
+%(AI) have the potential to significantly enhance effectiveness
+%of \CDSSs{}. AI-based systems have the potential to infer diagnoses from patient
+%vitals and history \emph{earlier} and \emph{more accurately} than regular
+%care, and \emph{individualize treatment} to a patient's need.
+%But, despite their potential, reluctance to use AI-based approaches
+%stems from concerns of \emph{safety} from issues such as \emph{hallucinations}.
+%Building \CDSSs{} that utilize such breakthroughs \emph{safely} remains
+%a challenge.
 
 %While the potential of \CDSS{} has been recognized, wider adoption
 %is still hampered by significant challenges. \CDSSs{} are safety-critical -
@@ -159,7 +160,8 @@ a challenge.
 %
 %Given the safety-critical nature of \CDSSs{}, it is vital for \CIG{} languages
 %to have complete formal semantics and formally-verified execution engines and
-%analysis tools. This need has already been recognized in existing literature
+%analysis tools.
+%This need has already been recognized in existing literature
 %\cite{SuttonAMIA03, ShaharAMIA96}. It's also vital to ensure that
 %associated tools are kept up to date as the language evolves.
 %
@@ -265,20 +267,20 @@ for use in hospitals.
 \textbf{RQ 3 (Ecosystem):} Do semantics derived tools work well for \CDSSs{}?
 If the tools derived from the semantics cannot be used to execute and analyze
 \CDSS{} code, then the purpose of having said semantics defined in an executable
-manner is defeated. Thus, we seek to establish that:
-\begin{itemize}
-  \item The interpreter is performant enough for use in a \CDSS{}.
-  \item The model checker, deductive verifier can support verification of real
-    world \CDSSs{}
-\end{itemize}
-Apart from existing tools, we may need to develop additional tools/techniques or
-adapt existing ones for  \CDSS{}-specific functionalities.
-    Notably, we seek to develop the following capabilities:
-\begin{itemize}
-  \item Generation visual representations of programs to aid medical domain experts comprehend said programs.
-  \item Utilization of formal proofs of execution as evidence of conformance to
-    prescribed best practices.
-\end{itemize}
+manner is defeated. What additional tools/techniques do we need to develop or
+adapt for \CDSS{}-specific functionalities?
+%    Thus, we seek to establish that:
+%\begin{itemize}
+%  \item The interpreter is performant enough for use in a \CDSS{}.
+%  \item The model checker, deductive verifier can support verification of real
+%    world \CDSSs{}
+%\end{itemize}
+%    Notably, we seek to develop the following capabilities:
+%\begin{itemize}
+%  \item Generation visual representations of programs to aid medical domain experts comprehend said programs.
+%  \item Utilization of formal proofs of execution as evidence of conformance to
+%    prescribed best practices.
+%\end{itemize}
 
 %To ensure \MediK{}
 %

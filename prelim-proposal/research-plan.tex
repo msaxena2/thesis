@@ -1,10 +1,13 @@
 \section{Research Plan}
 
-In this section, we discuss challenges we plan to address through this work.
+In this section, we discuss remaining challenges we plan to address through this work.
+In section \ref{sec:summary-and-conclusion} we summarize both completed and
+pending work, and discuss how we address research questions laid out in section
+\ref{sec:introduction}
 
-\subsection{Semantics Based Control Flow Graphs Generation}\label{subsec:visual-representation-generation}
+\subsection{Semantics Based Visual Representation Generation}\label{subsec:visual-representation-generation}
 
-Extremely vital to the success of \MediK{}, the the ability
+Extremely vital to the success of \MediK{}, the ability
 to generate visual representation of \MediK{} programs to aid
 comprehensibility to medical domain experts, enabling them to verify
 accuracy of encoded medical knowledge. Even though \MediK{} code
@@ -13,13 +16,13 @@ representations aid comprehensibility for medical
 domain experts as the representations resemble their paper-based counterparts,
 imparting a sense of familiarity.
 
-Control Flow Graphs (CFGs) form the basis of not only such visual
+Control Flow Graphs (\CFGs{}) form the basis of not only such visual
 representations, but other important analyses. For example,
 flow-sensitive analyzers can be used to verify that a medical procedure
 is performed on both treatment branches.
-\CGSs{} form use in applications from compilers to model checkers.
-But, despite their importance, \CGSs{} are not well understood.
-To illustrate the lack of a \emph{canonical} definition of a \CGS{},
+\CFGs{} find use in applications from compilers to model checkers.
+But, despite their importance, they are not well understood.
+To illustrate the lack of a \emph{canonical} definition of a \CFG{},
 in \cite{KoppelICFP22}, the authors
 used three different \CFG{} generators
 on the same program, and obtaining three different \CFGs{}, each
@@ -75,7 +78,7 @@ $\rightarrow  \left\langle \left(\text{skip}, \left[x \mapsto \star, y \mapsto \
 
 Note that expressions built over $\star$-values can still pose a
 challenge. For instance, a statement of the form \inlineimp{while e do s} when
-evaluted under an environment $\left[\star \mapsto \star\right]$ requires
+evaluated under an environment $\left[\star \mapsto \star\right]$ requires
 handling $\left\langle \left(e, \left[ \star \mapsto \star \right] \right)\;\mid\; k
 \right\rangle$, which can be matched by any expression rule. To handle this,
 $\left\langle \left(e, \left[ \star \mapsto \star \right] \right)\;\mid\; k \right\rangle$
@@ -103,9 +106,9 @@ established techniques for established techniques for program optimization
 such as partial evaluation of programs \cite{Jones93Book}.
 
 For a given language $L$, let $\llbracket\_\rrbracket$ be the
-intepreter for L. Say, for given $p \in L$--$\text{Program}$, and inputs
+interpreter for L. Say, for given $p \in L$--$\text{Program}$, and inputs
 $\text{in}_1, \text{in}_2$,
-$\text{output} = \llbracket p \rrbracket_{L}\left[\text{in}_1,\text{in}_2\right]$
+$\text{output} = \llbracket p \rrbracket\left[\text{in}_1,\text{in}_2\right]$
 if $p$ terminates.
 We can now express partial evaluation of program p, using another
 program $\mix$, called so since performs a mix of both execution and code
@@ -149,7 +152,7 @@ work.
 In \cite{SaxenaFMCAD23}, we implemented a real-world \CDSS{} for management of
 sepsis in pediatric cases, and verified a desired safety property holds.
 Recall that a \MediK{} program consists of a concurrently executing instances
-of \FSMs{}. During excution, an instance may be considered \emph{stuck} if
+of \FSMs{}. During execution, an instance may be considered \emph{stuck} if
 the event at the head of its input buffer does not have an associated handler,
 rendering it \emph{unresponsive}. For this reason, languages such as P
 \cite{DesaiPLDI13} raise an exception in such cases. One way to ensure
@@ -162,22 +165,7 @@ in all states. But, for \MediK{} we found that:
   during execution.
 \end{enumerate*}
 
-Thus, we employed a weaker notion of responsiveness. We verified that all
-possible events that a state can potentially receive have associated handlers.
-it. This presents a challenge for reactive systems, or systems involve interactions
-with the external world, such as \MediK{}-based \CDSSs, as exploring
-the system's state space requires modeling the external components.
-In \MediK{}, we address this by specifying external components
-as \emph{ghost} machines - a technique also used by other state machine
-formalisms such as P \cite{DesaiPLDI13}.
-For program analysis, \emph{ghost} machines substitute external agents,
-permitting exploration of the state space.
-During execution, \emph{ghosts} are discarded and replaced by actual external agents.
-Due to this, ghosts machines may have statements to express non-determinism
-in processes. Consider, for instance, on a positive sepsis diagnosis, a
-\HCP{} may chose to either administer fluids first, followed by antibiotics, or
-vice-versa. \MediK{} supports such non-determinism using \inlinemedik{either-or}
-statements as follows:
+\begin{wrapfigure}{r}{0.42\textwidth}
 \begin{lstlisting}[style=mediksty
 ,language=medik
 ,basicstyle=\ttfamily\scriptsize
@@ -193,21 +181,27 @@ either {
   broadcast StartFluidTherapy;
 }
 \end{lstlisting}
+  \caption{Non-determinism in \MediK{} Ghosts}\label{fig:non-determinism}
+\end{wrapfigure}
 
-To do so, we added a rule that takes a machine instance in an active state
-with an unhandled event at the head of the input buffer to a terminal \emph{stuck}
-state. This permits us to $\K$'s search capability to check if the \emph{stuck}
-state is reachable along any path.
-While in the ideal case, we would have symbolically executed the program while
-search for the \emph{stuck} pattern, we ran into performance issues
-with $\K$'s haskell backend that at the time of writing was the only backend
-that supported symbolic execution. Thus, as a fallback, we
-use an abstraction to
-encompass all possible values that may be encountered during execution.
-For instance, when modeling entering a parameter such as the Heart Rate,
-we use an abstract value to represent all possible concrete values.
-This also means we needed to add the following rules to the semantics to
-handle the abstraction.
+Thus, we employed a weaker notion of responsiveness. We verified that all
+possible events that a state can potentially receive have associated handlers.
+ This presents a challenge for reactive systems, or systems involve interactions
+with the external world, such as \MediK{}-based \CDSSs, as exploring
+the system's state space requires modeling the external components.
+In \MediK{}, we address this by specifying external components
+as \emph{ghost} machines - a technique also used by other state machine
+formalisms such as P \cite{DesaiPLDI13}.
+For program analysis, \emph{ghost} machines substitute external agents,
+permitting exploration of the state space.
+During execution, \emph{ghosts} are discarded and replaced by actual external agents.
+Due to this, ghosts machines may have statements to express non-determinism
+in processes. Consider, for instance, on a positive sepsis diagnosis, a
+\HCP{} may chose to either administer fluids first, followed by antibiotics, or
+vice-versa. \MediK{} supports such non-determinism using \inlinemedik{either-or}
+statements as shown in \figurename{} \ref{fig:non-determinism}
+
+\begin{wrapfigure}{r}{0.44\textwidth}
 \begin{lstlisting}[
   style=ksty
   ,language=k
@@ -224,6 +218,30 @@ handle the abstraction.
   rule if (#nondet) Block => Block
   rule if (#nondet) _     => .
 \end{lstlisting}
+  \caption{Abstract Semantics}\label{fig:abstract-semantics}
+\end{wrapfigure}
+
+When writing ghosts, values of measurements need to be abstract, to
+encompass all possible values that may be encountered during execution.
+For instance, when modeling entering a parameter such as the Heart Rate,
+we need to use an abstract value, representing all possible concrete values.
+To this end, we allow using an abstract value \inlinemedik{#nondet} in ghost machines,
+along with abstract semantics shown in \figurename{} \ref{fig:abstract-semantics}.
+
+We then added a rule that takes a machine instance in an active state
+with an unhandled event at the head of the input buffer to a terminal \emph{stuck}
+state. This permits us to $\K$'s search capability to check if the \emph{stuck}
+state is reachable along any path.
+While in the ideal case, we would have symbolically executed the program while
+search for the \emph{stuck} pattern, we ran into performance issues
+with $\K$'s haskell backend that at the time of writing was the only backend
+that supported symbolic execution. Thus, as a fallback, we
+use an abstraction to
+encompass all possible values that may be encountered during execution.
+For instance, when modeling entering a parameter such as the Heart Rate,
+we use an abstract value to represent all possible concrete values.
+This also means we needed to add the following rules to the semantics to
+handle the abstraction.
 
 This abstraction mechanism enables us to use $\K$'s LLVM backend
 that only supports concrete execution to search for the \emph{stuck}
@@ -235,7 +253,7 @@ that allows us to use concrete execution is indeed sound, i.e.,
 to show that if the abstract program satisfies the responsiveness
 property, then the corresponding concrete program will also satisfy it.
 
-\paragraph{Generation of Formal Proofs of Execution (optional)}
+%\paragraph{Generation of Formal Proofs of Execution (optional)}
 
 \subsection{Applicability to other \CDSSs{}}\label{subsec:applicability}
 
@@ -253,5 +271,4 @@ is motivated by the following reasons:
     the guideline in $\K$, as we had used the same \BPG{} for a $\K$-based \CDSSs{}
     (see section \ref{subsec:BPG-in-K}).
 \end{enumerate*}
-
 

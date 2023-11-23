@@ -1,25 +1,15 @@
 \section{Background}
 
-In this section, we introduce \BPGs{} through a real-world example, followed
-by a discussion of related approaches.
 
-%We first describe an example Best Practice Guidelines (\BPG{}) to
-%explain characteristics that a \CIG{} language needs to have. We then
-%explain limitations in existing approaches, and introduce our
-%\emph{semantics-first} methodology.
-
-%We first introduce relevant background work before discussing research challenges.
-%In section \ref{subsec:cdss}, a real-world \BPG{} for management of sepsis
-%in pediatric cases is used to introduce Guidelines-based \CDSSs{} and illustrate
-%characteristics desirable of a framework for building \CDSSs{}.
-%In section \ref{subsec:related-work}, we desribe progress
-%made towards addressing said challenges by existing approaches and their limitations.
-%Central to our approach is the \emph{semantics-first} philosophy,
-%which is introduced in section \ref{subsec:semantics-first-and-k}.
-%Section \ref{subsec:medik} introduces the \MediK{} \DSL{} for
-%\emph{executable} \BPGs{} and explains how its design satisfies aforementioned
-%characteristics. Section \ref{subsec:sepsis-cdss} discusses the \MediK{}-based
-%\emph{executable} \BPG{} for management of sepsis and the corresponding \CDSS{}.
+We first introduce relevant background work before discussing research challenges.
+In section \ref{subsec:cdss}, we use a real-world Best Practice Guideline (\BPG{})
+for management of sepsis
+in pediatric cases is used to introduce Guidelines-based Clinical Decision
+Support Systems (\CDSSs{}).
+In section \ref{subsec:related-work}, we desribe progress
+made towards addressing said challenges by existing approaches and their limitations.
+Central to our approach is the \emph{semantics-first} philosophy,
+which is introduced in section \ref{subsec:semantics-first-and-k}.
 
 \subsection{Guidelines-based Clinical Decision Support Systems}\label{subsec:cdss}
 
@@ -37,9 +27,8 @@ intravenous (IV) fluids \cite{Weiss2014CCM,Evans2018JAMA}.
 Departments (EDs) have shown effectiveness in screening and management of sepsis \cite{Eisenberg2021JP},
 leading to their adoption in many pediatric EDs \cite{Balamuth2017EM,Sepanski2014FP}.
 
-\begin{figure}
+\begin{figure}[b]
   \begin{subfigure}[b]{0.5\textwidth}
-    \centering
     \includegraphics[width=0.65\textwidth]{sepsis-screening-osf}
     %\includegraphics[width=0.5\textwidth]{screening-vitals}
     \caption{Pediatric sepsis screening \BPG{}}\label{fig:sepsis-screening}
@@ -67,8 +56,8 @@ leading to their adoption in many pediatric EDs \cite{Balamuth2017EM,Sepanski201
 
 In \figurename{} \ref{fig:sepsis-screening}, we present a simplified version of
 the screening section of OSF's sepsis management guideline.
-In essence, when a patient arrives at the
-\ED{} with a fever or an infection, the \HCP{} is supposed to obtain
+In essence, when a patient arrives at the emergency department
+\ED{} with a fever or an infection, the healthcare provider (\HCP{}) is supposed to obtain
 \begin{enumerate*}[label=(\alph*)]
   \item the patient's age,
   \item any conditions, such as cancer, immunosuppression, etc,
@@ -90,25 +79,17 @@ then he/she is flagged as potentially septic.
 
 The \BPG{}-recommended treatment for
 sepsis involves multiple concurrent workflows, such as
-screening for septic shock, fluid resuscitation, and administering antibiotics.
-In \figurename{} \ref{fig:fluid-therapy}, we provide
-a version of the fluid resuscitation guideline used
-at OSF. Briefly, if the patient is flagged as potentially septic, the guideline suggests
-\begin{enumerate*}[label=(\roman*)]
-  \item obtaining any fluid-overload risks,
-  \item administering normal saline (typically over a period of 15 minutes),
-    where the dosage is dictated by risks determined in previous step,
-  \item assessing signs of fluid-overload,
-  \item evaluating patient responsiveness to normal saline upon completion of
-    the administering process, and,
-  \item determining whether another fluid bolus should be administered based on
-    information from previous steps.
-\end{enumerate*}
-\begin{figure}[b]
-  \centering
-  \includegraphics[scale=0.45]{FluidWorkflow-fmcad.pdf}
-  \caption{Fluid Resuscitation Guideline}\label{fig:fluid-therapy}
-\end{figure}
+screening for septic shock, administering fluids and inotropes, and administering antibiotics.
+While we refer the reader to \cite{SaxenaFMCAD23} for more details,
+we briefly mention intended treatment to highlight the complexities in
+\BPGs{}. Workflows may need to be performed concurrently and
+the status of one workflow may impact the other.
+
+%\begin{figure}[b]
+%  \centering
+%  \includegraphics[scale=0.45]{FluidWorkflow-fmcad.pdf}
+%  \caption{Fluid Resuscitation Guideline}\label{fig:fluid-therapy}
+%\end{figure}
 
 This real-world \BPG{} exhibits characteristics common
 across many \BPGs{}. Specifically \BPGs{} typically:
@@ -130,33 +111,13 @@ across many \BPGs{}. Specifically \BPGs{} typically:
 %\begin{center}
 %\renewcommand{\arraystretch}{0.5}
 %\setlength\extrarowheight{-9pt}
-  \begin{table}
-    \tiny
-  \begin{tabularx}{\textwidth}{
-      >{\centering\arraybackslash}X
-    || >{\centering\arraybackslash}X
-    | >{\centering\arraybackslash}X
-    | >{\centering\arraybackslash}X
-    | >{\centering\arraybackslash}X
-    | >{\centering\arraybackslash}X
-  }
-                 & Specification-Implementation Gap  & Complex Workflows  & Diverse Agents   & Formal Analysis  & Holistic Safety  \\
-    Arden Syntax & $\greencheck$                     & $\redcross$        & $\redcross$    & $\redcross$        & $\redcross$ \\
-    GLIF         & $\greencheck$                     & $\greencheck$      & $\redcross$    & $\redcross$        & $\redcross$ \\
-    Asbru        & $\greencheck$                     & $\greencheck$      & $\redcross$    & $\greencheck$      & $\redcross$ \\
-    PROForma     & $\greencheck$                     & $\greencheck$      & $\redcross$    & $\redcross$        & $\redcross$ \\
-    GLARE        & $\greencheck$                     & $\greencheck$      & $\redcross$    & $\cancelcheck$     & $\cancelcheck$ \\
-    SAGE         & $\greencheck$                     & $\greencheck$      & $\greencheck$  & $\redcross$        & $\redcross$ \\
-    Promela/SPIN & $\redcross$                       & $\greencheck$      & $\redcross$    & $\greencheck$      & $\cancelcheck$ \\
-    AMSs         & $\redcross$                       & $\greencheck$      & $\redcross$    & $\greencheck$      & $\redcross$ \\
-    P            & $\redcross$                       & $\greencheck$      & $\greencheck$  & $\greencheck$      & $\redcross$ \\
-  \end{tabularx}
-  \caption{Comparison of Existing Approaches}\label{table:existing-approaches}
-  \end{table}
 %\end{center}
 
 \subsection{Related Work}\label{subsec:related-work}
 
+Existing research has been instrumental in both recognizing aforementioned
+challenges and addressing them to various degrees, leading to greater \CDSS{}
+adoption.
 Recall from section \ref{sec:introduction} the following
 challenges in building \CDSSs{}:
 \begin{itemize}
@@ -171,19 +132,39 @@ challenges in building \CDSSs{}:
     it's desirable to have execution engines with \emph{correctness guarantees}
     and a suite of formal analysis tools such as model checkers and deductive
     verifiers that can handle aforementioned complexity.
-  \item \textbf{Holistic Safety:} A mechanism for establishing the safety
-    of the entire system must exist. This includes reasoning about external
-    components, and safely integrating AI-enabled components.
 \end{itemize}
 
-Existing research has been instrumental in both recognizing aforementioned
-challenges and addressing them to various degrees, leading to greater \CDSS{}
-adoption. In \tablename{} \ref{table:existing-approaches}, we provide an overview of
+In \tablename{} \ref{table:existing-approaches}, we provide an overview of
 how existing work addresses aforementioned challenges. We use
 \greencheck{}, \cancelcheck{}, and \redcross{} to depict that an approach
 fully-addresses, partly-addresses, or doesn't address a limitation respectively.
 We next go over notable approaches, and describe how they incrementally
-address said challenges.
+address said challenges. Next, we discuss each approach in detail.
+
+\begin{table}[t]
+  \scriptsize
+  \begin{tabularx}{\textwidth}{
+      >{\centering\arraybackslash}X
+    || >{\centering\arraybackslash}X
+    | >{\centering\arraybackslash}X
+    | >{\centering\arraybackslash}X
+    | >{\centering\arraybackslash}X
+  }
+                 & Specification-Implementation Gap  & Complex Workflows  & Diverse Agents   & Formal Analysis \\
+    Arden Syntax & $\greencheck$                     & $\redcross$        & $\redcross$    & $\redcross$       \\
+    GLIF         & $\greencheck$                     & $\greencheck$      & $\redcross$    & $\redcross$       \\
+    Asbru        & $\greencheck$                     & $\greencheck$      & $\redcross$    & $\greencheck$     \\
+    PROForma     & $\greencheck$                     & $\greencheck$      & $\redcross$    & $\redcross$       \\
+    GLARE        & $\greencheck$                     & $\greencheck$      & $\redcross$    & $\cancelcheck$    \\
+    SAGE         & $\greencheck$                     & $\greencheck$      & $\greencheck$  & $\redcross$       \\
+    Promela/SPIN & $\redcross$                       & $\greencheck$      & $\redcross$    & $\greencheck$     \\
+    AMSs         & $\redcross$                       & $\greencheck$      & $\redcross$    & $\greencheck$     \\
+    P            & $\redcross$                       & $\greencheck$      & $\greencheck$  & $\greencheck$     \\
+    \MediK{}     & $\greencheck$                     & $\greencheck$      & $\greencheck$  & $\greencheck$     \\
+  \end{tabularx}
+  \caption{Comparison of Existing Approaches}\label{table:existing-approaches}
+  \end{table}
+
 
 \paragraph{Arden Syntax:}
 
@@ -210,10 +191,10 @@ middle is a computable-level, where details of guideline execution flow
 and patient data elements are specified. At the bottom is the implementable
 level, where institution-specific details and mappings into patient data are
 specified. Both Arden Syntax and GLIF  eliminate
-the gap between the \BPG{}, i.e. the specification, and the \CIG{}, i.e. implementation as
+the gap between the \BPG{} and its implementation as
 they're meant to be either directly used by clinicians (or in collaboration with
-computer scientists) to express \BPGs{} in an executable medium. \CIGs{}
-expressed in them are meant to be shared across hospitals, and are thus modular.
+computer scientists) to express \BPGs{} in an executable medium. Such executable
+\BPGs{} expressed in them are meant to be shared across hospitals, and are thus modular.
 However, neither formalism has complete formal semantics, or comprehensive support for
 rigorous formal analysis.
 
