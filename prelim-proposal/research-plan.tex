@@ -147,6 +147,19 @@ work.
 
 \subsection{Formal Analysis of Best Practice Guidelines}\label{subsec:formal-analysis}
 
+In \cite{SaxenaFMCAD23}, we focused on designing a language that would
+be conducive to expressing \BPGs{}. Our efforts were primarily focused
+on implementing a complex \CDSSs{} that could be used to evaluate
+our approach in real-world hospital setting. As a result,
+we
+\begin{enumerate*}[label=(\alph*)]
+  \item \emph{caught issues} with the medical logic during the design phases, and,
+  \item \emph{implemented} a system with positive \HCP{} feedback during a
+    \emph{dry-run}.
+\end{enumerate*}
+However, we identified limitations with the formal analysis component of our
+approach. Next, we idenitfy challenges and propose solutions.
+
 \paragraph{Responsiveness Verification:}
 
 In \cite{SaxenaFMCAD23}, we implemented a real-world \CDSS{} for management of
@@ -186,10 +199,21 @@ either {
 
 Thus, we employed a weaker notion of responsiveness. We verified that all
 possible events that a state can potentially receive have associated handlers.
- This presents a challenge for reactive systems, or systems involve interactions
-with the external world, such as \MediK{}-based \CDSSs, as exploring
-the system's state space requires modeling the external components.
-In \MediK{}, we address this by specifying external components
+The property we desire our system does not eventually end up in a
+state $\varphi_{\textit{stuck}}$, or,
+a state where the head of the input buffer has an event without
+an associated handler. The ML-pattern of interest is $\neg(\varphi_\textit{init} \To
+\varphi_{\textit{stuck}})$, where $\varphi_\textit{init}$ is the initial pattern.
+We can then use $\K$'s search command to search for $\varphi_{\textit{stuck}}$
+starting from $\varphi_{\textit{init}}$. If $\K$ returns $\top$, then the
+desired property doesn't hold.
+
+$\K$ has multiple backends, including a fast execution LLVM backend
+that can only handle \emph{ground} patterns, i.e. patterns with logical
+variables, and a haskell backend that can handle ML patterns in their
+full generality. Since $\MediK$ programs involve interactions with
+the external world, performing a search requires modeling the external
+components. We address this by specifying external components
 as \emph{ghost} machines - a technique also used by other state machine
 formalisms such as P \cite{DesaiPLDI13}.
 For program analysis, \emph{ghost} machines substitute external agents,
@@ -223,10 +247,12 @@ statements as shown in \figurename{} \ref{fig:non-determinism}
 
 When writing ghosts, values of measurements need to be abstract, to
 encompass all possible values that may be encountered during execution.
-For instance, when modeling entering a parameter such as the Heart Rate,
-we need to use an abstract value, representing all possible concrete values.
-To this end, we allow using an abstract value \inlinemedik{#nondet} in ghost machines,
-along with abstract semantics shown in \figurename{} \ref{fig:abstract-semantics}.
+Ideally, any such value can simply be represented by a logical variable
+that ranges over
+%For instance, when modeling entering a parameter such as the Heart Rate,
+%we need to use an abstract value, representing all possible concrete values.
+%To this end, we allow using an abstract value \inlinemedik{#nondet} in ghost machines,
+%along with abstract semantics shown in \figurename{} \ref{fig:abstract-semantics}.
 
 We then added a rule that takes a machine instance in an active state
 with an unhandled event at the head of the input buffer to a terminal \emph{stuck}
@@ -245,13 +271,25 @@ handle the abstraction.
 
 This abstraction mechanism enables us to use $\K$'s LLVM backend
 that only supports concrete execution to search for the \emph{stuck}
-state. However, we recognize that the inability to perform symbolic
+state.
+
+
+However, we recognize that the inability to perform symbolic
 reasoning is a limitation. In this proposal, we plan to
 address performance issues to enable symbolic execution.
 We also plan to prove that our abstraction-based methodology
 that allows us to use concrete execution is indeed sound, i.e.,
 to show that if the abstract program satisfies the responsiveness
 property, then the corresponding concrete program will also satisfy it.
+
+\subsection{Systematic Modeling of Time}
+
+In \cite{SaxenaFMCAD23}, we were primarily focused on
+designing a language that could serve as a convenient medium for
+expressing \BPGs{}. in this proposal, we plan to develop the
+requisite formal underpinings that enable reasoning about such systems.
+
+
 
 %\paragraph{Generation of Formal Proofs of Execution (optional)}
 
