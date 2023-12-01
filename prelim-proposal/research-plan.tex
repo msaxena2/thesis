@@ -253,6 +253,96 @@ that allows us to use concrete execution is indeed sound, i.e.,
 to show that if the abstract program satisfies the responsiveness
 property, then the corresponding concrete program will also satisfy it.
 
+\subsection{Systematic Handling of Time}\label{subsec:modeling-time}
+
+\MediK{} programs are \emph{real time} systems as \BPGs{}
+often involve actions that must be performed
+\begin{enumerate*}[label=(\alph*)]
+  \item at the end of, or over, a certain duration, or,
+  \item \emph{periodically} for a given frequency.
+\end{enumerate*}
+For instance, the \BPG{} might instruct administration of a
+drug \emph{after}, or \emph{over} a duration of a few minutes
+or \emph{every} few minutes. Similarly, ghost machines may
+need to model \emph{responding} to events within a certain duration.
+For instance, a common scenario is modeling that a suggested action will be
+performed with a time bound.
+
+\MediK{} provides limited real time support through a \inlinemedik{sleep}
+construct where the duration specified in seconds. We partition the
+semantic rules into \emph{instantaneous} and \emph{time-consuming}.
+We let \emph{time-consuming} only apply once no other \emph{instantaneous} rule can apply.
+Note that this permits \emph{zenoness}, or \emph{infinite} transitions in
+finite time, hence caution must be exercised while using \inlinemedik{sleep}.
+
+A \inlinemedik{sleep} causes a machine to yield execution,
+until a corresponding \emph{wake-up} event is encountered.
+As $\K{}$ does not provide a mechanism for keeping time,
+for execution, \inlinemedik{sleep} results in an event to an \emph{external
+timer machine} that is expected to respond with a
+\emph{wake-up} event once the sleep duration has expired.
+But, for formal analysis, we utilize \emph{discrete time model} where
+a \emph{tick} emitted every second reduces the sleep duration
+of every sleeping machine by one second. Consider a program $M = \left\{\Machine_0,
+\Machine_1, \dots, \Machine_{n-1}\right\}$ with $n$ machines.
+We can partition $M = M_{\awake} \cup M_{\sleeping}$ of \emph{awake} and
+\emph{sleeping} machines. Once no machine in $M_{\awake}$ can execute further,
+i.e., no \emph{instantaneous} rule can apply, we process $M_{\sleeping}$.
+For $\Machine \in M_{\sleeping}$, let $\tau_{\mathcal{M}}$ be the remaining
+sleep duration.
+At each \emph{tick}, for $0\leq i < |M_{\sleeping}|$, $\tau_{\mathcal{M}_i} \leftarrow \tau_{\mathcal{M}_i} - 1$
+if $\tau_{\mathcal{M}_i} \geq 1$. Otherwise, $M_{\sleeping} \leftarrow M_{\sleeping} \setminus \left\{\mathcal{M}_i\right\}$
+and $M_{\awake} \leftarrow M_{\awake} \cup \left\{\mathcal{M}_i\right\}$.
+\emph{Instantaneous} rules can now apply on the machines added to $M_{\awake}$,
+and the process repeats when no \emph{instantaneous} rule can apply.
+
+Our current approach has several limitations. First, a discrete
+model introduces unnecessary overhead. Since no \emph{instantaneous} rule
+can apply until some machine $\mathcal{M}_i \in S$ finishes its sleep duration,
+a combined \emph{tick} that advances time by $\textit{min}\left(\tau_i\right)_{0
+\leq i < n}$ can be used instead. Second, it precludes us from supporting
+ghost models that require a continuous model of time. Third, communication
+with external components may take \emph{significant time}, which our semantics
+fail to account for.
+
+To address these limitations, we propose to adopt existing approaches that enable
+both formal analysis in logical time, and execution in physical time.
+In \cite{SunArxiv10}, the authors describe a methodology to derive
+executable controllers for medical devices and emulation environments from
+models specified in Real-Time Maude \cite{RealTimeMaudeUrl}. Real-Time maude
+is an extension of Full Maude for modeling hybrid and real-time systems as
+real-time rewrite theories \cite{RealTimeMaudeManual}.
+A real-time rewrite theory can have both \emph{instantaneous}, i.e. ordinary
+rules, or \emph{tick} rules that operate on the \emph{global} configuration to
+model the elapse of time. The authors in \cite{SunArxiv10} use a \emph{maximum
+time elapseable (mte)} operator to model the maximum time that can elapse
+between \emph{instantaneous} rewrites, and a \emph{tick} operator to model
+evolution of system state with time. Given system state $S$, for $0 \leq \delta
+\leq \emph{mte}\left(S\right)$, $\emph{tick}\left(S, \delta\right)$ represents
+system state after time $\delta$, where for $\delta < \textit{mte}\left(S\right)$
+no \emph{instantaneous rules} can apply.  For execution, they utilize
+a dedicated thread with access to system time to \emph{tick} the system, i.e. advance time at \emph{mte} intervals.
+The use of Real-Time maude enables the authors to use \emph{timed} maude
+tools such as timed search LTL model checking.
+
+In \cite{OlveczkyTCS02}, the authors explain how a timed rewrite theory
+can be reduced to an ordinary rewrite theory by using an explicit clock, and
+a Time data type satisfying appropriate equational axioms. We postulate
+the same can be done for a $\K$ definition by adding an explicit clock to the
+configuration and ensuring that rules that advance time apply to the global
+configuration to uniformly advance time for the entire system to enable
+timed versions of $\K$ commands. We plan to explore these ideas through
+this work.
+
+\subsection{Modeling Hybrid Systems (optional)}
+
+In \cite{OlveczkyTCS02}, the authors demonstrate that models of hybrid systems
+such as timed and hybrid automata are expressable as Real-Time maude specifications.
+We plan to build on these results to express such models in $\K$. From
+\MediK's perspective, this would enable ghost machines that can model
+complex hybrid behavior exhibited by organ systems and medical devices.
+But, we leave this task as optional for this proposal.
+
 %\paragraph{Generation of Formal Proofs of Execution (optional)}
 
 \subsection{Applicability to other \CDSSs{}}\label{subsec:applicability}

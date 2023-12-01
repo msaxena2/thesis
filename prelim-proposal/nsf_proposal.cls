@@ -18,12 +18,12 @@
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions
 \LoadClass[11pt]{article}
-\RequirePackage{calc}
+%\RequirePackage{calc}
 %\RequirePackage{natbib}
 %\RequirePackage{mathpazo}
 %\RequirePackage{times}
 %\RequirePackage{charter}
-\RequirePackage{mathptmx}
+%\RequirePackage{mathptmx}
 
 
 % For some reason, the NSF Fastlane pdf upload checker would flag margins

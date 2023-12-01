@@ -53,7 +53,15 @@ community, with discussions to designate it as the \emph{canonical document}
 instead of the Yellow Paper. For more details, we refer the reader to
 section VII of \cite{HildenbrandtCSF18}.
 
-\begin{wrapfigure}{l}{0.6\textwidth}
+
+\figurename{} \ref{fig:evm-comparison} compares the $\K{}$-generated interpreter
+against the reference implementation (\textbf{cpp-ethereum}) and
+another formalization (\textbf{Lem EVM}) of the EVM semantics \cite{HiraiWSTC17} in Lem \cite{MulliganACM14}
+on the official test that implementations are expected to pass.
+All execution times are given as the full sequential CPU time (in MM:SS format) on an Intel i5-3330 processor (3GHz on 4 hardware threads) and 24 GB of RAM.
+By comparing to the C++ reference implementation, we show the feasibility of using the KEVM formal semantics for prototyping, development, and test-suite evaluation.
+
+\begin{wrapfigure}{l}{0.67\textwidth}
       \begin{tabular}{ l l l l }
           \textbf{Test Set} (no. tests) & \textbf{Lem EVM} & \textbf{KEVM} & \textbf{cpp-ethereum} \\
           Lem (40665)                   & 288:39           & 34:23         & 3:06                  \\
@@ -66,12 +74,6 @@ section VII of \cite{HildenbrandtCSF18}.
       \end{tabular}
   \caption{Lem EVM vs KEVM vs cpp-ethereum}\label{fig:evm-comparison}
 \end{wrapfigure}
-\figurename{} \ref{fig:evm-comparison} compares the $\K{}$-generated interpreter
-against the reference implementation (\textbf{cpp-ethereum}) and
-another formalization (\textbf{Lem EVM}) of the EVM semantics \cite{HiraiWSTC17} in Lem \cite{MulliganACM14}
-on the official test that implementations are expected to pass.
-All execution times are given as the full sequential CPU time (in MM:SS format) on an Intel i5-3330 processor (3GHz on 4 hardware threads) and 24 GB of RAM.
-By comparing to the C++ reference implementation, we show the feasibility of using the KEVM formal semantics for prototyping, development, and test-suite evaluation.
 
 The row Lem indicates a run of all the tests that the Lem semantics can run (a subset of the VMTests).
 The row VMStress indicates a run of all 18 stress tests in the test-suite, to compare the performance of KEVM with the C++ implementation.
@@ -341,7 +343,7 @@ input pipe.
 %\end{figure}
 
 
-\begin{figure}[t]
+\begin{figure}[b]
   \begin{lstlisting}[style=mediksty, language=medik,  multicols=2,
   basicstyle=\ttfamily\tiny, numbers=left
   ,showspaces=false
