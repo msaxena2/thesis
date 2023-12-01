@@ -297,10 +297,8 @@ and $M_{\awake} \leftarrow M_{\awake} \cup \left\{\mathcal{M}_i\right\}$.
 and the process repeats when no \emph{instantaneous} rule can apply.
 
 Our current approach has several limitations. First, a discrete
-model introduces unnecessary overhead. Since no \emph{instantaneous} rule
-can apply until some machine $\mathcal{M}_i \in S$ finishes its sleep duration,
-a combined \emph{tick} that advances time by $\textit{min}\left(\tau_i\right)_{0
-\leq i < n}$ can be used instead. Second, it precludes us from supporting
+model introduces unnecessary overhead as we track state change for every
+\emph{tick}. Second, it precludes us from supporting
 ghost models that require a continuous model of time. Third, communication
 with external components may take \emph{significant time}, which our semantics
 fail to account for.
