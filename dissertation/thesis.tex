@@ -8,6 +8,7 @@
 \usepackage[bookmarksdepth=3,linktoc=all,colorlinks=true,urlcolor=blue,linkcolor=blue,citecolor=blue]{hyperref}
 \usepackage[capitalize]{cleveref}
 \usepackage[style=ieee]{biblatex}
+\usepackage{dirtytalk}
 
 % \usepackage{ruledchapters}  % example of compliant heading format, uncomment to use
 
@@ -17,6 +18,7 @@
 \addbibresource{./references.bib}
 
 \newcounter{counterforappendices}
+\include{newcommands.tex}
 
 \begin{document}
 
@@ -56,8 +58,9 @@ To my family
 \chapter{List of Abbreviations}
 
 \begin{abbrevlist}
-\item[CA] Caffeine Addict.
-%\item[CD] Coffee Drinker.
+\item[PCAST] President's Council of Advisors on Science and Technology
+\item[PME]  Preventable Medical Error
+\item[HCP] Healthcare Provider
 \end{abbrevlist}
 
 \chapter{List of Symbols}
