@@ -65,7 +65,7 @@ CAST was responsible for reducing the fatality risk for commercial aviation
 in the United States by 83\%, and aims to reduce the risk further by 50\% by
 2025. To put CAST's achievements into perspective, between 2008 and 2020,
 U.S. carriers transported more than 7.8 billion passengers. But, in the same
-timeframe, there were only 2 fatalities \cite{CASTSafetyReport20}.
+time-frame, there were only 2 fatalities \cite{CASTSafetyReport20}.
 Several solutions were instrumental in achieving such remarkable results, including:
 \begin{itemize}
   \item fly-by-wire control that optimizes pilot inputs for safety, reliability,
@@ -90,15 +90,47 @@ Unfortunately, despite similarities, improvements in aviation safety haven't bee
 But, as evidenced by the September 2023 PCAST report, initiatives are been
 undertaken to address this. Addressing patient safety is a complex problem
 requiring multifaceted solutions, of which comprehensive use of technology is a part.
-
 This work in particular focuses on improving patient by enabling
 the development of \emph{safe} and \emph{cost effective} guidelines-based clinical decision
-support systems. These systems assist healthcare providers (\HCPs{}) follow
+support systems (\CDSSs{}). These systems assist healthcare providers (\HCPs{}) follow
 evidence-based best practice guidelines (\BPGs{}) -- evidence-based
 statements published by medical institutions that codify recommended treatment
-for various clinical scenarios \cite{FieldClinical90}.
+for various clinical scenarios \cite{FieldClinical90}. High quality guidelines are routinely updated to account for
+ results from clinical trials and advances in medicine, and make the latest
+ diagnosis and treatment information accessible to providers \cite{SteinbergNAP11}.
+
+While \BPGs{} have the potential to reduce medical errors, their effectiveness hinges
+on the adherence of healthcare providers to them.
+For example, consider Advanced Cardiac Life Support (\ACLS{}): a \BPG{} published
+by the American Heart Association (AHA) for management
+of a life threatening condition called in-hospital cardiac arrest (IHCA) \cite{AHAGuidelineAdult, AHAGuidelinePed}. Studies suggest that management
+of IHCA in 30\% of adult, and 17\% of pediatric cases deviates from the
+AHA-prescribed \BPG, resulting in worse patient outcomes \cite{Ornato2012DeviationAdult,Wolfe2020DeviationPediatric,
+Crowley2020DeviationAdult,Honarmand2018Adherence,Mcevoy2014Adherence}.
+
+While \BPG{}-adherence is difficult to achieve in
+practice \cite{RandJAMA99,DavisCMAJ97},
+integrating \BPGs{} with existing patient care-flow,
+and making them readily-accessible when required can improve adherence \cite{WoolfBMJ99}.
+To this end, \CDSSs{}
+codify \BPGs{} and support \HCPs{} with situation-specific advice.
+Such systems have been shown to improve \BPG{}-adherence \cite{GargJAMA06,KawamotoBMJ05}, and evidence from multi-center clinical trials
+suggests that they reduce \PMEs{} \cite{BenettJAMIA16,SahotaJIS11}.
+Thus, guideline-based \CDSSs{} are now considered imperative to the
+future of medical decision making in general \cite{JamesNEJM01}.
+
+Typically, a \CDSS{} usually consists of the following components \cite{SuttonNature20}:
+\begin{enumerate}[label=(\alph*)]
+  \item a translation of the guideline to an executable medium, called the
+  \BPGLogic{}.
+\item an user interface (\UI{}) that healthcare providers use to interact with
+  the system.
+  \item additional infrastructure that integrates with external data sources
+  such as sensors, health records.
+\end{enumerate}
+The system utilizes available data to assess patient state, and administers
+supports the \HCP{} by providing guidelines-prescribed advice for treating
+assessed patient condition.
 
 
-healthcare providers follow evidence-based best practices by providing situation
-specific advice for various clinical scenarios.
 
