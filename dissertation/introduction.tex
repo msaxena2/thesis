@@ -149,9 +149,226 @@ times to reduce workloads and improve situation awareness. \CDSSs{}
 present a promising approach to addressing issues of patient safety in
 healthcare, and are thus the focal point of this work.
 
-\section{Hurdles to Wider \CDSS{} Adoption}
+\section{Hurdles to Wider \CDSS{} Adoption}\label{sec:hurdles-cdss-adoption}
+
+The Office of the National Coordinator for Health Information Technology
+(\ONC{}) \cite{ONCUrl} has also recognized the potential that \CDSS{} have to
+improve safety \cite{ONCCDSUrl}. As part of its efforts to enable wider
+\CDSS{} adoption, the \ONC{} organized meetings that involved key stakeholders
+such as \CDSS{} experts, policy makers and Electronic Health
+Record (\EHR{}) vendors to study the state of \CDSS{} in healthcare and barriers
+limiting adoption. Their findings were summarized in a National Association Medicine (NAM) special
+report \cite{Nam17}. Drawing from several publications on \CDSSs{}, including a
+literature review commissioned by the Agency for Healthcare Research Quality \cite{BrightAIM12},
+the report highlighted that despite significant evidence that demonstrates
+\CDSSs{} reduce both errors and cost while improve quality of care,
+implementation and actualization of such systems remains \say{nascent} due to
+the following challenges (Cs):
+
+\begin{enumerate}[label=C\arabic*.]
+\itemsep0.0em
+\item Absence of systematic ways of \emph{validating content}
+in a \emph{reliable}, \emph{accessible} and \emph{updateable} manner.
+\item Lack of \emph{reliable}, \emph{shareable} \CDSS{} content
+that can be easily adopted across healthcare organizations and their (Information
+Technology) \IT{} systems.
+\item Technical difficulties of sharing due to \emph{need for
+  adaptation} to diverse Electronic Health Records (\EHR) systems.
+\item \emph{Suboptimal} User Interfaces (\UIs), implementation choices and
+workflows.
+\end{enumerate}
+
+\section{Solution}
+
+Typically, \CDSS{} are implemented as cumbersome standalone systems.
+To develop a \CDSS{}, practitioners work with
+developers to come up with a requirements documentation
+that presents the \BPGs{}'s medical knowledge in a manner amenable to software development \cite{PelegJBI13}.
+This documentation is then utilized to develop the \CDSS{}.
+Thus, the \BPG{}
+serves as a functional specification for the medical knowledge encoded in the
+\CDSS{}.
+But, the aforementioned process has several limitations.
+First, the implementation, i.e., the medical knowledge within the \CDSS{},
+may not concur with its specification, i.e., the textual \BPG{}.
+\BPGs{} are long, complex textual documents,
+where the exact meaning of terms may not be explicitly stated, and recommendations may be ambiguous \cite{ClerqAIM03}.
+Capturing and communicating these complexities via requirements documentation
+is challenging, and incorrect or incomplete documentation has resulted in failed
+implementations \cite{KubbenBook19}. Second, as \BPGs{} evolve to reflect
+new evidence or adaptions, corresponding updates must be made to the
+\CDSS{} as well. Thus, effort (and associated cost) must expended to ensure that the medical knowledge
+is accurately updated in the \CDSS{} as well.
+
+To address these limitations, instead of a monolithic system, our approach
+decomposes the \CDSSs{} into:
+\begin{enumerate}[label=(\alph*)]
+  \item the medical knowledge encoded in the \CDSS{}, which we refer to as the
+    \BPGLogic{}.
+  \item an interface for user-interaction.
+  \item additional infrastructure that integrates with external data sources
+  such as sensors, health records.
+\end{enumerate}
+
+To ensure that the \BPGLogic{} accurately reflects medical knowledge,
+domain specific languages (\DSL{}) that allow medical guidelines to
+be described in a manner that is both \emph{computer interpretable} and
+\emph{comprehensible} to healthcare practitioners are often utilized.
+A computer interpretable guideline (\CIG{}) can be directly used as
+\BPGLogic{} in a \CDSS{}. But, by being comprehensible to \HCPs{},
+such a guideline can also replace its textual counterpart.
+Thus, such \DSLs{} enable production of medical guidelines that can serve
+as both the system's functional specification, i.e. the \BPG{}, and implementation, i.e. the
+\BPGLogic{}. This ensures that there is no gap between the \BPG{} and the
+\CDSS{}' \BPGLogic{}.
+
+Given the safety-critical nature of \CDSSs{}, the need for \CIG{} \DSLs{} to
+have a complete formal semantics that can be used to implement tools such as
+execution engines, model checkers, etc. has been recognized.
+It's also desirable for such languages to have execution engines with formal \emph{correctness
+guarantees}, and accompanying tools for formal analysis.
+To this end, some existing \DSLs{} have partially-defined semantics and
+support for verification via model-checking.
+However, as identified by the authors of \cite{SuttonAMIA03, ShaharAMIA96},
+existing languages lack a complete formal semantics,
+execution engines with correctness guarantees
+and a comprehensive suite of accompanying tools such, model-checkers, symbolic-execution
+engines, and deductive verifiers.
+The difficulties of formal analysis are further compounded
+by the fact that \CDSSs{} are concurrent systems involving interactions with
+heterogeneous external agents such as sensors and \HCPs{}, making their analysis challenging.
+
+To address limitations of existing approaches, we developed a new language
+for computer interpretable guidelines called $\MediK$. $\MediK$ follows
+the \emph{semantics-first} philosophy. As shown in \figurename{}
+\ref{fig:semantics-first}, this philosophy dictates that instead of
+implementing tools such as an interpreter,
+compiler, program verifier for a language from scratch in an ad-hoc way,
+the execution semantics of the language should be formally defined, from which
+said tools are derived, making them \emph{correct-by-construction}.
+This also enables $\MediK$ to quickly and
+systematically incorporate healthcare practitioner feedback, as only the
+semantics need to be updated. As the tools are derived from the semantics,
+changes to the semantics are automatically reflected across all tools.
+
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=0.44\textwidth]{k-overview}
+  \caption{Semantics-first philosophy}\label{fig:semantics-first}
+\end{figure}
 
 
+$\MediK{}$'s semantics have been formalized in $\K$ -- a rewriting-based
+framework for defining programming languages \cite{KframeworkUrl}. Our
+choice for using $\K$ was motivated by
+\begin{enumerate*}[label=(\alph*)]
+  \item experience and expertise in developing $\K$, and defining languages in
+    it, and,
+  \item the fact that $\K$ has been used to define other real-world languages such as C
+    \cite{HathhornPLDI15}, Java \cite{BogdanasPOPL15} and the Ethereum Virtual
+    Machine \cite{HildenbrandtCSF18}, and verify programs in them
+    \cite{ParkFSE18,StefanescuOOPSLA16}.
+\end{enumerate*}
+
+\CDSSs{} are complex systems. The complexity stems from:
+\begin{enumerate}[label=(\roman*)]
+  \item \emph{concurrency} to account for multiple diagnoses and treatments
+    occur simultaneously, and,
+  \item interaction with heterogeneous \emph{external agents} such as sensor,
+    health records, and practitioners.
+\end{enumerate}
+To support formal analysis of such systems, a \DSL{} for
+computer interpretable guidelines must take into account said \emph{complexity}
+while ensuring \emph{comprehensibility} to healthcare practitioners.
+
+To ensure \emph{comprehensibility}, we ensure $\MediK{}$-based guidelines \emph{resemble}
+their existing textual counterparts that practitioners are already
+\emph{familiar} with. We started by examining existing \BPGs{} and the
+state-of-art \DSLs{} for expressing them in a \emph{computer-interpretable} way, and observed that
+\BPGs{} are often expressed in informal flowchart-like notation. For instance,
+see \cite{AHAFlowcharts} and \cite{CancerCareFlowcharts} for flowchart-based \BPGs{} for management of \emph{cardiac arrest}, and
+screening, risk-reduction, treatment and survivorship in cancer care.
+To tackle \emph{complexity},
+we utilized concepts from existing state-of-art in modeling
+and verification of large concurrent systems like P \cite{DesaiPLDI13} and maude
+\cite{MaudeBook}.
+In $\MediK$, like in P, a program is a collection of concurrently executing state
+machines that interact by passing messages. Just as in object-oriented maude,
+$\MediK{}$ treats external agents, such as the UI, sensors, etc., as state machines.
+Since \BPGs{} are often expressed using flowcharts, we represent each flowchart
+in $\MediK{}$ as a state machine. For formal analysis, we need to model
+heterogeneous external components such as the UI, sensors, etc.
+We model such agents as \emph{ghost machines}.
+These machines are only used for formal analysis, but are discarded during
+execution. During execution, the interface that glues all components
+is responsible for forwarding messages to and from external agents to $\MediK$.
+This allows $\MediK$ to support a uniform way of
+modeling heterogeneous external agents for both execution and analysis.
+
+In collaboration with the Children's Hospital of Illinois at
+OSF St. Francis Medical Center (referred to as OSF in the remainder of this
+work), we used our $\MediK$-based approach  to implement a \CDSS{} for management pediatric sepsis
+based on OSF's guidelines.
+Sepsis is life-threatening condition caused by the body's extreme response to
+an infection \cite{RhodesICM17}, and is
+a major cause of morbidity and mortality in children \cite{Eisenberg2021JP}.
+Adverse outcomes can, however, be mitigated through timely
+identification and prompt treatment with antibiotics and
+intravenous (IV) fluids \cite{Weiss2014CCM,Evans2018JAMA}.
+\BPGs{} for screening and management of sepsis in pediatric Emergency
+Departments (EDs) have shown effectiveness in screening and management of sepsis \cite{Eisenberg2021JP},
+leading to their adoption in many pediatric EDs \cite{Balamuth2017EM,Sepanski2014FP}.
+
+The $\MediK$-based \CDSS{} is a complex system, involving multiple
+concurrent workflows that interact with each other. As outlined earlier,
+the \CDSS{} consists of three independent components:
+\begin{itemize}
+  \itemsep0.0em
+  \item A UI tailored to the preferences of practitioners at OSF.
+  \item A $\MediK{}$ based computer interpretable guideline based on OSF's
+    existing textual \BPG{}.
+  \item Additional infrastructure that glues aforementioned components together.
+\end{itemize}
+
+
+The \BPGLogic{} of the \CDSS{} is implemented as a $\MediK{}$ program.
+This computer interpretable guideline in $\MediK$ expresses
+medical knowledge \emph{succinctly}, and allows establishing desired \emph{safety} properties.
+For the sepsis management \CDSS{}, we used $\MediK{}'s$ semantics-based model checker to
+establish \emph{responsiveness}. We say the system is \emph{responsive} if,
+under certain reasonable assumptions about the UI and interactions with external
+agents such as sensors, health records, all possible inputs to the
+system lead to a response. This ensures that the system does not
+\say{freeze} or \say{hang} when being used. But, beyond \emph{responsiveness},
+we need to ensure that the $\MediK{}$ program captures medical knowledge \emph{accurately}. To
+To this end, we utilize \emph{visual representations} of the programs that
+resemble flowcharts that practitioners intuitively understand,
+enabling them to validate the semantics of the $\MediK{}$-based
+computer-interpretable guideline. Once verified and validated, the $\MediK{}$ program
+can be combined with a customizable UI to obtain a complete \CDSS{} with
+strong safety guarantees. To the best of our knowledge, our is the first
+comprehensive \CDSSs{} for sepsis management to provide such \emph{safety
+guarantees}.
+
+Recall from section \ref{sec:hurdles-cdss-adoption}, the four challenges from
+the NAM{} special report on \CDSSs{}. Our approach's modular architecture and
+use of $\MediK{}$ for computer-interpretable guidelines tackles all
+challenges. $\MediK{}$ based guidelines provide a \emph{systematic} way of
+\emph{validating} medical knowledge that can be easily updated, thus addressing
+C1. Comprehensibility of $\MediK{}$ to practitioners ensures transparency.
+Practitioners can rely on the system to perform as expected, partly addressing C2.
+Our approach is agnostic to IT being utilized at the
+hospital. As mentioned earlier, our approach requires the implementation
+of a hospital-specific interface that glues the $\MediK{}$-based
+computer interpretable guideline and the UI with the hospital's IT
+infrastructure, addressing C2, C3 and partly C4. Moreover,
+our approach allows the UI to be safely customized,
+as any changes remain contained to the UI itself, and safety-critical
+components such as the \BPGLogic{} remain untouched. This addresses C4,
+as the UI can be optimized to a hospital's preferences. Moreover,
+as both the $\MediK{}$-based guideline and UI are shareable, the cost
+for deploying a \CDSS{} is lower than building a standalone,
+non-modular system from scratch.
 
 
 
