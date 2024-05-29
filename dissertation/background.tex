@@ -37,9 +37,9 @@ interventions for various clinical scenarios
  results from clinical trials and advances in medicine, and make the latest
  diagnosis and treatment information accessible to providers \cite{SteinbergNAP11}.
 
-\begin{figure}[b!]
+\begin{figure}[t]
   \centering
-  \includegraphics[width=0.43\textwidth]{sepsis-screening-osf}
+  \includegraphics[width=0.5\textwidth]{sepsis-screening-osf}
   %\includegraphics[width=0.5\textwidth]{screening-vitals}
   \caption{Pediatric sepsis screening \BPG{}}\label{fig:sepsis-screening}
 \end{figure}
@@ -70,27 +70,6 @@ In essence, when a patient arrives at the
   \item the patient's vital signs, such as heart rate, systolic blood
     pressure, respiratory rate, etc.
 \end{enumerate*}
-\begin{footnotesize}
-  \begin{table}
-    \centering
-    \begin{tabular}{ | c || c | c | c | }
-      \hline
-      \textbf{Age}            & \textbf{Heart Rate}   & \textbf{Systolic BP} & \textbf{Temp}  \\
-      \hline
-      $0d - 1m$               & $>205$                & $<60$                & $<36 \text{ or } >38$ \\
-      \hline
-      $\geq 1m - 3m$          & $>205$                & $<70$                & $<36 \text{ or } >38$ \\
-      \hline
-      $\geq 3m - 1y$          & $>190$                & $<70$                & $<36 \text{ or } >38.5$ \\
-      \hline
-      $\dots$                 & $\dots$               & $\dots$              & $\dots$ \\
-      \hline
-      $\geq 13y$              & $>100$                & $<90$                & $<36 \text{ or } >38.5$ \\
-      \hline
-    \end{tabular}
-    \caption{Vital Signs Chart}\label{table:vital-signs}
-  \end{table}
-\end{footnotesize}
 
 This information is then used to check for abnormalities
 in clusters of linked information, called \say{buckets}. For instance, if
@@ -122,9 +101,29 @@ at OSF. Briefly, if the patient is flagged as potentially septic, the guideline 
 \end{enumerate*}
 \begin{figure}[b]
   \centering
-  \includegraphics[scale=0.45]{FluidWorkflow-fmcad.pdf}
+  \includegraphics[scale=0.5]{FluidWorkflow-fmcad.pdf}
   \caption{Fluid Resuscitation Guideline}\label{fig:fluid-therapy}
 \end{figure}
+
+  \begin{table}
+    \centering
+    \begin{tabular}{ | c || c | c | c | }
+      \hline
+      \textbf{Age}            & \textbf{Heart Rate}   & \textbf{Systolic BP} & \textbf{Temp}  \\
+      \hline
+      $0d - 1m$               & $>205$                & $<60$                & $<36 \text{ or } >38$ \\
+      \hline
+      $\geq 1m - 3m$          & $>205$                & $<70$                & $<36 \text{ or } >38$ \\
+      \hline
+      $\geq 3m - 1y$          & $>190$                & $<70$                & $<36 \text{ or } >38.5$ \\
+      \hline
+      $\dots$                 & $\dots$               & $\dots$              & $\dots$ \\
+      \hline
+      $\geq 13y$              & $>100$                & $<90$                & $<36 \text{ or } >38.5$ \\
+      \hline
+    \end{tabular}
+    \caption{Vital Signs Chart}\label{table:vital-signs}
+  \end{table}
 
 This real-world \BPG{} exhibits characteristics common
 across many \BPGs{}. Specifically \BPGs{} typically:
