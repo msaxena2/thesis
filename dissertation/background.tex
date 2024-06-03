@@ -99,7 +99,7 @@ at OSF. Briefly, if the patient is flagged as potentially septic, the guideline 
   \item determining whether another fluid bolus should be administered based on
     information from previous steps.
 \end{enumerate*}
-\begin{figure}[b]
+\begin{figure}[h]
   \centering
   \includegraphics[scale=0.5]{FluidWorkflow-fmcad.pdf}
   \caption{Fluid Resuscitation Guideline}\label{fig:fluid-therapy}
@@ -150,8 +150,101 @@ such \DSLs{} should additionally
   \item have an execution engine to provide decision support.
 \end{enumerate*}
 
-
 \section{Clinical Decision Support Systems}\label{sec:cdss-background}
+
+\BPGs{} are developed with the intention of improving patient outcomes
+by reducing preventable medical errors. But, such guidelines can only be
+effective if they are followed in practice, which can be challenging.
+ For instance, consider the Advanced Cardiac Life Support (ACLS):
+a \BPG{} published by the American Heart Association (AHA) for management
+of a life-threatening condition called in-hospital cardiac arrest
+\cite{AHAGuidelineAdult, AHAGuidelinePed}. Studies suggest that management
+of IHCA in 30\% of adult, and 17\% of pediatric cases deviates from the
+AHA-prescribed \BPG{}, resulting in worse patient outcomes \cite{Ornato2012DeviationAdult,Wolfe2020DeviationPediatric,
+Crowley2020DeviationAdult,Honarmand2018Adherence,Mcevoy2014Adherence}.
+
+The benefits of \BPGs{} have resulted in them being widely adopted
+in daily practice \cite{WoolfBMJ99}. However, \BPG{} adoption in
+clinical settings has several challenges. \BPGs{} are complex documents,
+which may also contain some vagueness.
+Exact meaning of terms is not always defined and recommended
+actions may not be clearly articulated. The long and cumbersome
+nature of \BPGs{} may make them difficult to effectively apply
+in regular practice. Additionally, such \BPGs{} need to be
+periodically updated to take into account latest evidence, and
+adapted according to local needs of the setting they're utilized
+in \cite{DeClerqSHTI08}.
+
+To mitigate aforementioned issues, systems that utilize available
+patient data to assess patient state and issue guideline-based
+decision support to practiioners can be utilized \cite{DeClerqSHTI08}.
+Such computerized clinical decision support systems (\CDSSs{}) codify
+medical knowledge in \BPGs{} and provide practitioners with
+situation-specific advice that \say{guides} them towards adherence
+to the underlying \BPG{}.
+Well implemented \CDSSs{} have been shown to improve
+\BPG{}-adherence \cite{GargJAMA06,KawamotoBMJ05}, and reduce
+\PMEs{} based on evidence from multi-center clinical trials \cite{BenettJAMIA16,SahotaJIS11}.
+
+\subsection{An \CDSS{} Example}
+
+In section \ref{sec:bpg-background}, we presented a real-world
+\BPG{} for screening and management of sepsis in pediatric cases.
+To illustrate how a \CDSSs{} can enable better \BPG{} adherence,
+we utilize an example \CDSS{} that codifies the sepsis management \BPG{}
+to administer decision support.
+
+
+
+In \figurename{} \ref{fig:sepsis-tool}, we show an overview
+of a \CDSS{} for sepsis management.
+The \CDSS{} is intended to work as tablet at
+the patient's beside in a hospital's emergency department (ED).
+\figurename{} \ref{fig:sepsis-tool-main} depicts main screen that the practitioner sees on the tablet.
+The main screen consists of four panes (labeled and color coded for illustration
+purposes). Pane 1 shows a grid with the patient's vitals pulled
+from a combination of the patient's records, sensor measurements and
+assessments made by practitioner through prompts that appear on the screen.
+Red and green depict abnormality and normality respectively, while gray
+indicates missing measurements, which are assumed to be normal. As more
+measurements become available, corresponding boxes in the grid are updated
+to reflect their status. The two boxes in the top left corner depict whether
+the patient is suspected to have sepsis, and be in septic shock. The \CDSS{}
+continually monitors these vitals to determine whether they satisfy the criteria
+for sepsis or septic shock specified in the hospitals guideline, where the
+guideline itself is a $\MediK{}$ program that the practitioners can view and
+comprehend. Pane 2 shows the tasks the practitioner is expected to perform
+once sepsis is detected. As these tasks are supposed to be performed within an
+hour (referred to as golden hour in sepsis treatment), the \CDSS{} tracks time
+since the first task is started by clicking the corresponding check-mark.
+For some complex tasks, such as fluid resuscitation and antibiotics
+administration, an auxiliary window guides the practitioner through the task. The
+example scenario shows a patient with concerning vitals despite having
+given multiple fluid boluses, indicating septic shock -- a condition that
+demands immediate attention. Thus, as specified in the guidelines, the system
+recommends urgently administering antibiotics alongside fluids, by highlighting
+the relevant tasks in yellow.
+Pane 3 contains medications grouped by type, where clicking the
+\say{GIVE} button corresponds to administering the drug.
+Pane 4 leads to toggleable windows with
+important information. For instance, clicking on \say{HEMODYNAMICS LINE GRAPHS}
+toggles the window in \figurename{} \ref{fig:sepsis-graphs-view} depicting
+the patient's vitals over time punctuated by points at which
+drugs were administered.
+
+\begin{figure*}[b!]
+  \begin{subfigure}[t]{0.69\textwidth}
+    \centering
+    \includegraphics[height=2.5in]{sepsis-tool-main}
+    \subcaption{Main Screen}\label{fig:sepsis-tool-main}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.3\textwidth}
+    \centering
+    \includegraphics[height=2.5in]{sepsis-graphs}
+    \subcaption{Patient Vitals vs Time}\label{fig:sepsis-graphs-view}
+  \end{subfigure}
+  \caption{$\MediK{}$-based Sepsis Management \CDSS{}}\label{fig:sepsis-tool}
+\end{figure*}
 
 
 
