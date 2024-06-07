@@ -317,9 +317,29 @@ generate recommendations as specified in the underlying \BPG{}. Typically this i
 utilizing available data from various sources such as electronic health records,
 devices that monitor various patient vitals, and inputs from \HCPs{}.
 
+Consider for example the \BPG{} for managing sepsis from section
+\ref{sec:bpg-background}. As shown in \figurename{} \ref{fig:sepsis-screening},
+in order to determine whether a patient is potentially, data and
+measurements such as the patient's age, associated high-risk conditions,
+mental status, heart rate, etc. is required. The origins
+of the data is generally very diverse. Information such
+as the patient's age, weight and associated high risk conditions
+remain static over the duration of sepsis management, and can be
+obtained from the patient's health records.
+On the other hand, information such as the patient's mental
+state or the condition of the patient's skin necessitates an assessment from an
+\HCP{} at the patient's bedside before it's manually entered into the system.
+Finally, for patient parameters such blood pressure or mean arterial pressure
+that change dynamically during the course of treatment, sensors or monitors
+that provide them in real-time should ideally be utilized.
+
 \paragraph{User Interface (\UI{})}
 
-\HCPs{} utilize with the system through a \UI{} that
+\HCPs{} interact with the system through a \UI{} that
 displays alerts, recommendations and facilitates input
-of practitioner provided clinical data.
+of practitioner provided clinical data. As mentioned earlier,
+
+
+
+
 
