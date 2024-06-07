@@ -223,7 +223,6 @@ To illustrate how a \CDSSs{} can enable better \BPG{} adherence,
 we utilize an example \CDSS{} that codifies the sepsis management \BPG{}
 to administer decision support.
 
-
 In \figurename{} \ref{fig:sepsis-tool}, we show an overview
 of a \CDSS{} for sepsis management.
 The \CDSS{} is intended to work as tablet at
@@ -255,12 +254,12 @@ the relevant tasks in yellow.
 Pane 3 contains medications grouped by type, where clicking the
 \say{GIVE} button corresponds to administering the drug.
 Pane 4 leads to toggleable windows with
-important information. For instance, clicking on \say{HEMODYNAMICS LINE GRAPHS}
+important information. For instance, clicking on \say{HAEMODYNAMICS LINE GRAPHS}
 toggles the window in \figurename{} \ref{fig:sepsis-graphs-view} depicting
 the patient's vitals over time punctuated by points at which
 drugs were administered.
 
-\begin{figure*}[b!]
+\begin{figure*}[t!]
   \begin{subfigure}[t]{0.69\textwidth}
     \centering
     \includegraphics[height=2.5in]{sepsis-tool-main}
@@ -273,4 +272,54 @@ drugs were administered.
   \end{subfigure}
   \caption{$\MediK{}$-based Sepsis Management \CDSS{}}\label{fig:sepsis-tool}
 \end{figure*}
+
+\subsection{\CDSS{} Components}
+
+\CDSSs{} were first introduced in the 1970s. Initial systems
+didn't integrate well with existing patient care workflows, and
+didn't find greater adoption outside academia. However,
+wider adoption of electronic health records and digital systems for
+patient parameters enabled better integration of \CDSSs{} with
+workflows in everyday practice, enabling wider adoption.
+Modern \CDSS{} can deliver recommendations
+through a diverse spectrum of devices such
+as systems at the patient bedsides, desktops or tablets carried by
+practitioners and smartphones. This versatility
+has further enhanced \CDSSs{} adoption \cite{SuttonNature20}.
+
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=0.75\textwidth]{cdss-architecture}
+  \caption{\CDSS{} Components}\label{fig:cdss-architecture}
+\end{figure}
+
+In \figurename{} \ref{fig:cdss-architecture}, we provide an overview
+of the components of a typical \CDSS{}, and the underlying architecture.
+A typical guidelines-based \CDSS{} conceptually consists of the
+following components \cite{SuttonNature20}:
+
+\paragraph{Knowledge Base}
+
+The knowledge base is the encoding of the underlying guideline in a
+computable medium. Recall from section \ref{sec:bpg-background}
+that \BPGs{} are typically developed experts in medicine and published
+as textual documents. To develop a \CDSS{}, experts in medicine
+collaborate with computer scientists or software developers to
+develop requirements documentations that present the \BPG{}'s
+semantics in a manner amenable to software development.
+This is subsequently utilized by software developers to encode
+knowledge from the textual \BPG{} into some programming language \cite{PelegJBI13}.
+
+\paragraph{Clinical Data}
+
+\CDSSs{} utilize clinical to assess patient state and
+generate recommendations as specified in the underlying \BPG{}. Typically this involves
+utilizing available data from various sources such as electronic health records,
+devices that monitor various patient vitals, and inputs from \HCPs{}.
+
+\paragraph{User Interface (\UI{})}
+
+\HCPs{} utilize with the system through a \UI{} that
+displays alerts, recommendations and facilitates input
+of practitioner provided clinical data.
 
