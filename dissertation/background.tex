@@ -215,7 +215,7 @@ Well implemented \CDSSs{} have been shown to improve
 \BPG{}-adherence \cite{GargJAMA06,KawamotoBMJ05}, and reduce
 \PMEs{} based on evidence from multi-center clinical trials \cite{BenettJAMIA16,SahotaJIS11}.
 
-\subsection{\CDSS{} Example}
+\subsection{\CDSS{} Example}\label{sec:cdss-example}
 
 In section \ref{sec:bpg-background}, we presented a real-world
 \BPG{} for screening and management of sepsis in pediatric cases.
@@ -298,7 +298,7 @@ of the components of a typical \CDSS{}, and the underlying architecture.
 A typical guidelines-based \CDSS{} conceptually consists of the
 following components \cite{SuttonNature20}:
 
-\paragraph{Knowledge Base}
+\paragraph{Knowledge Base:}
 
 The knowledge base is the encoding of the underlying guideline in a
 computable medium. Recall from section \ref{sec:bpg-background}
@@ -309,17 +309,21 @@ develop requirements documentations that present the \BPG{}'s
 semantics in a manner amenable to software development.
 This is subsequently utilized by software developers to encode
 knowledge from the textual \BPG{} into some programming language \cite{PelegJBI13}.
+For instance, the \CDSS{} for sepsis management from section \ref{sec:cdss-example}
+utilizes the textual \BPG{} shown in \figurename{} \ref{fig:sepsis-screening}
+and \figurename{} \ref{fig:fluid-therapy} to diagnose and manage sepsis.
+Thus, medical knowledge in the textual \BPG{} must translated into some
+programming language to enable its use in a functioning \CDSS{}.
 
-\paragraph{Clinical Data}
+\paragraph{Clinical Data:}
 
 \CDSSs{} utilize clinical to assess patient state and
 generate recommendations as specified in the underlying \BPG{}. Typically this involves
 utilizing available data from various sources such as electronic health records,
 devices that monitor various patient vitals, and inputs from \HCPs{}.
 
-Consider for example the \BPG{} for managing sepsis from section
-\ref{sec:bpg-background}. As shown in \figurename{} \ref{fig:sepsis-screening},
-in order to determine whether a patient is potentially, data and
+Consider the sepsis screening \BPG{} in \figurename{} \ref{fig:sepsis-screening}.
+In order to screen a patient for sepsis, data and
 measurements such as the patient's age, associated high-risk conditions,
 mental status, heart rate, etc. is required. The origins
 of the data is generally very diverse. Information such
@@ -332,14 +336,22 @@ state or the condition of the patient's skin necessitates an assessment from an
 Finally, for patient parameters such blood pressure or mean arterial pressure
 that change dynamically during the course of treatment, sensors or monitors
 that provide them in real-time should ideally be utilized.
+Typically, \CDSS{} must take said diversity in data sources into account
+to be effective.
 
-\paragraph{User Interface (\UI{})}
+\paragraph{User Interface (\UI{}):}
 
 \HCPs{} interact with the system through a \UI{} that
 displays alerts, recommendations and facilitates input
-of practitioner provided clinical data. As mentioned earlier,
+of practitioner provided clinical data. The example
+in \figurename{} \ref{fig:sepsis-tool-main} shows
+the \UI{} for a \CDSS{} designed for a tablet at the patient's
+bedside.
 
+\paragraph{Additional Infrastructure}
 
+For a functioning \CDSS{}, some additional infrastructure is
+required to glue all components together.
 
 
 
