@@ -341,17 +341,39 @@ to be effective.
 
 \paragraph{User Interface (\UI{}):}
 
-\HCPs{} interact with the system through a \UI{} that
-displays alerts, recommendations and facilitates input
-of practitioner provided clinical data. The example
-in \figurename{} \ref{fig:sepsis-tool-main} shows
-the \UI{} for a \CDSS{} designed for a tablet at the patient's
-bedside.
+The \UI{} is the interface the \HCPs{} utilize to interact with the system.
+The UI typically:
+\begin{itemize}
+  \item Delivers guideline-specified information (recommendations, alerts, etc.).
+  \item Facilitates input of necessary data from the practitioner.
+  \item Displays relevant patient information (vital signs, treatment progress).
+\end{itemize}
+
+The \UIs{} need to account for the diversity in devices used in modern
+healthcare. Interaction can occur through desktops, tablets, or even cell
+phones. The \UI{} of the our running example \CDSS{} for managing \CDSS{}
+is meant to be displayed on tablet at the patient's bedside, and is shown in
+\figurename{} \ref{fig:sepsis-tool-main}.
+The displayed information is organized into distinct \say{panes}:
+Pane 1 for patient state, Pane 2 for treatment progress,
+Pane 3 for medication details, and Pane 4 for textual guideline references.
+Time-sensitive and critical information appears as overlaid popups/prompts.
 
 \paragraph{Additional Infrastructure}
 
-For a functioning \CDSS{}, some additional infrastructure is
-required to glue all components together.
-
-
-
+Finally, additional infrastructure is required to glue all aforementioned
+components into a functioning \CDSS{}. Said infrastructure typically consists
+of software to:
+\begin{itemize}
+  \item Integrate with a healthcare establishment's existing Information Technology
+    stack for access to electronic health records, and systems for services such
+    as drug order and delivery, \HCP{} communication, etc.
+  \item Interface with various devices, including sensors and monitors,
+    that track patient parameters like heart rate, blood pressure, etc.
+  \item Control treatment-related devices such as infusion pumps, ventilators, etc.
+\end{itemize}
+For instance, the example \CDSS{} for sepsis management shown in \figurename{}
+\ref{fig:sepsis-tool-main} integrates requires additional software for integration with
+electronic health, several monitors for patient parameters
+such as heart rate, blood pressure, mean arterial pressure, etc. and the
+hospital's drug order and delivery systems to be effective.
