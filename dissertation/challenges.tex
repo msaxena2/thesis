@@ -29,13 +29,39 @@ Technology) \IT{} systems.
 workflows.
 \end{enumerate}
 
-Originally, \CDSSs{} were developed as monolithic standalone systems
+\section{Addressing Adoption Hurdles}
+
+\CDSS{} first appeared in the 1960s, and have evolved over time
+to address aforementioned challenges. The following sections
+describe progress made towards addressing aforementioned challnges.
+
+\subsection{Monolithic \CDSSs{}}\label{sec:monolithic-cdss}
+
+Early \CDSSs{} were developed as monolithic standalone systems
 that were self-contained, requiring direct user input for clinical data
-\cite{RodriguezBook16}. Such systems existed at a time when
-support for electronic health records was primitive,
+\cite{RodriguezBook16}. Such systems co-existed with
+primitve electronic health records (\EHR{}) systems,
 and thus had to rely on manual data entry before administering support
-\cite{ShortliffeBook12,BarnettJAMA87}. This made using such systems
-time consuming, causing
+\cite{ShortliffeBook12,BarnettJAMA87}. The reliance on manual entry
+made using such systems time-consuming. As support for \EHR{} matured,
+\CDSSs{} implementations became better integrated with \EHR{} systems
+for automated clinical data retrieval. However,
+the integration was usually \EHR{} specific \cite{RodriguezBook16}.
+Migrating or sharing \CDSS{} content across medical establishments
+presented significant challenges as a system desgined
+for an establishment's \EHR{} system couldn't be used with a different
+establishment's \EHR{} system \cite{KawamotoJBI10}.
+
+\subsection{Modular \CDSS{} Architectures}
+
+In section \ref{sec:cdss-components}, we presented the components that
+every guidelines-based clinical decision suppport can conceptually be decomposed
+into. Early \CDSSs{} from section \ref{sec:monolithic-cdss}
+were not designed with modularty that enabled sharing components
+between different implementations. As the need for scaling \CDSSs{}
+across institutions grew, component-based architectures that
+enabled \EHR{} agnostic systems to be developed became prevalent
+\cite{KawamotoJBI10}.
 
 
 
