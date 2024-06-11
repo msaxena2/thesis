@@ -40,29 +40,56 @@ describe progress made towards addressing aforementioned challnges.
 Early \CDSSs{} were developed as monolithic standalone systems
 that were self-contained, requiring direct user input for clinical data
 \cite{RodriguezBook16}. Such systems co-existed with
-primitve electronic health records (\EHR{}) systems,
-and thus had to rely on manual data entry before administering support
-\cite{ShortliffeBook12,BarnettJAMA87}. The reliance on manual entry
-made using such systems time-consuming. As support for \EHR{} matured,
+primitive electronic health records (\EHR{}) systems,
+and thus had to rely on manual data entry before administering support.
+
+Several successful \CDSSs{} implementations utilized a standalone
+architecture. Early \CDSS{} implementations
+such as MYCIN \cite{ShortliffeBook12} required the \HCP{}
+to answer a set of questions to provide advice regarding microbial therapy.
+Other early \CDSSs{} such as DXplain \cite{BarnettJAMA87} utilized a wide
+range of findings (history, data, etc.) to come up with a diagnosis, and
+is still in active development.
+
+The reliance on manual entry made using such systems time-consuming. As support for \EHR{} matured,
 \CDSSs{} implementations became better integrated with \EHR{} systems
-for automated clinical data retrieval. However,
-the integration was usually \EHR{} specific \cite{RodriguezBook16}.
+for automated clinical data retrieval.
+However, with monolithic systems, the integration was usually \EHR{}-specific \cite{RodriguezBook16}.
 Migrating or sharing \CDSS{} content across medical establishments
-presented significant challenges as a system desgined
+presented significant challenges as a system designed
 for an establishment's \EHR{} system couldn't be used with a different
 establishment's \EHR{} system \cite{KawamotoJBI10}.
 
 \subsection{Modular \CDSS{} Architectures}
 
 In section \ref{sec:cdss-components}, we presented the components that
-every guidelines-based clinical decision suppport can conceptually be decomposed
+every guidelines-based clinical decision support can conceptually be decomposed
 into. Early \CDSSs{} from section \ref{sec:monolithic-cdss}
-were not designed with modularty that enabled sharing components
+were not designed with modularity that enabled sharing components
 between different implementations. As the need for scaling \CDSSs{}
 across institutions grew, component-based architectures that
-enabled \EHR{} agnostic systems to be developed became prevalent
-\cite{KawamotoJBI10}.
+enabled \EHR{} agnostic systems to be developed became prevalent \cite{KawamotoJBI10}.
 
+\EHR{}-agnostic architectures represent a significant step towards
+addressing several challenges. Such architectures
+address C3 as the knowledge-base can be shared across institutions with
+different \EHR{} systems. C2 is partially addressed as the
+knowledge-base can be independently developed, maintained and distributed.
+C4 is also partially addressed as decoupled components, such as the \UI{},
+are easier to adapt to \HCP{} preferences.
 
+Over the years, several \CDSS{} implementations have utilized a
+components-based architecture. For instance, in \cite{KawamotoJBI10}, the
+authors utilize the service-oriented architecture \cite{ErlBook05} to build
+a \CDSS{} web service that can be utilized in a completely \EHR{}-agnostic way.
+Recent efforts include \CDSSs{} platforms such as
+EvidencePoint that enable \CDSS{} to be integrated
+closely with the hospital's \EHR{} without being tightly coupled \cite{SolomonJMIR23}.
+Using EvidencePoint allows decision support to be administered using the
+\EHR{}'s \UI{}. Given their prevalence in modern medical establishments,
+\EHR{} systems have become integrated into workflows,
+and HCPs are accustomed to using them. Dispensing clinical decision
+support through the \EHR{}'s \UI{} is vital for adoption, as better workflow
+integration can lead to higher adoption \cite{PressJMIR16,LiJMI16}.
 
 
