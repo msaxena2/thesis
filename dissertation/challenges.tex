@@ -85,11 +85,23 @@ a \CDSS{} web service that can be utilized in a completely \EHR{}-agnostic way.
 Recent efforts include \CDSSs{} platforms such as
 EvidencePoint that enable \CDSS{} to be integrated
 closely with the hospital's \EHR{} without being tightly coupled \cite{SolomonJMIR23}.
-Using EvidencePoint allows decision support to be administered using the
+\EHR{}-agnostic architectures allow decision support to be administered using the
 \EHR{}'s \UI{}. Given their prevalence in modern medical establishments,
 \EHR{} systems have become integrated into workflows,
 and HCPs are accustomed to using them. Dispensing clinical decision
 support through the \EHR{}'s \UI{} is vital for adoption, as better workflow
 integration can lead to higher adoption \cite{PressJMIR16,LiJMI16}.
+
+Approaches that utilize a component-based architecture
+enable medical knowledge to be shared more efficiently.
+But, it's possible for medical knowledge itself to be incorrectly
+encoded. \BPGs{} are genrally expressed as long textual documents meant to
+be understood by \HCPs{} \cite{SchiffmanYMI13}. To build a \CDSS{}, the \BPG{} has to be
+systematically expressed in a computable medium. This translation process,
+referred to as knowledge formalization, is generally ad-hoc, and can be
+the source of inconsistencies in encoded medical knowleddge
+resulting in \CDSSs{} that render wrong advice .
+
+
 
 
