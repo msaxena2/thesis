@@ -1,4 +1,4 @@
-\chapter{Hurdles to \CDSS{} Adoption}
+\chapter{Hurdles to \CDSS{} Adoption}\label{chapter:hurdles-cdss-adoption}
 
 There is now increasing evidence to suggest that
 well implemented \CDSSs{} can significantly improve quality of care
@@ -60,7 +60,7 @@ presented significant challenges as a system designed
 for an establishment's \EHR{} system couldn't be used with a different
 establishment's \EHR{} system \cite{KawamotoJBI10}.
 
-\subsection{Modular \CDSS{} Architectures}
+\subsection{Modular \CDSS{} Architectures}\label{sec:modular-architectures}
 
 In section \ref{sec:cdss-components}, we presented the components that
 every guidelines-based clinical decision support can conceptually be decomposed
@@ -116,7 +116,32 @@ However, since computer scientists/software
 developers don't understand medicine, and experts in medicine typically
 don't understand programming languages,
 it's possible for the functional specification, i.e., the \BPG{}, to
-diverge from its implementation, i.e., the knowledge base.
+diverge from its implementation, i.e., the knowledge base. Thus,
+C1 from section \ref{chapter:hurdles-cdss-adoption} remains unaddressed.
+
+\subsection{Computer-Interpretable \BPGs{}}
+
+\CDSSs{} are safety-critical systems, where bugs can have serious (sometimes fatal)
+consequences. Thus, ensuring correctness of \CDSSs{} is vital to widespread
+adoption. To ensure bugs arising out of divergences between the textual \BPG{}
+and its computable translation, i.e. the knowledge base, the gap between
+the \BPG{} and knowledge base must be eliminated. To this end, instead of
+translating \BPGs{} to a conventional programming language, domain-specific
+specifically designed for expressing \BPGs{} in a computer-intertable manner can
+be utilized. By emphasizing comprehensible to \HCPs{}, such languages enable
+\HCPs{} to validate the accuracy of encoded medical knowledge.
+Such computer-interpretable \BPGs{} can both as the specification, i.e. the textual \BPGs{},
+and the implementation, i.e., the knowledge bases in \CDSSs{}, eliminating the
+specification-implementation gap.
+
+
+
+
+
+
+
+
+
 
 
 
