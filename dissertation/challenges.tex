@@ -121,21 +121,27 @@ C1 from section \ref{chapter:hurdles-cdss-adoption} remains unaddressed.
 
 \subsection{Computer-Interpretable \BPGs{}}
 
-\CDSSs{} are safety-critical systems, where bugs can have serious (sometimes fatal)
-consequences. Thus, ensuring correctness of \CDSSs{} is vital to widespread
-adoption. To ensure bugs arising out of divergences between the textual \BPG{}
-and its computable translation, i.e. the knowledge base, the gap between
-the \BPG{} and knowledge base must be eliminated. To this end, instead of
-translating \BPGs{} to a conventional programming language, domain-specific
-specifically designed for expressing \BPGs{} in a computer-intertable manner can
-be utilized. By emphasizing comprehensible to \HCPs{}, such languages enable
+\CDSSs{} are safety-critical systems, where bugs can have serious consequences.
+Thus, ensuring correctness of \CDSSs{} is vital to widespread adoption.
+To ensure bugs arising out of divergences between the textual \BPG{}
+and its computable translation, i.e., the knowledge base, the gap between
+the \BPG{} and the knowledge base must be eliminated. To this end, instead of
+encoding \BPGs{} in a conventional programming language, domain-specific
+languages (\DSLs{}) for directly expressing \BPGs{} in a computer-interpretable manner can
+be utilized. By emphasizing comprehensibility to \HCPs{}, these \DSLs{} enable
 \HCPs{} to validate the accuracy of encoded medical knowledge.
-Such computer-interpretable \BPGs{} can both as the specification, i.e. the textual \BPGs{},
-and the implementation, i.e., the knowledge bases in \CDSSs{}, eliminating the
+A computer-interpretable \BPGs{} can both as the specification, i.e. the textual \BPG{},
+and the implementation, i.e., the knowledge base, thereby eliminating the
 specification-implementation gap.
 
-
-
+In 1989, the Arden Syntax was developed as a result of incompatibility
+of medical knowledge between medical institutions \cite{HripcsakCBM94}.
+While it was designed to represent simple guidelines,
+such as those related to reminders, more complex treatment protocols couldn't
+be represented. Arden syntax had a formal Backus-Naur Form (\BNF{})
+syntax definition, but no formal semantics, or a standardized execution engine.
+Instead, ad-hoc execution engines for the language have been developed over
+time \cite{ClerqAIM03}.
 
 
 
