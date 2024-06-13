@@ -95,12 +95,30 @@ integration can lead to higher adoption \cite{PressJMIR16,LiJMI16}.
 Approaches that utilize a component-based architecture
 enable medical knowledge to be shared more efficiently.
 But, it's possible for medical knowledge itself to be incorrectly
-encoded. \BPGs{} are genrally expressed as long textual documents meant to
+encoded. \BPGs{} are generally expressed as long textual documents meant to
 be understood by \HCPs{} \cite{SchiffmanYMI13}. To build a \CDSS{}, the \BPG{} has to be
 systematically expressed in a computable medium. This translation process,
 referred to as knowledge formalization, is generally ad-hoc, and can be
-the source of inconsistencies in encoded medical knowleddge
-resulting in \CDSSs{} that render wrong advice .
+the source of inconsistencies in encoded medical knowledge
+resulting in \CDSSs{} that render wrong advice \cite{ShaharIOS04}.
+
+Typically, in order to translate textual guidelines to a computable
+medium, experts in medicine collaborate with computer scientists and
+software developers to come up with a requirements document.
+This is subsequently utilized to develop the knowledge base, i.e.,
+the computer interpretable encoding of the \BPG{} \cite{PelegJBI13} in a
+traditional programming language. Thus, the \BPG{} as a
+functional specification for the knowledge base.
+For instance, in the case of the aforementioned EvidencePoint,
+the knowledge base is expressed in  Javascript \cite{SolomonJMIR23}.
+
+However, since computer scientists/software
+developers don't understand medicine, and experts in medicine typically
+don't understand programming languages,
+it's possible for the functional specification, i.e., the \BPG{}, to
+diverge from its implementation, i.e., the knowledge base.
+
+
 
 
 
