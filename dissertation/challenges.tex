@@ -181,10 +181,15 @@ components-based architectures, discussed in section
 be developed and maintained independently of other components (such as system \UI{}).
 To ensure that medical knowledge is indeed encoded correctly,
 several \DSLs{} that eliminate the gap between a textual \BPG{} and
-the \CDSS{}' knowledge base have been developed. However,
+the \CDSS{}' knowledge base have been developed. However, while the need
 the following challenges remain unaddressed:
+\begin{itemize}
+  \item Interpreters and compilers for said \DSLs{} are developed in an
+    ad-hoc way, and can be prone to bugs that manifest during execution.
+  \item There is a lack of formal analysis tools such as model checkers and
+    program verifiers that can be utilized to establish that the
+    computer-interpretable \BPGs{} satisfy desired safety and liveness
+    properties.
+\end{itemize}
 
-%\begin{itemize}
-%  \item S
-%\end{itemize}
 
