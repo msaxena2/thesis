@@ -178,11 +178,11 @@ the earliest \CDSSs{} attempted to increased adherence to evidence-based best pr
 at medical establishments. To ensure \CDSSs{} could be scaled better,
 components-based architectures, discussed in section
 \ref{sec:modular-architectures} enabled medical knowledge to
-be developed and maintained independently of other components (such as system \UI{}).
-To ensure that medical knowledge is indeed encoded correctly,
+be developed and maintained independently of other components (such as system
+\UI{}). To ensure that medical knowledge is indeed encoded correctly,
 several \DSLs{} that eliminate the gap between a textual \BPG{} and
-the \CDSS{}' knowledge base have been developed. However, while the need
-the following challenges remain unaddressed:
+the \CDSS{}' knowledge base have been developed. However,
+the following issues still remain:
 \begin{itemize}
   \item Interpreters and compilers for said \DSLs{} are developed in an
     ad-hoc way, and can be prone to bugs that manifest during execution.
@@ -190,6 +190,13 @@ the following challenges remain unaddressed:
     program verifiers that can be utilized to establish that the
     computer-interpretable \BPGs{} satisfy desired safety and liveness
     properties.
+  \item \DSLs{} lack complete formal semantics that can be utilized
+    as a language model for a suite of formal analysis and execution tools.
 \end{itemize}
 
+Addressing aforementioned issues is vital to improving \CDSS{} adoption.
+In order to have trustworthy and useable computer interpretable \BPGs{},
+it's important to buttress  \HCP{}-friendly \DSLs{}
+with a suite of formal analysis tools that can establish desired safety
+properties, thus comprehensively addressing C1.
 
