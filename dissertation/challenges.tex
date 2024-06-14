@@ -143,14 +143,48 @@ syntax definition, but no formal semantics, or a standardized execution engine.
 Instead, ad-hoc execution engines for the language have been developed over
 time \cite{ClerqAIM03}.
 
+Shortcomings regarding ability of the Arden Syntax to represent complex
+treatment protocols were addressed by formalisms such as GLIF \cite{PelegAMIA00}
+that permit encoding complex guidelines through the use of a multi-layer
+approach to represent both high-level medical knowledge and low-level
+implementation details. However, just like the Arden Syntax, GLIF lacks
+a formal semantics or formal analysis tools.
 
+The need for formal analysis is identified by Asbru: a formalism with formally
+defined syntax and semantics \cite{ShaharAMIA96}. In Asbru, a guideline is modeled as a plan
+that contains:
+\begin{enumerate*}[label=(\roman*)]
+  \item intentions that define aims,
+  \item conditions that specify when the plan is applicable,
+  \item effects that define expected behavior during execution, and,
+  \item a body containing other subplans.
+\end{enumerate*}
+Apart from an execution engine, the Asbru ecosystem also contains
+other tools, such as a model checker for verification \cite{BaumlerSPIN06}.
+However, the formal semantics of Asbru have been only partially defined, and
+is insufficient to implement tools for the language \cite{SuttonAMIA03}.
+The importance of a complete formal-semantics is identified and addressed
+by PROforma \cite{SuttonAMIA03}, another formalism that uses plans to
+model guidelines. A PROforma plan is made of a sequence of tasks.
+The plan defines constraints on their enactment, and circumstances
+for termination (for example, exceptions) \cite{SuttonAMIA03}. But, despite
+having complete formal semantics, PROforma's semantics is not executable.
+Therefore, an interpreter and analysis tools have to be implemented in an
+ad-hoc manner.
 
+Over the years, significant progress has been made towards making \CDSSs{}
+safer, easier, effective and cheaper. In section \ref{sec:monolithic-cdss},
+the earliest \CDSSs{} attempted to increased adherence to evidence-based best practices
+at medical establishments. To ensure \CDSSs{} could be scaled better,
+components-based architectures, discussed in section
+\ref{sec:modular-architectures} enabled medical knowledge to
+be developed and maintained independently of other components (such as system \UI{}).
+To ensure that medical knowledge is indeed encoded correctly,
+several \DSLs{} that eliminate the gap between a textual \BPG{} and
+the \CDSS{}' knowledge base have been developed. However,
+the following challenges remain unaddressed:
 
-
-
-
-
-
-
-
+%\begin{itemize}
+%  \item S
+%\end{itemize}
 
