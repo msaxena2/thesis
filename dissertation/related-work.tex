@@ -40,7 +40,7 @@ engines \cite{AnandMed04,KaradimasAMIA02}.
 
 The maturity of the Arden Syntax platform is reflected in its
 use to implement a large and diverse set of \CDSSs{}. These
-include
+include:
 \begin{itemize}
   \item Systems for monitoring and infections surveillance \cite{BlackyACI12,SteinbrecherDC02}.
   \item Treatment planning and decision support \cite{EngeleHealth11,BoeglAMIA05}.
@@ -55,7 +55,40 @@ limitations. Notably:
   \item Lack of formal semantics and clarity in the language specifications \cite{SamwaldJBI12}.
 \end{itemize}
 
-\subsection{The Guideline Interchange Format}
+\subsection{\GEODECM{}}
+
+Guided Entry of Data Elements for Clinical Management (\GEODECM{}) was
+an early \DSL{} developed by the Decision Systems Group at Harvard University
+Medical School. The \GEODECM{} \DSL{} utilized a
+state machine-based architecture to represent medical knowledge.
+Clinical problems in \GEODECM{} were broken down into clinical management
+states, where entry, exit and transitions between states were determined
+by data collected during execution \cite{StoufletJAMIA96}. Each
+clinical management state was represented as state machine nodes,
+and edges between nodes represented transitions between the various clinical
+mangement states \cite{MachadoJAMIA98}.
+
+\subsection{EON}
+
+The EON langauge, developed at Stanford University, also
+utilizes a state machine-based architecture for representing medical guidelines.
+Treatment protocols are first recursively composed into smaller granular
+elementary protocols that cannot be decomposed any further.
+The protocols are then represented via directed multigraphs, where
+nodes represent both patient and treatment state, and transitions represent
+actions or changes in patient conditions \cite{TuAMIA96}.
+
+EON{} has many similarities to \GEODECM{}. Medical knowledge in both \DSLs{}
+is expressed using a finite-state machine notation, where nodes are
+patient or treatment states and edges represent actions or changes in state.
+However, EON, unlike \GEODECM{}:
+\begin{itemize}
+  \item Has an informal, yet comprehensive semantics.
+  \item Support for sequencing, looping and synchronization constructs to support
+    guidelines with multiple concurrent actions \cite{TuAMIA96}.
+\end{itemize}
+
+\subsection{\GLIF{}}
 
 The Guideline Interchange Format (\GLIF{}) was introduced in 1998 as a
 result of a collaboration between researchers from Columbia University,
@@ -64,12 +97,22 @@ guidelines improve healthcare quality, but require substantial work
 to develop and maintain. At the time, guidelines were published through
 unstructured text documents that were not easily shareable. The motivation
 behind the \GLIF{} project was to enable \BPG{} between institutions sharing
-through:
+through the development of:
 \begin{itemize}
-  \item Development of a standardized electronic format for rapid
-    dissemination.
-  \imte Implementation of a repository of commonly-used
+  \item A standardized electronic format for rapid dissemination.
+  \item A repository of guidelines to prevent duplicated effort.
+  \item Tools that \HCPs{} could utilize to retrieve and
+    execute relevant guidelines.
+  \item Analysis tools that enabled authors to develop
+    and publish high-quality, unambiguous guidelines.
 \end{itemize}
+
+The \GLIF{} team comprised of research groups from various universities
+where other languages (such as the Arden Syntax) had been developed and
+utilized. Thus, perspectives and learnings from existing efforts guided
+the development of \GLIF{}.
+
+
 
 
 
