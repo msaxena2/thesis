@@ -23,7 +23,7 @@ discuss other approaches that aren't specific to \BPGs{}.
 
 \section{\DSL{}-based Approaches}\label{sec:dsl-based-approaches}
 
-\subsection{Arden Syntax}
+\subsection{Arden Syntax}\label{sec:arden-syntax}
 
 The Arden Syntax is among the earliest and most widely-used
 standards for expressing medical logic, with the first
@@ -55,7 +55,7 @@ limitations. Notably:
   \item Lack of formal semantics and clarity in the language specifications \cite{SamwaldJBI12}.
 \end{itemize}
 
-\subsection{\GEODECM{}}
+\subsection{\GEODECM{}}\label{sec:geodecm}
 
 Guided Entry of Data Elements for Clinical Management (\GEODECM{}) was
 an early \DSL{} developed by the Decision Systems Group at Harvard University
@@ -68,7 +68,7 @@ clinical management state was represented as state machine nodes,
 and edges between nodes represented transitions between the various clinical
 mangement states \cite{MachadoJAMIA98}.
 
-\subsection{EON}
+\subsection{EON}\label{sec:eon}
 
 The EON langauge, developed at Stanford University, also
 utilizes a state machine-based architecture for representing medical guidelines.
@@ -83,12 +83,18 @@ is expressed using a finite-state machine notation, where nodes are
 patient or treatment states and edges represent actions or changes in state.
 However, EON, unlike \GEODECM{}:
 \begin{itemize}
-  \item Has an informal, yet comprehensive semantics.
+  \item Has an informal, yet comprehensive operational semantics.
   \item Support for sequencing, looping and synchronization constructs to support
     guidelines with multiple concurrent actions \cite{TuAMIA96}.
 \end{itemize}
 
-\subsection{\GLIF{}}
+While Arden Syntax emphasizes expressing medical logic using independent, modular
+medical logical modules, EON state machines are more tightly coupled, enabling
+representation of complex protocols and guidelines \cite{TuAMIA96}. EON has
+been used to implement complex \CDSSs{} for management of conditions such as
+AIDS \cite{MusenJAMIA96} and Breast Cancer \cite{TuAMIA96}.
+
+\subsection{\GLIF{}}\label{sec:glif}
 
 The Guideline Interchange Format (\GLIF{}) was introduced in 1998 as a
 result of a collaboration between researchers from Columbia University,
@@ -108,13 +114,10 @@ through the development of:
 \end{itemize}
 
 The \GLIF{} team comprised of research groups from various universities
-where other languages (such as the Arden Syntax) had been developed and
-utilized. Thus, perspectives and learnings from existing efforts guided
+where other languages, including Arden Syntax (section \ref{sec:arden-syntax}),
+\GEODECM{} (section \ref{sec:geodecm}) and EON (section \ref{sec:eon}),
+were developed. Thus, perspectives and learnings from existing efforts guided
 the development of \GLIF{}.
-
-
-
-
 
 \section{General Approaches}\label{sec:general-approaches}
 
