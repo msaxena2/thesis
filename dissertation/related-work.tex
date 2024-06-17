@@ -29,13 +29,13 @@ The Arden Syntax is among the earliest and most widely-used
 standards for expressing medical logic, with the first
 draft of the standard appearing in 1989.
 It was also among the earliest attempts to create a domain
-specific langauge specifically for use in \CDSSs{} \cite{SamwaldJBI12}.
+specific language specifically for use in \CDSSs{} \cite{SamwaldJBI12}.
 
 In Arden Syntax, code is organized into self-contained medical
 logic modules (\MLMs{}) that have a well-defined structure to
 separate higher-level medical logic from low-level implementation
 details such as variable declarations. The language continues to
-evolve to accomodate diverse uses, and is supported by multiple execution
+evolve to accommodate diverse uses, and is supported by multiple execution
 engines \cite{AnandMed04,KaradimasAMIA02}.
 
 The maturity of the Arden Syntax platform is reflected in its
@@ -50,13 +50,29 @@ Being one of the earliest \DSLs{} specifically designed for \CDSSs{}, the
 Arden Syntax has found widespread adoption. But, the language also has several
 limitations. Notably:
 \begin{itemize}
+  \item Support on simple, independent guidelines instead of complex treatment
+  workflows \cite{ClerqAIM03}.
   \item Lack of formal semantics and clarity in the language specifications \cite{SamwaldJBI12}.
 \end{itemize}
 
+\subsection{The Guideline Interchange Format}
+
+The Guideline Interchange Format (\GLIF{}) was introduced in 1998 as a
+result of a collaboration between researchers from Columbia University,
+Harvard University and Stanford \cite{ClerqAIM03}. Good medical
+guidelines improve healthcare quality, but require substantial work
+to develop and maintain. At the time, guidelines were published through
+unstructured text documents that were not easily shareable. The motivation
+behind the \GLIF{} project was to enable \BPG{} between institutions sharing
+through:
+\begin{itemize}
+  \item Development of a standardized electronic format for rapid
+    dissemination.
+  \imte Implementation of a repository of commonly-used
+\end{itemize}
+
+
+
 \section{General Approaches}\label{sec:general-approaches}
-
-
-
-
 
 
