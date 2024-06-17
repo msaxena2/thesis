@@ -117,7 +117,21 @@ The \GLIF{} team comprised of research groups from various universities
 where other languages, including Arden Syntax (section \ref{sec:arden-syntax}),
 \GEODECM{} (section \ref{sec:geodecm}) and EON (section \ref{sec:eon}),
 were developed. Thus, perspectives and learnings from existing efforts guided
-the development of \GLIF{}.
+the development of \GLIF{}, including borrowing certain useful constructs
+directly from EON \cite{MachadoJAMIA98}
+
+In \GLIF{}, guidelines are expressed using the \GLIF{} class containing
+relevant attributes corresponding to treatment information. One such
+attribute is an unordered list of all guideline steps. The guideline
+specification itself is a directed graph defined over collection of
+said steps. A step can be one of the following:
+\begin{itemize}
+    \item Action steps: Specify clinical-care actions during treatment.
+    \item Conditional steps: Determine control flow based on logical statements.
+    \item Branch steps: Enable flow to multiple guideline steps concurrently.
+    \item Synchronization steps: Converge concurrent flow back to a single
+      guideline step \cite{MachadoJAMIA98}.
+\end{itemize}
 
 \section{General Approaches}\label{sec:general-approaches}
 
