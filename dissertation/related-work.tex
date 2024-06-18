@@ -98,7 +98,7 @@ AIDS \cite{MusenJAMIA96} and Breast Cancer \cite{TuAMIA96}.
 
 The Guideline Interchange Format (\GLIF{}) was introduced in 1998 as a
 result of a collaboration between researchers from Columbia University,
-Harvard University and Stanford \cite{ClerqAIM03}. Good medical
+McGill University, Harvard University and Stanford \cite{ClerqAIM03}. Good medical
 guidelines improve healthcare quality, but require substantial work
 to develop and maintain. At the time, guidelines were published through
 unstructured text documents that were not easily shareable. The motivation
@@ -132,7 +132,32 @@ said steps. A step can be one of the following:
     \item Synchronization steps: Converge concurrent flow back to a single
       guideline step \cite{MachadoJAMIA98}.
 \end{itemize}
-\GLIF{} has been used to implement several \CDSSs{}, including
+
+\GLIF{} was used to implement several \CDSSs{}, such as a web-based
+application for support in clinical consultations \cite{BoxwalaAMIA99} and
+the Partners Computerized Algorithm Processor and Editor (\PCAPE{}) system
+for creating and deploying \BPGs{} \cite{ZielstorffAMIA98}.
+
+The experience and lessons from implementing aforementioned \CDSSs{} in
+\GLIF{} also revealed certain limitations of the language, such as:
+\begin{itemize}
+  \item Integration of heterogeneous clinical systems was challenging.
+  \item Guidelines were cumbersome to develop and readability was suboptimal.
+\end{itemize}
+
+To address these shortcomings, an updated version of the language called
+\GLIF3{} was introduced  \cite{PelegAMIA00}. \GLIF3{} utilized different
+abstraction levels to present relevant information based on the user's role.
+Guidelines are modeled using three hierarchical \say{abstraction levels}:
+\begin{enumerate}[label=\roman*.]
+  \item The conceptual level, where the guideline is represented as
+    a flowchart for consumption by \HCPs{}.
+  \item The computable level, where information regarding
+    execution exists to enable use in a \CDSS{}.
+  \item The implementable level, where additional information
+    regarding integration with institution-specific \EHRs{} resides.
+\end{enumerate}
+Like \GLIF{}, \GLIF3{} has also  been used to implement several \CDSSs{}, including
 systems for depression screening and management \cite{ChoiJMI07} and
 hyperkalemia patient screening \cite{WangBook04}.
 
@@ -175,7 +200,7 @@ debugging them, and an execution engine for running them \cite{SuttonAMIA03}.
 PROforma has been used to implement several \CDSSs{} that have demonstrated
 improvements in care quality in clinical settings. Among the first applications
 of PROforma was the CAPSULE system that assisted general practitioners prescribe
-medicines \cite{WaltonBMJ97}. Similarly, the LISA system was designed to  \HCPs{} with
+medicines \cite{WaltonBMJ97}. Similarly, the LISA system was designed to \HCPs{} with
 dosages for pediatric patients with acute lymphoblastic leukemia
 \cite{BuryBJH05}. Other applications include support with image interpretation
 and diagnosis \cite{TaylorMIA99}, and support for breast cancer diagnosis and
