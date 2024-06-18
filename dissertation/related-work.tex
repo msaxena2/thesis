@@ -55,6 +55,31 @@ limitations. Notably:
   \item Lack of formal semantics and clarity in the language specifications \cite{SamwaldJBI12}.
 \end{itemize}
 
+\subsection{Dilemma}
+
+The Dilemma project was among the first attempts at
+standardizing \BPGs{} to originate out of Europe. In Dilemma, a
+protocol describes the set of activities that must be carried out
+in order to reach on objective based on clinical indications \cite{HerbertMPB95}.
+Protocols are recursively broken into smaller elementary protocols. Each
+protocol has one or more associated indication that determine when
+it becomes applicable, and a set of objectives that define the expected
+outcome.
+
+Applying a protocol to a patient state is defined as a procedure, where
+leaf-level procedures are specifically referred to as activities. Activities
+are carried out by agents (usually \HCPs{} such as doctors, nurses, etc.),
+and typically involve:
+\begin{itemize}
+  \item Maintaining or changing patient state through treatment steps.
+  \item Obtaining information or confirming procedures.
+  \item Communication or interaction with other agents.
+\end{itemize}
+
+Dilemma was utilized to implement guidelines from several European
+countries, such as primary care guidelines from the Netherlands and the UK and cancer
+treatment guidelines from France \cite{HerbertMPB95}.
+
 \subsection{\GEODECM{}}\label{sec:geodecm}
 
 Guided Entry of Data Elements for Clinical Management (\GEODECM{}) was
@@ -159,7 +184,9 @@ Guidelines are modeled using three hierarchical \say{abstraction levels}:
 \end{enumerate}
 Like \GLIF{}, \GLIF3{} has also  been used to implement several \CDSSs{}, including
 systems for depression screening and management \cite{ChoiJMI07} and
-hyperkalemia patient screening \cite{WangBook04}.
+hyperkalemia patient screening \cite{WangBook04}. But, despite its use
+in several systems, the semantics of the \GLIF{} framework remain only informally
+defined.
 
 \subsection{PROforma}\label{sec:proforma}
 
@@ -206,8 +233,14 @@ dosages for pediatric patients with acute lymphoblastic leukemia
 and diagnosis \cite{TaylorMIA99}, and support for breast cancer diagnosis and
 treatment \cite{FoxECAI06}.
 
+PROforma is also among the first \DSLs{} to identify the for a formally defined
+syntax and semantics, and expend significant effort in doing so.
+In \cite{SuttonAMIA03}, the authors enunciate
+that PROforma \say{must have} open source syntax and semantics definitions
+to ensure that medical logic in PROforma is unambiguous, and to ensure
+tools \say{correctly} read and process PROforma.
+
+\subsection{Asbru}\label{sec:Asbru}
+
 \section{General Approaches}\label{sec:general-approaches}
-
-
-
 
