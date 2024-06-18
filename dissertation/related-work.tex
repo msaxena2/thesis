@@ -140,10 +140,10 @@ hyperkalemia patient screening \cite{WangBook04}.
 
 PROforma was initially developed at the Cancer Research UK Advanced Computation
 Laboratory, and has been utilized to develop several \CDSSs{} \cite{ClerqAIM03}.
-In PROforma, guidelines are modeled as tasks and data items. Tasks are further
-divided into:
+In PROforma, guidelines are modeled as tasks and data items. Tasks are
+hierarchically organized into plan, and may be further divided into:
 \begin{itemize}
-  \item Actions: Procedures that must be peformed in an external environment.
+  \item Actions: Procedures that must be performed in an external environment.
   \item Enquiries: Guideline points at which data must be obtained.
   \item Decisions: Points at which a choice determines further control flow
     \cite{SuttonAMIA03}.
@@ -155,6 +155,22 @@ actions are represented as squares, enquiries as diamonds and
 decisions as circles. This enables PROforma guidelines' visual representations
 to resemble flowcharts and medical algorithms that \HCPs{} are already familiar
 with.
+
+A PROforma task has associated properties that determine how it's interpreted.
+These include:
+\begin{itemize}
+  \item Captions and descriptions that improve guideline comprehensibility.
+  \item Preconditions that specify conditions for a task's execution to begin.
+  \item Scheduling constraints that enable synchronization between concurrent
+    tasks.
+\end{itemize}
+Additionally, plans have termination and abort conditions that specify
+successful end of the current plan to facilitate execution of successor
+plans.
+
+Using PROforma requires a suite of tools called Tallis \cite{TallisUrl}, written in Java,
+that include a composer for creating and viewing guidelines, a tester for
+debugging them, and an execution engine for running them \cite{SuttonAMIA03}.
 
 \section{General Approaches}\label{sec:general-approaches}
 
