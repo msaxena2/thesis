@@ -188,18 +188,6 @@ hyperkalemia patient screening \cite{WangBook04}. But, despite its use
 in several systems, the semantics of the \GLIF{} framework remain only informally
 defined.
 
-\subsection{Asbru}\label{sec:asbru}
-
-Asbru, developed by collaborators from Stanford, Vienna
-University of Technology, and Ben Gurion University, focuses on
-time-oriented clinical guidelines \cite{ClerqAIM03}.
-The langauge attempted to address limitations from existing approaches
-such Dilemma (see section \ref{sec:dilemma} and EON (see section \ref{sec:eon})
-such as:
-\begin{itemize}
-  \item Lack of human-readability.
-  \item Inability to integrate well with electronic patient records.
-\end{itemize}
 
 \subsection{PROforma}\label{sec:proforma}
 
@@ -253,7 +241,26 @@ that PROforma \say{must have} open source syntax and semantics definitions
 to ensure that medical logic in PROforma is unambiguous, and to ensure
 tools \say{correctly} read and process PROforma.
 
-\subsection{Asbru}\label{sec:Asbru}
+\subsection{Asbru}\label{sec:asbru}
+
+Asbru, developed by collaborators from Stanford, Vienna
+University of Technology, and Ben Gurion University, focuses on
+time-oriented clinical guidelines \cite{ClerqAIM03}.
+The langauge attempted to address limitations from existing approaches
+such Dilemma (section \ref{sec:dilemma}) and EON (section \ref{sec:eon})
+such as:
+\begin{itemize}
+  \item Lack of human-readability.
+  \item Inability to integrate well with electronic patient records.
+\end{itemize}
+
+In Asbru, guidelines are represented using skeletal plans, or a
+sequence of generalized steps \cite{ShaharAIM98}.
+These steps are instantiated with specific operations in a specific
+problem context to solve a given problem \cite{FriedlandJAR85}.
+In Asbru, specifically, plans comprise of problem-solving tasks
+
+
 
 \section{General Approaches}\label{sec:general-approaches}
 
