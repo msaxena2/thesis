@@ -246,21 +246,38 @@ tools \say{correctly} read and process PROforma.
 Asbru, developed by collaborators from Stanford, Vienna
 University of Technology, and Ben Gurion University, focuses on
 time-oriented clinical guidelines \cite{ClerqAIM03}.
-The langauge attempted to address limitations from existing approaches
+The language attempted to address limitations from existing approaches
 such Dilemma (section \ref{sec:dilemma}) and EON (section \ref{sec:eon})
 such as:
 \begin{itemize}
   \item Lack of human-readability.
   \item Inability to integrate well with electronic patient records.
+  \item Inability to model flexibility in guideline-prescribed steps.
 \end{itemize}
 
-In Asbru, guidelines are represented using skeletal plans, or a
-sequence of generalized steps \cite{ShaharAIM98}.
-These steps are instantiated with specific operations in a specific
-problem context to solve a given problem \cite{FriedlandJAR85}.
-In Asbru, specifically, plans comprise of problem-solving tasks
+To address these shortcomings, especially readability and modeling
+flexibility, Asbru utilizes a skeletal plans-based approach.
+Skeletal plans are a sequence of generalized steps that are instantiated
+in a specific problem context to solve a given problem \cite{FriedlandJAR85}.
+Thus, skeletal plans provide a broad framework for solving a class of problems,
+instead of fine-grained details required to solve a specific problem.
+This flexibility enables Asbru guidelines to have intended objectives that
+can be achieved in different ways. For instance, to manage diabetes,
+an \HCP{} can either administer additional insulin, or instruct
+the patient to consume less carbohydrates during a meal. Both actions
+have the intended outcome of moderating blood sugar levels.
 
+An Asbru skeletal plan based guideline has:
+\begin{itemize}
+  \item Actions to be performed by the \HCP{}.
+  \item An intended plan made of action described as pattern of actions.
+  \item The intended outcome described through patterns over patient states \cite{ShaharAIM98}.
+\end{itemize}
 
+When executed, the \HCP{} applies the guideline by following actions,
+which are observed, recorded and abstrated over time into an absracted plan.
+both patient state, and the inferred intention is also recorded
+\cite{ShaharAIM98}.
 
 \section{General Approaches}\label{sec:general-approaches}
 
