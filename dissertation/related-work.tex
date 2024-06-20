@@ -266,8 +266,7 @@ can be achieved in different ways. For instance, to manage diabetes,
 an \HCP{} can either administer additional insulin, or instruct
 the patient to consume less carbohydrates during a meal. Both actions
 have the intended outcome of moderating blood sugar levels.
-
-An Asbru skeletal plan based guideline has:
+Specifically, an Asbru skeletal plan based guideline has:
 \begin{itemize}
   \item Actions to be performed by the \HCP{}.
   \item An intended plan made of action described as pattern of actions.
@@ -277,7 +276,54 @@ An Asbru skeletal plan based guideline has:
 When executed, the \HCP{} applies the guideline by following actions,
 which are observed, recorded and abstrated over time into an absracted plan.
 both patient state, and the inferred intention is also recorded
+\cite{ShaharAIM98}. Asbru's execution model also provides the ability
+to critique execution along these axes:
+\begin{itemize}
+  \item Guideline-prescribed actions vs \HCP{} followed actions.
+  \item Guideline-intended plan vs \HCP{} followed plan.
+  \item Guideline-intended state vs the \HCP{}'s intended state.
+  \item Guideline-intended state vs actual patient state.
+  \item \HCPs{}'s intended state vs actual patient state.
+\end{itemize}
+These axes provide 32 different scenarios of guideline execution
 \cite{ShaharAIM98}.
+
+Asbru provides comprehensive support for temporal aspects of guidelines through
+the use of time reference annotations.
+These represent uncertainty in starting, ending and duration
+of time intervals. An annotation can be an absolute reference point,
+a reference point with uncertainty (defined by a region), or a function of
+some previous plan. Deviation from the reference point represent uncertainty
+in starting. Through the use of these annotations, intervals have an
+earliest start shift, latest start shift, earliest finishing shift, latest
+finishing shift and minimum duration and maximum durations \cite{ShaharAIM98}.
+
+Asbru guidelines are developed and published as part of the Digital Electronic
+Guidelines Library (\DEGEL{}) \cite{HatsekBook08}. A guideline in the library
+consists of a set of plans and corresponding time annotations. During execution,
+the interpreter attempts to decompose the plan into subplans from the library.
+If a plan is non-decomposable, it is considered to be atomic, usually corresponding
+to actions to be performed by an external agent such as obtaining information,
+administering treatment, etc.
+
+Library plans have four states: considered, possible, rejected and ready that
+determine whether a plan is applicable. During execution, a ready plan is
+instantiated. Apart from the name, arguments and time annotation, a plan also has:
+\begin{itemize}
+  \item Preferences: Factors that influence the selection of a plan to
+    achieve a goal. Examples include start conditions for the plan,
+    heuristics (such as exact-fit) to specify a selection criteria, etc.
+  \item Intentions: High level goals of the plan.
+  \item Effects: Functional relations between arguments and measurable
+    clinical parameters.
+  \item Body: Other plans (that also have the same structure) that may be
+    executed in parallel, in sequence, or some combination thereof
+    \cite{ShaharAIM98}.
+\end{itemize}
+
+The Asbru language has been used to implement several guidelines in
+Endocrinology, Pulmonology, Gynaecology, involving researchers
+from Stanford and Ben Gurion University \cite{YoungAMIA05}.
 
 \section{General Approaches}\label{sec:general-approaches}
 
