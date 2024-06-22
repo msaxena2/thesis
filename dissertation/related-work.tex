@@ -298,9 +298,8 @@ in starting. Through the use of these annotations, intervals have an
 earliest start shift, latest start shift, earliest finishing shift, latest
 finishing shift and minimum duration and maximum durations \cite{ShaharAIM98}.
 
-Asbru guidelines are developed and published as part of the Digital Electronic
-Guidelines Library (\DEGEL{}) \cite{HatsekBook08}. A guideline in the library
-consists of a set of plans and corresponding time annotations. During execution,
+A guideline in an Asbru library consists of a set
+of plans and corresponding time annotations. During execution,
 the interpreter attempts to decompose the plan into subplans from the library.
 If a plan is non-decomposable, it is considered to be atomic, usually corresponding
 to actions to be performed by an external agent such as obtaining information,
@@ -327,5 +326,67 @@ infants, and mechanical ventilation in premature babies
 \cite{YoungAMIA05}. The language has a formal syntax in \BNF{}, and the earlier versions of the language
 also have a formal structural operational semantics \cite{BalserPIDP02}.
 
+During the development of Asbru, it was realized that
+\CDSSs{} are limited by a lack of standardized \EHR{} formats, and in many
+settings, a complete lack of \EHR{} support. To address these issues,
+a new Asbru-based system that enables implementing \CDSSs{} in
+settings with complete, partial, or no \EHR{}, called Spock, was developed.
+Spock utilizes Hybrid-Asbru, a semi-formal variant of Asbru developed
+for the Digital Electronic Guideline Library (\DEGEL{}) \cite{YoungAMIA05,YoungAIM05}.
+Unlike Asbru, Hybrid-Asbru lacks a complete executable semantics and an
+interpreter with any correctness guarantees.
+
+\subsection{Guideline Acquisition, Representation, and Execution (\GLARE{})}\label{sec:glare}
+
+The \GLARE{} system attempts to decouple the representation of knowledge
+in \BPGs{} to their execution \cite{TerenzianiAIM01}. The \GLARE{} representation
+language represents guidelines using actions, that may be either atomic or
+composite. Atomic actions involve elementary steps that cannot be broken
+down further, and can be one of the following:
+\begin{itemize}
+  \item Work actions: Steps or procedures that must be
+    performed at a particular point during guideline execution.
+  \item Query actions: Obtaining information from the outside world,
+    for instance, from doctors, or databases.
+  \item Decision actions: Selecting alternate actions in the guideline
+    based on guideline-specified criteria.
+  \item Conclusion actions: Finalizing the outcome of
+    executing the guideline .
+\end{itemize}
+Atomic actions provide the elementary primitives for modeling
+medical knowledge, but, to specify a guideline, additional mechanisms for
+expressing relations over said actions is needed. Relations in
+\GLARE{} can either be structure-related or control-related.
+Structural relations enable building trees from actions, where
+nodes represent composite actions, and leaves atomic ones.
+
+Guideline execution requires specifying temporal ordering on
+actions. This is supported through control-related relations, which
+can be one of:
+\begin{itemize}
+  \item Sequence relations that enforce a strict ordering on actions, where,
+    if any one of the actions in the sequence fails, then the entire sequence
+    is considered to have failed.
+  \item Concurrent relations that allow actions to run in any order, including
+    in parallel.
+  \item Decision relations that allow execution of alternative actions based
+    on the conclusion of a decision action.
+  \item Iteration relations that allow looping behavior, where
+    an action may be repeated for a given duration, or, until a particular
+    condition is met.
+\end{itemize}
+
+To enhance usability, actions in \GLARE{} must further follow a particular
+structure. Work actions are further refined into clinical procedures and
+pharmacological prescriptions. Additionally, work actions may additionally
+have properties such as:
+\begin{itemize}
+  \item Preconditions that specify the context under which the action may apply.
+  \item Cycles that specify temporal behavior \cite{TerenzianiAIM01}.
+\end{itemize}
+
+
 \section{General Approaches}\label{sec:general-approaches}
+
+\subsection{Maude}
 
