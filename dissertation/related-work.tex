@@ -376,6 +376,7 @@ can be one of:
     condition is met.
 \end{itemize}
 
+
 To enhance usability, actions in \GLARE{} must further follow a particular
 structure. Work actions are further refined into clinical procedures and
 pharmacological prescriptions. Additionally, work actions may additionally
@@ -384,6 +385,27 @@ have properties such as:
   \item Preconditions that specify the context under which the action may apply.
   \item Cycles that specify temporal behavior \cite{TerenzianiAIM01}.
 \end{itemize}
+
+\subsubsection{Guideline Acquisition and Consitency Checking}
+
+The \GLARE{} framework provides a graphical tool for authoring guidelines
+that enables \HCPs{} to specify \GLARE{}-based guidelines.
+The interface has distint \say{windows} that deal with different guideline
+apspects.
+
+The structure window is used to represent relations
+between different actions through a tree. Each node represents
+an action, and its children represent sub-actions that must be performed
+as a part of executing the main-action.
+A separate control window is utilized to enforce execution
+ordering on actions. For a given action, its sub-actions
+are represented as nodes in a control graph, where edges
+specify control relations between said nodes.
+
+\GLARE{} framework provides mechanisms for ensuring modeled
+guidelines do not have inconsistencies.
+
+
 
 
 \section{General Approaches}\label{sec:general-approaches}
