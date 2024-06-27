@@ -386,12 +386,12 @@ have properties such as:
   \item Cycles that specify temporal behavior \cite{TerenzianiAIM01}.
 \end{itemize}
 
-\subsubsection{Guideline Acquisition and Consitency Checking}
+\subsubsection{Guideline Acquisition and Consistency Checking}
 
 The \GLARE{} framework provides a graphical tool for authoring guidelines
 that enables \HCPs{} to specify \GLARE{}-based guidelines.
-The interface has distint \say{windows} that deal with different guideline
-apspects.
+The interface has distinct \say{windows} that deal with different guideline
+aspects.
 
 The structure window is used to represent relations
 between different actions through a tree. Each node represents
@@ -403,10 +403,39 @@ are represented as nodes in a control graph, where edges
 specify control relations between said nodes.
 
 \GLARE{} framework provides mechanisms for ensuring modeled
-guidelines do not have inconsistencies.
+guidelines do not have inconsistencies \cite{TerenzianiAIM01}. \GLARE{} supports the
+following two types of checks:
 
+\paragraph{Standardization Inconsistencies:}
 
+Writing guidelines in \GLARE{} occurs in one of two modes: safe and
+advanced. In safe mode, when a new term is introduced as a part of
+an action's description, \GLARE{} checks if the term has already been
+defined in its existing database, and disallows the introduction if
+the term is not found. This ensures standard terminology and range of values
+is used throughout the system. In advanced mode, new terms can be introduced,
+and a warning is issued, under the assumption that the reason for ignoring
+existing checks is intentional.
 
+\paragraph{Logical Inconsistencies:}
+
+The checks for logical inconsistencies ensures that certain \say{logical design
+criteria} are followed. The following inconsistencies are disallowed:
+
+\begin{itemize}
+  \item Cycles: Introduction of cyclic behavior through control arcs is
+    disallowed, as repetitiveness can be specified through attributes.
+  \item Alternatives without decisions: An action that models available choices
+    must follow a decision action. This ensures that if a guideline provides
+    multiple paths to reaching a goal, then there exists an explicit way of
+    discriminating between them.
+  \item Queries before decisions: When a decision action is reached, all
+    data must have already been obtained. This ensures that all data
+    necessary to make a decision is already available when control reaches
+    a decision action.
+\end{itemize}
+
+\paragraph{Temporal Inconsistencies:}
 
 \section{General Approaches}\label{sec:general-approaches}
 
