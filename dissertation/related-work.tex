@@ -437,6 +437,39 @@ criteria} are followed. The following inconsistencies are disallowed:
 
 \paragraph{Temporal Inconsistencies:}
 
+These checks try to ensure semantic correctness from a temporal standpoint
+\cite{TerenzianiAIM01}. Recall that sequences of actions and sub-actions form graph
+structures. Minimum and maximum durations of actions and minimum and maximum delays
+between actions form logical constraints. These constraints
+are utilized in the control graph to infer new constraints, that can be checked
+for consistency using the LaTeR temporal manager \cite{BrusoniExpert97,TerenzianiAIM01} .
+
+\subsubsection{Execution of \GLARE{} Guidelines}
+
+Execution in \GLARE{} corresponds to an instantiation of the guideline
+with a specific patient's data. \GLARE{}'s execution module is responsible
+for:
+\begin{enumerate}[label=\arabic*)]
+  \item Interacting with the patient's \EHR{} to generate
+    required SQL \cite{SQLBook89} queries to obtain relevant data.
+  \item Maintaining the set of applicable guidelines for each patient, and their
+    status (such as active, suspended, etc.).
+  \item Maintaining the list of patients undergoing treatment.
+  \item Storing logs for each guideline execution to append patient history.
+\end{enumerate}
+The execution module also supports different \say{modalities}
+to enable use in diverse settings, such as clinical practice, or training.
+For example, in actual practice, time delays between actions are modeled
+using wall-clock time, while in training, a simulated time might be used instead.
+
+The \GLARE{} framework has been used to implement real-world guidelines in
+different domains, such as bladder cancer, reflux esophagitis
+and heart failure \cite{TerenzianiBook04}. The approach has been instrumental in
+demonstrating viability of standardized executable guidelines. However, despite use is
+safety-critical settings, the execution module has an ad-hoc Java
+implementation with no correctness guarantees, and utilizes
+an informal and incomplete paper-based execution semantics \cite{TerenzianiAIM01}.
+
 \section{General Approaches}\label{sec:general-approaches}
 
 \subsection{Maude}
