@@ -444,7 +444,7 @@ between actions form logical constraints. These constraints
 are utilized in the control graph to infer new constraints, that can be checked
 for consistency using the LaTeR temporal manager \cite{BrusoniExpert97,TerenzianiAIM01} .
 
-\subsubsection{Execution of \GLARE{} Guidelines}
+\subsubsection{Execution of \GLARE{} Guidelines}\label{sec:glare}
 
 Execution in \GLARE{} corresponds to an instantiation of the guideline
 with a specific patient's data. \GLARE{}'s execution module is responsible
@@ -469,6 +469,57 @@ demonstrating viability of standardized executable guidelines. However, despite 
 safety-critical settings, the execution module has an ad-hoc Java
 implementation with no correctness guarantees, and utilizes
 an informal and incomplete paper-based execution semantics \cite{TerenzianiAIM01}.
+
+\subsection{Guideline PRocess cOnformance VErification Framework (\GPROVE{})}\label{sec:gprove}
+
+\GPROVE{} is a set of tools that allow users to specify guidelines and
+reason about compliance of observed behavior. Specifically,
+the framework allows a-posteriori verification of workflow executions \cite{ChesaniISMIS06}.
+The \GPROVE{} framework consists of:
+\begin{itemize}
+  \item The Guideline prOcess Specification Language (\GOSPEL{}) language for graphically representing guidelines.
+  \item A translation to the Sciff language \cite{AlbertiTOCL08}.
+  \item Verification of compliance of an execution trace to the guideline.
+\end{itemize}
+Next, we briefly describe each component.
+
+\paragraph{\GOSPEL{}:}
+
+\GPROVE{}'s modeling language uses flowchart-derived concepts of
+blocks and relations between blocks to represent medical guidelines. Blocks belong to one of three families:
+\begin{itemize}
+  \item Activity blocks that contain various guideline actions that \HCPs{} must perform.
+    Said actions are expressed through activities.
+    Atomic activities represent actions that cannot be further decomposed, and
+    can be combined to form more complex composite activities.
+  \item Gateway blocks that dictate divergence and convergence of control flow.
+    These blocks enable fork and join constructs for modeling concurrent
+    behavior.
+  \item Start/end blocks that dictate terminal flowchart nodes.
+\end{itemize}
+
+\paragraph{Sciff Translation and Verification:}
+
+The modeled guideline is mechanically translated to Sciff --
+a constraint logic programming framework. This translation
+consists of various constraints describing expectations of what
+should or should not happen. During runtime,
+a log of the actually observed events is generated from guideline execution.
+The log is then checked against the generated constraints, and a violation is
+raised if the log does not satisfy the said constraints \cite{ChesaniBook08}.
+
+The \GPROVE{} framework is motivated by a different objective than other
+framework described in this chapter. Notably, \GPROVE{} focuses on proving
+a-posteriori compliance to guidelines, and intends to serve as a complementary
+tool, instead of a standalone one \cite{BottrighiBook10}. But, the
+approach has some limitations.
+First, the \GPROVE{} modeling language does not have a formally defined
+semantics. Instead, the semantics are embedded in the Sciff translator and
+execution trace generator. Second, there exist no proofs of correctness of
+the Sciff translator, or methods of checking equivalence between the
+\GOSPEL{} code and its Sciff translation, leading to a gap that can
+potentially result in the Sciff model to diverge from the underlying \GOSPEL{}
+code.
 
 \section{General Approaches}\label{sec:general-approaches}
 
