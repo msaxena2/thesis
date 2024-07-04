@@ -535,6 +535,24 @@ and specifically focused on the following:
 In HELEN, guidelines are organized into classes, that may have attributes and
 subclasses. The subclasses represent an \say{is a} relation, i.e., the subclass
 inherits attributes of all its superclasses.
+For knowledge acquisition, HELEN uses Prot\'eg\'e framework \cite{GennariIJHS03}.
+To improve comprehensibility, the HELEN framework includes a graphical interface
+that allows \HCPs{} to view the guideline logic.
+
+The framework also includes the Guideline Execution Engine (\GEE{}) that
+facilitates \BPGs{} to be used in \CDSSs{}. The \GEE{} traverses the guideline
+in order to:
+\begin{itemize}
+  \item Communicate with \HCPs{} about recommendations and scheduled actions.
+  \item Evaluate guideline logic to determine execution flow.
+  \item Perform administrative tasks such as logging performed actions and
+    manage \HCP{} information (such as roles, access, etc.) and patient data
+    \cite{SkonetzkiMIM04}.
+\end{itemize}
+
+HELEN has been used to formalized several guidelines, from diagnosis of uveitis in
+Ophthalmology \cite{BeckerUveitis99,BiswasIJO99}
+
 
 \section{General Approaches}\label{sec:general-approaches}
 
