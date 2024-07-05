@@ -566,8 +566,8 @@ administer both advice and timing support \cite{SkonetzkiMIM04}. This highlights
 a versatile system capable of  accommodating diverse needs.
 
 While the framework can be used to implement and execute \BPGs{}, it does not
-provide a way to systematically analyze them for semantic incosistencies --
-limitations were recongized in \cite{SkonetzkiMIM04}. The language does not
+provide a way to systematically analyze them for semantic inconsistencies --
+limitations were recognized in \cite{SkonetzkiMIM04}. The language does not
 have a formal syntax and semantics, and the main execution engine in Java
 has been implemented using an ad-hoc semantics. Thus, while HELEN moves the
 needle towards wider \BPG{} adoption, as acknowledged by the developers themselves,
@@ -581,11 +581,46 @@ The Prodigy initiative was an effort by the UK's National Health Service
 been several iterations of the Prodigy system to address limitations
 observed in practice. The Prodigy I and Prodigy II were closely coupled with
 the \EHR{} systems, and were not amenable to sharing. Prodigy II found wide
-use, demonstrating benefits of such systems to \GPs{} \cite{JohnsonAMIA00}.
+use, demonstrating benefits of such systems to \GPs{}, but was found to be
+inadequate to express important guidelines for chronic diseases. As a result,
+Prodigy III was developed to support modeling of such diseases \cite{JohnsonAMIA00}.
 
+In Prodigy III, guidelines are expressed through scenarios and action steps.
+Scenarios are easily recognizable patient states dictating if the guideline
+is applicable. Each scenario can have one or more outcome assessments with
+associated action steps that specify guideline-coded recommendations to manage
+the outcome. The action steps can:
+\begin{itemize}
+  \item Start, stop or modify activities that occur over time, such as
+    administering time-metered drug dosages).
+  \item Specify instantaneous actions, such as giving an immediate drug dose,
+    or recording a patient assessment.
+\end{itemize}
+In cases when a single action is insufficient to describe recommended treatment,
+a sub-guideline step that specifies additional treatment in a structured way
+can be utilized. This hierarchical representation methodology makes Prodigy
+guidelines resemble their paper-based counterparts.
+
+Prodigy, like most \CDSSs{} frameworks, depends on patient data to
+be available through \EHRs{} or \HCP{} assessments. In real clinical settings
+however, it is unreasonable to expect perfect data to be consistently
+available.It is often the case that
+\begin{enumerate*}[label=(\alph*)]
+  \item decision support is started after some treatment has already
+    been performed, leading to an inconsistency between the perceived
+    digital state and actual real-world state, and,
+  \item patient data is unreliable, obsolete, or simply unavailable.
+\end{enumerate*}
+To address this, in Prodigy III:
+\begin{itemize}
+  \item Scenarios can be broad and flexible, and serve as intuitive access points for
+    the clinicians in situations where perceived digital state may be
+    inaccurate.
+  \item Default values for patient parameters and other assessments are utilized
+    if patient data is unavailable or inconsistent \cite{JohnsonAMIA00}.
+\end{itemize}
 
 \section{General Approaches}\label{sec:general-approaches}
-
 
 \subsection{Maude}
 
