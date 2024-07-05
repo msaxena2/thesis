@@ -565,6 +565,24 @@ other hand, forms a complex \CDSSs{} that utilizes nested algorithms to
 administer both advice and timing support \cite{SkonetzkiMIM04}. This highlights
 a versatile system capable of  accommodating diverse needs.
 
+While the framework can be used to implement and execute \BPGs{}, it does not
+provide a way to systematically analyze them for semantic incosistencies --
+limitations were recongized in \cite{SkonetzkiMIM04}. The language does not
+have a formal syntax and semantics, and the main execution engine in Java
+has been implemented using an ad-hoc semantics. Thus, while HELEN moves the
+needle towards wider \BPG{} adoption, as acknowledged by the developers themselves,
+more work is needed to address challenges for formal analysis and execution with
+correctness guarantees.
+
+\subsection{Prodigy}\label{sec:prodigy}
+
+The Prodigy initiative was an effort by the UK's National Health Service
+(\NHS{}) to develop \CDSSs{} for use by general practitioners (\GPs{}). There have
+been several iterations of the Prodigy system to address limitations
+observed in practice. The Prodigy I and Prodigy II were closely coupled with
+the \EHR{} systems, and were not amenable to sharing. Prodigy II found wide
+use, demonstrating benefits of such systems to \GPs{} \cite{JohnsonAMIA00}.
+
 
 \section{General Approaches}\label{sec:general-approaches}
 
