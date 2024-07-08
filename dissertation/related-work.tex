@@ -620,6 +620,73 @@ To address this, in Prodigy III:
     if patient data is unavailable or inconsistent \cite{JohnsonAMIA00}.
 \end{itemize}
 
+Prodigy III differs in its approach towards decision support, in comparison
+to alternative approaches such as \GLIF{} (section \ref{sec:glif}), EON (section
+\ref{sec:eon}) or Asbru (section \ref{sec:asbru}). Unlike said alternatives,
+that offer complex concurrency and synchronization primitives to capture
+treatment details, Prodigy relies employs a simpler action plans-based approach
+that Prodigy's developers argue is sufficiently expressive for most guidelines.
+Other approaches emphasize \HCP{}-system interactions and access to good quality
+and up-to-date clinical data to make complex assessments about patient state and dispense detailed
+advice. Prodigy, on the other hand, leaves the complex assessment of patient
+state to the \HCP{}, and provides more abstract advice in the form of choices,
+expected outcomes and associated steps to reach said outcomes \cite{JohnsonAMIA00}.
+
+Prodigy, as an early \CDSS{} framework, enabled greater adoption among
+\HCPs{}. The focus of the Prodigy initiative was to standardize guidelines and
+improve uptake and adoption. Thus, efforts weren't expended into ensuring that
+the guidelines had a well defined semantics, and tools that were based on
+on it.
+
+\subsection{\SAGE{}}\label{sec:sage}
+
+The Standards-based Active Guidelines Environment (\SAGE{}) was the
+result of a collaboration between groups at University of Nebraska
+Medical Center, GE Healthcare, Stanford University and Mayo Clinic.
+The project focused on creating relevant infrastructure for shareable,
+standards-based guidelines amenable to use in decision support, across
+diverse \EHR{} environments.
+
+Integration with care workflow has been shown to be critical to \CDSS{}
+effectiveness. \SAGE{}, therefore, focuses on ensuring that the language
+and associated infrastructure support this goal. Instead of waiting for
+the user to control the workflow, \SAGE{} uses available information to
+suggest applicable best-practices in the form of events. To this end,
+the language itself is expressive enough to specify workflow contexts
+that decide when guidelines become applicable \cite{TuAMIA07}.
+
+In \SAGE{}, guidelines are represented using recommendation sets, or,
+collections of recommendations applicable in one or more computable
+contexts. A context formalizes the clinical settings under which
+the recommendation is applicable. A recommendation further comprises
+of action specifications and decision logic that specify guideline-intended
+\HCP{} behavior. The recommendation set itself is organized as a directed
+graph that captures relation between recommendations \cite{TuAMIA07}.
+
+\SAGE{} guidelines are interpreted by the \SAGE{} execution engine.
+The engine interprets the context, action specifications
+and recommendation-relations and dispatches decision support
+to the \EHR{}. The engine's event listener module is responsible
+for receiving any state changes from the \EHR{} \cite{RamMEDINFO04}.
+
+\SAGE{}'s design is motivated by:
+\begin{enumerate*}[label=(\roman*)]
+  \item using native \EHR{} to dispense support,
+  \item integrating with workflows as seamlessly as possible, and,
+  \item enabling interoperability between different \EHR{} systems.
+\end{enumerate*}
+Its architecture and design choices enable interaction with heterogeneous
+sources of information, and, de-duplicating replication across \EHR{}
+implementations \cite{TuAMIA07}. This is reflected in the fact that
+\SAGE{} has been used to implement guidelines at \EHR{} systems
+at the University of Nebraska Medical Center and the Mayo Clinic \cite{TuAMIA07}.
+But, \SAGE{} does not provide tools for validating guideline content, and,
+execution engine doesn't have any correctness guarantees either. While
+the execution engine does provide some validation checks \cite{RamMEDINFO04},
+\SAGE{} does not have dedicated validation or verification tools.
+
+
+
 \section{General Approaches}\label{sec:general-approaches}
 
 \subsection{Maude}
