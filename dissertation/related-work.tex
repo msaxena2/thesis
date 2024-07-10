@@ -685,9 +685,64 @@ execution engine doesn't have any correctness guarantees either. While
 the execution engine does provide some validation checks \cite{RamMEDINFO04},
 \SAGE{} does not have dedicated validation or verification tools.
 
-
-
 \section{General Approaches}\label{sec:general-approaches}
+
+\subsection{T/Gen}
+
+The T/Gen is a lisp-based project that enables validation
+of \CIGs{} through test-case synthesis. While
+primarily developed for \GLIF{} (section \ref{sec:glif}),
+it can be made to work with any guideline modeling formalism.
+
+The T/Gen tool takes as input a GLIF guideline encoded as a
+Lisp program, and an initial condition set that defines
+possible clinical scenarios for a program, and additional
+logical constraints that define when said clinical scenarios are
+feasible. T/Gen takes these initial conditions and constraints, and
+generates a set of meaningful clinical scenarios under which the
+guideline can be tested \cite{MillerJAMIA01}.
+
+For instance, consider the guideline in \figurename{} \ref{fig:tgen-example}
+with initial conditions $\varphi_1, \varphi_2, \varphi_3$. A naive
+way to test the system would result in 8 distinct conditions $\varphi_i = Y/N$
+for $i = 1,2,3$. T/Gen, however, would only generate
+4 conditions $\{\varphi_1 = Y, \varphi_2 = Y\}$,
+$\{\varphi_1 = Y, \varphi_2 = N\}$, $\{\varphi_1 = Y, \varphi_3 = Y\}$,
+$\{\varphi_1 = Y, \varphi_3 = N\}$ that result in firing of $\alpha_1, \dots
+\alpha_4$ under which the system should be tested to ensure complete coverage.
+Additionally, T/Gen further allows the user to specify constraints on
+the condition set both that can further reduce
+the number of test cases \cite{MillerJAMIA01}.
+
+\begin{figure}[b!]
+  \centering
+  \includegraphics[width=0.4\textwidth]{tgen}
+  \caption{T/Gen Example}\label{fig:tgen-example}
+\end{figure}
+
+T/Gen's white-box testing approach allows significant reductions in the
+number of test cases required for high test-coverage, and has demonstrated
+effectiveness in real-world use cases \cite{MillerJAMIA01}. But, it still has
+many limitations. Notably:
+\begin{itemize}
+  \item T/Gen can work with any \CIG{} language, and supports
+  a simplified version of \GLIF{}. But, this requires the \CIG{} to
+  be re-expressed in T/Gen's simplified language,
+  which requires additional effort, especially in cases of languages that differ
+    significantly from \GLIF{}. Moreover, the translation effort itself may
+    introduce bugs, or, may semantically be different from the original source.
+  \item Uncovering additional constraints requires both efforts and expertise.
+    As acknowledged in \cite{MillerJAMIA01}, a compromise must be made between
+    finding constraints and allowing some redundancy in tests. Moreover,
+    introducing constraints can omit certain scenarios, such
+    as those dependant on ordering of actions, from being tested.
+    Thus, using the tool effectively may require significant effort, depending
+    on the complexity of the system under test.
+  \item T/Gen utilizes an ad-hoc semantics of \GLIF{}, which may differ from
+    that used by \GLIF{} execution engines. Morover, changes to the \GLIF{} language
+    over time would also necessitate corresponding updates to T/Gen.
+\end{itemize}
+
 
 \subsection{Maude}
 

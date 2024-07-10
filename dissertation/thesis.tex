@@ -13,11 +13,41 @@
 \usepackage{graphicx}
 \usepackage{wrapfig}
 \usepackage{subcaption}
+\usepackage{listings}
+\usepackage{xcolor}
 
 % \usepackage{ruledchapters}  % example of compliant heading format, uncomment to use
 
 % uncomment the below to show a grid on all pages
 % \usepackage[grid, gridunit=in, gridcolor=blue!40, subgridcolor=blue!20]{eso-pic}
+
+% Settings for listings
+\usepackage{algpseudocode}
+\newcommand\CONDITION[2]%
+  {\begin{tabular}[t]{@{}l@{}l@{}}
+     #1&#2
+   \end{tabular}%
+  }
+\algdef{SE}[WHILE]{While}{EndWhile}[1]%
+  {\algorithmicwhile\ \CONDITION{#1}{\ \algorithmicdo}}%
+  {\algorithmicend\ \algorithmicwhile}
+\algdef{SE}[FOR]{For}{EndFor}[1]%
+  {\algorithmicfor\ \CONDITION{#1}{\ \algorithmicdo}}%
+  {\algorithmicend\ \algorithmicfor}
+\algdef{S}[FOR]{ForAll}[1]%
+  {\algorithmicforall\ \CONDITION{#1}{\ \algorithmicdo}}
+\algdef{SE}[REPEAT]{Repeat}{Until}{\algorithmicrepeat}[1]%
+  {\algorithmicuntil\ \CONDITION{#1}{}}
+\algdef{SE}[IF]{If}{EndIf}[1]%
+  {\algorithmicif\ \CONDITION{#1}{\ \algorithmicthen}}%
+  {\algorithmicend\ \algorithmicif}%
+\algdef{C}[IF]{IF}{ElsIf}[1]%
+  {\algorithmicelse\ \algorithmicif\ \CONDITION{#1}{\ \algorithmicthen}}
+\input{medik-lst.tex}
+\input{k-lst.tex}
+\algrenewcommand\alglinenumber[1]{\footnotesize #1} \newcommand{\inlinemedik}[1]{\lstinline[style=mediksty,basicstyle=\ttfamily\footnotesize]{#1}}
+\newcommand{\inlinek}[1]{\lstinline[style=ksty,basicstyle=\ttfamily\footnotesize]{#1}}
+\lstset{ literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1} }
 
 \graphicspath{{./figures}}
 \addbibresource{./references.bib}
