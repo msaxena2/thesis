@@ -743,6 +743,60 @@ many limitations. Notably:
     over time would also necessitate corresponding updates to T/Gen.
 \end{itemize}
 
+\subsection{Verification of Hierarchical Plans}\label{sec:asbru-verification}
+
+In \cite{DuftschmidAIM01}, formal verification of hierarchical plans-based
+guidelines is discussed. Although the work specifically focuses on guidelines in
+Asbru, it is applicable to other languages that utilize a plan-based approach
+to representing \BPGs{}. Recall from section \ref{sec:asbru} that Asbru guidelines
+consist of hierarchical plans, where a plan may contain other sub-plans,
+thus creating a tree of plans. Leaves of said trees are plans that cannot
+be decomposed any further into sub-plans.
+
+A set of eight plan states describe the actual state of the plan during
+planning and execution. The following seven conditions define transitions
+between aforementioned states:
+\begin{enumerate}[label=\arabic*)]
+  \item filter-preconditions that hold if an applicable plan cannot be achieved.
+  \item setup-preconditions that must hold for an applicable plan to start.
+  \item activate-condition that specifies whether plan starts automatically or
+    manually.
+  \item suspend-conditions that specify when a plan must temporarily halt execution.
+  \item abort-conditions that specify when a plan must be stopped unsuccessfully.
+  \item complete-conditions that specify successful termination.
+  \item reactivate-conditions that enable suspended plans to resume.
+\end{enumerate}
+
+The technique described in \cite{DuftschmidAIM01} utilizes static analysis
+to ensure plans are \emph{meaningful}, or, verified to not contain well defined
+anomalies described in \cite{PreeceJIS94}. Given the hierarchical nature of plans, abnormalities
+are classified into:
+\begin{enumerate*}[label=(\alph*)]
+  \item level 1 that occur within a plan,
+  \item level 2 that occur within linked plans,
+  \item level 3 that occur at the scale of \BPGs{}.
+\end{enumerate*}
+The verification is performed bottom-up -- from the leaves of the hierarchical
+plan to the eventual root representing the guideline. In \cite{PreeceJIS94},
+the authors describe verification of anomalies for knowledge bases by modeling
+a knowledge base as a union of a rule base and set of declarations, where rules are
+statements that define transitions, and
+the set of declarations comprising of possible outputs,
+the input vocabulary and constraints.
+By modeling Asbru plans as a knowledge-base, the authors are able to
+utilize existing techniques for checking anomalies from \cite{PreeceJIS94}
+to Asbru plans.
+
+The work in \cite{DuftschmidAIM01} represents significant progress towards
+verification of meaningful properties on real guidelines. But, the methodology
+also has limitations, such as:
+\begin{itemize}
+  \item It only works for certain pre-defined anomalies.
+  \item Expressing hierarchical plans in Asbru as knowledge-bases from
+    \cite{PreeceJIS94} utilizes an ad-hoc semantics of Asbru.
+  \item Any update to Asbru would necessitate corresponding updates to
+    the verification tool.
+\end{itemize}
 
 \subsection{Maude}
 
