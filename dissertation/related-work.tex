@@ -776,18 +776,85 @@ are classified into:
   \item level 2 that occur within linked plans,
   \item level 3 that occur at the scale of \BPGs{}.
 \end{enumerate*}
-The verification is performed bottom-up -- from the leaves of the hierarchical
-plan to the eventual root representing the guideline. In \cite{PreeceJIS94},
-the authors describe verification of anomalies for knowledge bases by modeling
-a knowledge base as a union of a rule base and set of declarations, where rules are
-statements that define transitions, and
-the set of declarations comprising of possible outputs,
-the input vocabulary and constraints.
-By modeling Asbru plans as a knowledge-base, the authors are able to
-utilize existing techniques for checking anomalies from \cite{PreeceJIS94}
-to Asbru plans.
 
-The work in \cite{DuftschmidAIM01} represents significant progress towards
+In \cite{PreeceJIS94}, a general foundation for reasoning for reasoning
+about knowledge bases is provided. A knowledge-base $\mathcal{K} = \mathcal{R}
+\cup \mathcal{D}$, where:
+\begin{enumerate}
+  \item $\mathcal{R}$ is a set rules $\left\{R_1, \dots, R_n\right\}$.
+    Rule $R_i$ is an expression of the form of the form
+    $L_{i_1} \wedge L_{i_2} \wedge \dots \wedge L_{i_m} \rightarrow R_i$,
+    where $L_{i_1}, \dots, L_{i_m}, R_i$ are First-Order Logic literals.
+    $\antecedent{R_i} = L_{i_1} \wedge L_{i_2} \dots L_{i_m}$ and $\consequent{R_i} = M_i$.
+  \item The set of declarations $\mathcal{D} = \mathcal{G} \cup \mathcal{L} \cup
+    \mathcal{C}$ representing the set of goal literals, input literals and
+    constraints respectively.
+\end{enumerate}
+An environment $E$ is defined as a subset of input literals s.t. $E \to
+\neg(C\rho)$ for some $c \in \mathcal{C}$ and any substitution $\rho$.
+The set of inferrable hypotheses $\mathcal{H}$ is defined as literals
+that can be inferred using rules, i.e., for $H \in \mathcal{H}$,
+$\exists R \in \mathcal{R}$ s.t. $H = \consequent{R}\rho$ for any
+substitution $\rho$. $\left(\mathcal{R} \cup E \right) \vdash H$
+denotes that $H$ is inferrable from rule base $\mathcal{R}$ if there
+is some environment $E$ s.t. $H$ is the logical consequence of supplying
+$E$ to rule $R$.
+
+In \cite{DuftschmidAIM01} describe a methodology to transform
+an Asbru plans-based guidelines to a rule base.
+base to capture Asbru's model of plan states $\MPS{}$ is described.
+The rules specify the sequence in which the conditions of a plan
+are considered. As $\MPS$ encodes the semantics of Asbru, it has
+to only be specified once.
+
+Next, each plan $P_i$ in the guideline is also encoded as a rule base
+$\PC_i$, and the guideline is defined as the rule base $\PC = \PC_1 \cup \PC_2,
+\cup \dots \cup \PC_n$. Additionally, the following sets are defined:
+\begin{itemize}
+  \item $\PlanSet$ -- the set of all plan
+  \item $\PatientSet$ -- the set of all patients
+  \item $\ConditionSet = \left\{\text{filter}, \text{setup}, \dots,
+    \text{complete}\right\}$ corresponding to plan conditions.
+  \item $\FinalStateSet = \left\{\text{rejected}, \text{aborted}, \text{completed}\right\}$.
+\end{itemize}
+
+The rule base $\MPS{}$ consists of rules encoding the generic model of plan
+states. Given parameters $pl$ and $pa$ for a plan and patient respectively,
+$\MPS{}$ has rules encoding states such as:
+\begin{itemize}
+  \item $\Considered(pl)$ encodes the starting state of each plan.
+  \item $\Considered(pl,pa) \wedge \filter(pl,pa) \to \possible(pl,pa)$
+    encodes the condition that a plan with filter conditions satisfied
+    is possible for execution.
+\end{itemize}
+
+Next, Asbru plan $i$ in the guideline need to be transformed into
+its corresponding rule base $PC_i$. For instance, a plan for
+treatment of non-insulation dependandant gestation diabetes militus,
+in patients with normal blood glucose levels, called GDM-TYPE-II,
+contains rules of the form:
+\begin{itemize}
+  \item $\text{Female}(pa) \wedge \text{Pregnant}(pa) \to \filter(\text{GDM-TYPE-II}, pa)$
+    encodes that pregnant female patients should be considered for the plan.
+  \item $\text{Activate}(\text{GDM-TYPE-II}, pa)$ encodes that the plan should
+    be automatically activated.
+  \item $\text{State}(\text{blood-glucose-high}, pa) \to \text{suspend}(\text{GDM-TYPE-II},pa)$
+    encodes that if the plan be suspended in case of high blood sugar.
+  \item $\text{State}(\text{blood-glucose-normal}, pa) \to \text{reactivated}(\text{GDM-TYPE-II},pa)$
+    similary encodes that the guideline be reactivated when blood sugar returns
+    to normal.
+\end{itemize}
+
+Once the guideline has been encoded as a rule base using the above mentioned
+transformation, important properties can be checked against the rule base.
+For instance, conditions in a plan must be satisfiable in order to
+have an effect on the plan. Formally, this is equivalent to checking
+all rules in the rule base are \emph{fireable}. If a condition,
+such as $\text{Male}(pa) \wedge \text{Pregnant}(pa) \to \filter(\text{plan}, pa)$
+contains a conjunction that cannot be satisfied, then it does not contribute
+to the plan's execution, and, is not \emph{meaningful}.
+
+The work methodology describe above represents significant progress towards
 verification of meaningful properties on real guidelines. But, the methodology
 also has limitations, such as:
 \begin{itemize}
@@ -797,6 +864,19 @@ also has limitations, such as:
   \item Any update to Asbru would necessitate corresponding updates to
     the verification tool.
 \end{itemize}
+
+%The verification is performed bottom-up -- from the leaves of the hierarchical
+%plan to the eventual root representing the guideline.
+%In \cite{PreeceJIS94},
+%the authors describe verification of anomalies for knowledge bases by modeling
+%a knowledge base as a union of a rule base and set of declarations, where rules are
+%statements that define transitions, and
+%the set of declarations comprising of possible outputs,
+%the input vocabulary and constraints.
+%By modeling Asbru plans as a knowledge-base, the authors are able to
+%utilize existing techniques for checking anomalies from \cite{PreeceJIS94}
+%to Asbru plans.
+
 
 \subsection{Maude}
 
