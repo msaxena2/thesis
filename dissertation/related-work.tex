@@ -865,6 +865,32 @@ also has limitations, such as:
     the verification tool.
 \end{itemize}
 
+\subsection{Model-driven Development and Verification}
+
+In \cite{PerezJBI10}, the authors present a comprehensive approach
+to development and verification of guidelines, called the Model Driven
+Architecture (\MDA{}). Instead of
+utilizing a domain specific language, they choose to model \BPGs{}
+as UML Statecharts \cite{OMGSpecUrl}. The choice is motivated by
+the fact that Statecharts have been used to build systems in diverse
+domains such as Air Traffic Control \cite{WhittleICSE02} and biology
+\cite{EfroniGR03}.
+
+The development and verification methodology has several steps.
+First, software engineers and experts in medicine collaborate
+express the guideline using Statecharts. Next, patterns
+representing common errors in guidelines are utilized to
+write specifications for the guidelines. The
+the Statecharts code is automatically translated to PROMELA,
+the language of the SPIN model checker \cite{MikkISFST98} for verification.
+To turn the verified Statechart guidelines into a \CDSS{}, the
+\MDA{}-based approach includes tools that translate the Statecharts into
+executable Java code that is combined with additional infrastructure to
+obtain a functioning \CDSS{}.
+
+\subsubsection{Property Specification}
+
+
 %The verification is performed bottom-up -- from the leaves of the hierarchical
 %plan to the eventual root representing the guideline.
 %In \cite{PreeceJIS94},
