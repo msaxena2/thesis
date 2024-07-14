@@ -890,6 +890,43 @@ obtain a functioning \CDSS{}.
 
 \subsubsection{Property Specification}
 
+In \cite{PerezJBI10}, the authors deal with
+medical properties, or properties that are not implementation-related,
+dealing with aspects such as  medical parameters, \HCP{} actions,
+and overall guideline intentions. As specifying properties
+requires expertise and a mathematical background. The \MDA{}
+approach includes a number of common patterns applicable
+to all guidelines that can be
+used as templates for writing actual properties. Thus,
+through the use of these patterns, the authors attempt
+to enable even non-experts to use the \MDA{} verification
+methodology.
+
+Property patterns in the \MDA{} verification methodology
+are based on existing work on simplifying verification for
+concurrent and reactive systems through safety and liveness patterns
+that contain informal descriptions of the property and
+well-defined translations to widely used temporal logics such
+as Computation Tree Logic (\CTL{}) and Linear Temporal Logic (\LTL{})
+\cite{DwyerFM98,DwyerICSE98,BitschSAFECOMP01,RyndinaThesis05}.
+
+To ensure that that patterns presented under the \MDA{} framework
+cover a wide spectrum of possible properties, the authors
+collected properties relevant to \BPGs{} from literature, and attempted
+to represent them using specification patterns proposed by Dwyer et al.
+in \cite{DwyerFM98}. However, they realized that Dwyer patterns
+were insufficient to represent all properties of interest. To
+address this the authors:
+\begin{enumerate*}[label=(\alph*)]
+  \item utilized an expanded pattern representation schema
+    proposed by Ryndina et al in \cite{RyndinaThesis05}, and,
+  \item proposed a new patterns to encompass all desired properties.
+\end{enumerate*}
+This expanded representation schema enables the authors to represent
+useful and complex properties, at both local and global scopes, and
+dealing with both safety (something bad never occurs) and liveness
+(always something desirable eventually occurs).
+
 
 %The verification is performed bottom-up -- from the leaves of the hierarchical
 %plan to the eventual root representing the guideline.
