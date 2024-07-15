@@ -927,6 +927,66 @@ useful and complex properties, at both local and global scopes, and
 dealing with both safety (something bad never occurs) and liveness
 (always something desirable eventually occurs).
 
+In \cite{PorresECBS08}, \MDA{}
+is used to implement and analyze the
+\IRC{} guideline for management of infections due
+to intravenous catheters. The verification process revealed
+several inconsistencies, which were fixed. Moreover, the \CDSS{}
+was shown to satisfy several important properties. Several
+important patterns were identified during the verification process,
+which are also applicable to other guidelines. For instance,
+it is important to ensure
+that if an empirical treatment has not been ordered, then
+it is not removed later on. This is identified as
+an instance of the absence-after pattern, and can
+be represented by the \LTL{} formula
+$\eventually\neg\left(\text{removeTreatment} == \text{Empirical} \to
+\text{beginTreatment} == \text{Empirical}\right)$.
+Another pattern of interest is possible-existence, stating that,
+starting from a certain patient
+state leads to a desired guideline-based outcome. For instance,
+in case of the \IRC{} guideline, the authors verified that
+starting from clinical test results that were not indicative of
+\IRC{}, it is never possible to reach a state where \IRC{} is indicated.
+Thus, the verification process revealed both inconsistencies in the guidelines
+and ensured that other desired properties are satisfied \cite{PerezJBI10}.
+
+The \MDA{} approach has several strengths. Notably:
+\begin{itemize}
+  \item The approach has been used to implement real-world
+    systems and verify important properties against them,
+    as demonstrated in \cite{PorresECBS08}.
+  \item Utilizes existing work in modeling large concurrent
+    systems as Statecharts, instead of implementing a \DSL{} from
+    scratch, allowing existing tools for visualization to be used.
+  \item Unlike other approaches, emphasis is given to ensuring
+    that expertise in mathematics is not needed for verification,
+    through the use of property patterns for property specification,
+    and automated translations of the \BPG{} and property to PROMELA
+    for verification using SPIN.
+\end{itemize}
+
+However, the approach also has some limitations. First, in order to execute the
+Statecharts-based \BPG{} in a \CDSS{}, a translation from the OMG Systems
+Modeling Language \cite{OMGSpecUrl} to Java is utilized, and for
+verification via SPIN, a translation to PROMELA is utilized. Thus, it
+is possible for the translations to diverge from the underlying \BPG{}
+in the OMG Systems Modeling Language. This can have serious
+consequences, as verification results may not be satisfied by the actual
+implementation. Thus, even though utilizing specification patterns
+may enalbe non-experts in verification to verify properties PROMELA model,
+expertise in formal reasoning may be required to ensure that the model
+corresponds to the original \BPG{} and the corresponding Java code.
+Second, only a subset OMG Systems Modeling Language is supported
+by the tools in \cite{PerezJBI10,PorresECBS08}, and the translation
+are tied to a particular version of the language. Supporting newer
+versions of the language and updates to the language would require
+corresponding updates to the entire toolchain. Finally, while several
+important properties can be established using model checking in SPIN,
+supporting other techniques such as symbolic execution or deductive
+verification would require similar translation to other languages, which
+would further require increase the chances of the many translations
+diverging from the underlying \BPG{}.
 
 %The verification is performed bottom-up -- from the leaves of the hierarchical
 %plan to the eventual root representing the guideline.
