@@ -338,6 +338,50 @@ interpreter with any correctness guarantees.
 
 \subsubsection{KIV-based Verification}
 
+In \cite{TenAIM06}, a formal-methods approach to improve Asbru-based guidelines
+is presented. The authors identify that in order to use formal methods
+for systematic verification of guidelines and protocols requires
+an appropriate representation language with a clear and well-defined semantics.
+Two real-world guidelines were chosen, and analyzed using a
+by gradually transforming them into more formal representations.
+First, the protocols are transformed from plain text into Asbru plans. Then,
+the Asbru plans are transformed into KIV programs encoding said plans, for analysis
+using the KIV theorem prover \cite{BalserFASE00}. A crucial step in using
+KIV is the definition of the formal semantics of the main parts of Asbru,
+which can also be utilized for verification of guidelines beyond those
+presented in \cite{TenAIM06}. As part of formalizing the guidelines,
+several properties relevant to clinical guidelines were identified,
+formulated over Asbru code, formalized in KIV, and established against
+the KIV code.
+
+To evaluate the effectiveness of their approach, the authors chose the following
+guidelines for the management of:
+\begin{enumerate}[label=(\alph*)]
+  \item Hyperbilirubinemia (Jaundice) in normal term infants by the American
+    Academy of Pediatrics \cite{JaundiceAAP94}.
+  \item Diabetes mellitus type 2 by the Dutch Association of General
+    Practitioners \cite{RuttenNHG99}.
+\end{enumerate}
+The formalization process required significant effort, where the
+following problems were observed:
+\begin{itemize}
+  \item \textbf{Ambiguity}: Several terms presented interpretation
+    related challenges, were details were left to the \HCP{}. While
+    missing details may be overlooked in paper versions, they needed
+    accurate descriptions in the computer-interpretable counterparts.
+  \item \textbf{Incompleteness}: Expected guidance or information
+    was found to be missing in some cases. For instance, conditions
+    such as \say{rapid increases} in certain patient parameters lacked
+    accurate descriptions, and interpretations were left to the \HCPs{}.
+  \item \textbf{Inconsistencies}: Certain guidelines were found to lead
+    to conflicting advice for the same patient data. Such scenarios
+    were deemed to be very serious, as following the guideline could
+    potentially result in non optimal treatment.
+  \item \textbf{Redundancies}: Instances of repeated recommendation were
+    often discovered during the process of formalizing the guidelines in Asbru.
+\end{itemize}
+
+
 
 
 \subsection{Guideline Acquisition, Representation, and Execution (\GLARE{})}\label{sec:glare}
