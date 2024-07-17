@@ -381,8 +381,44 @@ following problems were observed:
     often discovered during the process of formalizing the guidelines in Asbru.
 \end{itemize}
 
+\paragraph{Asbru Semantics}
 
+The semantics of Asbru are defined for two purposes:
+\begin{enumerate*}[label=(\alph*)]
+  \item to formally document the language specification, and,
+  \item to derive a calculus for verification.
+\end{enumerate*}
+To this end, a structural operational semantics (\SOS{})
+is defined \cite{TuriLICS97}.
+Recall from section \ref{sec:asbru} that Asbru programs
+consist of hierarchical plans that execute concurrently.
+The semantics consist of an execution engine that encodes
+concurrent execution of plans, and a data abstraction
+unit that abstract signals to the said plans.
 
+The semantics of plan execution are described by
+expressing the transition system as a statecharts \cite{DammCOMPOS97}.
+Statecharts are directed graphs representing state machines \cite{BalserICIDP02}.
+Plan states represents statechart nodes, and edges transitions. The transitions
+can then be conveniently formalized as \SOS{} rules. For instance, the rule:
+$$
+\inference{\llbracket \text{P.State}=\text{considered}\rrbracket_{\sigma} &
+\text{da}\left(\Omega, \sigma \right) \rightarrow \ast\text{da}\left(\true{},
+\sigma^{\prime}\right)}
+{\text{psm}_P\left(\sigma\right) \rightarrow
+\text{psm}_P\left(\sigma^{\prime}\left[\text{P.State} \leftarrow
+\text{ready}\right]\right)}
+$$
+expresses the semantics of a plan $P$ (expressed as a statechart $\text{psm}$)
+to transition from state \say{$\text{consider}$}
+to state \say{$\text{ready}$}. The \SOS{} rule expresses that
+if, under the environment $\sigma$,
+\begin{enumerate*}[label=(\alph*)]
+  \item the filter condition $\Omega$ evalutes to $\true$ by the data
+    abstraction unit $\text{da}$, and,
+  \item the plan's current state is $\text{consider}$
+\end{enumerate*},
+then the plan $\text{P}$ advances to state $\text{ready}$.
 
 \subsection{Guideline Acquisition, Representation, and Execution (\GLARE{})}\label{sec:glare}
 
@@ -423,7 +459,6 @@ can be one of:
     an action may be repeated for a given duration, or, until a particular
     condition is met.
 \end{itemize}
-
 
 To enhance usability, actions in \GLARE{} must further follow a particular
 structure. Work actions are further refined into clinical procedures and
