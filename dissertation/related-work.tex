@@ -420,6 +420,48 @@ if, under the environment $\sigma$,
 \end{enumerate*},
 then the plan $\text{P}$ advances to state $\text{ready}$.
 
+Once the semantics have been formally captured, Asbru plans are
+translated to programs into KIV. In KIV, program behavior is
+specified using standard dynamic logic program constructs,
+such as variable assignments $v := \tau$, conditional $\text{if}(\Psi)\ S_1
+\ \text{else}\ S_2 $, iteration $\text{while}(\psi)\ \text{do}\ S$,
+parellel execution $S_1 \parallel S_2$. The translation from Asbru
+to KIV is performed in a structure-preserving way, as most
+Asbru constructs can directly be mapped into a corresponding KIV one.
+For certain features of Asbru, additional encoding is required.
+The KIV encoding makes KIV's theorem proving capabilities available
+for formal verification, where properties are stated as
+Interval Temporal Logic (\ITL{}) formulas \cite{AllenJLC94}.
+Notably, plan intentions can be encoded as logical formulas,
+and verified against the plan's KIV translation. However,
+the verification may require experience with theorem proving
+when dealing with properties of interest.
+
+The outlined based approach demonstrates
+that formal methods can successfully be utilized
+for improving real \BPGs{}. The analysis revealed
+several issues with both protocols, some of which were
+deemed very serious. Moreover, the corresponding Asbru plans
+were verified to satisfy their stated intentions, improving
+system safety.
+But, the approach has the following limitations:
+\begin{itemize}
+  \item While the formal semantics of Asbru intends to serve
+    as a manual for implementing execution engines for Asbru,
+    existing engines are not derived from it. This leaves it possible
+    for the execution engine to implement semantics that diverge
+    from the \SOS{} semantics used for verification, leaving
+    it possible for the verification results to not hold on
+    As newer versions of the language are introduced, effort has
+    to be expended into keeping the semantics and all tools in sync.
+  \item Only a subset of the language has a direct mapping into
+    KIV constructs. Manual effort and expertise is required
+    for encoding constructs without direct mappings.
+    Expressing intentions as logical formulas also requires
+    expertise, and, may be error prone as the property isn't
+    directly written over the Asbru program, but its translation in KIV.
+\end{itemize}
+
 \subsection{Guideline Acquisition, Representation, and Execution (\GLARE{})}\label{sec:glare}
 
 The \GLARE{} system attempts to decouple the representation of knowledge
