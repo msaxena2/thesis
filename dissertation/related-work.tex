@@ -1137,14 +1137,83 @@ In section \ref{sec:addressing-hurdles}, we outlined major
 themes behind addressing aforementioned challenges. We briefly
 recap those themes here:
 
-\paragraph{Modular Architecture}
+\paragraph{Implementation-Specification Gap}
 
-In section \ref{sec:cdss-components}, we outlined the various
-components that conceptually make up a \CDSS{}.
-Early \CDSS{} implementations were monolithic systems where
-all components were tightly coupled to the settings (such as
-the hospital's \EHR{}) that they were used in.
+Textual \BPGs{} are often written by medical experts, but,
+the translation into an executable computer program is
+provided is performed by software developers and knowledge
+engineers who typically lack the necessary expertise to ensure
+medical knowledge is correctly encoded. The textual \BPG{} is
+utilized as a functional specification to develop the \CDSSs{}.
+This make it possible for the specification to diverge from the
+implementation, leading to an implementation-specification gap.
 
+\DSLs{} for computer-interpretable guidelines aim to eliminate
+the aforementioned gap by emphasizing \HCP{} comprehensibility,
+thereby enabling the \CIG{} to also serve as the guideline's
+textual description, eliminating the implementation-specification gap,
+and are vital to developing trusted guidelines with validated content.
+
+\paragraph{Formal Semantics}
+
+In order to utilize formal methods to ensure \CDSS{} correctness,
+the underlying language utilized to express guidelines must have
+a complete, well-defined formal semantics \cite{ShaharAMIA96}. The
+semantics can then be utilized to implement tools for execution and analysis,
+to support a development of verified guidelines.
+
+\paragraph{Formal Analysis Tools}
+
+A complete suite of formal analysis tools, such as model checkers, symbolic
+execution engines and deductive verifiers is required to support the
+development of systems with desired safety properties.
+
+Taken together, the aforementioned themes can address challenges C1 to C4.
+In \tablename{} \ref{table:dsl-comparison}, we provide an overview of
+the approaches in this chapter, and their respective strengths and weaknesses.
+We use $\circ$ to denote that a particular approach only has partial support
+for the mentioned feature.
+
+The outlined languages can be categorized into either \DSLs{} for \CIGs{},
+or, general ones for building concurrent systems. For instance,
+the Arden Syntax (section \ref{sec:arden-syntax})
+was among the first languages specifically designed to be
+comprehensible to \HCPs{}, and is still widely used for expressing medical
+knowledge. But, it's designed for simpler, independent guidelines, and
+is unsuitable for complex workflows. Other approaches
+such DILLEMA (section \ref{sec:dilemma}) and \GEODECM{}
+(section \ref{sec:geodecm}) enabled expressing more complex guidelines,
+while maintaining
+
+
+  \begin{table}[ht]
+    \begin{tabularx}{\textwidth}
+   {>{\centering\arraybackslash}X
+   || >{\centering\arraybackslash}X
+   | >{\centering\arraybackslash}X
+   | >{\centering\arraybackslash}X
+   | >{\centering\arraybackslash}X
+ }
+                 & Implementation-Specification Gap & Complete Formal Semantics & Formal Analysis Tools & Holistic Safety  \\
+    Arden Syntax & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    DILLEMA      & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    \GEODECM{}   & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    GLIF         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    Asbru        & $\greencheck$                    & $\circ$                   & $\greencheck$         & $\redcross$ \\
+    PROForma     & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
+    GLARE        & $\greencheck$                    & $\circ$                   & $\circ$               & $\circ$     \\
+    Promela/SPIN & $\redcross$                      & $\greencheck$             & $\greencheck$         & $\circ$     \\
+    AMSs         & $\redcross$                      & $\greencheck$             & $\greencheck$         & $\redcross$ \\
+    SAGE         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+  \end{tabularx}
+  \caption{Comparison of Existing Approaches}\label{table:dsl-comparison}
+  \end{table}
+
+
+%\begin{center}
+%\renewcommand{\arraystretch}{0.5}
+%\setlength\extrarowheight{-9pt}
+%\end{center}
 
 
 
