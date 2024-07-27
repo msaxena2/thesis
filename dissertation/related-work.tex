@@ -336,7 +336,7 @@ for the Digital Electronic Guideline Library (\DEGEL{}) \cite{YoungAMIA05,YoungA
 Unlike Asbru, Hybrid-Asbru lacks a complete executable semantics and an
 interpreter with any correctness guarantees.
 
-\subsubsection{KIV-based Verification}
+\subsubsection{KIV-based Verification}\label{sec:kiv-verification}
 
 In \cite{TenAIM06}, a formal-methods approach to improve Asbru-based guidelines
 is presented. The authors identify that in order to use formal methods
@@ -1113,6 +1113,30 @@ verification would require similar translation to other languages, which
 would further require increase the chances of the many translations
 diverging from the underlying \BPG{}.
 
+
+  \begin{table}[ht]
+    \begin{tabularx}{\textwidth}
+   {>{\centering\arraybackslash}X
+   || >{\centering\arraybackslash}X
+   | >{\centering\arraybackslash}X
+   | >{\centering\arraybackslash}X
+   | >{\centering\arraybackslash}X
+ }
+                 & Implementation-Specification Gap & Complete Formal Semantics & Formal Analysis Tools & Holistic Safety  \\
+    Arden Syntax & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    DILLEMA      & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    \GEODECM{}   & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    GLIF         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    Asbru        & $\greencheck$                    & $\circ$                   & $\greencheck$         & $\redcross$ \\
+    PROForma     & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
+    GLARE        & $\greencheck$                    & $\circ$                   & $\circ$               & $\circ$     \\
+    Promela/SPIN & $\redcross$                      & $\greencheck$             & $\greencheck$         & $\circ$     \\
+    AMSs         & $\redcross$                      & $\greencheck$             & $\greencheck$         & $\redcross$ \\
+    SAGE         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+  \end{tabularx}
+  \caption{Comparison of Existing Approaches}\label{table:dsl-comparison}
+  \end{table}
+
 \section{Discussion}
 
 In chapter \ref{chapter:hurdles-cdss-adoption}, we discussed several
@@ -1183,31 +1207,74 @@ knowledge. But, it's designed for simpler, independent guidelines, and
 is unsuitable for complex workflows. Other approaches
 such DILLEMA (section \ref{sec:dilemma}) and \GEODECM{}
 (section \ref{sec:geodecm}) enabled expressing more complex guidelines,
-while maintaining
+and modular architectures that integrate with diverse systems.
+However, since these were among the earliest attempts at building modular \CDSSs{},
+functionality was prioritized over formal correctness.
+
+EON (section \ref{sec:eon}) switched from small, modular and
+independent guidelines from Arden Syntax to more complex,
+tightly coupled state machines-based representation to enable modeling
+interdependent workflows. Similarly, \GLIF{} (section \ref{sec:glif}) borrowed experiences from
+EON, \GEODECM{} and Arden Syntax to facilitate modeling complex workflows.
+The design and implementation of \GLIF{} was particularly influenced
+by the motivation to allow \GLIF{}-based guidelines to be easily shared
+between medical establishments. Similary, Prodigy (section \ref{sec:prodigy})
+tackled \CDSSs{} challenges encountered in practice, such as diversity in
+data sources, and their unreliability, while \SAGE{} (section \ref{sec:sage})
+attempted to integrate with existing digital workflows as seamlessly as
+possible. It's important to note that these approaches demonstrated that computerized decision support
+systems can both
+\begin{enumerate*}[label=(\alph*)]
+  \item manage complex guidelines with interdependent concurrent tasks, and,
+  \item be modular and portable to accommodate hospital-specific customizations,
+    and integrate with their \EHR{} systems.
+\end{enumerate*}
+But, system safety and correctness wasn't a challenge that these approaches
+were directly attempting to address.
+Thus, they lack a complete formal semantics, and a suite of tools accompanying
+analysis tools.
+
+The need for a complete formal semantics to enable development of tools for
+execution and analysis of guidelines has already been recognized by several
+approaches. For instance, the lack of ways to systematically analyze guidelines
+in HELEN (section \ref{sec:helen}), and an execution engine based on ad-hoc
+semantics has already been recognized as a limitation of the framework.
+ PROforma (section \ref{sec:proforma}), and
+Asbru (section \ref{sec:asbru}) attempt to address this by having formal
+semantics, albeit incomplete semantics, that are intended to guide tool
+development. The Asbru language has an incomplete, but formal
+\SOS{} paper-based semantics. But, according to the authors of
+\cite{SuttonAMIA03}, it is insufficient for developing tools for the language.
+Despite its incompleteness, Asbru language's semantics has served as a calculus for deductive verification
+using KIV, as described section \ref{sec:kiv-verification}.
+Along similar lines, a formal but incomplete paper-based semantics
+of the PROforma language is
+presented in \cite{SuttonAMIA03}, with the aim of serving as a manual for
+developing PROforma tools. Both approaches take significant steps towards using
+recognizing formal semantics, and using them in some ways
+to establish \CDSS{} safety. But, the support for formal analysis is very
+limited. Moreover, the tools aren't directly derived
+from the semantics, and need to be updated every time the language evolves,
+which can potential lead to a divergence between the official semantics, and
+the ones utilized by said tools.
+
+Approaches such as \GLARE{} (section \ref{sec:glare}) and \GPROVE (section
+\ref{sec:gprove}), also have tools that allow complex guidelines to
+be both modeled and analyzed, but said tools are based on ad-hoc language
+semantics. For instance, GLARE{} provides mechanisms to check
+for inconsistencies in the guidelines such as unintended cyclic
+behavior, choices without alternative options, and actions
+with unsatisfiable temporal constraints. Notably, \GPROVE{}
+has capabilities to enable a-posteriori compliance checking, i.e., checking whether a log
+generated during execution indicates adherence (or lack thereof) to the guideline.
+To this end, \GOSPEL{} (the language for expressing guidelines in \GPROVE{})
+is translated to Sciff -- a constraint logic programming framework.
+But, both \GLARE{} and \GPROVE{} lack formal semantics. \GLARE{}'s analysis
+and \GPROVE{}'s Sciff translator and execution trace generator are based on
+ad-hoc semantics of the underlying languages, making it possible for the
+analysis results to not hold on the actual programs.
 
 
-  \begin{table}[ht]
-    \begin{tabularx}{\textwidth}
-   {>{\centering\arraybackslash}X
-   || >{\centering\arraybackslash}X
-   | >{\centering\arraybackslash}X
-   | >{\centering\arraybackslash}X
-   | >{\centering\arraybackslash}X
- }
-                 & Implementation-Specification Gap & Complete Formal Semantics & Formal Analysis Tools & Holistic Safety  \\
-    Arden Syntax & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
-    DILLEMA      & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
-    \GEODECM{}   & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
-    GLIF         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
-    Asbru        & $\greencheck$                    & $\circ$                   & $\greencheck$         & $\redcross$ \\
-    PROForma     & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
-    GLARE        & $\greencheck$                    & $\circ$                   & $\circ$               & $\circ$     \\
-    Promela/SPIN & $\redcross$                      & $\greencheck$             & $\greencheck$         & $\circ$     \\
-    AMSs         & $\redcross$                      & $\greencheck$             & $\greencheck$         & $\redcross$ \\
-    SAGE         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
-  \end{tabularx}
-  \caption{Comparison of Existing Approaches}\label{table:dsl-comparison}
-  \end{table}
 
 
 %\begin{center}
