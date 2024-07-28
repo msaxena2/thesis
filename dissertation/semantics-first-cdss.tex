@@ -25,7 +25,31 @@ Technology) \IT{} systems.
 workflows.
 \end{enumerate}
 
+\begin{figure}[bh]
+  \centering
+  \includegraphics[width=0.4\textwidth]{pyramid}
+  \caption{Existing \DSLs{} for Computer Interpretable Guidelines}\label{fig:existing-work-pyramid}
+\end{figure}
+
 Over the years, significant progress has been made towards
 addressing these challenges. In chapter \ref{chapter:related-work},
 we discussed how existing approaches have attempted to
-address said challenges, and their limitations.
+address said challenges, and their limitations. Specifically,
+in section \ref{sec:related-work-discussion}, we outlined major
+themes that these approaches adopt to tackle these challenges.
+This is further illustrated by the pyramid diagram in \figurename{}
+\ref{fig:existing-work-pyramid}, where aforementioned themes are
+underlined in the pyramid's various rungs.
+As is typical, approaches that appear in higher rungs also
+have characteristics of ones below them. For example, while guidelines expressed in
+the Arden Syntax eliminate the specification-implementation gap by being
+both \HCP{}-comprehensible and interpretable, they cannot be formally analyzed
+due to lack of analysis tools in the ecosystem. Asbru-based guidelines
+on the other hand not only eliminate the specification-implementation gap, but can also be
+formally analyzed using support for KIV-based verification in the Asbru
+ecosystem (see section \ref{sec:kiv-verification}).
+
+As is evident in \figurename{} \ref{fig:existing-work-pyramid}
+
+
+
