@@ -569,7 +569,7 @@ between actions form logical constraints. These constraints
 are utilized in the control graph to infer new constraints, that can be checked
 for consistency using the LaTeR temporal manager \cite{BrusoniExpert97,TerenzianiAIM01} .
 
-\subsubsection{Execution of \GLARE{} Guidelines}\label{sec:glare}
+\subsubsection{Execution of \GLARE{} Guidelines}\label{sec:glare-execution}
 
 Execution in \GLARE{} corresponds to an instantiation of the guideline
 with a specific patient's data. \GLARE{}'s execution module is responsible
@@ -1164,16 +1164,25 @@ to support a development of verified guidelines.
 
 \paragraph{Formal Analysis Tools}
 
-A complete suite of formal analysis tools, such as model checkers, symbolic
-execution engines and deductive verifiers is required to support the
-development of systems with desired safety properties.
+A comprehensive suite of formal analysis tools---model checkers,
+symbolic execution engines, and deductive verifiers---is essential for
+developing systems with desired safety properties.
+Additionally, it is crucial to keep these tools updated as the language evolves.
+As \DSLs{} for computer interpretable guidelines adapt
+to lessons from implementing best practice guidelines (\BPGs{}),
+mechanisms must be in place to update all relevant tools, and not just
+ones needed for immediate use, such as execution engines.
 
-Taken together, the aforementioned themes can address challenges C1 to C4.
-In \tablename{} \ref{table:dsl-comparison}, we provide an overview of
-the approaches in this chapter, and their respective strengths and weaknesses.
-We use $\circ$ to denote that a particular approach only has partial support
-for the mentioned feature.
+\paragraph{Holistic Safety}
 
+Ensuring that computer interpretable guidelines
+meet desired correctness properties is crucial,
+but it is equally important to ensure that tools used
+to execute and analyze said guidelines themselves are correct,
+as bugs can compromise patient safety.
+We use the term \say{holistic safety} to refer to approaches that
+have a comprehensive suite of execution and formal analysis tools,
+each with its own correctness guarantees.
 
   \begin{table}[th]
     \begin{tabularx}{\textwidth}
@@ -1190,11 +1199,11 @@ for the mentioned feature.
     EON                             & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
     \GLIF{}                         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
     Asbru                           & $\greencheck$                    & $\circ$                   & $\greencheck$         & $\redcross$ \\
-    PROForma                        & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
+    PROforma                        & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
     \GLARE                          & $\greencheck$                    & $\circ$                   & $\circ$               & $\circ$     \\
     \GPROVE{}                       & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
-    HELEN                           & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
-    PRODIGY                         & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
+    HELEN                           & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    PRODIGY                         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
     SAGE                            & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
     Hierarchical Plans              & $\redcross$                      & $\circ$                   & $\greencheck$         & $\circ$     \\
     \MDA{}                          & $\redcross$                      & $\redcross$               & $\greencheck$         & $\redcross$ \\
