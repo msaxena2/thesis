@@ -839,7 +839,7 @@ Additionally, T/Gen further allows the user to specify constraints on
 the condition set both that can further reduce
 the number of test cases \cite{MillerJAMIA01}.
 
-\begin{figure}[b!]
+\begin{figure}[th]
   \centering
   \includegraphics[width=0.4\textwidth]{tgen}
   \caption{T/Gen Example}\label{fig:tgen-example}
@@ -990,7 +990,7 @@ also has limitations, such as:
     the verification tool.
 \end{itemize}
 
-\subsection{Model-driven Development and Verification}
+\subsection{Model-driven Development and Verification}\label{sec:mda-verification}
 
 In \cite{PerezJBI10}, the authors present a comprehensive approach
 to development and verification of guidelines, called the Model Driven
@@ -1113,30 +1113,6 @@ verification would require similar translation to other languages, which
 would further require increase the chances of the many translations
 diverging from the underlying \BPG{}.
 
-
-  \begin{table}[ht]
-    \begin{tabularx}{\textwidth}
-   {>{\centering\arraybackslash}X
-   || >{\centering\arraybackslash}X
-   | >{\centering\arraybackslash}X
-   | >{\centering\arraybackslash}X
-   | >{\centering\arraybackslash}X
- }
-                 & Implementation-Specification Gap & Complete Formal Semantics & Formal Analysis Tools & Holistic Safety  \\
-    Arden Syntax & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
-    DILLEMA      & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
-    \GEODECM{}   & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
-    GLIF         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
-    Asbru        & $\greencheck$                    & $\circ$                   & $\greencheck$         & $\redcross$ \\
-    PROForma     & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
-    GLARE        & $\greencheck$                    & $\circ$                   & $\circ$               & $\circ$     \\
-    Promela/SPIN & $\redcross$                      & $\greencheck$             & $\greencheck$         & $\circ$     \\
-    AMSs         & $\redcross$                      & $\greencheck$             & $\greencheck$         & $\redcross$ \\
-    SAGE         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
-  \end{tabularx}
-  \caption{Comparison of Existing Approaches}\label{table:dsl-comparison}
-  \end{table}
-
 \section{Discussion}
 
 In chapter \ref{chapter:hurdles-cdss-adoption}, we discussed several
@@ -1197,6 +1173,35 @@ In \tablename{} \ref{table:dsl-comparison}, we provide an overview of
 the approaches in this chapter, and their respective strengths and weaknesses.
 We use $\circ$ to denote that a particular approach only has partial support
 for the mentioned feature.
+
+
+  \begin{table}[th]
+    \begin{tabularx}{\textwidth}
+   {>{\centering\arraybackslash}X
+   || >{\centering\arraybackslash}X
+   | >{\centering\arraybackslash}X
+   | >{\centering\arraybackslash}X
+   | >{\centering\arraybackslash}X
+ }
+                                    & Implementation-Specification Gap & Complete Formal Semantics & Formal Analysis Tools & Holistic Safety  \\
+    Arden Syntax                    & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    DILLEMA                         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    \GEODECM{}                      & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    EON                             & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    \GLIF{}                         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    Asbru                           & $\greencheck$                    & $\circ$                   & $\greencheck$         & $\redcross$ \\
+    PROForma                        & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
+    \GLARE                          & $\greencheck$                    & $\circ$                   & $\circ$               & $\circ$     \\
+    \GPROVE{}                       & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
+    HELEN                           & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
+    PRODIGY                         & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
+    SAGE                            & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    Hierarchical Plans              & $\redcross$                      & $\circ$                   & $\greencheck$         & $\circ$     \\
+    \MDA{}                          & $\redcross$                      & $\redcross$               & $\greencheck$         & $\redcross$ \\
+  \end{tabularx}
+  \caption{Comparison of Existing Approaches}\label{table:dsl-comparison}
+  \end{table}
+
 
 The outlined languages can be categorized into either \DSLs{} for \CIGs{},
 or, general ones for building concurrent systems. For instance,
@@ -1274,7 +1279,38 @@ and \GPROVE{}'s Sciff translator and execution trace generator are based on
 ad-hoc semantics of the underlying languages, making it possible for the
 analysis results to not hold on the actual programs.
 
-
+Next, we consider approaches that rely on general solutions for building
+concurrent systems for building and analyzing \CDSSs{}. The verification methodology
+defined in section \ref{sec:asbru-verification} utilizes foundational work in
+reasoning with knowledge bases to reason about Asbru guidelines. But, it
+can work with any language that utilizes a plan-based approach to
+represent guidelines. Similarly, the \MDA{}-based approach relies
+on guidelines expressed as Statecharts in the OMG systems modeling language.
+The OMG Statecharts are then translated to PROMELA for verification using the SPIN,
+and into executable Java code for use as a \CDSS{}.
+For convenience, we refer to the representation that guidelines are directly
+encoded in as \say{\HCP{}-friendly}, and the translated representation
+used for analysis as \say{analysis-friendly}.
+For instance, for the \MDA{}-based approach described in section
+\ref{sec:mda-verification}, we refer to Statecharts as the \say{\HCP{}-friendly}
+, and the translated PROMELA code as \say{analysis-friendly}.
+Thus, for both these approaches:
+\begin{enumerate*}[label=(\alph*)]
+  \item These exists a specification-implementation gap, where the
+    \say{HCP-friendly} guideline serves as the specification, and the
+    translated PROMELA or Java code serves as the implementation.
+  \item the translation from the \say{\HCP{}-friendly} representation to
+    an \say{executable} one, or a \say{analysis-friendly} is typically based on an
+    ad-hoc semantics of the \say{\HCP{}-friendly} language. Thus, even though
+    the \say{analysis-friendly} representation may have well-defined formal
+    semantics, the results of analysis may not hold on the \say{\HCP{}-friendly}
+    notation.
+\end{enumerate*}
+Moreover, in case of the \MDA{}-based approach, the \say{\HCP{}-friendly}
+notation is translated to Java for execution. But, as the Java and
+PROMELA translations are not proven to be equivalent, it is possible for
+the results of model checking through SPIN may not be applicable to the
+corresponding Java code.
 
 
 %\begin{center}
