@@ -124,6 +124,56 @@ disadvantages:
   \caption{State-of-Art in Programming Language Design}\label{fig:conventional-pl-development}
 \end{figure}
 
+\subsection{Why build \CDSSs{} using Semantics-First?}
+
+In section \ref{sec:semantics-first}, we described benefits
+of using the semantics-first approach for developing regular programming
+language. But, these differences become starker when semantics-first
+is compared against the conventional approach shown in \figurename{}
+\ref{fig:conventional-pl-development} in context of domain-specific language for
+expressing medical guidelines. Specifically, as such a language will be utilized
+in safety-critical settings, it is vital that the language:
+\begin{itemize}
+  \item Has an \emph{unambiguous}, \emph{formal}
+    semantics that can serve as a reference for developing tool support for it.
+    This is necessary to ensure that
+    tools are free of behavioral inconsistencies due to ambiguities in the
+    semantics.
+  \item Is supported by a rich formal analysis tools that can
+    be used to analyze programs.
+    Implementing such tools from scratch would require significant effort.
+  \item Can evolve quick to incorporate
+    \begin{enumerate*}[label=(\roman*)]
+      \item lessons from expressing medical guidelines in it, and,
+      \item \HCP{} feedback, specifically regarding comprehensibility.
+    \end{enumerate*}
+    This can be challenging when using the approach shown in \figurename{}
+    \ref{fig:conventional-pl-development}, as
+    every change to the language's semantics would require corresponding
+    changes to all relevant tools, and additional effort to maintain
+    different versions, making the development process extremely tedious.
+\end{itemize}
+
 \section{The $\K{}$ Framework}\label{sec:k-framework}
+
+In this section, we introduce $\K{}$: a rewrite-based executable semantics
+in which programming languages can be defined through configurations and rules
+\cite{KframeworkUrl}. Once the semantics of a programming language has been
+defined, $\K{}$ automatically generates all tools depicted in \figurename{}
+\ref{fig:semantics-first}, such as an interpreter, compiler,
+model-checker and deductive verifier for the language. $\K{}$ has been successfully
+utilized to formalize semantics of large real-world languages, such as
+C \cite{HathhornPLDI15}, Java \cite{BogdanasPOPL15} and
+Javascript \cite{ParkPLDI15}, and analyze non-trivial programs
+\cite{StefanescuOOPSLA16,ParkFSE18}.
+
+The remainder of this section introduces $\K{}$ in greater detail by
+going over the semantics the $\K$ semantics of IMP: a imperative
+language whose syntax is inspired by C and Java. This introduction
+is imperative to understanding the details of the $\MediK{}$ language
+discussed in upcoming chapters that often rely on $\K{}$ notation.
+
+
+
 
 \section{Pitfalls of the Semantics-First Approach}\label{sec:semantics-first-pitfalls}
