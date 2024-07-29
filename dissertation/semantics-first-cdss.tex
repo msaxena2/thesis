@@ -25,9 +25,9 @@ Technology) \IT{} systems.
 workflows.
 \end{enumerate}
 
-\begin{figure}[bh]
+\begin{figure}[th!]
   \centering
-  \includegraphics[width=0.4\textwidth]{pyramid}
+  \includegraphics[width=0.5\textwidth]{pyramid}
   \caption{Existing \DSLs{} for Computer Interpretable Guidelines}\label{fig:existing-work-pyramid}
 \end{figure}
 
@@ -49,7 +49,74 @@ on the other hand not only eliminate the specification-implementation gap, but c
 formally analyzed using support for KIV-based verification in the Asbru
 ecosystem (see section \ref{sec:kiv-verification}).
 
-As is evident in \figurename{} \ref{fig:existing-work-pyramid}
+As is evident in \figurename{} \ref{fig:existing-work-pyramid}, no
+existing approach covers the \say{holistic safety} rung of the pyramid.
+Recall from section \ref{sec:related-work-discussion} that we say an
+approach tackles \say{holistic safety} if,
+besides support for analyzing guidelines,
+analysis and execution tools also have correctness guarantees.
+In this work, we argue that such guarantees are necessary for
+trustworthy \CDSSs{}. We attempt to address \say{holistic safety}
+systematically by developing a \emph{semantics-first approach} for
+building clinical decision support systems. In this context, by semantics-first
+we mean that:
+\begin{itemize}
+  \item The semantics of the programming language for defining said knowledge is
+    formally defined, from which execution and analysis tools are derived in a
+    correct by construction manner, leading to holistic safety.
+  \item The semantics of medical knowledge are expressed accurately.
+\end{itemize}
+At the core of our approach is a novel domain-specific language for expressing
+medical knowledge called $\MediK{}$ (pronounced Medi-Kay). By being comprehensible to domain experts
+in medicine, $\MediK{}$-based computer interpretable guidelines can serve
+both as a guideline's non-executable \HCP{}-comprehensible description, i.e.,
+the specification, and its encoding in a computable medium, i.e., the
+implementation, thereby eliminating any specification-implementation gap.
 
+The remainder of this chapter is structured as follows: Section
+\ref{sec:semantics-first} briefly describes the semantics-first philosophy.
+Next, Section \ref{sec:k-framework} describes $\K$ -- the language semantic
+framework that $\MediK{}$'s are expressed in. Finally,
+section \ref{sec:semantics-first-pitfalls} describes potential pitfalls
+of following the semantics-first philosophy.
 
+\section{Semantics-First Approach}\label{sec:semantics-first}
 
+The semantics-first approach prescribes a systematic way of
+developing programming languages. Instead of implementing
+tools for a language, such as interpreters, compilers and
+model checkers in ad-hoc manner, the approach states that the
+first step in developing said tools must be to formally define
+the language's semantics. As show in \figurename{} \ref{fig:semantics-first},
+once defined, all tools for the language
+can then be automatically derived from the semantics. Moreover, since
+the tools utilize the semantics, they are, by definition,
+correct-by-construction.
+
+While following the semantics-first philosophy might seem like an obvious choice
+in language design, its adoption in practice is far from ideal.
+Conventional practice in the programming language and formal
+methods community is still to develop analysis and execution tools for each
+programming language from scratch \cite{ChenSETSS19}, as illustrated
+in \figurename{} \ref{fig:conventional-pl-development} from
+\cite{ChenSETSS19}. But, this approach has several
+disadvantages:
+\begin{itemize}
+  \item Tools are often based on informal descriptions of language semantics,
+    leaving developers to extrapolate finer details of the language's semantics,
+    leading to inconsistencies.
+    For instance, in \cite{ParkPLDI15}, it was found
+    that ECMAScript 5.1-compliant JavaScript engines
+    in mainstream web browsers exhibited different behaviors
+    for certain complex JavaScript programs.
+\end{itemize}
+
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=0.6\textwidth]{conventional-pl-development}
+  \caption{State-of-Art in Programming Language Design}\label{fig:conventional-pl-development}
+\end{figure}
+
+\section{The $\K{}$ Framework}\label{sec:k-framework}
+
+\section{Pitfalls of the Semantics-First Approach}\label{sec:semantics-first-pitfalls}
