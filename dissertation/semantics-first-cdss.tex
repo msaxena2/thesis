@@ -102,15 +102,22 @@ in \figurename{} \ref{fig:conventional-pl-development} from
 \cite{ChenSETSS19}. But, this approach has several
 disadvantages:
 \begin{itemize}
+  \item Implementing tools that perform the same function for
+    different languages incurs unnecessary development and maintenance cost.
+    As shown in figure \ref{fig:conventional-pl-development}, if there are
+    $l$ languages, where each has $t$ tools, then a total of $l \times t$
+    tools have to be developed and maintained over time.
   \item Tools are often based on informal descriptions of language semantics,
     leaving developers to extrapolate finer details of the language's semantics,
     leading to inconsistencies.
     For instance, in \cite{ParkPLDI15}, it was found
     that ECMAScript 5.1-compliant JavaScript engines
-    in mainstream web browsers exhibited different behaviors
+    in mainstream web browsers behaved differently from each other
     for certain complex JavaScript programs.
+  \item As newer versions of a language are introduced, each
+    tool for the language has to be updated to ensure support for the latest
+    version. This again results in duplicated work.
 \end{itemize}
-
 \begin{figure}[t!]
   \centering
   \includegraphics[width=0.6\textwidth]{conventional-pl-development}
