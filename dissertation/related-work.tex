@@ -1,9 +1,9 @@
 \chapter{Related Work}\label{chapter:related-work}
 
-In chapter \ref{chapter:hurdles-cdss-adoption}, we provided a brief
+In \autoref{chapter:hurdles-cdss-adoption}, we provided a brief
 overview of existing approaches and their limitations. This chapter
 provides a comprehensive discussion of related approaches. Recall
-from section \ref{sec:modular-architectures} that implementing a guidelines-based
+from \autoref{sec:modular-architectures} that implementing a guidelines-based
 clinical decision support system requires collaboration between
 experts in medicine and software engineers for knowledge formalization, i.e.,
 the process of encoding medical knowledge in textual
@@ -16,8 +16,7 @@ To address this, \DSLs{} designed specifically for expressing
 in such languages can serve as both textual guideline documents and knowledge
 bases in \CDSSs{}. But, medical knowledge in \BPGs{} has also been expressed
 and formalized using other non domain-specific approaches. The discussion in
-this chapter has also been split along the same lines. In section
-\ref{sec:dsl-based-approaches}, we discuss approaches involving \DSLs{} for
+this chapter has also been split along the same lines. In \autoref{sec:dsl-based-approaches}, we discuss approaches involving \DSLs{} for
 computer interpretable guidelines. In \ref{sec:general-approaches}, we
 discuss other approaches that aren't specific to \BPGs{}.
 
@@ -139,8 +138,8 @@ through the development of:
 \end{itemize}
 
 The \GLIF{} team comprised of research groups from various universities
-where other languages, including Arden Syntax (section \ref{sec:arden-syntax}),
-\GEODECM{} (section \ref{sec:geodecm}) and EON (section \ref{sec:eon}),
+where other languages, including Arden Syntax (\autoref{sec:arden-syntax}),
+\GEODECM{} (\autoref{sec:eon}),
 were developed. Thus, perspectives and learnings from existing efforts guided
 the development of \GLIF{}, including borrowing certain useful constructs
 directly from EON \cite{MachadoJAMIA98}
@@ -247,7 +246,7 @@ Asbru, developed by collaborators from Stanford, Vienna
 University of Technology, and Ben Gurion University, focuses on
 time-oriented clinical guidelines \cite{ClerqAIM03}.
 The language attempted to address limitations from existing approaches
-such Dilemma (section \ref{sec:dilemma}) and EON (section \ref{sec:eon})
+such Dilemma (\autoref{sec:eon})
 such as:
 \begin{itemize}
   \item Lack of human-readability.
@@ -390,7 +389,7 @@ The semantics of Asbru are defined for two purposes:
 \end{enumerate*}
 To this end, a structural operational semantics (\SOS{})
 is defined \cite{TuriLICS97}.
-Recall from section \ref{sec:asbru} that Asbru programs
+Recall from \autoref{sec:asbru} that Asbru programs
 consist of hierarchical plans that execute concurrently.
 The semantics consist of an execution engine that encodes
 concurrent execution of plans, and a data abstraction
@@ -746,8 +745,8 @@ To address this, in Prodigy III:
 \end{itemize}
 
 Prodigy III differs in its approach towards decision support, in comparison
-to alternative approaches such as \GLIF{} (section \ref{sec:glif}), EON (section
-\ref{sec:eon}) or Asbru (section \ref{sec:asbru}). Unlike said alternatives,
+to alternative approaches such as \GLIF{} (\autoref{sec:glif}), EON (\autoref{sec:eon})
+or Asbru (\autoref{sec:asbru}). Unlike said alternatives,
 that offer complex concurrency and synchronization primitives to capture
 treatment details, Prodigy relies employs a simpler action plans-based approach
 that Prodigy's developers argue is sufficiently expressive for most guidelines.
@@ -816,7 +815,7 @@ the execution engine does provide some validation checks \cite{RamMEDINFO04},
 
 The T/Gen is a lisp-based project that enables validation
 of \CIGs{} through test-case synthesis. While
-primarily developed for \GLIF{} (section \ref{sec:glif}),
+primarily developed for \GLIF{} (\autoref{sec:glif}),
 it can be made to work with any guideline modeling formalism.
 
 The T/Gen tool takes as input a GLIF guideline encoded as a
@@ -827,7 +826,7 @@ feasible. T/Gen takes these initial conditions and constraints, and
 generates a set of meaningful clinical scenarios under which the
 guideline can be tested \cite{MillerJAMIA01}.
 
-For instance, consider the guideline in \figurename{} \ref{fig:tgen-example}
+For instance, consider the guideline in \autoref{fig:tgen-example}
 with initial conditions $\varphi_1, \varphi_2, \varphi_3$. A naive
 way to test the system would result in 8 distinct conditions $\varphi_i = Y/N$
 for $i = 1,2,3$. T/Gen, however, would only generate
@@ -873,7 +872,7 @@ many limitations. Notably:
 In \cite{DuftschmidAIM01}, formal verification of hierarchical plans-based
 guidelines is discussed. Although the work specifically focuses on guidelines in
 Asbru, it is applicable to other languages that utilize a plan-based approach
-to representing \BPGs{}. Recall from section \ref{sec:asbru} that Asbru guidelines
+to representing \BPGs{}. Recall from \autoref{sec:asbru} that Asbru guidelines
 consist of hierarchical plans, where a plan may contain other sub-plans,
 thus creating a tree of plans. Leaves of said trees are plans that cannot
 be decomposed any further into sub-plans.
@@ -1115,11 +1114,11 @@ diverging from the underlying \BPG{}.
 
 \section{Discussion}\label{sec:related-work-discussion}
 
-In chapter \ref{chapter:hurdles-cdss-adoption}, we discussed several
+In \autoref{chapter:hurdles-cdss-adoption}, we discussed several
 challenges that limit wider \CDSSs{} uptake in practice. The
 approaches discussed in this chapter make significant headway into
 addressing said challenges. These challenges (Cs) were concisely
-described in section \ref{sec:hurdles-cdss-adoption} as:
+described in \autoref{sec:hurdles-cdss-adoption} as:
 \begin{enumerate}[label=C\arabic*.]
 \itemsep0.0em
 \item Absence of systematic ways of \emph{validating content}
@@ -1133,7 +1132,7 @@ Technology) \IT{} systems.
 workflows.
 \end{enumerate}
 
-In section \ref{sec:addressing-hurdles}, we outlined major
+In \autoref{sec:addressing-hurdles}, we outlined major
 themes behind addressing aforementioned challenges. We briefly
 recap those themes here:
 
@@ -1214,27 +1213,27 @@ each with its own correctness guarantees.
 
 The outlined languages can be categorized into either \DSLs{} for \CIGs{},
 or, general ones for building concurrent systems. For instance,
-the Arden Syntax (section \ref{sec:arden-syntax})
+the Arden Syntax (\autoref{sec:arden-syntax})
 was among the first languages specifically designed to be
 comprehensible to \HCPs{}, and is still widely used for expressing medical
 knowledge. But, it's designed for simpler, independent guidelines, and
 is unsuitable for complex workflows. Other approaches
-such DILLEMA (section \ref{sec:dilemma}) and \GEODECM{}
-(section \ref{sec:geodecm}) enabled expressing more complex guidelines,
+such DILLEMA (\autoref{sec:dilemma}) and \GEODECM{}
+(\autoref{sec:geodecm}) enabled expressing more complex guidelines,
 and modular architectures that integrate with diverse systems.
 However, since these were among the earliest attempts at building modular \CDSSs{},
 functionality was prioritized over formal correctness.
 
-EON (section \ref{sec:eon}) switched from small, modular and
+EON (\autoref{sec:eon}) switched from small, modular and
 independent guidelines from Arden Syntax to more complex,
 tightly coupled state machines-based representation to enable modeling
-interdependent workflows. Similarly, \GLIF{} (section \ref{sec:glif}) borrowed experiences from
+interdependent workflows. Similarly, \GLIF{} (\autoref{sec:glif}) borrowed experiences from
 EON, \GEODECM{} and Arden Syntax to facilitate modeling complex workflows.
 The design and implementation of \GLIF{} was particularly influenced
 by the motivation to allow \GLIF{}-based guidelines to be easily shared
-between medical establishments. Similary, Prodigy (section \ref{sec:prodigy})
+between medical establishments. Similary, Prodigy (\autoref{sec:prodigy})
 tackled \CDSSs{} challenges encountered in practice, such as diversity in
-data sources, and their unreliability, while \SAGE{} (section \ref{sec:sage})
+data sources, and their unreliability, while \SAGE{} (\autoref{sec:sage})
 attempted to integrate with existing digital workflows as seamlessly as
 possible. It's important to note that these approaches demonstrated that computerized decision support
 systems can both
@@ -1251,16 +1250,16 @@ analysis tools.
 The need for a complete formal semantics to enable development of tools for
 execution and analysis of guidelines has already been recognized by several
 approaches. For instance, the lack of ways to systematically analyze guidelines
-in HELEN (section \ref{sec:helen}), and an execution engine based on ad-hoc
+in HELEN (\autoref{sec:helen}), and an execution engine based on ad-hoc
 semantics has already been recognized as a limitation of the framework.
- PROforma (section \ref{sec:proforma}), and
-Asbru (section \ref{sec:asbru}) attempt to address this by having formal
+ PROforma (\autoref{sec:proforma}), and
+Asbru (\autoref{sec:asbru}) attempt to address this by having formal
 semantics, albeit incomplete semantics, that are intended to guide tool
 development. The Asbru language has an incomplete, but formal
 \SOS{} paper-based semantics. But, according to the authors of
 \cite{SuttonAMIA03}, it is insufficient for developing tools for the language.
 Despite its incompleteness, Asbru language's semantics has served as a calculus for deductive verification
-using KIV, as described section \ref{sec:kiv-verification}.
+using KIV, as described \autoref{sec:kiv-verification}.
 Along similar lines, a formal but incomplete paper-based semantics
 of the PROforma language is
 presented in \cite{SuttonAMIA03}, with the aim of serving as a manual for
@@ -1272,8 +1271,7 @@ from the semantics, and need to be updated every time the language evolves,
 which can potential lead to a divergence between the official semantics, and
 the ones utilized by said tools.
 
-Approaches such as \GLARE{} (section \ref{sec:glare}) and \GPROVE (section
-\ref{sec:gprove}), also have tools that allow complex guidelines to
+Approaches such as \GLARE{} (\autoref{sec:glare}) and \GPROVE (\autoref{sec:gprove}), also have tools that allow complex guidelines to
 be both modeled and analyzed, but said tools are based on ad-hoc language
 semantics. For instance, GLARE{} provides mechanisms to check
 for inconsistencies in the guidelines such as unintended cyclic
@@ -1290,7 +1288,7 @@ analysis results to not hold on the actual programs.
 
 Next, we consider approaches that rely on general solutions for building
 concurrent systems for building and analyzing \CDSSs{}. The verification methodology
-defined in section \ref{sec:asbru-verification} utilizes foundational work in
+defined in \autoref{sec:asbru-verification} utilizes foundational work in
 reasoning with knowledge bases to reason about Asbru guidelines. But, it
 can work with any language that utilizes a plan-based approach to
 represent guidelines. Similarly, the \MDA{}-based approach relies
@@ -1300,8 +1298,7 @@ and into executable Java code for use as a \CDSS{}.
 For convenience, we refer to the representation that guidelines are directly
 encoded in as \say{\HCP{}-friendly}, and the translated representation
 used for analysis as \say{analysis-friendly}.
-For instance, for the \MDA{}-based approach described in section
-\ref{sec:mda-verification}, we refer to Statecharts as the \say{\HCP{}-friendly}
+For instance, for the \MDA{}-based approach described in \autoref{sec:mda-verification}, we refer to Statecharts as the \say{\HCP{}-friendly}
 , and the translated PROMELA code as \say{analysis-friendly}.
 Thus, for both these approaches:
 \begin{enumerate*}[label=(\alph*)]

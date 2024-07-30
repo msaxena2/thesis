@@ -1,16 +1,16 @@
 \chapter{Semantics-First Approach to Clinical Decision Support}
 
-In chapter \ref{chapter:introduction}, we explained that, despite
+In \autoref{chapter:introduction}, we explained that, despite
 advances in medicine, mortality and costs associated with preventable
-medical errors (\PMEs{}) remain unacceptably high. In chapter
-\ref{chapter:background}, we explained how systems that
+medical errors (\PMEs{}) remain unacceptably high. In
+\autoref{chapter:background}, we explained how systems that
 assist healthcare practitioners (\HCPs{}) with situation-specific
 advice based on evidence-based best practice guidelines (\BPGs{}),
 called clinical decision (\CDSSs{}) can reduce both mortality
 and costs associated with \PMEs{}. But, despite their potential,
 the uptake of such systems in practice is hindered by challenges
-that were introduced in section \ref{sec:hurdles-cdss-adoption}, and
-discussed in depth in chapter \ref{chapter:hurdles-cdss-adoption}.
+that were introduced in \autoref{sec:hurdles-cdss-adoption}, and
+discussed in depth in \autoref{chapter:hurdles-cdss-adoption}.
 In brief, the following challenges (Cs) were outlined:
 \begin{enumerate}[label=C\arabic*.]
 \itemsep0.0em
@@ -32,13 +32,12 @@ workflows.
 \end{figure}
 
 Over the years, significant progress has been made towards
-addressing these challenges. In chapter \ref{chapter:related-work},
+addressing these challenges. In \autoref{chapter:related-work},
 we discussed how existing approaches have attempted to
 address said challenges, and their limitations. Specifically,
-in section \ref{sec:related-work-discussion}, we outlined major
+in \autoref{sec:related-work-discussion}, we outlined major
 themes that these approaches adopt to tackle these challenges.
-This is further illustrated by the pyramid diagram in \figurename{}
-\ref{fig:existing-work-pyramid}, where aforementioned themes are
+This is further illustrated by the pyramid diagram in \autoref{fig:existing-work-pyramid}, where aforementioned themes are
 underlined in the pyramid's various rungs.
 As is typical, approaches that appear in higher rungs also
 have characteristics of ones below them. For example, while guidelines expressed in
@@ -47,11 +46,11 @@ both \HCP{}-comprehensible and interpretable, they cannot be formally analyzed
 due to lack of analysis tools in the ecosystem. Asbru-based guidelines
 on the other hand not only eliminate the specification-implementation gap, but can also be
 formally analyzed using support for KIV-based verification in the Asbru
-ecosystem (see section \ref{sec:kiv-verification}).
+ecosystem (see \autoref{sec:kiv-verification}).
 
-As is evident in \figurename{} \ref{fig:existing-work-pyramid}, no
+As is evident in \autoref{fig:existing-work-pyramid}, no
 existing approach covers the \say{holistic safety} rung of the pyramid.
-Recall from section \ref{sec:related-work-discussion} that we say an
+Recall from \autoref{sec:related-work-discussion} that we say an
 approach tackles \say{holistic safety} if,
 besides support for analyzing guidelines,
 analysis and execution tools also have correctness guarantees.
@@ -73,11 +72,11 @@ both as a guideline's non-executable \HCP{}-comprehensible description, i.e.,
 the specification, and its encoding in a computable medium, i.e., the
 implementation, thereby eliminating any specification-implementation gap.
 
-The remainder of this chapter is structured as follows: Section
-\ref{sec:semantics-first} briefly describes the semantics-first philosophy.
-Next, Section \ref{sec:k-framework} describes $\K$ -- the language semantic
+The remainder of this chapter is structured as follows:
+\autoref{sec:semantics-first} briefly describes the semantics-first philosophy.
+Next, \autoref{sec:k-framework} describes $\K$ -- the language semantic
 framework that $\MediK{}$'s are expressed in. Finally,
-section \ref{sec:semantics-first-pitfalls} describes potential pitfalls
+\autoref{sec:semantics-first-pitfalls} describes potential pitfalls
 of following the semantics-first philosophy.
 
 \section{Semantics-First Approach}\label{sec:semantics-first}
@@ -87,7 +86,7 @@ developing programming languages. Instead of implementing
 tools for a language, such as interpreters, compilers and
 model checkers in ad-hoc manner, the approach states that the
 first step in developing said tools must be to formally define
-the language's semantics. As show in \figurename{} \ref{fig:semantics-first},
+the language's semantics. As show in \autoref{fig:semantics-first},
 once defined, all tools for the language
 can then be automatically derived from the semantics. Moreover, since
 the tools utilize the semantics, they are, by definition,
@@ -98,13 +97,13 @@ in language design, its adoption in practice is far from ideal.
 Conventional practice in the programming language and formal
 methods community is still to develop analysis and execution tools for each
 programming language from scratch \cite{ChenSETSS19}, as illustrated
-in \figurename{} \ref{fig:conventional-pl-development} from
+in \autoref{fig:conventional-pl-development} from
 \cite{ChenSETSS19}. But, this approach has several
 disadvantages:
 \begin{itemize}
   \item Implementing tools that perform the same function for
     different languages incurs unnecessary development and maintenance cost.
-    As shown in figure \ref{fig:conventional-pl-development}, if there are
+    As shown in \autoref{fig:conventional-pl-development}, if there are
     $l$ languages, where each has $t$ tools, then a total of $l \times t$
     tools have to be developed and maintained over time.
   \item Tools are often based on informal descriptions of language semantics,
@@ -129,8 +128,7 @@ disadvantages:
 In section \ref{sec:semantics-first}, we described benefits
 of using the semantics-first approach for developing regular programming
 language. But, these differences become starker when semantics-first
-is compared against the conventional approach shown in \figurename{}
-\ref{fig:conventional-pl-development} in context of domain-specific language for
+is compared against the conventional approach shown in \autoref{fig:conventional-pl-development} in context of domain-specific language for
 expressing medical guidelines. Specifically, as such a language will be utilized
 in safety-critical settings, it is vital that the language:
 \begin{itemize}
@@ -147,8 +145,7 @@ in safety-critical settings, it is vital that the language:
       \item lessons from expressing medical guidelines in it, and,
       \item \HCP{} feedback, specifically regarding comprehensibility.
     \end{enumerate*}
-    This can be challenging when using the approach shown in \figurename{}
-    \ref{fig:conventional-pl-development}, as
+    This can be challenging when using the approach shown in \autoref{fig:conventional-pl-development}, as
     every change to the language's semantics would require corresponding
     changes to all relevant tools, and additional effort to maintain
     different versions, making the development process extremely tedious.
@@ -159,8 +156,7 @@ in safety-critical settings, it is vital that the language:
 In this section, we introduce $\K{}$: a rewrite-based executable semantics
 in which programming languages can be defined through configurations and rules
 \cite{KframeworkUrl}. Once the semantics of a programming language has been
-defined, $\K{}$ automatically generates all tools depicted in \figurename{}
-\ref{fig:semantics-first}, such as an interpreter, compiler,
+defined, $\K{}$ automatically generates all tools depicted in \autoref{fig:semantics-first}, such as an interpreter, compiler,
 model-checker and deductive verifier for the language. $\K{}$ has been successfully
 utilized to formalize semantics of large real-world languages, such as
 C \cite{HathhornPLDI15}, Java \cite{BogdanasPOPL15} and

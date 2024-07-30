@@ -3,7 +3,7 @@
 This chapter introduces relevant background information on
 best practice guidelines (\BPG{}) and guidelines-based clinical decision support
 systems (\CDSS{}).
-In section \ref{sec:bpg-background}, we utilize a real-world \BPG{}
+In \autoref{sec:bpg-background}, we utilize a real-world \BPG{}
 to explain the motivation behind codifying treatment
 in the form of clinical guidelines. We also briefly discuss
 common characteristics of such guidelines that enable medical knowledge
@@ -20,7 +20,7 @@ research institutions and medical associations with the aim to improve quality o
 
 While in theory, following \BPGs{} should improve clinical outcomes,
 their effectiveness in practice is dictated by whether healthcare practitioners
-follow them or not. In section \ref{sec:cdss-background}, we present
+follow them or not. In \autoref{sec:cdss-background}, we present
 challenges that practitioners encounter in following \BPGs{}. We then argue
 that non-conformance results in worse patient outcomes.
 Next, we show how computerized systems that utilize data from available
@@ -88,7 +88,7 @@ intravenous (IV) fluids \cite{Weiss2014CCM,Evans2018JAMA}.
 Departments (EDs) have shown effectiveness in screening and management of sepsis \cite{Eisenberg2021JP},
 leading to their adoption in many pediatric EDs \cite{Balamuth2017EM,Sepanski2014FP}.
 
-In \figurename{} \ref{fig:sepsis-screening}, we present a simplified version of
+In \autoref{fig:sepsis-screening}, we present a simplified version of
 the screening section of OSF's sepsis mangement guideline.
 In essence, when a patient arrives at the
 \ED{} with a fever or an infection, the \HCP{} is supposed to obtain
@@ -105,7 +105,7 @@ in clusters of linked information, called \say{buckets}. For instance, if
 the patient's heart rate is abnormal, then \say{bucket 1} is said to
 have an abnormal value.
 Checking for such abnormalities often involves the use of tables, such as
-\tablename{} \ref{table:vital-signs} that contains normal ranges indexed by
+\autoref{table:vital-signs} that contains normal ranges indexed by
 \emph{age}.
 %\footnote{For brevity, we omit some age ranges and vital signs from table
 %\ref{table:vital-signs}}.
@@ -115,7 +115,7 @@ then he/she is flagged as potentially septic.
 The \BPG{}-recommended treatment for
 sepsis involves multiple concurrent workflows, such as
 screening for septic shock, fluid resuscitation, and administering antibiotics.
-In \figurename{} \ref{fig:fluid-therapy}, we provide
+In \autoref{fig:fluid-therapy}, we provide
 a version of the fluid resuscitation guideline used
 at OSF. Briefly, if the patient is flagged as potentially septic, the guideline suggests
 \begin{enumerate*}[label=(\roman*)]
@@ -217,17 +217,17 @@ Well implemented \CDSSs{} have been shown to improve
 
 \subsection{\CDSS{} Example}\label{sec:cdss-example}
 
-In section \ref{sec:bpg-background}, we presented a real-world
+In \autoref{sec:bpg-background}, we presented a real-world
 \BPG{} for screening and management of sepsis in pediatric cases.
 To illustrate how a \CDSSs{} can enable better \BPG{} adherence,
 we utilize an example \CDSS{} that codifies the sepsis management \BPG{}
 to administer decision support.
 
-In \figurename{} \ref{fig:sepsis-tool}, we show an overview
+In \autoref{fig:sepsis-tool}, we show an overview
 of a \CDSS{} for sepsis management.
 The \CDSS{} is intended to work as tablet at
 the patient's beside in a hospital's emergency department (ED).
-\figurename{} \ref{fig:sepsis-tool-main} depicts main screen that the practitioner sees on the tablet.
+\autoref{fig:sepsis-tool-main} depicts main screen that the practitioner sees on the tablet.
 The main screen consists of four panes (labeled and color coded for illustration
 purposes). Pane 1 shows a grid with the patient's vitals pulled
 from a combination of the patient's records, sensor measurements and
@@ -255,7 +255,7 @@ Pane 3 contains medications grouped by type, where clicking the
 \say{GIVE} button corresponds to administering the drug.
 Pane 4 leads to toggleable windows with
 important information. For instance, clicking on \say{HAEMODYNAMICS LINE GRAPHS}
-toggles the window in \figurename{} \ref{fig:sepsis-graphs-view} depicting
+toggles the window in \autoref{fig:sepsis-graphs-view} depicting
 the patient's vitals over time punctuated by points at which
 drugs were administered.
 
@@ -305,7 +305,7 @@ has further enhanced \CDSSs{} adoption \cite{SuttonNature20}.
   \caption{\CDSS{} Components}\label{fig:cdss-architecture}
 \end{figure}
 
-In \figurename{} \ref{fig:cdss-architecture}, we provide an overview
+In \autoref{fig:cdss-architecture}, we provide an overview
 of the components of a typical \CDSS{}, and the underlying architecture.
 A typical guidelines-based \CDSS{} conceptually consists of the
 following components \cite{SuttonNature20}:
@@ -313,7 +313,7 @@ following components \cite{SuttonNature20}:
 \paragraph{Knowledge Base:}
 
 The knowledge base is the encoding of the underlying guideline in a
-computable medium. Recall from section \ref{sec:bpg-background}
+computable medium. Recall from \autoref{sec:bpg-background}
 that \BPGs{} are typically developed experts in medicine and published
 as textual documents. To develop a \CDSS{}, experts in medicine
 collaborate with computer scientists or software developers to
@@ -321,9 +321,9 @@ develop requirements documentations that present the \BPG{}'s
 semantics in a manner amenable to software development.
 This is subsequently utilized by software developers to encode
 knowledge from the textual \BPG{} into some programming language \cite{PelegJBI13}.
-For instance, the \CDSS{} for sepsis management from section \ref{sec:cdss-example}
-utilizes the textual \BPG{} shown in \figurename{} \ref{fig:sepsis-screening}
-and \figurename{} \ref{fig:fluid-therapy} to diagnose and manage sepsis.
+For instance, the \CDSS{} for sepsis management from \autoref{sec:cdss-example}
+utilizes the textual \BPG{} shown in \autoref{fig:sepsis-screening}
+and \autoref{fig:fluid-therapy} to diagnose and manage sepsis.
 Thus, medical knowledge in the textual \BPG{} must translated into some
 programming language to enable its use in a functioning \CDSS{}.
 
@@ -334,7 +334,7 @@ generate recommendations as specified in the underlying \BPG{}. Typically this i
 utilizing available data from various sources such as electronic health records,
 devices that monitor various patient vitals, and inputs from \HCPs{}.
 
-Consider the sepsis screening \BPG{} in \figurename{} \ref{fig:sepsis-screening}.
+Consider the sepsis screening \BPG{} in \autoref{fig:sepsis-screening}.
 In order to screen a patient for sepsis, data and
 measurements such as the patient's age, associated high-risk conditions,
 mental status, heart rate, etc. is required. The origins
@@ -365,7 +365,7 @@ The \UIs{} need to account for the diversity in devices used in modern
 healthcare. Interaction can occur through desktops, tablets, or even cell
 phones. The \UI{} of the our running example \CDSS{} for managing \CDSS{}
 is meant to be displayed on tablet at the patient's bedside, and is shown in
-\figurename{} \ref{fig:sepsis-tool-main}.
+\autoref{fig:sepsis-tool-main}.
 The displayed information is organized into distinct \say{panes}:
 Pane 1 for patient state, Pane 2 for treatment progress,
 Pane 3 for medication details, and Pane 4 for textual guideline references.
@@ -384,8 +384,8 @@ of software to:
     that track patient parameters like heart rate, blood pressure, etc.
   \item Control treatment-related devices such as infusion pumps, ventilators, etc.
 \end{itemize}
-For instance, the example \CDSS{} for sepsis management shown in \figurename{}
-\ref{fig:sepsis-tool-main} integrates requires additional software for integration with
+For instance, the example \CDSS{} for sepsis management shown in
+\autoref{fig:sepsis-tool-main} integrates requires additional software for integration with
 electronic health, several monitors for patient parameters
 such as heart rate, blood pressure, mean arterial pressure, etc. and the
 hospital's drug order and delivery systems to be effective.

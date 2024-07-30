@@ -10,7 +10,7 @@ scope of this work. But, several limitations in existing \CDSS{} technology have
 inhibited further adoption. This chapter discusses said challenges, and
 the progress made by existing state of art towards addressing them.
 
-Recall, from section \ref{sec:hurdles-cdss-adoption}, that in 2017,
+Recall, from \autoref{sec:hurdles-cdss-adoption}, that in 2017,
 the National Academy of Medicine published a report on \CDSSs{} that
 laid out a roadmap to optmize \CDSS{} uptake in medicine. According to the
 report, several challenges need to be tackled for wider adoption, such as:
@@ -62,9 +62,9 @@ establishment's \EHR{} system \cite{KawamotoJBI10}.
 
 \subsection{Modular \CDSS{} Architectures}\label{sec:modular-architectures}
 
-In section \ref{sec:cdss-components}, we presented the components that
+In \autoref{sec:cdss-components}, we presented the components that
 every guidelines-based clinical decision support can conceptually be decomposed
-into. Early \CDSSs{} from section \ref{sec:monolithic-cdss}
+into. Early \CDSSs{} from \autoref{sec:monolithic-cdss}
 were not designed with modularity that enabled sharing components
 between different implementations. As the need for scaling \CDSSs{}
 across institutions grew, component-based architectures that
@@ -117,7 +117,7 @@ developers don't understand medicine, and experts in medicine typically
 don't understand programming languages,
 it's possible for the functional specification, i.e., the \BPG{}, to
 diverge from its implementation, i.e., the knowledge base. Thus,
-C1 from section \ref{chapter:hurdles-cdss-adoption} remains unaddressed.
+C1 from \autoref{chapter:hurdles-cdss-adoption} remains unaddressed.
 
 \subsection{Computer-Interpretable \BPGs{}}\label{sec:computer-interpetable-bpg}
 
@@ -173,11 +173,11 @@ Therefore, an interpreter and analysis tools have to be implemented in an
 ad-hoc manner.
 
 Over the years, significant progress has been made towards making \CDSSs{}
-safer, easier, effective and cheaper. In section \ref{sec:monolithic-cdss},
+safer, easier, effective and cheaper. In \autoref{sec:monolithic-cdss},
 the earliest \CDSSs{} attempted to increased adherence to evidence-based best practices
 at medical establishments. To ensure \CDSSs{} could be scaled better,
-components-based architectures, discussed in section
-\ref{sec:modular-architectures} enabled medical knowledge to
+components-based architectures, discussed in
+\autoref{sec:modular-architectures} enabled medical knowledge to
 be developed and maintained independently of other components (such as system
 \UI{}). To ensure that medical knowledge is indeed encoded correctly,
 several \DSLs{} that eliminate the gap between a textual \BPG{} and
