@@ -258,7 +258,7 @@ To enforce a particular order, or, to choose a subset of the operands, a
 list of operand positions specifying the desired order can be supplied to
 \inlinek{strict}. For example, \inlinek{strict(2, 1)} would make $\K$
 evaluate the second argument before the first. This is particularly
-useful for defining constructs like short-curcuit \inlineimp{&&} boolean
+useful for defining constructs like short-curcuit (\inlineimp{&&}) boolean
 expression on \autoref{lstline:imp-bexp-and}, where \inlinek{strict(1)}
 ensures that the left operand is evaluated first, allowing the right to only
 be evaluated if the left evaluates to \inlinek{true}.
@@ -283,6 +283,52 @@ definition of a list of identifier (\inlinek{Ids}) on \autoref{lstline:imp-ids}.
 \inlinek{List\{...\}} is used to define syntactic-lists, where the first
 argument is the production of list elements, and the second the list de-limiter.
 Thus, \inlinek{List\{Id, ","\}} defines a comma-separated list of program identifiers.
+
+Once the \emph{syntax} has been defined, $\K$ can utilize it to generate a
+parser, which can be used to generate abstract
+syntax trees (\ASTs{}) for programs. The program's \AST{} forms a part of the larger
+program state, over which semantics are defined through rules.
+The $\K$ semantics of any language has two components:
+\begin{itemize}
+  \item A \emph{Configuration} that organizes the state
+    into units called \emph{cells}, that may be nested.
+  \item \emph{Rules} that operate over \emph{configuration}-segments
+    to desribe evolution of state during execution.
+\end{itemize}
+For Imp, \autoref{lst:imp-semantics} has aforementioned
+components inside \inlinek{module IMP}.
+Note that the syntax and semantics exist in separate modules,
+where the semantics \inlinek{module} \inlinek{imports}
+the syntax \inlinek{module}. This is by convention, and
+has the following advantages:
+\begin{enumerate}[label=\alph*)]
+  \item Rules can operate directly over the language's syntax,
+    making them easier to specify and comprehend.
+  \item With the syntax and semantics residing in separate modules,
+    $\K$ can be instructed to use only the syntax \inlinek{module} for parsing programs.
+    This allows users to define additional syntactic constructs in the semantics module
+    for use in rules. If a combined syntax and semantics \inlinek{module} is used instead,
+    any constructs defined solely for use in rules
+    would unintentionally become part of the language's syntax,
+    and be accepted by the parser.
+\end{enumerate}
+
+
+To impart semantics, we must describe how the
+evolution of the program's \emph{state} during
+execution. This is done through \emph{rewrite rules} that operate over
+$\K$-\emph{configurations}.
+In $\K$ \emph{state} is organized into a \emph{configuration}.
+The configuration is an unordered list of (potentially nested) \emph{cells},
+specified using an XML-like notation. When writing \emph{rules} (as rewrites)
+over this state, any subset of the \emph{cells} present in the configuration
+can be mentioned. Thus, only parts of the state \emph{relevant} to the rule
+need to be mentioned; the rest of the state is assumed to remain unchanged.
+The keyword \inlinek{configuration} (line 24)  defines a \emph{configuration},
+followed by xml-like notation for the $\K$ \emph{cells}. For instance,
+\inlinek{<foo> <bar> ...  </bar> </foo>} corresponds to $\K$ \emph{cells} with
+the names \inlinek{foo} and \inlinek{bar} respectively, where \inlinek{bar}
+is nested under \inlinek{foo}.
 
 \begin{lstlisting}[float=hb,
   frame=single,
