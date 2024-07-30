@@ -173,6 +173,52 @@ language whose syntax is inspired by C and Java. This introduction
 is imperative to understanding the details of the $\MediK{}$ language
 discussed in upcoming chapters that often rely on $\K{}$ notation.
 
+\subsection{Defining Semantics in $\K$}\label{sec:semantics-in-k}
+
+A typical $\K$ definition consists of the following components:
+\begin{itemize}
+  \item Syntax: Defined in \BNF{}-like notation, and utilized by $\K$
+    to generate a parser for the language.
+  \item Configuration: Organizes the program execution state
+    into units called \emph{cells} that may be nested.
+  \item Rules: Operate over configuration segments and define program
+    evolution via rewrites.
+\end{itemize}
+
+In \autoref{listing:imp-syntax}, we provide the syntax
+definition for IMP.
+
+\begin{lstlisting}[float=ht,
+  frame=single,
+  style=ksty,
+  language=k,
+  numbers=left,
+  numbersep=5pt,
+  caption={Syntax Definition in $\K$},
+  label={listing:imp-syntax}
+]
+module IMP-SYNTAX
+  imports DOMAINS-SYNTAX
+
+  syntax Exp ::=
+      Int
+    | Id
+    | Exp "+" Exp                   [left, strict]
+    | Exp "-" Exp                   [left, strict]
+    | "(" Exp ")"                   [bracket]
+
+  syntax Stmt ::=
+      Id "=" Exp ";"                [strict(2)]
+    | "if" "(" Exp ")" Stmt Stmt    [strict(1)]
+    | "while" "(" Exp ")" Stmt
+    | "{" Stmt "}"   [bracket]
+    | "{" "}"
+    > Stmt Stmt                     [left, strict(1)]
+
+  syntax Pgm ::= "int" Ids ";" Stmt
+  syntax Ids ::= List{Id,","}
+endmodule
+\end{lstlisting}
 
 
 

@@ -1,9 +1,12 @@
+\definecolor{greybackground}{rgb}{0.95,0.95,0.92}
 \lstdefinestyle{ksty}{
   keywordstyle=\color{magenta},
-  basicstyle=\ttfamily\footnotesize
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{greybackground},
+  framerule=0pt
 }
 \lstdefinelanguage{k}{
-  morekeywords={rule,configuration,=>,syntax,multiplicity,type},
+  morekeywords={rule,configuration,=>,syntax,multiplicity,type,module,endmodule,import,imports},
   morecomment=[l]{//},
   morecomment=[s]{/*}{*/}
 }
