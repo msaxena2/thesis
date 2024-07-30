@@ -182,17 +182,24 @@ A typical $\K$ definition of a language consists of the following components:
 \end{itemize}
 We now discuss aforementioned components in the context of the Imp
 language. Imp is a simple imperative programming language
-whose syntax and semantics are inspired by C and Java.
+inspired by C and Java that supports arithmetic and boolean expressions and
+statements such as variable declaration and assignment, branching (\inlineimp{if})
+and looping (\inlineimp{while}).
 
-In \autoref{lst:imp-syntax} and \autoref{lst:imp-semantics},
-we present the syntax and semantics of Imp respectively.
-In $\K{}$, code must exist inside an organizational unit called a
-\inlinek{module} that has a name, and can import other \inlinek{modules}.
-For example, \inlinek{module IMP-SYNTAX ... endmodule}, on \autoref{lstline:imp-module-start}
-to \autoref{lstline:imp-module-end} in \autoref{lst:imp-syntax} defines
+\autoref{lst:imp-syntax} and \autoref{lst:imp-semantics},
+define syntax and semantics of Imp respectively.
+$\K{}$ code must be place inside an organizational unit called a
+\inlinek{module} that has a name, and can import other \inlinek{module}(s).
+For example, \inlinek{module IMP-SYNTAX ... endmodule}
+between \autoref{lstline:imp-module-start} and
+\autoref{lstline:imp-module-end} of \autoref{lst:imp-syntax} defines
 a $\K{}$ \inlinek{module} named \inlinek{IMP-SYNTAX} containing Imp's
-BNF grammar.
-
+grammar. $\K{}$ provides builtin support for domains such as natural
+numbers, integers, booleans and program identifiers
+under a \inlinek{module} named \inlinek{DOMAINS}.
+\autoref{lstline:imp-syntax-import} \inlinek{imports}
+the syntax definition of $\K{}'s$ \inlinek{DOMAINS} module
+to enable parsing integers and booleans in Imp programs.
 
 \begin{lstlisting}[float=ht,
   frame=single,
@@ -203,32 +210,81 @@ BNF grammar.
   caption={Imp Syntax in $\K$},
   label={lst:imp-syntax}
 ]
-module IMP-SYNTAX             @\label{lstline:imp-module-start}@
-  imports DOMAINS-SYNTAX
-  syntax AExp  ::= Int | Id
+module IMP-SYNTAX                                               @\label{lstline:imp-module-start}@
+  imports DOMAINS-SYNTAX                                        @\label{lstline:imp-syntax-import}@
+  syntax AExp  ::= Int | Id                                     @\label{lstline:imp-aexp-start}@
                  | "-" Int
-                 | AExp "/" AExp              [left, strict]
+                 | AExp "/" AExp              [left, strict]    @\label{lstline:imp-aexp-div}@
                  | "(" AExp ")"               [bracket]
-                 > AExp "+" AExp              [left, strict]
+                 > AExp "+" AExp              [left, strict]    @\label{lstline:imp-aexp-end}@
   syntax BExp  ::= Bool
                  | AExp "<=" AExp             [seqstrict]
                  | "!" BExp                   [strict]
                  | "(" BExp ")"               [bracket]
-                 > BExp "&&" BExp             [left, strict(1)]
+                 > BExp "&&" BExp             [left, strict(1)] @\label{lstline:imp-bexp-and}@
   syntax Block ::= "{" "}"
                  | "{" Stmt "}"
-  syntax Stmt  ::= Block
-                 | Id "=" AExp ";"            [strict(2)]
+  syntax Stmt  ::= Block                                        @\label{lstline:imp-stmt-block}@
+                 | Id "=" AExp ";"            [strict(2)]       @\label{lstline:imp-stmt-assgn}@
                  | "if" "(" BExp ")"
                    Block "else" Block         [strict(1)]
-                 | "while" "(" BExp ")" Block
-                 > Stmt Stmt                  [left]
-  syntax Pgm ::= "int" Ids ";" Stmt
-  syntax Ids ::= List{Id,","}
-endmodule                     @\label{lstline:imp-module-end}@
+                 | "while" "(" BExp ")" Block                   @\label{lstline:imp-stmt-while}@
+                 > Stmt Stmt                  [left]            @\label{lstline:imp-stmt-comp}@
+  syntax Pgm ::= "int" Ids ";" Stmt                             @\label{lstline:imp-pgm}@
+  syntax Ids ::= List{Id,","}                                   @\label{lstline:imp-ids}@
+endmodule                                                       @\label{lstline:imp-module-end}@
 \end{lstlisting}
 
-\begin{lstlisting}[float=ht,
+\emph{Syntax} in $\K{}$ is defined using BNF-like notation; terminals are enclosed
+in quotes, and non-terminals begin with an uppercase. For example,
+consider the declaration of Imp arithmetic expressions between
+\autoref{lstline:imp-aexp-start} and \autoref{lstline:imp-aexp-end}. On
+\autoref{lstline:imp-aexp-start} $\K$'s builtin support
+for integers (\inlinek{Int}) and program identifiers
+(\inlinek{Id}) is used to support arithmetic expressions over program variables.
+Beyond simply defining the syntax, $\K{}$ also allows assigning semantics to
+constructs through the use of \emph{attributes} specified as a comma-separated list
+in square brackets (\inlinek{[..]}) placed immediately after the \BNF{} production.
+For example, On \autoref{lstline:imp-aexp-div} and \autoref{lstline:imp-aexp-end},
+the attribute \inlinek{left} is used to declare the
+corresponding operator as left associative. The \inlinek{strict} attribute is used
+to assign \emph{evaluation strategies}. Note its use
+on \autoref{lstline:imp-aexp-div} and \autoref{lstline:imp-aexp-end}, signifying
+that both operand sub-expressions must be completely evaluated before the
+before the corresponding operator (\inlinek{/}, \inlinek{+}) is evaluated.
+Note that the order in which the arguments are evaluated is non-deterministic,
+and, all operands will be evaluated before the operator is evaluated.
+To enforce a particular order, or, to choose a subset of the operands, a
+list of operand positions specifying the desired order can be supplied to
+\inlinek{strict}. For example, \inlinek{strict(2, 1)} would make $\K$
+evaluate the second argument before the first. This is particularly
+useful for defining constructs like short-curcuit \inlineimp{&&} boolean
+expression on \autoref{lstline:imp-bexp-and}, where \inlinek{strict(1)}
+ensures that the left operand is evaluated first, allowing the right to only
+be evaluated if the left evaluates to \inlinek{true}.
+Similarly, for an assignment statement on \autoref{lstline:imp-stmt-assgn}
+the \inlinek{strict(2)} indicates that the second argument, i.e., the
+expression to the right of the \inlineimp{=} sign must be evaluated before
+the identifier on the left of the \inlineimp{=} is updated.
+
+$\K{}$ also allows operator precedence to be specified as a part of the
+syntax definition. On \autoref{lstline:imp-aexp-end},
+the \inlinek{>} signifies that all preceding productions have higher precedence,
+i.e., bind tighter, than the production for addition (\inlinek{+}).
+Similarly, \autoref{lstline:imp-stmt-comp} defines statement composition.
+Thus, preceding \inlinek{Stmt} productions
+(\autoref{lstline:imp-stmt-block}-\autoref{lstline:imp-stmt-while}), that define
+blocks (\inlinek{\{..\}}) and standalone statements such as variable assignment and
+while loop have higher precedence, indicated by \inlinek{>} on \autoref{lstline:imp-stmt-comp}.
+
+On \autoref{lstline:imp-pgm}, an Imp program is defined to start with a list of program variable
+declarations (\inlinek{"int" Ids ";"}) followed by other statements. Note the
+definition of a list of identifier (\inlinek{Ids}) on \autoref{lstline:imp-ids}. In $\K{}$,
+\inlinek{List\{...\}} is used to define syntactic-lists, where the first
+argument is the production of list elements, and the second the list de-limiter.
+Thus, \inlinek{List\{Id, ","\}} defines a comma-separated list of program identifiers.
+
+\begin{lstlisting}[float=hb,
   frame=single,
   style=ksty,
   language=k,
@@ -237,7 +293,7 @@ endmodule                     @\label{lstline:imp-module-end}@
   caption={$\K$ Semantics of Imp},
   label={lst:imp-semantics}
 ]
-module IMP imports IMP-SYNTAX
+module IMP
   imports IMP-SYNTAX
   imports DOMAINS
   syntax KResult ::= Int | Bool
