@@ -198,7 +198,7 @@ grammar. $\K{}$ provides builtin support for domains such as natural
 numbers, integers, booleans and program identifiers
 under a \inlinek{module} named \inlinek{DOMAINS}.
 \autoref{lstline:imp-syntax-import} \inlinek{imports}
-the syntax definition of $\K{}'s$ \inlinek{DOMAINS} module
+the syntax definition of $\K{}$'s \inlinek{DOMAINS} module
 to enable parsing integers and booleans in Imp programs.
 
 \begin{lstlisting}[float=ht,
@@ -244,7 +244,7 @@ for integers (\inlinek{Int}) and program identifiers
 (\inlinek{Id}) is used to support arithmetic expressions over program variables.
 Beyond simply defining the syntax, $\K{}$ also allows assigning semantics to
 constructs through the use of \emph{attributes} specified as a comma-separated list
-in square brackets (\inlinek{[..]}) placed immediately after the \BNF{} production.
+inside square brackets (\inlinek{[..]}) placed immediately after the \BNF{} production.
 For example, On \autoref{lstline:imp-aexp-div} and \autoref{lstline:imp-aexp-end},
 the attribute \inlinek{left} is used to declare the
 corresponding operator as left associative. The \inlinek{strict} attribute is used
