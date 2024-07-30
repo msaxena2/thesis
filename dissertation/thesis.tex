@@ -50,10 +50,12 @@
   {\algorithmicelse\ \algorithmicif\ \CONDITION{#1}{\ \algorithmicthen}}
 \input{medik-lst.tex}
 \input{k-lst.tex}
-\algrenewcommand\alglinenumber[1]{\footnotesize #1} \newcommand{\inlinemedik}[1]{\lstinline[style=mediksty,basicstyle=\ttfamily\footnotesize]{#1}}
-\newcommand{\inlinek}[1]{\lstinline[style=ksty,basicstyle=\ttfamily\footnotesize]{#1}}
+\algrenewcommand\alglinenumber[1]{\footnotesize #1}
+\newcommand{\inlinemedik}[1]{\lstinline[style=mediksty,language=medik,basicstyle=\ttfamily\small]{#1}}
+\newcommand{\inlinek}[1]{\lstinline[style=ksty,language=k,basicstyle=\ttfamily\small]{#1}}
 \lstset{ literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1} }
-\lstset{captionpos=b}
+\lstset{captionpos=b,escapeinside={@}{@}}
+\providecommand*{\lstnumberautorefname}{Line}
 
 \graphicspath{{./figures}}
 \addbibresource{./references.bib}

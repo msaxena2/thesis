@@ -163,15 +163,15 @@ C \cite{HathhornPLDI15}, Java \cite{BogdanasPOPL15} and
 Javascript \cite{ParkPLDI15}, and analyze non-trivial programs
 \cite{StefanescuOOPSLA16,ParkFSE18}.
 
-The remainder of this section introduces $\K{}$ in greater detail by
-going over the semantics the $\K$ semantics of IMP: a imperative
-language whose syntax is inspired by C and Java. This introduction
-is imperative to understanding the details of the $\MediK{}$ language
-discussed in upcoming chapters that often rely on $\K{}$ notation.
+The remainder of this section introduces relevant features of
+$\K{}$ by describing the $\K{}$ semantics of an example language called
+Imp. This introduction to $\K{}$ provides necessary background
+for upcoming chapters that discuss the $\MediK{}$ \DSL{} through the
+use of $\K{}$ notation and concepts.
 
-\subsection{Defining Semantics in $\K$}\label{sec:semantics-in-k}
+\subsection{Defining Languages in $\K$}\label{sec:semantics-in-k}
 
-A typical $\K$ definition consists of the following components:
+A typical $\K$ definition of a language consists of the following components:
 \begin{itemize}
   \item Syntax: Defined in \BNF{}-like notation, and utilized by $\K$
     to generate a parser for the language.
@@ -180,9 +180,19 @@ A typical $\K$ definition consists of the following components:
   \item Rules: Operate over configuration segments and define program
     evolution via rewrites.
 \end{itemize}
+We now discuss aforementioned components in the context of the Imp
+language. Imp is a simple imperative programming language
+whose syntax and semantics are inspired by C and Java.
 
-In \autoref{listing:imp-syntax}, we provide the syntax
-definition for IMP.
+In \autoref{lst:imp-syntax} and \autoref{lst:imp-semantics},
+we present the syntax and semantics of Imp respectively.
+In $\K{}$, code must exist inside an organizational unit called a
+\inlinek{module} that has a name, and can import other \inlinek{modules}.
+For example, \inlinek{module IMP-SYNTAX ... endmodule}, on \autoref{lstline:imp-module-start}
+to \autoref{lstline:imp-module-end} in \autoref{lst:imp-syntax} defines
+a $\K{}$ \inlinek{module} named \inlinek{IMP-SYNTAX} containing Imp's
+BNF grammar.
+
 
 \begin{lstlisting}[float=ht,
   frame=single,
@@ -190,32 +200,79 @@ definition for IMP.
   language=k,
   numbers=left,
   numbersep=5pt,
-  caption={Syntax Definition in $\K$},
-  label={listing:imp-syntax}
+  caption={Imp Syntax in $\K$},
+  label={lst:imp-syntax}
 ]
-module IMP-SYNTAX
+module IMP-SYNTAX             @\label{lstline:imp-module-start}@
   imports DOMAINS-SYNTAX
-
-  syntax Exp ::=
-      Int
-    | Id
-    | Exp "+" Exp                   [left, strict]
-    | Exp "-" Exp                   [left, strict]
-    | "(" Exp ")"                   [bracket]
-
-  syntax Stmt ::=
-      Id "=" Exp ";"                [strict(2)]
-    | "if" "(" Exp ")" Stmt Stmt    [strict(1)]
-    | "while" "(" Exp ")" Stmt
-    | "{" Stmt "}"   [bracket]
-    | "{" "}"
-    > Stmt Stmt                     [left, strict(1)]
-
+  syntax AExp  ::= Int | Id
+                 | "-" Int
+                 | AExp "/" AExp              [left, strict]
+                 | "(" AExp ")"               [bracket]
+                 > AExp "+" AExp              [left, strict]
+  syntax BExp  ::= Bool
+                 | AExp "<=" AExp             [seqstrict]
+                 | "!" BExp                   [strict]
+                 | "(" BExp ")"               [bracket]
+                 > BExp "&&" BExp             [left, strict(1)]
+  syntax Block ::= "{" "}"
+                 | "{" Stmt "}"
+  syntax Stmt  ::= Block
+                 | Id "=" AExp ";"            [strict(2)]
+                 | "if" "(" BExp ")"
+                   Block "else" Block         [strict(1)]
+                 | "while" "(" BExp ")" Block
+                 > Stmt Stmt                  [left]
   syntax Pgm ::= "int" Ids ";" Stmt
   syntax Ids ::= List{Id,","}
-endmodule
+endmodule                     @\label{lstline:imp-module-end}@
 \end{lstlisting}
 
+\begin{lstlisting}[float=ht,
+  frame=single,
+  style=ksty,
+  language=k,
+  numbers=left,
+  numbersep=5pt,
+  caption={$\K$ Semantics of Imp},
+  label={lst:imp-semantics}
+]
+module IMP imports IMP-SYNTAX
+  imports IMP-SYNTAX
+  imports DOMAINS
+  syntax KResult ::= Int | Bool
+
+  configuration <T>
+                  <k> $PGM:Pgm </k>
+                  <state> .Map </state>
+                </T>
+
+// AExp
+  rule <k> X:Id => I ...</k> <state>... X |-> I ...</state>
+  rule I1 / I2 => I1 /Int I2  requires I2 =/=Int 0
+  rule I1 + I2 => I1 +Int I2
+  rule - I1 => 0 -Int I1
+// BExp
+  rule I1 <= I2 => I1 <=Int I2
+  rule ! T => notBool T
+  rule true && B => B
+  rule false && _ => false
+// Block
+  rule {} => .   [structural]
+  rule {S} => S  [structural]
+// Stmt
+  rule <k> X = I:Int; => . ...</k> <state>... X |-> (_ => I) ...</state>
+  rule S1:Stmt S2:Stmt => S1 ~> S2  [structural]
+  rule if (true)  S else _ => S
+  rule if (false) _ else S => S
+  rule while (B) S => if (B) {S while (B) S} else {}  [structural]
+// Pgm
+  rule <k> int (X,Xs => Xs);_ </k> <state> Rho:Map (.Map => X|->0) </state>
+    requires notBool (X in keys(Rho))
+  rule int .Ids; S => S  [structural]
+
+endmodule
+\end{lstlisting}
 
 
 \section{Pitfalls of the Semantics-First Approach}\label{sec:semantics-first-pitfalls}
