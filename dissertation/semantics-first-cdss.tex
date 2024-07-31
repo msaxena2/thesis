@@ -298,39 +298,22 @@ The $\K$ semantics of any language has two components:
 For Imp, \autoref{lst:imp-semantics} has aforementioned
 components inside \inlinek{module IMP}.
 Note that the syntax and semantics exist in separate modules,
-where the semantics \inlinek{module} \inlinek{imports}
-the syntax \inlinek{module}. This is by convention, and
+where the semantics module \inlinek{imports}
+the syntax module. This is by convention, and
 has the following advantages:
 \begin{enumerate}[label=\alph*)]
   \item Rules can operate directly over the language's syntax,
     making them easier to specify and comprehend.
   \item With the syntax and semantics residing in separate modules,
-    $\K$ can be instructed to use only the syntax \inlinek{module} for parsing programs.
+    $\K$ can be instructed to use only the syntax module for parsing programs.
     This allows users to define additional syntactic constructs in the semantics module
-    for use in rules. If a combined syntax and semantics \inlinek{module} is used instead,
+    for use in rules. If a combined syntax and semantics module is used instead,
     any constructs defined solely for use in rules
     would unintentionally become part of the language's syntax,
     and be accepted by the parser.
 \end{enumerate}
 
-
-To impart semantics, we must describe how the
-evolution of the program's \emph{state} during
-execution. This is done through \emph{rewrite rules} that operate over
-$\K$-\emph{configurations}.
-In $\K$ \emph{state} is organized into a \emph{configuration}.
-The configuration is an unordered list of (potentially nested) \emph{cells},
-specified using an XML-like notation. When writing \emph{rules} (as rewrites)
-over this state, any subset of the \emph{cells} present in the configuration
-can be mentioned. Thus, only parts of the state \emph{relevant} to the rule
-need to be mentioned; the rest of the state is assumed to remain unchanged.
-The keyword \inlinek{configuration} (line 24)  defines a \emph{configuration},
-followed by xml-like notation for the $\K$ \emph{cells}. For instance,
-\inlinek{<foo> <bar> ...  </bar> </foo>} corresponds to $\K$ \emph{cells} with
-the names \inlinek{foo} and \inlinek{bar} respectively, where \inlinek{bar}
-is nested under \inlinek{foo}.
-
-\begin{lstlisting}[float=hb,
+\begin{lstlisting}[float=t,
   frame=single,
   style=ksty,
   language=k,
@@ -344,10 +327,10 @@ module IMP
   imports DOMAINS
   syntax KResult ::= Int | Bool
 
-  configuration <T>
-                  <k> $PGM:Pgm </k>
-                  <state> .Map </state>
-                </T>
+  configuration <T>                         @\label{lstline:imp-config-start}@
+                  <k> $PGM:Pgm </k>         @\label{lstline:imp-pgm-var}@
+                  <state> .Map </state>     @\label{lstline:imp-pgm-state}@
+                </T>                        @\label{lstline:imp-config-end}@
 
 // AExp
   rule <k> X:Id => I ...</k> <state>... X |-> I ...</state>
@@ -376,5 +359,28 @@ module IMP
 endmodule
 \end{lstlisting}
 
+The configuration is defined using the keyword \inlinek{configuration},
+followed by an unordered list of \emph{cells},
+which may be nested and are specified using an XML-like notation.
+For instance, \inlinek{<foo> <bar> ... </bar> </foo>}
+corresponds to $\K$ \emph{cells} named
+\inlinek{foo} and \inlinek{bar} respectively, where \inlinek{bar}
+is nested under \inlinek{foo}.
+Imp's configuration is defined
+between \autoref{lstline:imp-config-start} and \autoref{lstline:imp-config-end},
+and consists of a top-level cell \inlinek{<T>} containing cells
+\inlinek{<k>} and \inlinek{<state>} on \autoref{lstline:imp-pgm-var} and
+\autoref{lstline:imp-config-end} respectively. In $\K{}$,
+the \inlinek{<k>} cell typically contains the \AST{} of the executing
+program, indicated by its contents \inlinek{$PGM:Pgm}.
+During execution, $\K{}$ will attempt to parse the program being executed
+using the production \inlinek{Pgm} defined on \autoref{lstline:imp-pgm} of
+\autoref{lst:imp-syntax}. If parsing is successful, $\K{}$ will replace
+\inlinek{$PGM} with the parsed \AST{}. The \inlinek{<state>} cell,
+as the name suggests, will hold a map of
+program identifiers and values they acquire during execution.
+Said map is initially empty, denoted by \inlinek{.Map}.
+The dot (\inlinek{.}) in $\K{}$ denotes \emph{nothing} or \emph{empty}.
+Thus, \inlinek{.Map} denotes an empty map.
 
 \section{Pitfalls of the Semantics-First Approach}\label{sec:semantics-first-pitfalls}
