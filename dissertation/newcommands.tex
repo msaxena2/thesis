@@ -10,13 +10,13 @@
 \newcommand{\CDSS}{CDSS}
 \newcommand{\CDSSs}{CDSSs}
 \newcommand{\BPGLogic}{knowledge-base}
-\newcommand{\K}{\mathbb{K}}
-\newcommand{\MediK}{\text{Medi}\K{}}
+\newcommand{\K}{\ensuremath{\mathbb{K}}}
+\newcommand{\MediK}{\ensuremath{\text{Medi}\K{}}}
 \newcommand{\FSM}{\emph{FSM}}
 \newcommand{\FSMs}{\emph{FSMs}}
 \newcommand{\Var}{\text{Var}}
-\newcommand{\LHS}{\emph{\text{LHS}}}
-\newcommand{\RHS}{\emph{\text{RHS}}}
+\newcommand{\LHS}{\text{LHS}}
+\newcommand{\RHS}{\text{RHS}}
 \renewcommand{\phi}{\varphi}
 \newcommand{\GUI}{GUI}
 \newcommand{\UI}{UI}
@@ -93,6 +93,57 @@
 \newcommand{\true}{\text{true}}
 \newcommand{\false}{\text{false}}
 
-% Temporal
-\newcommand{\eventually}{\lozenge}
-\newcommand{\always}{\square}
+% SBC Commands
+\newcommand{\mix}{\text{mix}}
+\newcommand{\CFG}{\text{CFG}}
+\newcommand{\CFGs}{\text{CFGs}}
+
+%% ML Commands
+
+\newcommand{\cln}{{\kern0.2ex:\kern0.2ex}}
+\newcommand{\ld}{\mathord{.\,}}
+\newcommand{\To}{\Rightarrow}
+\newcommand{\imp}{\to}
+\newcommand{\eventually}{\diamond}
+\newcommand{\code}[1]{{\MyColorBox[blue!5]{\small\texttt{#1}}}}
+\newcommand{\codel}[1]{\\\phantom{aaa}\code{#1}\\}
+\newcommand{\pr}[1]{\langle #1 \rangle}
+\newcommand{\SV}{SV}
+\newcommand{\EV}{EV}
+\newcommand{\PAT}[1]{\textsc{Pattern}(#1)}
+\newcommand{\Pattern}{\textsc{Pattern}}
+\newcommand{\dimp}{\leftrightarrow}
+\newcommand{\ev}[2]{|#1|_{#2}}
+\newcommand{\pset}[1]{\mathcal{P}(#1)}
+\newcommand{\FV}{\textsc{fv}}
+\newcommand{\bflfp}{\mathbf{lfp}}
+\newcommand{\uapdu}{\_{\apd}\_}
+\newcommand{\apd}{\mathbin{\scalebox{0.7}{$\bullet$}}}
+\newcommand{\apde}{\mathbin{\overline{\apd}}}
+\newcommand{\celli}[2]{\code{<#1>\,#2\,</#1>}}
+\newcommand{\celln}[1]{\code{</#1>}}
+\newcommand{\inh}[1]{\llbracket #1 \rrbracket}
+\newcommand{\Sort}{\mathit{Sort}}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\newcommand{\tb}{\textbackslash}
+\newcommand{\prule}[1]{\scalebox{.85}[1]{\textnormal{{(#1)}}}}
+\newcommand{\Slash}{/\!/ }
+%\newcommand{\hole}{\square}
+\newcommand{\smallurl}[1]{{\small\url{#1}}}
+\newcommand{\oto}{\mathbin{\scalebox{0.8}{\textnormal{\textcircled{\scriptsize$\to$}}}}}
+
+\newcommand{\wnext}{{\circ}}
+\newcommand{\snext}{{\bullet}}
+\newcommand{\always}{{\squareplanar}}
+\newcommand{\wellfounded}{{\mathsf{WF}}}
+%\newcommand{\State}{\mathit{State}}
+%\newcommand{\LTL}{\mathsf{LTL}}
+\newcommand{\until}{\mathbin{U}}
+\newcommand{\RL}{\mathsf{RL}}
+\newcommand{\hole}{\raisebox{-1pt}{\ensuremath{\Box}}}
+\newcommand{\Cfg}{\mathit{Cfg}}
+\newcommand{\ldot}{\mathord{.\,}} % lower dot, used in exists x . phi
+
+\newcommand{\lfp}{\text{lfp}}
+\newcommand{\gfp}{\text{gfp}}

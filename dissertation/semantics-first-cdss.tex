@@ -333,9 +333,9 @@ module IMP
                 </T>                        @\label{lstline:imp-config-end}@
 
 // AExp
-  rule <k> X:Id => I ...</k> <state>... X |-> I ...</state>
+  rule <k> X:Id => I ...</k> <state>... X |-> I ...</state> @\label{lstline:imp-assgn-rule}@
   rule I1 / I2 => I1 /Int I2  requires I2 =/=Int 0
-  rule I1 + I2 => I1 +Int I2
+  rule I1 + I2 => I1 +Int I2                @\label{lstline:imp-add-rule}@
   rule - I1 => 0 -Int I1
 // BExp
   rule I1 <= I2 => I1 <=Int I2
@@ -358,6 +358,9 @@ module IMP
 
 endmodule
 \end{lstlisting}
+
+\subsubsection{Configurations}\label{sec:k-configuration}
+
 
 The configuration is defined using the keyword \inlinek{configuration},
 followed by an unordered list of \emph{cells},
@@ -382,5 +385,88 @@ program identifiers and values they acquire during execution.
 Said map is initially empty, denoted by \inlinek{.Map}.
 The dot (\inlinek{.}) in $\K{}$ denotes \emph{nothing} or \emph{empty}.
 Thus, \inlinek{.Map} denotes an empty map.
+
+\subsubsection{Rules}\label{sec:k-rules}
+$\K$ \emph{rules} operate over configuration segments and define evolution of
+program state. When specifying a rule $\K{}$, only relevant parts of the
+configuration need to be mentioned---$\K{}$ completes the rest of the
+configuration through a mechanism called \emph{configuration abstraction}.
+This allows rules to be concise,
+enhancing readability and making them easier to write. For example,
+consider the rule for addition on \autoref{lstline:imp-add-rule}.
+Simply put, the rule specifies that if the term at the top of the \inlinek{<k>}
+cell is an addition expression, then it should be \emph{rewritten} to
+addition in the integer domain \inlinek{+Int}. But, even though the
+rule is intended to simplify the top of the \inlinek{<k>} cell,
+no cells are explicitly mentioned. This is because:
+\begin{itemize}
+  \item If no cell is mentioned, $\K$ assumes that rule applies at the top of
+    the $\K{}$ cell.
+  \item All other parts of the configuration are assumed to remain unchanged.
+\end{itemize}
+
+Now we describe rules in greater depth.
+A rule begins with the keyword \inlinek{rule}
+and is a statement of the form $\varphi \To \psi$, where
+$\varphi$, $\psi$ are \emph{patterns} over configuration terms and $\K$ variables.
+We say $\varphi$ is the LHS and $\psi$ is the RHS of the rule.
+We define a \emph{substitution} $\theta$ to be a map from $\K$-variables to terms.
+Given pattern $\varphi$ and \emph{substitution} $\theta$, we say
+$\varphi\theta$ is the pattern obtained by replacing every variable $v$ in
+$\varphi$ with $\theta(v)$. We say pattern $\varphi$ matches
+term $\tau$ iff there exists a substitution $\theta$ s.t. $\tau = \varphi\theta$.
+During execution, if the current configuration term
+$\tau$ \emph{matches} the LHS $\varphi$ of rule $\varphi \To \psi$
+with substitution $\theta$, then $C$ is rewritten to $\psi\theta$.
+For example, the addition rule on \autoref{lstline:imp-add-rule}.
+$\K$-variables always begin with an uppercase, and may be suffixed with
+\inlinek{:S}, where \inlinek{S} is the variable's sort. In the case
+of the addition rule, $\K$ can \emph{infer} that sorts for variables
+\inlinek{I1} and \inlinek{I2} to be \inlinek{Int}, as operands of the
+buitin operator \inlinek{+Int} can only be integers (\inlinek{+Int}
+is addition in the domain of integers). Thus, the \LHS{} \inlinek{I1 + I2}
+\emph{match} term \inlinek{2 + 3} (of sort \inlinek{AExp})
+with substitution
+\inlinekmath{$\theta = $(I1\ $\mapsto$ 2, I2\ $\mapsto$\ 3)} and rewrite it \inlinek{2 +Int 3}, i.e. \inlinek{5}, as
+\inlinek{+Int} is $\K$-builtin for integer addition.
+
+Next, we consider the rule for program variable assignment on
+\autoref{lstline:imp-assgn-rule}.
+The rule in considerations uses two variables \inlinek{X} and \inlinek{I}
+having sorts \inlinek{Id} and \inlinek{Int} respectively. Suppose
+we're trying to evaluate the statement \inlineimp{x = 2 + 3;}.
+Recall that the \inlinek{<k>} cell typically contains
+the program. Thus, we have would have \inlinek{x = 2 + 3;} at the start
+of the cell. Note that in $\K$, \inlinek{...} is used to represent
+parts of the configuration \emph{not relevant} to the rule. Said parts remain
+\emph{unchanged} during the rewrite. Since variable \inlinek{I} is suffixed with the sort
+\inlinek{Int}, the variable assignment rule will \emph{not} match the
+expression \inlinek{2 + 3}.
+Recall the attribute \inlinek{strict(2)} from \autoref{lstline:imp-stmt-assgn} in
+\autoref{lst:imp-syntax}), denoting
+$\K$ will \emph{heat}, or pull-out the second
+argument for evaluation. This results in a configuration term of the form
+\inlinek{<k> 2 + 3} $\curvearrowright$ \inlinek{ x =\ }\hole\inlinek{ ; ...</k>},
+where in $\K{}$ $\curvearrowright$ means \emph{followed-by}, i.e.,
+the evaluation of \inlinek{2 + 3} must occur \emph{before} the evaluation
+of \inlinek{x = \ }\hole\inlinek{;}. \hole
+denotes a \emph{hole} left in place of the argument that was \emph{heated}.
+\inlinek{<k> 2 + 3} $\curvearrowright$ \inlinek{x =\ }
+\hole\inlinek{ ; ...</k>} is re-written to \inlinek{<k> 5} $\curvearrowright$
+\inlinek{x =\ }\hole\inlinek{ ; ...</k>}
+by an application of the arithmetic addition rule on line 29. On
+%line 23, we specify any term of sort \inlinek{Int} to be a \inlinek{KResult}.
+%This signifies that the term can no longer be evaluated, and is \emph{cooled}
+%or plugged-back into the original, resulting in \inlinek{<k> x = 5; ...</k>}
+%Now the LHS of the assignment rule can \emph{match} with substitution $\theta =
+%($\inlinek{X}\ $ \mapsto $ \inlinek{x}$,$ \inlinek{I} $\mapsto\ $ \inlinek{5}$)$, resulting in the value that identifier \inlinek{x}
+%is bound to in the \inlinek{<state>} cell to be rewritten to \inlinek{5}.
+%Note the difference between program identifiers and $\K$ variables. While
+%program variables are simply terms belonging to sort \inlinek{Id},
+%$\K$ variables have logical meaning. If multiple rules can match
+%the configuration term, then one rule is non-deterministically chosen.
+%Execution is a sequence of rule applications that continues until no
+%rule can match the configuration.
+
 
 \section{Pitfalls of the Semantics-First Approach}\label{sec:semantics-first-pitfalls}
