@@ -347,20 +347,19 @@ module IMP
   rule {S} => S  [structural]
 // Stmt
   rule <k> X = I:Int; => . ...</k> <state>... X |-> (_ => I) ...</state>
-  rule S1:Stmt S2:Stmt => S1 ~> S2  [structural]
+  rule S1:Stmt S2:Stmt => S1 ~> S2  [structural] @\label{lstline:imp-stmt-decomp}@
   rule if (true)  S else _ => S
   rule if (false) _ else S => S
   rule while (B) S => if (B) {S while (B) S} else {}  [structural]
 // Pgm
-  rule <k> int (X,Xs => Xs);_ </k> <state> Rho:Map (.Map => X|->0) </state>
-    requires notBool (X in keys(Rho))
-  rule int .Ids; S => S  [structural]
+  rule <k> int (X,Xs => Xs);_ </k> <state> Rho:Map (.Map => X|->0) </state> @\label{lstline:imp-vardec-rule}@
+    requires notBool (X in keys(Rho))  @\label{lstline:imp-vardec-requires}@
+  rule int .Ids; S => S  [structural]  @\label{lstline:imp-emptydec-rule}@
 
 endmodule
 \end{lstlisting}
 
 \subsubsection{Configurations}\label{sec:k-configuration}
-
 
 The configuration is defined using the keyword \inlinek{configuration},
 followed by an unordered list of \emph{cells},
@@ -421,8 +420,8 @@ with substitution $\theta$, then $C$ is rewritten to $\psi\theta$.
 For example, the addition rule on \autoref{lstline:imp-add-rule}.
 $\K$-variables always begin with an uppercase, and may be suffixed with
 \inlinek{:S}, where \inlinek{S} is the variable's sort. In the case
-of the addition rule, $\K$ can \emph{infer} that sorts for variables
-\inlinek{I1} and \inlinek{I2} to be \inlinek{Int}, as operands of the
+of the addition rule, $\K$ can \emph{infer} that the sort of
+\inlinek{I1} and \inlinek{I2} is \inlinek{Int}, as operands of the
 buitin operator \inlinek{+Int} can only be integers (\inlinek{+Int}
 is addition in the domain of integers). Thus, the \LHS{} \inlinek{I1 + I2}
 \emph{match} term \inlinek{2 + 3} (of sort \inlinek{AExp})
@@ -430,10 +429,62 @@ with substitution
 \inlinekmath{$\theta = $(I1\ $\mapsto$ 2, I2\ $\mapsto$\ 3)} and rewrite it \inlinek{2 +Int 3}, i.e. \inlinek{5}, as
 \inlinek{+Int} is $\K$-builtin for integer addition.
 
-Next, we consider the rule for program variable assignment on
-\autoref{lstline:imp-assgn-rule}.
-The rule in considerations uses two variables \inlinek{X} and \inlinek{I}
-having sorts \inlinek{Id} and \inlinek{Int} respectively. Suppose
+We now discuss execution of an entire program to introduce $K{}$ nuances
+relevant to later chapter. Imp's grammar dictates that an
+Imp program (denoted by production \inlinek{Pgm} on
+\autoref{lstline:imp-pgm} of \autoref{lst:imp-syntax})
+must declare all variables at the start of execution. Consider
+the simple program \inlinemedik{int x; x = 2 + 3;}.
+At the start of execution, \K{} replaces the \inlinek{$PGM}
+in the configuration declaration with the program's \AST{}.
+Thus, we get the following initial configuration:
+\begin{lstlisting}[language=k,style=ksty,backgroundcolor=\color{white}]
+<T>
+  <k> int x, .Ids; x = 2 + 3; </k>
+  <state> .Map </state>
+</T>
+\end{lstlisting}
+where \inlinek{.Ids} is the identity element for the user-defined
+list of program identifiers, and \inlinek{.Map} is the map identity
+from the initial configuration declaration on \autoref{lstline:imp-pgm-state}
+Now the rule for variable declaration on \autoref{lstline:imp-vardec-rule}
+can match with substition \inlinekmath{(X $\ \mapsto\ $ x, Xs $ \mapsto\ $ .Ids,
+Rho $\ \mapsto\ $.Map)}
+to rewrite the configuration to:
+\begin{lstlisting}[language=k,style=ksty,backgroundcolor=\color{white}]
+<T>
+  <k> int .Ids; x = 2 + 3; </k>
+  <state> x |-> 0 </state>
+</T>
+\end{lstlisting}
+Note the following conveniences that \K{} offers to make writing rules easier:
+\begin{enumerate}[label=\roman*)]
+  \item The use of parenthesis limi scope of the rewrite to the
+    list of program identifiers. Localized rewriting reduces redundancy
+    as only relevant parts of a term have to be mentioned on the \RHS{} of the
+    rule.
+  \item The underscore \inlinek{_} following \inlinek{int (X, Xs => Xs);}
+    on \autoref{lstline:imp-vardec-rule}
+    is an \emph{anonymous} variable that matches the remainder to the program.
+    Since it's not anywhere on the \RHS{}, there is no need to provide an
+    explicit variable name.
+\end{enumerate}
+Also that the rule has a side condition, expressed through the keyword \inlinek{requires}
+on \autoref{lstline:imp-vardec-requires}. This forces the rule to only apply if
+the program identifier has not already been declared. For instance,
+a program that starts with \inlineimp{int x, x;} will not execute to completion.
+Next, the rule on \autoref{lstline:imp-emptydec-rule} will eliminate
+\inlinek{int .Ids;}, leaving the following configuration after the rewrite:
+\begin{lstlisting}[language=k,style=ksty,backgroundcolor=\color{white}]
+<T>
+  <k> x = 2 + 3; </k>
+  <state> x |-> 0 </state>
+</T>
+\end{lstlisting}
+
+Consider the assignment rule on \autoref{lstline:imp-assgn-rule} of
+\autoref{lst:imp-semantics}. The rule uses two variables: \inlinek{X} and \inlinek{I}
+with sorts \inlinek{Id} and \inlinek{Int} respectively. Suppose
 we're trying to evaluate the statement \inlineimp{x = 2 + 3;}.
 Recall that the \inlinek{<k>} cell typically contains
 the program. Thus, we have would have \inlinek{x = 2 + 3;} at the start
