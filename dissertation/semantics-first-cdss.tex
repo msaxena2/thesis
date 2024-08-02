@@ -513,7 +513,7 @@ argument for evaluation. This results in the configuration:
   <state> x |-> 0 </state>
 </T>
 \end{lstlisting}
-In $\K{}$, \inlinek{~>} means \emph{followed-by}, i.e.,
+In $\K{}$, \lstinline[style=inlineksty]{~>} means \emph{followed-by}, i.e.,
 the evaluation of \inlinek{2 + 3} must occur \emph{before} the evaluation
 of \inlinek{x = [];}. \inlinek{[]} denotes a \emph{hole} left in place of
 the argument that was \emph{heated}.
@@ -531,23 +531,23 @@ or plugged-back into its corresponding hole, resulting in the configuration:
   <state> x |-> 0 </state>
 </T>
 \end{lstlisting}
-%Now the LHS of the assignment rule can \emph{match} with substitution
-%\inlinekmath{$\theta$\ =\ (X\ $\mapsto$\ x, I\ $\mapsto$\ 5)}
-% resulting in the final configuration:
-%\begin{lstlisting}[language=k,style=ksty,backgroundcolor=\color{white}]
-%<T>
-%  <k> . </k>
-%  <state> x |-> 5 </state>
-%</T>
-%\end{lstlisting}
-%
-%Note the difference between program identifiers and $\K$ variables. While
-%program variables are simply terms belonging to sort \inlinek{Id},
-%$\K$ variables have logical meaning. If multiple rules can match
-%the configuration term, then one rule is non-deterministically chosen.
-%Execution is a sequence of rule applications that continues until no
-%rule can match the configuration. Since in the running example the
-%$\K{}$ the $K{}$-cell becomes empty after all statement are evaluated,
-%indicating successful completion.
+Now the LHS of the assignment rule can \emph{match} with substitution
+\inlinekmath{$\theta$\ =\ (X\ $\mapsto$\ x, I\ $\mapsto$\ 5)}
+ resulting in the final configuration:
+\begin{lstlisting}[language=k,style=ksty,backgroundcolor=\color{white}]
+<T>
+  <k> . </k>
+  <state> x |-> 5 </state>
+</T>
+\end{lstlisting}
+
+Note the difference between program identifiers and $\K$ variables. While
+program variables are simply terms belonging to sort \inlinek{Id},
+$\K$ variables have logical meaning. If multiple rules can match
+the configuration term, then one rule is non-deterministically chosen.
+Execution is a sequence of rule applications that continues until no
+rule can match the configuration. Since in the running example the
+$\K{}$ the \inlinek{<k>} cell becomes empty after all statement are evaluated,
+indicating successful completion.
 
 \section{Pitfalls of the Semantics-First Approach}\label{sec:semantics-first-pitfalls}
