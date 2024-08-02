@@ -325,7 +325,7 @@ has the following advantages:
 module IMP
   imports IMP-SYNTAX
   imports DOMAINS
-  syntax KResult ::= Int | Bool
+  syntax KResult ::= Int | Bool             @\label{lstline:imp-kresult}@
 
   configuration <T>                         @\label{lstline:imp-config-start}@
                   <k> $PGM:Pgm </k>         @\label{lstline:imp-pgm-var}@
@@ -348,8 +348,8 @@ module IMP
 // Stmt
   rule <k> X = I:Int; => . ...</k> <state>... X |-> (_ => I) ...</state>
   rule S1:Stmt S2:Stmt => S1 ~> S2  [structural] @\label{lstline:imp-stmt-decomp}@
-  rule if (true)  S else _ => S
-  rule if (false) _ else S => S
+  rule if (true)  S else _ => S  @\label{lstline:imp-if-true-rule}@
+  rule if (false) _ else S => S  @\label{lstline:imp-if-false-rule}@
   rule while (B) S => if (B) {S while (B) S} else {}  [structural]
 // Pgm
   rule <k> int (X,Xs => Xs);_ </k> <state> Rho:Map (.Map => X|->0) </state> @\label{lstline:imp-vardec-rule}@
@@ -448,7 +448,7 @@ where \inlinek{.Ids} is the identity element for the user-defined
 list of program identifiers, and \inlinek{.Map} is the map identity
 from the initial configuration declaration on \autoref{lstline:imp-pgm-state}
 Now the rule for variable declaration on \autoref{lstline:imp-vardec-rule}
-can match with substition \inlinekmath{(X $\ \mapsto\ $ x, Xs $ \mapsto\ $ .Ids,
+can match with substition \inlinekmath{(X $\ \mapsto\ $ x, Xs\ $ \mapsto\ $ .Ids,
 Rho $\ \mapsto\ $.Map)}
 to rewrite the configuration to:
 \begin{lstlisting}[language=k,style=ksty,backgroundcolor=\color{white}]
@@ -481,43 +481,73 @@ Next, the rule on \autoref{lstline:imp-emptydec-rule} will eliminate
   <state> x |-> 0 </state>
 </T>
 \end{lstlisting}
+Also note that the rule does not explicitly mention the cell on which
+it is intended to operate. In $\K$, a rule that doesn't
+mention any cells is implicitly assumed to apply on top of the
+\inlinek{<k>} cell. As the \inlinek{<k>} cell typically
+contains the program being executed, not having to explicitly
+mention the cell allows the rule to only show how constructs in the language
+affect execution. For instance, the rules on \autoref{lstline:imp-if-true-rule}
+and \autoref{lstline:imp-if-false-rule} depict that for an
+\inlineimp{if(condition) \{...\}} statement,
+if the \inlineimp{condition} is true, the \inlineimp{if} block is taken,
+else whatever comes after is taken.
 
-Consider the assignment rule on \autoref{lstline:imp-assgn-rule} of
+Next, consider the assignment rule on \autoref{lstline:imp-assgn-rule} of
 \autoref{lst:imp-semantics}. The rule uses two variables: \inlinek{X} and \inlinek{I}
-with sorts \inlinek{Id} and \inlinek{Int} respectively. Suppose
-we're trying to evaluate the statement \inlineimp{x = 2 + 3;}.
-Recall that the \inlinek{<k>} cell typically contains
-the program. Thus, we have would have \inlinek{x = 2 + 3;} at the start
-of the cell. Note that in $\K$, \inlinek{...} is used to represent
-parts of the configuration \emph{not relevant} to the rule. Said parts remain
-\emph{unchanged} during the rewrite. Since variable \inlinek{I} is suffixed with the sort
-\inlinek{Int}, the variable assignment rule will \emph{not} match the
-expression \inlinek{2 + 3}.
-Recall the attribute \inlinek{strict(2)} from \autoref{lstline:imp-stmt-assgn} in
-\autoref{lst:imp-syntax}), denoting
+with sorts \inlinek{Id} and \inlinek{Int} respectively. Since the \inlinek{<k>}
+cell in our running example has \inlinek{x = 2 + 3;}, we expect the assignment
+rule to apply at some point and update the \inlinek{<state>} accordingly.
+But, the rule cannot apply as the \RHS{} of the assignment, i.e., the expression
+\inlinek{2 + 3}, is not of sort \inlinek{Int}, which needs to be evaluated
+first. This in \K{} is enabled by evaluation strategies.
+Recall that the attribute assignment statement has the attribute
+\inlinek{strict(2)} (\autoref{lstline:imp-stmt-assgn} of
+\autoref{lst:imp-syntax}), denoting that the second argument of the
+construct must be evaluated first. Thus,
 $\K$ will \emph{heat}, or pull-out the second
-argument for evaluation. This results in a configuration term of the form
-\inlinek{<k> 2 + 3} $\curvearrowright$ \inlinek{ x =\ }\hole\inlinek{ ; ...</k>},
-where in $\K{}$ $\curvearrowright$ means \emph{followed-by}, i.e.,
+argument for evaluation. This results in the configuration:
+\begin{lstlisting}[language=k,style=ksty,backgroundcolor=\color{white}]
+<T>
+  <k> 2 + 3 ~> x = []; </k>
+  <state> x |-> 0 </state>
+</T>
+\end{lstlisting}
+In $\K{}$, \inlinek{~>} means \emph{followed-by}, i.e.,
 the evaluation of \inlinek{2 + 3} must occur \emph{before} the evaluation
-of \inlinek{x = \ }\hole\inlinek{;}. \hole
-denotes a \emph{hole} left in place of the argument that was \emph{heated}.
-\inlinek{<k> 2 + 3} $\curvearrowright$ \inlinek{x =\ }
-\hole\inlinek{ ; ...</k>} is re-written to \inlinek{<k> 5} $\curvearrowright$
-\inlinek{x =\ }\hole\inlinek{ ; ...</k>}
-by an application of the arithmetic addition rule on line 29. On
-%line 23, we specify any term of sort \inlinek{Int} to be a \inlinek{KResult}.
-%This signifies that the term can no longer be evaluated, and is \emph{cooled}
-%or plugged-back into the original, resulting in \inlinek{<k> x = 5; ...</k>}
-%Now the LHS of the assignment rule can \emph{match} with substitution $\theta =
-%($\inlinek{X}\ $ \mapsto $ \inlinek{x}$,$ \inlinek{I} $\mapsto\ $ \inlinek{5}$)$, resulting in the value that identifier \inlinek{x}
-%is bound to in the \inlinek{<state>} cell to be rewritten to \inlinek{5}.
+of \inlinek{x = [];}. \inlinek{[]} denotes a \emph{hole} left in place of
+the argument that was \emph{heated}.
+\inlinek{<k> 2 + 3 ~> x = []; </k>}
+is re-written to \inlinek{<k> 5 ~> x = []; </k>}
+by an application of the arithmetic addition rule on
+\autoref{lstline:imp-add-rule}. On
+\autoref{lstline:imp-kresult},
+we specify any term of sort \inlinek{Int} to be a \inlinek{KResult}.
+This signifies that the term can no longer be evaluated, and can be \emph{cooled}
+or plugged-back into its corresponding hole, resulting in the configuration:
+\begin{lstlisting}[language=k,style=ksty,backgroundcolor=\color{white}]
+<T>
+  <k> x = 5; </k>
+  <state> x |-> 0 </state>
+</T>
+\end{lstlisting}
+%Now the LHS of the assignment rule can \emph{match} with substitution
+%\inlinekmath{$\theta$\ =\ (X\ $\mapsto$\ x, I\ $\mapsto$\ 5)}
+% resulting in the final configuration:
+%\begin{lstlisting}[language=k,style=ksty,backgroundcolor=\color{white}]
+%<T>
+%  <k> . </k>
+%  <state> x |-> 5 </state>
+%</T>
+%\end{lstlisting}
+%
 %Note the difference between program identifiers and $\K$ variables. While
 %program variables are simply terms belonging to sort \inlinek{Id},
 %$\K$ variables have logical meaning. If multiple rules can match
 %the configuration term, then one rule is non-deterministically chosen.
 %Execution is a sequence of rule applications that continues until no
-%rule can match the configuration.
-
+%rule can match the configuration. Since in the running example the
+%$\K{}$ the $K{}$-cell becomes empty after all statement are evaluated,
+%indicating successful completion.
 
 \section{Pitfalls of the Semantics-First Approach}\label{sec:semantics-first-pitfalls}
