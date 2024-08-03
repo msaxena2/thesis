@@ -590,7 +590,7 @@ where \inlinek{...} after \inlinek{x = x + 2;} in the \inlinek{<k>}
 abstracts away the remaining computation, which in our example
 is \lstinline[style=ksty]{~> x = x + 2;}. The rule can then
 rewrite the assignment \inlinek{x = 5;} to nothing (denoted by
-dot (\inlinek{.}), which leads to the configuration:
+\inlinek{.}), which leads to the configuration:
 \begin{lstlisting}[language=k,style=ksty]
 <T>
   <k> x = x + 2; </k>
@@ -604,35 +604,33 @@ a cell by default, is explicity assumed to operate on top
 of the \inlinek{<k>} cell. We can now explain this in greater
 detail. Essentially, \K{} considers any rule $\varphi \To \psi$
 where $\varphi$, $\psi$ don't mention any cells equivalent
-\inlinekmath{<k> ($\varphi \to \psi$) ... </k>}.
+\inlinekmath{<k> ($\varphi \To \psi$) ... </k>}.
 This both simplifies the process of specifying semantics in \K{}, and,
 greatly improves readability of \K{} definition. Moreover, the
 ability to use strictness atributes further reduces the
 need to write rules to specify evaluation strategies, enabling
 the semantics to serve as language specifications that are both
 concise and mathematically precise. This is demonstrated well
-by the example Imp defintion as:
-\begin{itemize}
-  \item Only the rules for variable lookup (\autoref{lstline:imp-lookup-rule}),
-    variable declaration (\autoref{lstline:imp-vardec-rule}) and
-    variable assignment (\autoref{lstline:imp-assgn-rule}) explicitly
-    mention cells. All other rules use terms \emph{only involving} constructs
-    whose semantics they define. For instance, the semantics of
-    short curcuit boolean and (\inlinek{&&}) is concisely captured
-    by two rules depicting:
-    \begin{enumerate*}[label=(\alph*)]
-      \item the need to evaluate the second argument
-        only if the first is \inlinek{true}, and,
-      \item discarding the second argument when the first is \inlinek{false}
-        (see \autoref{lstline:imp-and-true-rule} and
-        \autoref{lstline:imp-and-false-rule} of \autoref{lst:imp-semantics}).
-    \end{enumerate*}
-    The \inlinek{strict(1)} attribute
-    on \autoref{lstline:imp-bexp-and} of \autoref{lst:imp-syntax}
-    eliminates the need to write additional rules to ensure the
-    first argument is already evaluated when the rules for
-    \inlinek{&&} apply.
-\end{itemize}
+by the example Imp defintion.
+Only the rules for variable lookup (\autoref{lstline:imp-lookup-rule}),
+variable declaration (\autoref{lstline:imp-vardec-rule}) and
+variable assignment (\autoref{lstline:imp-assgn-rule}) explicitly
+mention cells. All other rules use terms \emph{only involving} constructs
+whose semantics they define. For instance, the semantics of
+short curcuit boolean and (\inlinek{&&}) is concisely captured
+by two rules depicting:
+\begin{enumerate*}[label=(\alph*)]
+  \item the need to evaluate the second argument
+    only if the first is \inlinek{true}, and,
+  \item discarding the second argument when the first is \inlinek{false}
+    (see \autoref{lstline:imp-and-true-rule} and
+    \autoref{lstline:imp-and-false-rule} of \autoref{lst:imp-semantics}).
+\end{enumerate*}
+The \inlinek{strict(1)} attribute
+on \autoref{lstline:imp-bexp-and} of \autoref{lst:imp-syntax}
+eliminates the need to write additional rules to ensure the
+first argument is already evaluated when the rules for
+\inlinek{&&} apply.
 %
 %Note the difference between program identifiers and $\K$ variables. While
 %program variables are simply terms belonging to sort \inlinek{Id},
