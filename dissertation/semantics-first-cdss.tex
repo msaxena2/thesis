@@ -611,26 +611,30 @@ ability to use strictness atributes further reduces the
 need to write rules to specify evaluation strategies, enabling
 the semantics to serve as language specifications that are both
 concise and mathematically precise. This is demonstrated well
-by the example Imp defintion.
-Only the rules for variable lookup (\autoref{lstline:imp-lookup-rule}),
-variable declaration (\autoref{lstline:imp-vardec-rule}) and
-variable assignment (\autoref{lstline:imp-assgn-rule}) explicitly
-mention cells. All other rules use terms \emph{only involving} constructs
-whose semantics they define. For instance, the semantics of
-short curcuit boolean and (\inlinek{&&}) is concisely captured
-by two rules depicting:
-\begin{enumerate*}[label=(\alph*)]
-  \item the need to evaluate the second argument
-    only if the first is \inlinek{true}, and,
-  \item discarding the second argument when the first is \inlinek{false}
-    (see \autoref{lstline:imp-and-true-rule} and
-    \autoref{lstline:imp-and-false-rule} of \autoref{lst:imp-semantics}).
-\end{enumerate*}
-The \inlinek{strict(1)} attribute
-on \autoref{lstline:imp-bexp-and} of \autoref{lst:imp-syntax}
-eliminates the need to write additional rules to ensure the
-first argument is already evaluated when the rules for
-\inlinek{&&} apply.
+by the example Imp defintion as:
+\begin{itemize}
+  \item Only the rules for variable lookup (\autoref{lstline:imp-lookup-rule}),
+    variable declaration (\autoref{lstline:imp-vardec-rule}) and
+    variable assignment (\autoref{lstline:imp-assgn-rule}) explicitly
+    mention cells. All other rules use terms \emph{only involving} constructs
+    whose semantics they define. For instance, the semantics of
+    short curcuit boolean and (\inlinek{&&}) is concisely captured
+    by two rules depicting:
+    \begin{enumerate*}[label=(\alph*)]
+      \item the need to evaluate the second argument
+        only if the first is \inlinek{true}, and,
+      \item discarding the second argument when the first is \inlinek{false}
+        (see \autoref{lstline:imp-and-true-rule} and
+        \autoref{lstline:imp-and-false-rule} of \autoref{lst:imp-semantics}).
+    \end{enumerate*}
+    The \inlinek{strict(1)} attribute
+    on \autoref{lstline:imp-bexp-and} of \autoref{lst:imp-syntax}
+    eliminates the need to write additional rules to ensure the
+    first argument is already evaluated when the rules for
+    \inlinek{&&} apply.
+  \item The entire executable semantics is fewer than 100 lines,
+    indicating $\K{}$'s suitability for semantics-first language design.
+\end{itemize}
 %
 %Note the difference between program identifiers and $\K$ variables. While
 %program variables are simply terms belonging to sort \inlinek{Id},
