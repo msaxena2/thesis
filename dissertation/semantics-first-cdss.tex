@@ -635,6 +635,105 @@ by the example Imp defintion as:
   \item The entire executable semantics is fewer than 100 lines,
     indicating $\K{}$'s suitability for semantics-first language design.
 \end{itemize}
+
+\subsection{Theoretical Foundations of \K{}}
+
+In \autoref{sec:related-work-discussion}, we discussed how
+the need for a formal semantics for \DSLs{} for expressing
+computer interpretable guideline has already been recognized.
+One of the motivations mentioned is the ability to utilize
+semantics for formal methods-based reasoning and analysis.
+In this section, we briefly introduce the theoretical foundations
+of \K{} that provide a sound framework for formal reasoning.
+
+\subsubsection{Matching Logic}
+
+The semantics of a $\K$ definition are given in
+Matching Logic (ML), which we briefly
+describe in this section. We only present concepts that are
+relevant to this proposal, and direct the reader to \cite{RosuLMCS17,ChenLICS19}
+for a more thorough introduction to ML.
+
+Traditionally, program verification approraches have
+relied on an axiomatic semantics for deduction, i.e., a proof system with
+\emph{language-specific} proof rules, such as Hoare logic \cite{HoareACM69}.
+In $\K$ however, the semantics are defined in an operational style, as
+rewrite rules in Matching Logic, and reasoning can be performed through
+the language-independent proof system of Matching Logic \cite{MatchingLogicUrl}.
+
+
+An \emph{ML $\Sigma$-theory} is the pair $\left(\Sigma, \Gamma\right)$,
+comprising of $\Sigma$, a \emph{signature}, and $\Gamma$ a set of
+$\Sigma$-\emph{patterns} called \emph{axioms}.
+
+The \emph{syntax} of matching logic is parametric in two sets of variables
+$\EV$ and $\SV$,
+called \emph{element variables} and \emph{set variables}. We use
+a lowercase letter $x$ (uppercase letter $X$) to denote $x \in \EV$ $(X \in \SV)$.
+%\begin{definition}
+A \emph{(matching logic) signature} $\Sigma$ is a set of \emph{(constant)
+  symbols}. A \emph{(matching logic) pattern} $\varphi$ is inductively defined as:
+\begin{align*}
+\varphi \Coloneqq\
+& x
+\mid X
+\mid \sigma
+\mid \varphi_1 \  \varphi_2
+\mid \bot
+\mid \varphi_1 \imp \varphi_2
+\mid \exists x \ld \varphi
+\mid \mu X \ld \varphi %\quad \text{if $\varphi$ is positive in $X$}
+\end{align*}
+where in $\mu X \ld \varphi$ it's required that $\varphi$ has no negative occurrences of $X$.
+
+%Given signature $\Sigma$, a $\Sigma$-\emph{model} is the tuple $\left(M, \_.\_,
+%\left\{\sigma_{M}\right\}_{\sigma \in \Sigma}\right)$, where,
+%$M$ is a non-empty \emph{carrier set}, $\_.\_: M \times M \to 2^M$
+%  is a binary function called \emph{application}, and $\sigma_{M} \subseteq M$ is an
+%  \emph{interpretation} of symbol $\sigma \in \Sigma$ in $M$
+
+Next, we give an intuive description of the semantics of ML.
+Given signature $\Sigma$, a $\Sigma$-\emph{model} contains, among other things,
+a carrier set $M$ of elements, and for every $\sigma \in \Sigma$, an
+\emph{interpretation}  $\sigma_{M} \subseteq M$ for every $\sigma \in \Sigma$.
+In \emph{models}, patterns evaluate to sets of elements that \emph{match} them.
+For instance, variable $x \in \EV$ evaluates to a \emph{singleton}
+containing \emph{element}, while $X \in \SV$ evalutes to some subset of $M$. $\bot$
+evaluates to the $\emptyset$.
+$\varphi_1 \imp \varphi_2$ is matched by all elements that match $\varphi_2$
+if they also match $\varphi_1$. $\exists x \ld \varphi$ allows abstracting
+away irrelevant parts (i.e. $x$) of the pattern $\varphi$. $\varphi_1\
+\varphi_2$ allows for application of a function/operation/constructor,
+i.e. $\varphi_1$, to its arguments, i.e. $\varphi_2$. $\mu X \ld \varphi$
+evaluates to the \emph{smallest} set $X$ s.t. $\varphi$ evaluates to $X$.
+Other patterns such as $\neg \varphi$, $\varphi_1 \vee \varphi_2$ can all be
+derived from the basic ones mentioned above, and have expected semantics.
+For instance, $\neg \varphi$ matches everything \emph{not} matched by
+$\varphi$. $\varphi_1 \vee \varphi_2$ matches everything that either
+$\varphi_1$ or $\varphi_2$ matches. We refer the reader to \cite{ChenTR20}
+for a detailed discussion on the semantics of matching logic.
+
+\subsubsection$\K$ in Matching Logic}
+
+Given a language $L$ defined in $\K$, the $\K$ tool compiles
+the $\K$-definition of $L$ into a matching logic theory $\Gamma^L$.
+Recall from section \ref{subsec:semantics-first-and-k} that a $\K$-defintion
+consists of rewrite rules of the form $\varphi \To \psi$. These rules
+  define a \emph{transition system} over computation configurations.
+This is captured in ML using a symbol $\snext \in \Sigma$, called
+\emph{one-path-next}. Intuitively, for a given configuration $\gamma$, $\snext\gamma$
+is \emph{matched} by all states that can transition to $\gamma$ in one step \cite{ChenTR20}.
+We can then define $\eventually \varphi \equiv \mu X \ld \varphi \lor \snext X$,
+  which equals $\varphi \vee \snext\varphi \vee \snext\snext\varphi \dots$ or $\bigvee_{i \in
+  \mathbb{N}}\left(\snext^{i}\varphi\right)$.
+Intuitively, the $\eventually$ operator behaves exactly
+as its modal-logic equivalent. It matches all states that can \emph{reach} $\varphi$ in zero or more rewrite steps.
+Thus, a rewrite $\varphi \To \psi$ is expressed in ML as $\varphi \imp \eventually \psi$, or
+the set of all configurations that if match $\varphi$, can also reach $\psi$ in zero or more steps.
+
+
+
+
 %
 %Note the difference between program identifiers and $\K$ variables. While
 %program variables are simply terms belonging to sort \inlinek{Id},
