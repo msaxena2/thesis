@@ -659,8 +659,12 @@ relied on an axiomatic semantics for deduction, i.e., a proof system with
 \emph{language-specific} proof rules, such as Hoare logic \cite{HoareACM69}.
 In $\K$ however, the semantics are defined in an operational style, as
 rewrite rules in Matching Logic, and reasoning can be performed through
-the language-independent proof system of Matching Logic \cite{MatchingLogicUrl}.
-
+the language-independent proof system of ML \cite{MatchingLogicUrl}.
+ML as a logic was developed specifically to reason about programs
+compactly and modularly, and is expressive to enable other logics,
+such as First-Order Logic with least fixed-points, modal logic and temporal
+logics to be captured as ML theories
+\cite{RosuLMCS17,ChenLICS19,ChenTR20,ChenICFP20}.
 
 An \emph{ML $\Sigma$-theory} is the pair $\left(\Sigma, \Gamma\right)$,
 comprising of $\Sigma$, a \emph{signature}, and $\Gamma$ a set of
@@ -686,11 +690,11 @@ A \emph{(matching logic) signature} $\Sigma$ is a set of \emph{(constant)
 \end{align*}
 where in $\mu X \ld \varphi$ it's required that $\varphi$ has no negative occurrences of $X$.
 
-%Given signature $\Sigma$, a $\Sigma$-\emph{model} is the tuple $\left(M, \_.\_,
-%\left\{\sigma_{M}\right\}_{\sigma \in \Sigma}\right)$, where,
-%$M$ is a non-empty \emph{carrier set}, $\_.\_: M \times M \to 2^M$
-%  is a binary function called \emph{application}, and $\sigma_{M} \subseteq M$ is an
-%  \emph{interpretation} of symbol $\sigma \in \Sigma$ in $M$
+Given signature $\Sigma$, a $\Sigma$-\emph{model} is the tuple $\left(M, \_.\_,
+\left\{\sigma_{M}\right\}_{\sigma \in \Sigma}\right)$, where,
+$M$ is a non-empty \emph{carrier set}, $\_.\_: M \times M \to 2^M$
+  is a binary function called \emph{application}, and $\sigma_{M} \subseteq M$ is an
+  \emph{interpretation} of symbol $\sigma \in \Sigma$ in $M$
 
 Next, we give an intuive description of the semantics of ML.
 Given signature $\Sigma$, a $\Sigma$-\emph{model} contains, among other things,
@@ -713,11 +717,11 @@ $\varphi$. $\varphi_1 \vee \varphi_2$ matches everything that either
 $\varphi_1$ or $\varphi_2$ matches. We refer the reader to \cite{ChenTR20}
 for a detailed discussion on the semantics of matching logic.
 
-\subsubsection$\K$ in Matching Logic}
+\subsubsection{$\K$ in Matching Logic}
 
 Given a language $L$ defined in $\K$, the $\K$ tool compiles
 the $\K$-definition of $L$ into a matching logic theory $\Gamma^L$.
-Recall from section \ref{subsec:semantics-first-and-k} that a $\K$-defintion
+Recall from section \ref{sec:semantics-first} that a $\K$-defintion
 consists of rewrite rules of the form $\varphi \To \psi$. These rules
   define a \emph{transition system} over computation configurations.
 This is captured in ML using a symbol $\snext \in \Sigma$, called
