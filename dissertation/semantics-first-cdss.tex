@@ -636,7 +636,7 @@ by the example Imp defintion as:
     indicating $\K{}$'s suitability for semantics-first language design.
 \end{itemize}
 
-\subsection{Theoretical Foundations of \K{}}
+\subsection{Matching Logic: Theoretical Foundations of \K{}}
 
 In \autoref{sec:related-work-discussion}, we discussed how
 the need for a formal semantics for \DSLs{} for expressing
@@ -645,8 +645,6 @@ One of the motivations mentioned is the ability to utilize
 semantics for formal methods-based reasoning and analysis.
 In this section, we briefly introduce the theoretical foundations
 of \K{} that provide a sound framework for formal reasoning.
-
-\subsubsection{Matching Logic}
 
 The semantics of a $\K$ definition are given in
 Matching Logic (ML), which we briefly
@@ -663,12 +661,13 @@ the language-independent proof system of ML \cite{MatchingLogicUrl}.
 ML as a logic was developed specifically to reason about programs
 compactly and modularly, and is expressive to enable other logics,
 such as First-Order Logic with least fixed-points, modal logic and temporal
-logics to be captured as ML theories
-\cite{RosuLMCS17,ChenLICS19,ChenTR20,ChenICFP20}.
+logics to be captured as ML theories \cite{RosuLMCS17,ChenLICS19,ChenTR20,ChenICFP20}.
 
 An \emph{ML $\Sigma$-theory} is the pair $\left(\Sigma, \Gamma\right)$,
 comprising of $\Sigma$, a \emph{signature}, and $\Gamma$ a set of
-$\Sigma$-\emph{patterns} called \emph{axioms}.
+$\Sigma$-\emph{patterns} called \emph{axioms} \cite{ChenLICS19}.
+
+\subsubsection{Syntax}
 
 The \emph{syntax} of matching logic is parametric in two sets of variables
 $\EV$ and $\SV$,
