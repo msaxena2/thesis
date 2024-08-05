@@ -662,20 +662,17 @@ ML as a logic was developed specifically to reason about programs
 compactly and modularly, and is expressive to enable other logics,
 such as First-Order Logic with least fixed-points, modal logic and temporal
 logics to be captured as ML theories \cite{RosuLMCS17,ChenLICS19,ChenTR20,ChenICFP20}.
-
-An \emph{ML $\Sigma$-theory} is the pair $\left(\Sigma, \Gamma\right)$,
-comprising of $\Sigma$, a \emph{signature}, and $\Gamma$ a set of
-$\Sigma$-\emph{patterns} called \emph{axioms} \cite{ChenLICS19}.
+Next we present a brief introduction to Matching Logic. For a more
+thorough reading, we refer the reader to \cite{ChenTR20}.
 
 \subsubsection{Syntax}
 
 The \emph{syntax} of matching logic is parametric in two sets of variables
-$\EV$ and $\SV$,
-called \emph{element variables} and \emph{set variables}. We use
+$\EV$ and $\SV$, called \emph{element variables} and \emph{set variables}. We use
 a lowercase letter $x$ (uppercase letter $X$) to denote $x \in \EV$ $(X \in \SV)$.
-%\begin{definition}
-A \emph{(matching logic) signature} $\Sigma$ is a set of \emph{(constant)
-  symbols}. A \emph{(matching logic) pattern} $\varphi$ is inductively defined as:
+A \emph{(matching logic) signature} $\MLSigma = \left(\EV,\SV, \Sigma\right)$
+where $\Sigma$ is a set of symbols denoted $\sigma_1,\sigma_2,\dots$.
+A \emph{(matching logic) pattern} $\varphi$ is inductively defined as:
 \begin{align*}
 \varphi \Coloneqq\
 & x
@@ -688,12 +685,55 @@ A \emph{(matching logic) signature} $\Sigma$ is a set of \emph{(constant)
 \mid \mu X \ld \varphi %\quad \text{if $\varphi$ is positive in $X$}
 \end{align*}
 where in $\mu X \ld \varphi$ it's required that $\varphi$ has no negative occurrences of $X$.
+$\varphi_1\varphi_2$ is an \emph{application} pattern representing application
+  of $\varphi_1$ to $\varphi_2$. All other constructs can be derived as follows:
+\begin{align*}
+  \neg \varphi &\equiv \varphi \imp \bot & \top &\equiv \neg \varphi  & \phi_1 \wedge \phi_2 &\equiv \neg \left(\phi_1 \vee \phi_2 \right) \\
+  \phi_1 \vee \phi_2 &\equiv \neg\phi_1 \imp \phi_2 & \forall x \ld \varphi
+  &\equiv \neg\exists x \ld \neg\varphi &\quad \nu X\ld\varphi &\equiv \neg \mu X \ld\neg\varphi\left[\neg X / X\right]
+\end{align*}
 
-Given signature $\Sigma$, a $\Sigma$-\emph{model} is the tuple $\left(M, \_.\_,
-\left\{\sigma_{M}\right\}_{\sigma \in \Sigma}\right)$, where,
-$M$ is a non-empty \emph{carrier set}, $\_.\_: M \times M \to 2^M$
-  is a binary function called \emph{application}, and $\sigma_{M} \subseteq M$ is an
-  \emph{interpretation} of symbol $\sigma \in \Sigma$ in $M$
+$\varphi\left[\psi / x\right] (\text{respectively} \varphi\left[\psi / X\right])$ is the result of
+substituting $\psi$ for $x (\text{respectively} X)$, where bound variables in
+$\psi$ are renamed to avoid capture.
+
+\subsubsection{Semantics}
+
+Given signature $\MLSigma$, a $\MLSigma$-model  $\mathbb{M} = \left(M, \_.\_,
+\left\{M_{\sigma}\right\}_{\sigma \in \Sigma}\right)$, where,
+$M$ is a non-empty \emph{carrier set}, $\_.\_: M \times M \to \powerset{M}$
+is a binary function called \emph{application}, and $M_{\sigma} \subseteq M$ is an
+\emph{interpretation} of symbol $\sigma \in \Sigma$ in $M$. For brevity, we
+abuse  $\_.\_: \powerset{M} \times \powerset{M} \to \powerset{M}$ to also mean the pointwise extension of
+the \emph{application} function, i.e., $A . B = \bigcup_{a \in A, b \in B}\ a.b$
+for $A,B \in \powerset{M}$.
+
+Given a $\MLSigma$-model $M$, an $M$-valuation of variables
+$\rho:\left(\SV{}\cup\EV{}\right) \to \left(M \cup \powerset{M}\right)$, define
+interpretation $\interpret{\varphi}{\rho}$ of a pattern $\varphi$ in $M$ as:
+\begin{itemize}
+  \item $\interpret{x}{\rho} = \left\{\rho\left(x\right)\right\}$ for $x \in \EV$.
+  \item $\interpret{X}{\rho} = \rho\left(x\right)$ for $X \in \SV$.
+  \item $\interpret{\sigma}{\rho} = M_{\sigma}$ for $\sigma \in \Sigma$.
+  \item $\interpret{\varphi_1\varphi_2}{\rho} = \interpret{\varphi}{\rho_1} . \interpret{\varphi}{\rho_2}$
+  \item $\interpret{\bot}{\rho} = \emptyset$
+  \item $\interpret{\varphi_1 \to \varphi_2}{\rho} = M \setminus
+    \left(\interpret{\varphi_1}{\rho} \setminus \interpret{\varphi_2}{\rho}\right)$.
+  \item $\interpret{\exists x \ldot \varphi}{\rho} = \bigcup_{a \in
+    M}\interpret{\varphi}{\rho\left[a / x\right]}$, where $\rho\left[a /
+    x\right]$ and $\rho$ agree on all variables except $x$, and $\rho\left[a /
+    x\right](x) = a$.
+  \item $\interpret{\mu X \ldot \varphi}{\rho} =
+    \mu\mathcal{F}^{\rho}_{X,\varphi}$ where $\mathcal{F}^{\rho}_{X,\varphi} =
+    \interpret{\varphi}{\rho\left[A / X\right]}$ for every $A \subseteq M$,
+    where $\rho\left[A / X\right]$ and $\rho$ agree on all variables except $X$
+    and $\rho\left[A / X\right](X) = A$.  For proof of existence of a unique least-fixed point
+    for $\mathcal{F}^{\rho}_{X,\varphi}$, referred to as $\mu\mathcal{F}^{\rho}_{X,\varphi}$, see \cite{ChenLICS19}.
+\end{itemize}
+
+
+
+
 
 Next, we give an intuive description of the semantics of ML.
 Given signature $\Sigma$, a $\Sigma$-\emph{model} contains, among other things,
