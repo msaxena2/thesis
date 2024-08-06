@@ -243,6 +243,7 @@ consider the declaration of Imp arithmetic expressions between
 \autoref{lstline:imp-aexp-start} $\K$'s builtin support
 for integers (\inlinek{Int}) and program identifiers
 (\inlinek{Id}) is used to support arithmetic expressions over program variables.
+
 Beyond simply defining the syntax, $\K{}$ also allows assigning semantics to
 constructs through the use of \emph{attributes} specified as a comma-separated list
 inside square brackets (\inlinek{[..]}) placed immediately after the \BNF{} production.
@@ -287,7 +288,9 @@ Thus, \inlinek{List\{Id, ","\}} defines a comma-separated list of program identi
 
 Once the \emph{syntax} has been defined, $\K$ can utilize it to generate a
 parser, which can be used to generate abstract
-syntax trees (\ASTs{}) for programs. The program's \AST{} forms a part of the larger
+syntax trees (\ASTs{}) for programs. The $\K$ grammar declares an
+order-sorted algebra over AST terms, where the non-terminals are
+the sorts. The program's \AST{} forms a part of the larger
 program state, over which semantics are defined through rules.
 The $\K$ semantics of any language has two components:
 \begin{itemize}
@@ -670,9 +673,9 @@ thorough reading, we refer the reader to \cite{ChenTR20}.
 The \emph{syntax} of matching logic is parametric in two sets of variables
 $\EV$ and $\SV$, called \emph{element variables} and \emph{set variables}. We use
 a lowercase letter $x$ (uppercase letter $X$) to denote $x \in \EV$ $(X \in \SV)$.
-A \emph{(matching logic) signature} $\MLSigma = \left(\EV,\SV, \Sigma\right)$
+A \emph{(matching logic) signature} $\MLSigma$ is the tuple $\left(\EV,\SV, \Sigma\right)$
 where $\Sigma$ is a set of symbols denoted $\sigma_1,\sigma_2,\dots$.
-A \emph{(matching logic) pattern} $\varphi$ is inductively defined as:
+The set of $\MLSigma$-patterns is inductively defined by the grammar:
 \begin{align*}
 \varphi \Coloneqq\
 & x
@@ -699,7 +702,7 @@ $\psi$ are renamed to avoid capture.
 
 \subsubsection{Semantics}
 
-Given signature $\MLSigma$, a $\MLSigma$-model  $\mathbb{M} = \left(M, \_.\_,
+A $\MLSigma$-model $\mathbb{M}$ is the tuple $\left(M, \_.\_,
 \left\{M_{\sigma}\right\}_{\sigma \in \Sigma}\right)$, where,
 $M$ is a non-empty \emph{carrier set}, $\_.\_: M \times M \to \powerset{M}$
 is a binary function called \emph{application}, and $M_{\sigma} \subseteq M$ is an
@@ -708,7 +711,8 @@ abuse  $\_.\_: \powerset{M} \times \powerset{M} \to \powerset{M}$ to also mean t
 the \emph{application} function, i.e., $A . B = \bigcup_{a \in A, b \in B}\ a.b$
 for $A,B \in \powerset{M}$.
 
-Given a $\MLSigma$-model $M$, an $M$-valuation of variables
+Given a model $\mathbb{M} = \left(M,\_.\_,\left\{M_{\sigma}\right\}_{\sigma \in
+\Sigma}\right)$, an $M$-valuation of variables
 $\rho:\left(\SV{}\cup\EV{}\right) \to \left(M \cup \powerset{M}\right)$, define
 interpretation $\interpret{\varphi}{\rho}$ of a pattern $\varphi$ in $M$ as:
 \begin{itemize}
@@ -731,15 +735,24 @@ interpretation $\interpret{\varphi}{\rho}$ of a pattern $\varphi$ in $M$ as:
     for $\mathcal{F}^{\rho}_{X,\varphi}$, referred to as $\mu\mathcal{F}^{\rho}_{X,\varphi}$, see \cite{ChenLICS19}.
 \end{itemize}
 
-
-
-
+A pattern $\varphi$ is said to hold in model $\mathbb{M}$, denoted $\mathbb{M} \vDash \varphi$ iff
+$\interpret{\varphi}{\rho} = M$ for any $\mathbb{M}$ evaluation $\rho$. Similarly,
+set of patterns $\Gamma$ holds in $\mathbb{M}$, i.e. $\mathbb{M} \vDash \Gamma$
+iff $\mathbb{M} \vDash \varphi$ for all $\varphi \in \Gamma$.
+Finally, $\Gamma \vDash \varphi$ holds iff for any model $\mathbb{M}$,
+if $\mathbb{M} \vDash \Gamma$ then $\mathbb{M} \vDash \varphi$.
+In \cite{ChenTR19}, the authors present a Hilbert-style proof system
+for ML that is amenable to automated fixed-point reasoning for working with
+inductive proofs \cite{ChenOOPSLA20}. The provability relation, denoted
+$\Gamma \vdash \varphi$, is defined to mean $\varphi$ can be deduced using
+ML's proof system utilizing $\Gamma$ as additional axioms. This
+provability relation is \emph{sound}, i.e., $\Gamma \vdash \varphi \implies \Gamma
+\vDash \varphi$.
 
 Next, we give an intuive description of the semantics of ML.
-Given signature $\Sigma$, a $\Sigma$-\emph{model} contains, among other things,
-a carrier set $M$ of elements, and for every $\sigma \in \Sigma$, an
-\emph{interpretation}  $\sigma_{M} \subseteq M$ for every $\sigma \in \Sigma$.
-In \emph{models}, patterns evaluate to sets of elements that \emph{match} them.
+Given signature $\MLSigma$, a $\Sigma$-model
+$\mathbb{M} = \left(M,\_.\_,\left\{M_{\sigma}\right\}_{\sigma \in \Sigma}\right)$,
+$\MLSigma$-patterns evaluate to sets of elements in $M$ that \emph{match} them.
 For instance, variable $x \in \EV$ evaluates to a \emph{singleton}
 containing \emph{element}, while $X \in \SV$ evalutes to some subset of $M$. $\bot$
 evaluates to the $\emptyset$.
@@ -760,10 +773,25 @@ for a detailed discussion on the semantics of matching logic.
 
 Given a language $L$ defined in $\K$, the $\K$ tool compiles
 the $\K$-definition of $L$ into a matching logic theory $\Gamma^L$.
+Note that this compilation involves generation of additional axioms
+to capture $K$ concepts such as definedness, order-sortedness, etc.
+For an in-depth discussion, see \cite{ChenTR19}.
+The key idea behind ML is that it is simple, yet expressive to
+formally capture capture the semantics of a $\K$ definition.
+Element variables can be used to \emph{abstract} away parts of terms through
+existential quantification ($\exists$).
+Set variables range over sets and behave as modal logic propositional variables be
+by fixed-point quantification $\mu$. Symbols can represent functions,
+constructors and modal operators in a uniform way. Together with
+application ($\varphi_1 \varphi_2$), symbols can construct complex patterns
+from a simple signature. For example a symbol $f$ applied to
+arguments $a_1,a_2,\dots$ (see \cite{ChenLICS19} for encoding tuples as
+patterns) can behave as a function. Similarly a symbol \inlinek{<k>}
+can be used to construct \inlinek{Configuration} terms.
 Recall from section \ref{sec:semantics-first} that a $\K$-defintion
 consists of rewrite rules of the form $\varphi \To \psi$. These rules
-  define a \emph{transition system} over computation configurations.
-This is captured in ML using a symbol $\snext \in \Sigma$, called
+ define a \emph{transition system} over computation configurations.
+This is captured in ML by adding a symbol $\snext \in \Sigma$, called
 \emph{one-path-next}. Intuitively, for a given configuration $\gamma$, $\snext\gamma$
 is \emph{matched} by all states that can transition to $\gamma$ in one step \cite{ChenTR20}.
 We can then define $\eventually \varphi \equiv \mu X \ld \varphi \lor \snext X$,
@@ -773,9 +801,12 @@ Intuitively, the $\eventually$ operator behaves exactly
 as its modal-logic equivalent. It matches all states that can \emph{reach} $\varphi$ in zero or more rewrite steps.
 Thus, a rewrite $\varphi \To \psi$ is expressed in ML as $\varphi \imp \eventually \psi$, or
 the set of all configurations that if match $\varphi$, can also reach $\psi$ in zero or more steps.
-
-
-
+As mentioned earlier, ML has a sound proof system that is amenable to automated
+deduction. Thus, reasoning in $\K$ for a language $L$ boils down to formal
+reasoning using its ML encoding $\Gamma^{L}$. Thus, reasoning that
+an initial configuration $\varphi_{\text{init}}$ reaches a final configuration
+$\varphi_{\text{final}}$ is showing $\Gamma^{L} \vdash \varphi_{\text{init}} \To
+\varphi_{\text{final}}$.
 
 %
 %Note the difference between program identifiers and $\K$ variables. While
@@ -787,4 +818,3 @@ the set of all configurations that if match $\varphi$, can also reach $\psi$ in 
 %$\K{}$ the \inlinek{<k>}-cell becomes empty after all statement are evaluated,
 %indicating successful completion.
 
-\section{Pitfalls of the Semantics-First Approach}\label{sec:semantics-first-pitfalls}
