@@ -1,4 +1,4 @@
-\chapter{Semantics-First Approach to Clinical Decision Support}
+\chapter{Semantics-First Approach to Clinical Decision Support}\label{chapter:semantics-first-cdss}
 
 In \autoref{chapter:introduction}, we explained that, despite
 advances in medicine, mortality and costs associated with preventable
@@ -123,7 +123,7 @@ disadvantages:
   \caption{State-of-Art in Programming Language Design}\label{fig:conventional-pl-development}
 \end{figure}
 
-\subsection{Why build \CDSSs{} using Semantics-First?}
+\subsection{Why build \CDSSs{} using Semantics-First?}\label{sec:why-use-semantics-first}
 
 In section \ref{sec:semantics-first}, we described benefits
 of using the semantics-first approach for developing regular programming
@@ -849,24 +849,14 @@ semantics-derived tools for both execution and analysis. This leads to the
 question---are $\K$ semantics-derived tools performant enough to serve as
 execution and analysis engines in a production setting?
 
-\subsection{Developing a New Domain Specific Language from Scrach}
+\subsection{Developing a New Domain Specific Language from Scratch}
 
-\$K has been used to analyze programs in real-world languages, but,
-as these languages had already been analyzed, informal language descriptions
-and reference test-suites were available to assist in development and testing of
-semantics.In our case,
+$\K{}$ has been used to analyze programs in real-world languages, but
+these languages had existing informal language descriptions
+and reference test-suites to assist in development and testing of
+the semantics. In our case,
 we intend to implement the language from scratch, and come up with reference tests
 for it at the same time, where both the definition and the corresponding tests
 need to be comprehensive enough to enable independent development of tools utilizing
 the semantics as a standard and tests as measures of compliance.
-
-
-
-
-
-
-
-
-
-
 
