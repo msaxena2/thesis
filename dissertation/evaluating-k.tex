@@ -11,15 +11,217 @@ In \autoref{sec:semantics-first-pitfalls}, we also touched upon
 some additional considerations for using $\K$ in the context of
 developing a language for developing a computer interpretretable giudeline DSL.
 We outlined the following concerns:
-\begin{itemize}
+\begin{enumerate}[label=(Q\arabic*)]
  \item Can the $\K$ generated tools be performant enough to serve as
  the \text{sole} tools?
  \item Can the $\K$-based semantics first approach be used to develop
  a semantics from scratch, wihout even an informal description of the language,
   and, comprehesive tests to go long with the same? Can the semantics
   serve as a comprhenesive docuemnt to implement other tools for the language?
+\end{enumerate}
+
+In the following sections attempt to answer aforementioned questions.
+
+\section{\KEVM: Semantics of the Ethereum Virtual Machine}\label{sec:kevm}
+
+The Ethereum ecosystem is a blockchain-based platform where accounts
+have snippets of computer code called \emph{smart contracts}, that
+enable programmatic governance of transactions on the Ethereum network.
+All \emph{smart contracts} on the blockchain
+must be specified in is an stack-based assembly-like language called
+the Ethereum Virtual Machine (\EVM{}). The semantics of the
+Ethereum Virtual Machine are described semi-formally in a specification
+called the Ethereum YellowPaper \cite{WoodReport14}.
+
+Smart contracts execute when a transaction calls the account, and, among other features,
+these contracts can tally user votes, communicate with other contracts,
+store or represent tokens and digital assets, and send or receive money in
+cryptocurrencies, without requiring trust in any third party to faithfully
+execute the contract \cite{SzaboReport94,PetersBook16}.
+The growing popularity of smart contracts has led to increased scrutiny of their security.
+Bugs in such contracts can be financially devastating to the involved parties.
+An example of such a catastrophe is the DAO attack \cite{delCastilloReport16},
+ where 150 million USD worth of Ether was stolen,
+ prompting an unprecedented hard fork of the Ethereum blockchain
+ \cite{DaianReport16}.
+
+To address these issues in a principled manner, in \cite{HildenbrandtCSF18}
+\footnote{Joint work with E. Hildenbrandt et al.},
+we formalized the semantics of the \EVM{} in \K{}, with the intention to
+utilize the semantics-generated tools for both execution and analysis of \KEVM{}
+program. Specifically, we intended to demonstrate that:
+
+\begin{itemize}
+  \item The $\K$ definition can be used not only to derive semantics-based
+  tools, but also as an \emph{unambiguous alternative} to the
+  informal YellowPaper semantics specification to implement new tools. In other
+  words, the semantics themselves are \emph{readable} to enable one to
+  comprehend all subtleties and nuances of the language.
+  \item The generated tools, including the interpreter, are \emph{performant}
+  enough for use in place of custom \EVM{}-specific tools.
+  \item  The $\K$ definition is \emph{complete}, as in, the interpreter
+  generated from it passes all tests in the reference test suite.
+  \item The definition is useful, i.e., the generated tools can be used for
+  formal analysis in some meaningful way.
 \end{itemize}
 
+For a more complete reading, please see
+\cite{HildenbrandtCSF18}. Here, we only present arguments that
+help answer the questions we posed at the beginning of this chapter.
+The $\K{}$ semantics of \EVM{} presented in \cite{HildenbrandtCSF18}
+has 2644 lines of non-blank and non-literate code, and passes
+all reference tests published by the Ethereum Foundation for testing
+EVM implementations. For reference,
+the EVM specific C++ implementation has 4588 lines of code.
+This measurement was taken on commit-hash ee0c6776c of
+\url{https://github.com/ethereum/cpp-ethereum}
+by counting non-blank lines of all \inlinek{*.h} and \inlinek{*.cpp} files
+in subdirectory \inlinek{libevm}.
+We argue that these numbers are not atypical for implementing an
+interpreter for a small real-world programming language,
+not to mention the extra tools that \K{} provides for analysis and security along the way.
+
+In \autoref{table:kevm-perf}, we present a performance comparison between KEVM,
+the Lem semantics~\cite{HiraiWSTC17},
+and the C++ reference implementation distributed by the Ethereum foundation.
+At the time of publication of \cite{HildenbrandtCSF18}, the Lem semantics:
+the only other executable formal specification of the EVM that we are aware of
+at the time of comparison.
+
+\begin{table}[h]
+    \centering
+      \begin{tabular}{ l l l l }
+          \textbf{Test Set} (no. tests) & \textbf{Lem EVM} & \textbf{KEVM} & \textbf{cpp-ethereum} \\
+          Lem (40665)                   & 288:39           & 34:23         & 3:06                  \\
+          VMStress (18)                 & -                & 72:31         & 2:25                  \\
+          VMNormal (40665)              & -                & 27:10         & 2:17                  \\
+          VMAll (40683)                 & -                & 99:41         & 4:42                  \\
+          GSNormal(22705)               & -                & 35:00         & 1:30                  \\
+          GSQuad (250)                  & -                & 855:24        & 0:21                  \\
+          GSAll (22955)                 & -                & 889:00        & 1:51                  \\
+      \end{tabular}
+  \caption{Lem EVM vs KEVM vs cpp-ethereum} \label{table:kevm-perf}
+\end{table}
 
 
+All execution times are given as the full sequential CPU time (in MM:SS format)
+  on an Intel i5-3330 processor (3GHz on 4 hardware threads) and 24 GB of RAM.
+The row Lem indicates a run of all the tests that the Lem semantics
+can run (a subset of the VMTests).
+The row VMStress indicates a run of all 18 stress tests in the test-suite,
+    to compare the performance of KEVM with the C++ implementation.
+The row VMNormal is a run of all the non-stress
+tests in the test-suite (\textit{not} the same set of tests as Lem).
+VMAll is the addition of the second and third rows and is included for completeness.
+The last three rows indicate a runs of the GeneralStateTests;
+GSNormal are the non-stress tests, GSQuad are the stress tests,
+         and GSAll is the addition of the two.
+Under the GeneralStateTests, our tools performs well except
+in the case of QuadraticStateTests (250 out of 22955).
 
+As shown in the comparison,
+   the automatically extracted interpreter for KEVM outperforms
+   the currently available formal executable EVM semantics.
+\KEVM{} compares favorably to the C++ implementation,
+     performing under 30 times slower on the stress tests,
+     roughly 20 times slower on all tests, and
+     only 11 times slower on the Lem and VMNormal tests. Note
+     advancements to \K's concrete execution capabilities since
+     the publication of \cite{HildenbrandtCSF18} may
+     make the \KEVM{} interpreter compare even more favorably against the
+     C++ implementation.
+
+Next, we look at a more holistic comparison of \KEVM{} against related approaches,
+some of which are also semantics-based. We compare these approaches using the
+following metrics:
+\begin{itemize}
+    \item \textbf{Spec.:} Suitable as a formal specification?
+    \item \textbf{Exec.:} Executable on concrete tests?
+    \item \textbf{Tests:} Passes the Ethereum test-suites?
+    \item \textbf{Prover:} Serves as theorem prover for EVM?
+    \item \textbf{Bugs:} Heuristic-based tools for finding bugs?
+    \item \textbf{Gas:} Analyzes gas complexity of EVM programs?
+\end{itemize}
+
+Table~\ref{table:comparison} shows an overview of the results of our comparison.
+We briefly describe each effort and compare it to the relevant KEVM artifact.
+The projects fit two categories: semantic specifications and smart contract analysis tools.
+
+
+\subsection{Semantic Specifications}
+
+\paragraph{Ethereum YellowPaper:}
+The YellowPaper is the official document describing the execution of the EVM
+\cite{WoodReport14},
+    as well as other data, algorithms,
+    and parameters required to build consensus-compatible
+    EVM clients and Ethereum implementations.
+It cannot be tested against the conformance test-suite;
+instead it serves as a guide for implementations to follow.
+Much of the machine definition is supplied as several mutually
+recursive functions from machine-state to machine-state.
+The Yellow Paper is occasionally unclear or incomplete about
+the exact operational behavior of the EVM;
+in these cases it is often easier to simply consult one of the executable implementations.
+
+\paragraph{Cpp-ethereum:}
+Cpp-ethereum is the
+C++ implementation that at the time served as a de-facto semantics of the EVM
+\cite{CppEthereumUrl}.
+The Yellow Paper and the C++ implementation were
+developed by the same group early in the project,
+          so the Yellow Paper conforms mostly to the C++ implementation.
+In addition, the conformance test-suite is generated from the C++ implementation.
+This means that if the Yellow Paper and the C++ implementation disagree,
+     the C++ implementation is favored.
+
+\paragraph{Lem semantics:}
+A Lem (\cite{MulliganSIGPLAN14}) implementation of \EVM{} provides
+an executable semantics of EVM for doing formal verification of smart contracts \cite{HiraiWSTC17}.
+Lem compiles to various interactive theorem provers,
+    including Coq, Isabelle/HOL, and HOL4.
+The Lem semantics does not capture inter-contract
+execution precisely as it models function calls as non-deterministic events with an external (speculated) relation dictating the ``allowed non-determinism''.
+This semantics is executable and passes all of the VMTests
+test-suite except for those dealing with more complicated inter-contract execution,
+  providing high levels of confidence in its correctness.
+
+\paragraph{GMS small-step specification:}
+A small-step specification of the EVM inspired by the
+EtherLite semantics of \cite{LuuReport16}.
+The specification is non-executable, but provides a precise guide for
+implementers of the EVM \cite{GrishchenkoTR18}.
+
+\begin{table}[th]
+\centering
+\begin{tabular}{c | c | c | c | c | c | c}
+    Tool          & Spec.  & Exec.  & Tests  & Prover & Bugs   & Gas    \\ \hline
+    Yellow Paper  & \greencheck & \redcross & \redcross & \redcross & \redcross & \redcross \\
+    cpp-ethereum  & \redcross & \greencheck & \greencheck & \redcross & \redcross & \redcross \\
+    Lem spec      & \greencheck & \greencheck & \greencheck & \greencheck & \redcross & \redcross \\
+    Oyente        & \redcross & \greencheck & \redcross & \redcross & \greencheck & \greencheck \\
+    hevm          & \redcross & \greencheck & \redcross & \redcross & \redcross & \redcross \\
+    Manticore     & \redcross & \greencheck & \redcross & \redcross & \greencheck & \greencheck \\
+    REMIX         & \redcross & \greencheck & \redcross & \redcross & \greencheck & \greencheck \\
+    Dr. Y's       & \redcross & \greencheck & \redcross & \greencheck & \redcross & \redcross \\
+    \Fstar        & \redcross & \greencheck & \redcross & \greencheck & \greencheck & \redcross \\
+    \KEVM{}       & \greencheck & \greencheck & \greencheck & \greencheck & \redcross & \greencheck \\
+\end{tabular}
+\caption{Feature comparison of EVM semantics and other software quality tool efforts.} \label{table:comparison}
+\end{table}
+
+
+\subsection{Smart Contract Analysis Tools}
+
+\paragraph{Oyente:}
+Oyente is an EVM symbolic execution engine written in Python supporting most of
+the EVM, with heuristics-based drivers of the engine for bugfinding \cite{OyenteUrl}.
+
+\paragraph{Hevm:}
+Hevm \cite{HevmUrl} is a Haskell implementation of EVM including on an interactive debugger mode, which allows stepping through contract execution one opcode at a time.
+
+\paragraph{\Fstar formalization of EVM:}
+An implementation of the EVM in the \Fstar language \cite{FstarUrl}
+ which passes roughly half of the VMTests at the time of writing.
+The same paper discusses an on-paper small-step specification of the EVM as well
+\cite{GrishchenkoETAPS18}.
