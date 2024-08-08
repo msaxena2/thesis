@@ -196,16 +196,16 @@ implementers of the EVM \cite{GrishchenkoTR18}.
 \centering
 \begin{tabular}{c | c | c | c | c | c | c}
     Tool          & Spec.  & Exec.  & Tests  & Prover & Bugs   & Gas    \\ \hline
-    Yellow Paper  & \greencheck & \redcross & \redcross & \redcross & \redcross & \redcross \\
-    cpp-ethereum  & \redcross & \greencheck & \greencheck & \redcross & \redcross & \redcross \\
-    Lem spec      & \greencheck & \greencheck & \greencheck & \greencheck & \redcross & \redcross \\
-    Oyente        & \redcross & \greencheck & \redcross & \redcross & \greencheck & \greencheck \\
-    hevm          & \redcross & \greencheck & \redcross & \redcross & \redcross & \redcross \\
-    Manticore     & \redcross & \greencheck & \redcross & \redcross & \greencheck & \greencheck \\
-    REMIX         & \redcross & \greencheck & \redcross & \redcross & \greencheck & \greencheck \\
-    Dr. Y's       & \redcross & \greencheck & \redcross & \greencheck & \redcross & \redcross \\
-    \Fstar        & \redcross & \greencheck & \redcross & \greencheck & \greencheck & \redcross \\
-    \KEVM{}       & \greencheck & \greencheck & \greencheck & \greencheck & \redcross & \greencheck \\
+    Yellow Paper  & \greencheck & \redcross   & \redcross   & \redcross   & \redcross   & \redcross   \\
+    cpp-ethereum  & \redcross   & \greencheck & \greencheck & \redcross   & \redcross   & \redcross   \\
+    Lem spec      & \greencheck & \greencheck & \greencheck & \greencheck & \redcross   & \redcross   \\
+    Oyente        & \redcross   & \greencheck & \redcross   & \redcross   & \greencheck & \greencheck \\
+    hevm          & \redcross   & \greencheck & \redcross   & \redcross   & \redcross   & \redcross   \\
+    Manticore     & \redcross   & \greencheck & \redcross   & \redcross   & \greencheck & \greencheck \\
+    REMIX         & \redcross   & \greencheck & \redcross   & \redcross   & \greencheck & \greencheck \\
+    Dr. Y's       & \redcross   & \greencheck & \redcross   & \greencheck & \redcross   & \redcross   \\
+    \Fstar        & \redcross   & \greencheck & \redcross   & \greencheck & \greencheck & \redcross   \\
+    \KEVM{}       & \greencheck & \greencheck & \greencheck & \greencheck & \redcross   & \greencheck \\
 \end{tabular}
 \caption{Feature comparison of EVM semantics and other software quality tool efforts.} \label{table:comparison}
 \end{table}
@@ -220,8 +220,8 @@ the EVM, with heuristics-based drivers of the engine for bugfinding \cite{Oyente
 \paragraph{Hevm:}
 Hevm \cite{HevmUrl} is a Haskell implementation of EVM including on an interactive debugger mode, which allows stepping through contract execution one opcode at a time.
 
-\paragraph{\Fstar formalization of EVM:}
-An implementation of the EVM in the \Fstar language \cite{FstarUrl}
+\paragraph{\Fstar{} formalization of EVM:}
+An implementation of the EVM in the \Fstar{} language \cite{FstarUrl}
  which passes roughly half of the VMTests at the time of writing.
 The same paper discusses an on-paper small-step specification of the EVM as well
 \cite{GrishchenkoETAPS18}.
