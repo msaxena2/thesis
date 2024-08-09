@@ -203,7 +203,6 @@ implementers of the EVM \cite{GrishchenkoTR18}.
     hevm          & \redcross   & \greencheck & \redcross   & \redcross   & \redcross   & \redcross   \\
     Manticore     & \redcross   & \greencheck & \redcross   & \redcross   & \greencheck & \greencheck \\
     REMIX         & \redcross   & \greencheck & \redcross   & \redcross   & \greencheck & \greencheck \\
-    Dr. Y's       & \redcross   & \greencheck & \redcross   & \greencheck & \redcross   & \redcross   \\
     \Fstar        & \redcross   & \greencheck & \redcross   & \greencheck & \greencheck & \redcross   \\
     \KEVM{}       & \greencheck & \greencheck & \greencheck & \greencheck & \redcross   & \greencheck \\
 \end{tabular}
@@ -216,6 +215,21 @@ implementers of the EVM \cite{GrishchenkoTR18}.
 \paragraph{Oyente:}
 Oyente is an EVM symbolic execution engine written in Python supporting most of
 the EVM, with heuristics-based drivers of the engine for bugfinding \cite{OyenteUrl}.
+
+
+\paragraph{Manticore:}
+Manticore is symbolic execution engine for virtual machines, including models for x86, x86\_64, ARMv7, and EVM
+\cite{ManticoreUrl}.
+This tool exports a Python API for specifying programs, driving symbolic execution, and checking assertions.
+
+\paragraph{REMIX}
+REMIX is a JavaScript implementation of the EVM with a browser-based IDE for building and debugging smart contracts
+\cite{RemixUrl}.
+Some static analysis is built into the tool, allowing it to catch pre-specified classes of bugs in smart contracts.
+
+\paragraph{Dr.\/Y's Ethereum Contract Analyzer}\footnote{\url{https://blog.slock.it/an-ethereum-contract-analyzer-93e9da92fecb}}
+A symbolic execution engine for EVM to summarize the semantics of smart contracts.
+A debug mode allows step-by-step execution.
 
 \paragraph{Hevm:}
 Hevm \cite{HevmUrl} is a Haskell implementation of EVM including on an interactive debugger mode, which allows stepping through contract execution one opcode at a time.
