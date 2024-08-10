@@ -1,0 +1,27 @@
+\chapter{Separating Concerns: Modular and Safe Clinical Decision Support}\label{chapter:separating-concerns}
+
+In \autoref{sec:cdss-components}, we briefly mentioned components that
+conceptually make up a \CDSS{}. This chapter describes the motivations
+behind decomposing the system as such. First, we describe where
+\CDSSs{} may loosely fit within the larger context of control
+theory and motivate the need for tailored architectures for \CDSSs{}.
+Then we briefly identify some unique challenges of encoding medical knowledge.
+Finally, we talk about encoding medical knowledge directly through
+rewriting, and associated issues.
+
+\section{Control Theory and \CDSSs{}}
+Control theory deals with the design and analysis of \emph{closed-loop}
+systems, i.e., systems where the inputs are affected at-least in part by
+by outputs. Typically, such systems are characterized by:
+\begin{itemize}
+  \item The \emph{plant} represents the part of the system \emph{to be
+  controlled}.
+  \item The \emph{control} or \emph{compensator} is the part of the system
+  that provides \emph{satisfactory characteristics} or \emph{regulation}
+  \cite{SimrockTR08}.
+\end{itemize}
+
+When viewed from the lens of a closed-loop system, the patient behaves
+as the plant, and the goal is optimizing patient outcomes
+\cite{SongSMC23}\footnote{Joint work with Song et al.}.
+
