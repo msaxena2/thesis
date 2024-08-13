@@ -35,12 +35,18 @@ as $\K$ definitions. Execution in $\K{}$ is inherently concurrent---
 if more than one $\K{}$ rule can apply, then $\K$ non-deterministically
 chooses one. Thus, we describe a way of systematically encoding
 medical knowledge in \BPGs{} as $\K$ definitions. First, in
-\autoref{sec:acls}, we utilize a real world \BPG{} to come up
-with an abstract representation that captures the \BPGs{}'s semantics
-with enough details to enable computer-interpretation.
-Next, \autoref{sec:bpg-in-k} describes translating said abstract representation
-to a concrete, computer-interpretable format as a $\K{}$ definition.
-Finally,
+\autoref{sec:acls}, we introduce a real world \BPG{} that will be
+utilized as running-example in the rest of this chapter. Note that
+we intentionally choose real-word examples, instead of small toy cases,
+to highlight that our philosophy scales to work in the real-world.
+Next, \autoref{sec:kacls-cdss} describes $\KACLS{}$, a $\K$-based tool
+to assist \HCPs{} conform to \ACLS{} guidelines that attempts to
+follow the \emph{semantics-first} approach. Specifically,
+we come up with an abstract representation that captures the semantics
+of the \BPG{} from \autoref{sec:acls} with enough details to
+enable computer-interpretation. Finally, in \autoref{sec:kacls-backend},
+we describe a way to embed said abstract representation into a concrete
+$\K$ definition for execution.
 
 \section{Advanced Cardiovascular Life Support Guidelines (\ACLS{})}\label{sec:acls}
 
@@ -107,13 +113,69 @@ treatment has several parallel workflows such as:
     \emph{shockable} rhythm, using a defibrillator.
   \item Continuous cardiopulmonary resuscitation (\CPR{}).
   \item Administration of vital drugs such as
-    \emph{epinephrine} every few minutes.
+    epinephrine every few minutes.
 \end{itemize}
 As \autoref{fig:acls-algorithm} suggests, these workflows have to be
 performed rapidly and periodically. As the duration of the intervention
 is typically a few minutes, making optimal use of available time is critical to
 outcomes.
 
-\section{Encoding Medical Guidelines as $\K$ Definitions}\label{sec:bpg-in-k}
+\section{The \KACLS{} System}\label{sec:kacls-cdss}
+
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=0.8\textwidth]{acls-tool}
+  \caption{Snapshot of \KACLS{}}\label{fig:kacls-snapshot}
+\end{figure}
+
+\autoref{fig:kacls-snapshot} shows a snapshot of our \CDSS{} for
+enabling compliance to the advanced life support guidelines described in
+\autoref{sec:acls}. Advanced life support is supposed to be performed by
+a team of \HCPs{}, that take on roles such as a leader, \CPR{}-provider,
+airway/respiratory specialist, Intravenous access (IV) and drug administration
+specialist, pharmacist, defibrillator attendant and members that serve as
+backups \cite{ACLSWikiEntry}. The leader is responsible for coordinating
+treatment, our tool render support through a handheld tablet held by the leader.
+\autoref{fig:kacls-snapshot} show a snapshot of said tablet's main screen.
+
+\subsection{Capturing Execution-specific Details}\label{sec:execution-specific-details}
+
+A computer-interpretable version of a guidelines, unlike its
+textual counterpart, may require specification of additional details
+for execution. Such details can often be gathered from context in case
+of textual guidelines, or may be unintentionally missing. This was also
+discussed in context of related approaches in \autoref{chapter:related-work},
+especially in \autoref{sec:kiv-verification}.
+
+As discussed in \autoref{sec:generic-bpg}, \BPGs{} can be notionally
+represented using a collection of workflows. Each workflow has steps
+executed sequentially, but may be concurrently executed with steps from
+other workflows. Consider the \ACLS{} guidelines discussed in
+\autoref{sec:acls}. Several procedures, such as administering drugs,
+and performing \CPR{} occur concurrently, where each procedure has
+a set of tasks that need to be performed sequentially.
+There may also be some implicit order across workflows, but we
+address that in later chapters.
+
+\subsubsection{Modeling \BPGs{} as State Machines}
+
+In this work, we choose to express medical logic using
+concurrently executing finite state machines that communicate
+with implicit queues for inter-machine communication. Communicating
+state machines (\CSMs{}) is a well-understood model of concurrency
+\cite{BrandJACM83}, and is well-suited  representing medical guidelines in a
+computer-interpretable format that is also \HCP{}-friendly.
+We shall discuss the motivations behind using \CSMs{} in upcoming
+chapters. For now, it suffices to describe how our choice addresses
+issues mentioned in \autoref{sec:execution-specific-details}.
+Given a guideline represented as a collection of workflows, we
+describe each workflow via a state machine. The fact that
+\CSMs{} can execute concurrently conveniently captures the
+inherent concurrency in workflows.
+
+
+\subsection{$\KACLS$ backend}\label{sec:kacls-backend}
+
+
 
 
