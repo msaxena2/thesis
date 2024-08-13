@@ -52,7 +52,7 @@ $\K$ definition for execution.
 
 \begin{figure}[t!]
   \centering
-  \includegraphics[width=0.8\textwidth]{acls-algorithm}
+  \includegraphics[width=0.6\textwidth]{acls-algorithm}
   \caption{Advanced Cardiac Life Support Guidelines}\label{fig:acls-algorithm}
 \end{figure}
 
@@ -124,7 +124,7 @@ outcomes.
 
 \begin{figure}[t!]
   \centering
-  \includegraphics[width=0.8\textwidth]{acls-tool}
+  \includegraphics[width=0.85\textwidth]{acls-tool}
   \caption{Snapshot of \KACLS{}}\label{fig:kacls-snapshot}
 \end{figure}
 
@@ -173,6 +173,31 @@ describe each workflow via a state machine. The fact that
 \CSMs{} can execute concurrently conveniently captures the
 inherent concurrency in workflows.
 
+\subsubsection{\ACLS{} Workflows As State Machines}
+
+\autoref{fig:machine-defs} shows \ACLS{} workflows formalized
+as state machines. \autoref{fig:cpr-machine} captures the
+guideline specified procedure for \CPR{}
+
+
+\begin{figure}[tb]
+\centering
+\begin{subfigure}{\textwidth}
+  \centering
+  \includegraphics[width=0.65\linewidth]{cpr-machine}
+  \caption{CPR Machine}
+  \label{fig:cpr-machine}
+\end{subfigure}%
+\hfill\newline\hfill\newline\hfill
+\begin{subfigure}{\textwidth}
+  \centering
+  \includegraphics[width=0.65\linewidth]{epi-machine}
+  \caption{Epinephrine Machine}
+  \label{fig:epi-machine}
+\end{subfigure}
+\caption{Formal Machine Definitions}
+\label{fig:machine-defs}
+\end{figure}
 
 \subsection{$\KACLS$ backend}\label{sec:kacls-backend}
 
