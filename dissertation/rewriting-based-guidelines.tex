@@ -137,6 +137,14 @@ specialist, pharmacist, defibrillator attendant and members that serve as
 backups \cite{ACLSWikiEntry}. The leader is responsible for coordinating
 treatment, our tool render support through a handheld tablet held by the leader.
 \autoref{fig:kacls-snapshot} show a snapshot of said tablet's main screen.
+Decision support, in the form of time-sensitive reminders, warnings when
+procedures are stopped prematurely, or exceed stipulated limitations, and
+confirmations regarding the patient rhythm's are provided on the screen
+through popups and progress bars. For example, when the leader instructs
+the team to start CPR, and presses the \say{Start} button under the \say{CPR}
+section of the screen. A timer displays the duration and appropriate warnings
+about prematurely stopping CPR, or exceeding the time for a \CPR{} cycle are
+displayed.
 
 \subsection{Capturing Execution-specific Details}\label{sec:execution-specific-details}
 
@@ -177,7 +185,33 @@ inherent concurrency in workflows.
 
 \autoref{fig:machine-defs} shows \ACLS{} workflows formalized
 as state machines. \autoref{fig:cpr-machine} captures the
-guideline specified procedure for \CPR{}
+guideline specified procedure for administering \CPR{}.
+
+In \autoref{sec:modular-cdss-architecture}, we described
+conceptual components of \CDSSs{}, and argued in favor
+of developing \CDSSs{} using independently developed and maintained codebases
+aligned with these components. The \KACLS{} system follows
+this philosophy, and has:
+\begin{enumerate*}[label=(\roman*)]
+  \item a simple \emph{frontend} written in ReactJS that handles
+    user interaction, and,
+  \item a $\K$-based HTTP server that encodes the \ACLS{} guideline
+    and interacts with the frontend.
+\end{enumerate*}
+The use of a Javascript based simple frontend allows our application
+to run on any modern web-browser. As shown in figure \ref{fig:acls-tool},
+our frontend consists of forms and buttons that correspond to procedures
+in the algorithm in figure \ref{fig:acls-algorithm}. For example, the
+\say{Start} button in the CPR box results in a two minute timer corresponding
+to the \say{2 minute continuous CPR} procedure in the informal description.
+The frontend is simple and doesn't contain any guideline conformance related
+logic. Interaction with the frontend simply results in dispatch of
+\textit{events} to the backend. For example, when the \say{Start} button is pressed, a
+\say{StartCpr} event is sent to the backend.
+
+
+
+
 
 
 \begin{figure}[tb]
