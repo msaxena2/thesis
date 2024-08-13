@@ -52,7 +52,7 @@ outcomes. But, unlike traditional closed-loop systems
   and User Interface (UI) design.
 \end{itemize}
 
-\section{A Generic Treatment of Best Practice Guidelines}
+\section{A Generic Treatment of Best Practice Guidelines}\label{sec:generic-bpg}
 
 A \DSL{} for representing \BPGs{} must accommodate the diversity
 in \BPGs{}. Thus, we need characteristics that our \DSL{} must
@@ -61,8 +61,10 @@ in \cite{SongSMC23}, we attempted
 to come up with a convenient semi-formal \emph{abstraction}
 that can describe most guidelines.
 
-We observed that most guidelines consisted of statements of the
-form ``\inlinekmath{for situation $\ \varphi$ do $\ \alpha$}''.
+We observed that most guidelines consisted of statements that fit
+into the form ``\inlinekmath{if $\ \varphi$ do $\ \alpha$}''. Note
+statements without a condition can be representated simply as \inlinekmath{if
+$\ true$ do $\ \alpha$}.
 Thus, we can represent each statement as a tuple $\CR{}$.
 Given a \BPG{} $B$, we say
 \[
@@ -75,7 +77,43 @@ to refer to all statements within $B$. Next we observed that:
   \item There may be \emph{ordering} between statements.
 \end{itemize}
 To capture this, first, we define the concept of a \emph{workflow}
-$W = \left(S_W, <_W\right)$ as a \emph{strict order} on a partition $S_W \subseteq \Statements{B}$.
+$W = \left(S_W, \leq_W\right)$ as a \emph{lower semi-lattice} on a partition $S_W \subseteq \Statements{B}$.
+Specifically, for any pair $\left(\left(\varphi_1,\alpha_1\right),
+\left(\varphi_2, \alpha_2\right)\right)$, there exists some
+$\left(\varphi,\alpha\right) \in S_W$ s.t.
+\[
+    \left(\varphi,\alpha\right) \leq_W
+    \left(\varphi_1,\alpha_1\right)\quad\bigwedge\quad
+    \left(\varphi,\alpha\right) \leq_W \left(\varphi_2,\alpha_2\right)
+\]
+\noindent and there is no $\left(\varphi',\alpha'\right) \in S_W$ s.t.
+\[
+    \left(\varphi',\alpha'\right) \leq_W
+    \left(\varphi_1,\alpha_1\right)\quad\bigwedge\quad\left(\varphi',\alpha'\right) \leq_W
+    \left(\varphi_2,\alpha_2\right)
+\]
+\noindent and $\left(\varphi,\alpha\right) \leq_W \left(\varphi',\alpha'\right)$.
+%\begin{align*}
+%   \text{there exists some} \left(\varphi,\alpha\right) \in S_W \text{ s.t.}
+% \left(\varphi,\alpha\right) \leq_W  \left(\varphi_1,\alpha_1\right)\quad
+%    \bigwedge\quad \left(\varphi,\alpha\right) \leq_W
+%    \left(\varphi_2,\alpha_2\right)  \\
+%     \text{and}  \\
+%    \text{there is no} \left(\varphi',\alpha'\right) \in S_W \text{s.t.}
+%    \left(\varphi',\alpha'\right) \leq_W  \left(\varphi_1,\alpha_1\right)\quad
+%    \bigwedge\quad \left(\varphi',\alpha'\right) \leq_W
+%    \left(\varphi_2,\alpha_2\right)
+%    \text{and} \left(\varphi,\alpha\right) \leq_W \left(\varphi',\alpha'\right)
+%\end{align*}
+%\begin{itemize}
+%  \item $\left(\varphi,\alpha\right) \leq_W  \left(\varphi_1,\alpha_1\right)
+%    \bigwedge \left(\varphi,\alpha\right) \leq_W  \left(\varphi_2,\alpha_2\right)$.
+%  \item there is no $\left(\varphi',\alpha'\right) \in S_W$ s.t.
+%    $\left(\varphi',\alpha'\right) \leq_W  \left(\varphi_1,\alpha_1\right)
+%    \bigwedge \left(\varphi',\alpha'\right) \leq_W \left(\varphi_2,\alpha_2\right)$
+%    and $\left(\varphi,\alpha\right) \leq_W \left(\varphi',\alpha'\right)$.
+%\end{itemize}
+
 We can then define the guideline $B$ as the \emph{partial order}:
 \[
   \left(\left\{W_1,W_2,\dots,W_n\right\}, \leq\right)
@@ -85,12 +123,13 @@ $S_{W_1} \cup S_{W_2} \cup \dots \cup S_{W_n} = \Statements{B}$. Note that a
 workflow can contain a single statement to enable partitioning $\Statements{B}$
 into disparate workflows. Thus, given a workflow $W =\left(S_{W_i},
     <_{W_i}\right)$  an execution
-$\alpha_1,\alpha_2,\dots,\alpha_n$ is a valid execution of actions of a workflow iff:
-\begin{itemize}
-  \item $\left(\varphi_1,\alpha_1\right) <_W \left(\varphi_2,\alpha_2\right) <_W
-  \dots <_W \left(\varphi_n,\alpha_n\right)$
-  \item $\varphi_1 \wedge \varphi_2 \wedge \dots \wedge \varphi_n$ is satisfiable.
-\end{itemize}
+$\alpha_1,\alpha_2,\dots,\alpha_n$ is a valid execution of actions of a workflow
+iff:
+\[
+  \left(\varphi_1,\alpha_1\right) \leq_W \left(\varphi_2,\alpha_2\right) \leq_W \dots \leq_W \left(\varphi_n,\alpha_n\right)
+  \quad\text{ and }\quad
+  \varphi_1 \wedge \varphi_2 \wedge \dots \wedge \varphi_n \text{ is satisfiable.}
+\]
 
 \section{A Modular Architecture For \CDSSs{}}
 This section describes the architecture for \CDSSs{}
@@ -201,3 +240,4 @@ hold linked data. For example, while we may notionally refer to an abstract data
 used to record a patient's heart rate and blood pressure as a digital twin of
 the patient's cardiovascular system, such a twin would be a very incomplete
 representation of the patient's actual cardiovascular system.
+
