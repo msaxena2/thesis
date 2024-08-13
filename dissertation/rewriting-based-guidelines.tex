@@ -53,40 +53,66 @@ Finally,
 Advanced Cardiovascular Life Support (\ACLS{}) are a set of \BPGs{} periodically
 published by the American Heart Association (\AHA{}) for management of
 life-threatening cardiac conditions that will cause of have caused cardiac
-arrest---a cardiac emergency where the heart stop pumping \cite{ACLSWikiEntry}.
+arrest. The conditions that the guidelines treat range from dangerous arrhythmias, i.e.,
+irregularities in heart's rhythm, to cardiac arrest.---a cardiac emergency where
+the heart stop pumping \cite{ACLSWikiEntry}.
 The guidelines, according to the AHA{}, \say{are based on the most current
 and comprehensive review of resuscitation science, systems, protocols, and
 education} \cite{ACLSUrl}.
 
 \autoref{fig:acls-algorithm} shows the \AHA{}'s guidelines for advanced
-life support (\ALS{}) for adults \cite{ACLSGuidelineUrl}.
-\AHA{} also publishes guidelines
+life support (\ALS{}) for managing cardiac arrest in adults \cite{ACLSGuidelineUrl}.
+\AHA{} publishes guidelines
 for basic life support (\BLS{}), and pediatric counterparts of both. While
 \BLS{} is meant for a first responder to provide treatment with
 limited resources, such as an automatic emergency defibrillator (\AED{}),
 \ACLS{} is supposed to be followed by teams of
 trained professionals with advanced equipment for airway management,
-drug delivery, etc. Cardiac arrest is an urgent condition that requires
-prompt treatment. Immediate \ACLS{} guidelines-conformant has been
+drug delivery, etc.
+
+\subsubsection{Why build \CDSSs{} for \ACLS{}?}
+
+Cardiac arrest treatment is extremely time-critical, and outcomes
+become significantly worse with every passing minute. This
+gathering relevant data about the patient infeasible. Moreover, as
+the seriousness of the condition necessitates multiple, simultaneous treatments
+to be administered rapidly, intervention is usually executed following
+standardized \ACLS{} algorithms \cite{ACLSWikiEntry}.
+
+Prompt \ACLS{} guidelines-conformant treatment has been
 shown to improve patient outcomes \cite{HonarmandResuscitation18}.
 Moreover, deviations from the guidelines in in-hospital cases has been
 associated with decreased rates of return of spontaneous circulation (\ROSC{}),
- survival to discharge, and survival to discharge with favorable neurological
- outcomes \cite{CrawleyResuscitation20}.
+survival to discharge, and survival to discharge with favorable neurological
+outcomes \cite{CrowleyResuscitation20}. Studies have also found that
+inadequate \ACLS{} training can lead to poor retention, resulting
+in reduced \ACLS{} conformance \cite{KiddJCN07}. Thus,
+a \CDSS{} that can provide situation-specific guidance about
+the next steps, especially in cases where \HCP{} training might be inadequate,
+can potentially improve compliance, and consequently outcomes.
 
+\subsubsection{A Brief Overview of Advance Life Support Guidelines for Cardiac Arrest:}
 
-
-
-The guidelines require an electrocardiography (EKG) machine
-to monitor the patient's \textit{cardiac rhythm}, which can be
-\textit{shockable} or \textit{unshockable}.
-In case of a \textit{shockable
-rhythm}, a \textit{defibrillator} device can be used to administer
-a therapeutic electric shock. Furthermore, \textit{Cardiopulmonary Resuscitation} (CPR),
-and drugs such as \textit{Epinephrine} must be periodically administered.
-The algorithms is succinctly presented in figure \ref{fig:acls-algorithm} taken
-from the AHA's ACLS documentation \cite{AHAUrl}
-
+As we aren't concerned with intricacies of medical knowledge in the guideline,
+we present a brief and simplified description of the guideline-prescribed treatment.
+As \ALS{} is supposed to be performed in settings where necessary equipment is
+available, a electrocardiogram (EKG) machine is utilized to
+monitor the patient's cardiac rhythm. Certain cardiac arrhythmias, characterized
+by cardiac rhythms referred to as \emph{shockable}, must be treated
+by delivering a therapeutic electric shock
+\cite{DefibrillationWikiEntry}. As shown in \autoref{fig:acls-algorithm},
+treatment has several parallel workflows such as:
+\begin{itemize}
+  \item Periodic monitoring of the cardiac rhythm, and in case of a
+    \emph{shockable} rhythm, using a defibrillator.
+  \item Continuous cardiopulmonary resuscitation (\CPR{}).
+  \item Administration of vital drugs such as
+    \emph{epinephrine} every few minutes.
+\end{itemize}
+As \autoref{fig:acls-algorithm} suggests, these workflows have to be
+performed rapidly and periodically. As the duration of the intervention
+is typically a few minutes, making optimal use of available time is critical to
+outcomes.
 
 \section{Encoding Medical Guidelines as $\K$ Definitions}\label{sec:bpg-in-k}
 
