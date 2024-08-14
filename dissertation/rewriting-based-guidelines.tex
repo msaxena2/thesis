@@ -124,7 +124,7 @@ outcomes.
 
 \begin{figure}[t!]
   \centering
-  \includegraphics[width=0.85\textwidth]{acls-tool}
+  \includegraphics[width=0.65\textwidth]{acls-tool}
   \caption{Snapshot of \KACLS{}}\label{fig:kacls-snapshot}
 \end{figure}
 
@@ -145,6 +145,29 @@ the team to start CPR, and presses the \say{Start} button under the \say{CPR}
 section of the screen. A timer displays the duration and appropriate warnings
 about prematurely stopping CPR, or exceeding the time for a \CPR{} cycle are
 displayed.
+
+In \autoref{sec:modular-cdss-architecture}, we described
+conceptual components of \CDSSs{}, and argued in favor
+of developing \CDSSs{} using independently developed and maintained codebases
+aligned with these components. The \KACLS{} system follows
+this philosophy, and has:
+\begin{enumerate*}[label=(\roman*)]
+  \item a simple \emph{frontend} written in Javascript using React \cite{ReactJSUrl} that handles
+    user interaction, and,
+  \item a $\K$-based HTTP server that encodes the \ACLS{} guideline
+    and interacts with the frontend.
+\end{enumerate*}
+The use of the Javascript based frontend allows our application
+to run on any modern web-browser. As shown in figure \ref{fig:kacls-snapshot},
+our frontend consists of forms and buttons that correspond to procedures
+in the algorithm in figure \ref{fig:acls-algorithm}. For example, the
+\say{Start} button in the CPR box results in a two minute timer corresponding
+to the \say{2 minute continuous CPR} procedure in the informal description.
+The frontend is simple and doesn't contain any guideline conformance related
+logic. Interaction with the frontend simply results in dispatch of
+\textit{events} to the backend. For example, when the \say{Start} button is pressed, a
+\say{StartCpr} event is sent to the backend.
+
 
 \subsection{Capturing Execution-specific Details}\label{sec:execution-specific-details}
 
@@ -183,49 +206,18 @@ inherent concurrency in workflows.
 
 \subsubsection{\ACLS{} Workflows As State Machines}
 
-\autoref{fig:machine-defs} shows \ACLS{} workflows formalized
-as state machines. \autoref{fig:cpr-machine} captures the
-guideline specified procedure for administering \CPR{}.
-
-In \autoref{sec:modular-cdss-architecture}, we described
-conceptual components of \CDSSs{}, and argued in favor
-of developing \CDSSs{} using independently developed and maintained codebases
-aligned with these components. The \KACLS{} system follows
-this philosophy, and has:
-\begin{enumerate*}[label=(\roman*)]
-  \item a simple \emph{frontend} written in ReactJS that handles
-    user interaction, and,
-  \item a $\K$-based HTTP server that encodes the \ACLS{} guideline
-    and interacts with the frontend.
-\end{enumerate*}
-The use of a Javascript based simple frontend allows our application
-to run on any modern web-browser. As shown in figure \ref{fig:acls-tool},
-our frontend consists of forms and buttons that correspond to procedures
-in the algorithm in figure \ref{fig:acls-algorithm}. For example, the
-\say{Start} button in the CPR box results in a two minute timer corresponding
-to the \say{2 minute continuous CPR} procedure in the informal description.
-The frontend is simple and doesn't contain any guideline conformance related
-logic. Interaction with the frontend simply results in dispatch of
-\textit{events} to the backend. For example, when the \say{Start} button is pressed, a
-\say{StartCpr} event is sent to the backend.
-
-
-
-
-
-
-\begin{figure}[tb]
+\begin{figure}[tb!]
 \centering
 \begin{subfigure}{\textwidth}
   \centering
-  \includegraphics[width=0.65\linewidth]{cpr-machine}
+  \includegraphics[width=0.60\linewidth]{cpr-machine}
   \caption{CPR Machine}
   \label{fig:cpr-machine}
 \end{subfigure}%
 \hfill\newline\hfill\newline\hfill
 \begin{subfigure}{\textwidth}
   \centering
-  \includegraphics[width=0.65\linewidth]{epi-machine}
+  \includegraphics[width=0.60\linewidth]{epi-machine}
   \caption{Epinephrine Machine}
   \label{fig:epi-machine}
 \end{subfigure}
@@ -233,7 +225,284 @@ logic. Interaction with the frontend simply results in dispatch of
 \label{fig:machine-defs}
 \end{figure}
 
+At the start of \autoref{sec:kacls-cdss}, we mentioned that
+the \emph{frontend} of our \CDSS{} is a simple Javascript-based
+application to facilitate user interaction through buttons
+and popups. We can now elaborate what we mean by \emph{simple}.
+Button presses on the fronend correspond to \emph{events}
+that trigger transitions in state machines shown in \autoref{fig:machine-defs}.
+For instance, pressing the \say{Start} button under
+the CPR part of the tool shown in \autoref{fig:kacls-snapshot} results in a
+a \inlinek{StartCPR} event that triggers the corresponding transition in
+the machine in \autoref{fig:cpr-machine}.
+Similarly, certain machine states result in events being dispatched
+to the frontend that cause popups or messages to be displayed
+on associated parts of the screen. Thus, the frontend itself contains
+no medical logic.
+
 \subsection{$\KACLS$ backend}\label{sec:kacls-backend}
+
+As described at the start of \autoref{sec:kacls-cdss},
+the backend receives events from the frontend, processes them and
+dispatches the results back to the frontend.
+In \autoref{sec:execution-specific-details}, we described the
+process of details required for execution by expressing
+the \BPG{} using communicating state machines. For a functioning
+backend through, we need to translate the abstract state machines
+into an executable medium. We do this by encoding the
+state machines in a $\K$ definition.
+
+Recall from \autoref{sec:semantics-in-k} that in $\K$ computation
+is described via rewrite \emph{rules} that operate over a \emph{configuration}
+that organizes data in labeled and potentially nested units called cells.
+\autoref{lst:initial-configuration} shows the initial configuration for
+the definition $\K$ of our state machines-based representation.
+Note that unlike a typical $\K{}$ definition, the initial \inlinek{configuration}
+does not have a \inlinek{<k>} cell containing a \inlinek{$PGM} variable
+replaced by the program \AST{} at runtime, as the $\K$ definition is the
+program itself.
+
+\begin{lstlisting}[float=ht,
+  frame=single,
+  style=ksty,
+  language=k,
+  numbers=left,
+  numbersep=5pt,
+  caption={Initial Configuration},
+  label={lst:initial-configuration},
+  xleftmargin=3ex
+]
+    configuration
+        <machines>                                @\label{lstline:machines-cell-start}@
+            <machine multiplicity="*" type="Set"> @\label{lstline:machine-cell-start}@
+                <id>    .K   </id>
+                <state> .K   </state>
+                <store> .Map </store>
+            </machine>                           @\label{lstline:machine-cell-end}@
+        </machines>                              @\label{lstline:machines-cell-end}@
+        <inputBuffer>  .JSONs </inputBuffer>     @\label{lstline:input-buffer-cell}@
+        <outputBuffer> .JSONs </outputBuffer>    @\label{lstline:output-buffer-cell}@
+\end{lstlisting}
+
+Lines \ref{lstline:machines-cell-start}-\ref{lstline:machines-cell-end} declare
+a cell \inlinek{<machines>} that will be used to multiple
+\inlinek{<machine> ... </machine>} cells, declared between Lines
+\ref{lstline:machine-cell-start} and \ref{lstline:machine-cell-end}, where
+each cell stores all data related to a particular state machine. The
+\inlinek{<id>} and \inlinek{<state>} cells store the machine's name and
+active state respectively. The \inlinek{<store>} cell
+is a map used to store any additional data. Note the following:
+\begin{enumerate}[label=(\roman*)]
+  \item The \inlinek{<machine>} cell is declared with an attribute
+    \inlinek{multiplicity=*}, signifying that the configuration can contain
+    multiple instances of such cells that are added or removed dynamically
+    during execution. At the start of execution, the configuration has
+    zero such cells.
+  \item As the number of machines to represent is known and remains constant
+    during execution, one might ask why they are not declared as a part of the
+    initial configuration itself. We clarify that we deliberate not to do, due
+    to reasons we explain shortly.
+\end{enumerate}
+
+Lines \ref{lstline:input-buffer-cell} and \ref{lstline:output-buffer-cell}
+declare cells \inlinek{<inputBuffer>} and \inlinek{<outputBuffer>} respectively
+that hold comma-separated lists of
+JSON objects. As their name suggested, they are used as buffer to communicate with
+the frontend. Incoming events from the
+frontend are placed at the end of the \inlinek{<inputBuffer>} and outgoing
+events intended for the frontend are consumed from head of the \inlinek{<outputBuffer>}.
+
+\subsubsection{Initialization}
+
+Initialization involves populating the configuration with the
+initial state of each state machine. For instance,
+\autoref{lst:cpr-initialization} shows the rule that initializes
+the CPR Machine to start in state \inlinek{idle} corresponding to the
+entry state of the machine in \autoref{fig:cpr-machine}.
+
+\begin{lstlisting}[float=ht,
+  frame=single,
+  style=ksty,
+  language=k,
+  numbers=left,
+  numbersep=5pt,
+  caption={CPR Initialization},
+  label={lst:cpr-initialization},
+  xleftmargin=3ex
+]
+ rule <machines>
+       ( .Bag => <machine>                                      @\label{lstline:machine-add-begin}@
+                     <id> cprMachine </id>
+                     <state> idle </state>
+                     <store> "cprRunning" |-> false </store>
+                     ...
+                  </machine> )                                  @\label{lstline:machine-add-end}@
+       ...
+      </machines>
+      <inputBuffer> "cprMachine.init" , IN => IN </inputBuffer> @\label{lstline:init-inputBuffer}@
+\end{lstlisting}
+Instead of starting \inlinek{<machines>} cell that is pre-populated with
+\inlinek{<machine>} cells from the start, we dynamically initialize
+machines once the corresponding frontend component is rendered and ready.
+For instance, when the CPR part of the tool from
+\autoref{fig:kacls-snapshot} has successfully loaded, it sends a \inlinek{"cprMachine.init"},
+which is added to the head of the input buffer.
+Lines \ref{lstline:machine-add-begin}-\ref{lstline:machine-add-end} of the rule
+introduce a new \inlinek{<machine>} cell with name \inlinek{cprMachine} and initial
+state \inlinek{idle}. The \inlinek{.Bag} in $\K$, seen on
+\autoref{lstline:init-inputBuffer}, represents the absence of a cell, which
+the rule rewrites to a \inlinek{<machine>} cell, resulting in its
+addition to the configuration under the \inlinek{<machines>} cell.
+On \autoref{lstline:init-inputBuffer}, the $\K$ variable \inlinek{IN} matches any list of
+JSON elements. Thus, \inlinek{"cprMachine.init" , IN} matches any list with
+\inlinek{"cprMachine.init"} at the head of the list (\inlinek{IN} matches the tail of
+the list). When the rule fires, the list is rewritten to
+just the tail, resulting in the removal \inlinek{"cprMachine.init"}
+event from the \inlinek{<inputBuffer>} cell.
+
+\paragraph{CPR Machine} \hfill \break
+
+The \textit{CPR Machine} encodes the intended CPR procedure
+shown in figure \ref{fig:cpr-machine}. When the user clicks
+the \say{Start} button in the CPR pane in figure \ref{fig:kacls-snapshot},
+a two minute timer is started. If the user decides to stop CPR before
+two minutes are up, a message is displayed to the user warning him of
+deviation from the intended guidelines. If the user stops CPR after
+two minutes, no warning message is displayed.
+The following rule is trigger when the \say{Start} button in clicked:
+\begin{lstlisting}[float=ht,
+  frame=single,
+  style=ksty,
+  language=k,
+  numbers=left,
+  numbersep=5pt,
+  caption={CPR Machine in \K{}},
+  label={lst:cpr-machine},
+  xleftmargin=3ex
+]
+  rule <machine>
+            <id> cprMachine </id>
+            <state> idle => lessThan2Min </state>
+            <store> ( "cprRunning" |-> (_ => true) ) ... </store>
+            ...
+       </machine>
+       <inputBuffer> "StartCpr" , IN => IN </inputBuffer>
+       <outputBuffer>
+           OUT => OUT +JSONs jsonResponse( cprMachine
+                                         | lessThan2Min
+                                         | startTimer( .JSONs ) )
+       </outputBuffer>
+\end{lstlisting}
+The rule above:
+\begin{enumerate*}[label=(\alph*)]
+  \item consumes the \inlinek{"StartCpr"} event from the \inlinek{<inputBuffer>} in
+    line 9,
+  \item changes the state of the machine from \inlinek{idle} to \inlinek{lessThan2Min}
+    in line 3 and,
+  \item Sends a \inlinek{startTimer} action to the frontend via the
+    \inlinek{<outputBuffer>} (encoded as JSON),
+    which results in the start of a two minute timer in the frontend.
+\end{enumerate*}
+The rule uses several $\K$ features that greatly simplify the definitions.
+$\K$'s \textit{configuration abstraction} mechanism allows user to \textit{only}
+specify parts of the configuration needed in the rule. The
+\inlinek{...} (dots) on lines 4 and 5 are used to ignore parts contents of a cell
+not used in the rule. Another important feature is $\K$'s support for \textit{local
+rewrites}, which makes it easy to rewrite subterms in deeply nested configurations.
+
+\paragraph{Epinephrine Machine} \hfill \break
+
+The \textit{Epinephrine Machine} encapsulates instructions for administering
+the drug Epinephrine to the patient. The corresponding machine is shown in figure
+\ref{fig:epi-machine}.  The user orders the drug using the
+\say{Order 1mg} button and can administers it using the \say{Give} button in
+Epinephrine pane in figure \ref{fig:kacls-snapshot}. Giving the drug results in the
+start of a three minute timer, during which if a new order is placed, a warning
+is issued.
+
+Next we show the rule formalizing the transition between \inlinek{givenLessthan3Min} and \inlinek{earlyOrderWarningNotification}.
+The rule fires when it has been less than three minutes before the last dose and a fresh order for
+Epinephrine. Since the guidelines dictate that Epinephrine must be administered
+every three minutes, ordering fresh Epinephrine is a deviation from the
+guidelines. Thus, an appropriate warning message is presented to the user.
+\begin{lstlisting}[float=ht!,
+  frame=single,
+  style=ksty,
+  language=k,
+  numbers=left,
+  numbersep=5pt,
+  caption={Epi Machine in $\K$},
+  label={lst:epi-machine},
+  xleftmargin=3ex
+]
+  rule <machine>
+        <id> epiMachine </id>
+        <state> givenLessThan3Min
+            => earlyOrderWarningNotification
+        </state>
+        <store> .Map => ("tentativeOrder" |-> ORDERED) ... </store>
+      </machine>
+      <inputBuffer> { "event" : "orderEpi"
+                    , "data"  : [ ORDERED:Int ] } , IN
+                => IN
+      </inputBuffer>
+      <outputBuffer> OUT
+        => OUT +JSONs jsonResponse( epiMachine
+                                  | earlyOrderWarningNotification
+                                  | showEarlyOrderWarning( .JSONs ) )
+      </outputBuffer>
+\end{lstlisting}
+
+\paragraph{Shock Machine} \hfill \break
+
+We now desribe the \textit{Shock Machine}. Intuitively, this
+machine ensures:
+\begin{enumerate*}[label=(\alph*)]
+  \item shocks are only administered if the rhythm is shockable,
+  \item CPR is administered every two minutes, and,
+  \item drugs (such as Epinephrine) are periodically administered.
+\end{enumerate*}
+In case the of deviation appropriate warnings are issued.
+\begin{lstlisting}[
+  frame=single,
+  style=ksty,
+  language=k,
+  numbers=left,
+  numbersep=5pt,
+  caption={Shock Machine in $\K$},
+  label={lst:shock-machine},
+  xleftmargin=3ex
+]
+    rule <machine>
+            <id> shockMachine </id>
+            <state>
+              shockableRhythm => checkRhythm
+            </state> ...
+          </machine>
+          <machine>
+            <id> cprMachine </id>
+            <store> ( "cprRunning" |-> false ) ... </store> ...
+          </machine>
+          <machine>
+            <id> epiMachine </id>
+            <store> ( "epiGiven" |-> true ) ... </store> ...
+          </machine>
+          <inputBuffer> "administerShock" , IN => IN </inputBuffer>
+          <outputBuffer> OUT
+          => OUT +JSONs jsonResponse( shockMachine
+                                    | checkRhythm
+                                    | confirmShock("CPR for
+                                                    2 Minutes" ) )
+          </outputBuffer>
+\end{lstlisting}
+The rule abovfires when the rhythm is \textit{shockable}, and the user
+wants to administer a shock. Additionally, CPR hasn't been administered (line 9), but
+Epinephrine has been administered (line 13). In such a situation, a suggestion to
+administer CPR for two minutes is displayed to the user (lines 19-20). We draw
+the user's attention to the \textit{succinctness} and \textit{simplicity}
+of the rule. Despite expressing the interaction between three different machines,
+$\K$'s configuration abstraction mechanism ensures that only relevant parts of
+each machine are mentioned, making the transition \textit{comprehensible}.
 
 
 
