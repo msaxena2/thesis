@@ -554,9 +554,25 @@ machine ensures:
 \end{enumerate*}
 In case the of deviation appropriate warnings are issued. The \textit{Shock}
 machine differs from other machines, as its transitions depend
-on the status of the \textit{CPR} machine, as well as the \textit{Shock}
-machine.
-\begin{lstlisting}[
+on the status of both the \textit{CPR} and \textit{Epinephrine} machines.
+
+\autoref{lst:shock-machine} shows a rule from the \textit{Shock} machine.
+The rule fires when the rhythm is \textit{shockable}, and the user
+wants to administer a shock. Additionally, CPR hasn't been administered
+(\autoref{lstline:cpr-false}), but
+Epinephrine has been administered (\autoref{lstline:epi-true}).
+In such a situation, the user is informed that it is safe to
+administer a shock, which should be followed by
+two minutes of CPR (Lines
+\ref{lstline:shock-response-begin}-\ref{lstline:shock-response-end}).
+However, it is not safe to assume that the rhythm would remain
+\textit{shockable} for subsequent shocks. Thus, the machine moves from
+state \inlinek{shockableRhythm} to \inlinek{checkRhythm}. If the
+user tries to administer another shock, a prompt to confirm the rhythm will be
+displayed to ensure a shock is not administered in case of an \emph{unshockable}
+rhythm.
+
+\begin{lstlisting}[float=ht,
   frame=single,
   style=ksty,
   language=k,
@@ -569,30 +585,27 @@ machine.
     rule <machine>
             <id> shockMachine </id>
             <state>
-              shockableRhythm => checkRhythm
+              shockableRhythm => checkRhythm                         @\label{lstline:shock-state}@
             </state> ...
           </machine>
           <machine>
             <id> cprMachine </id>
-            <store> ( "cprRunning" |-> false ) ... </store> ...
+            <store> ( "cprRunning" |-> false ) ... </store> ...      @\label{lstline:cpr-false}@
           </machine>
           <machine>
             <id> epiMachine </id>
-            <store> ( "epiGiven" |-> true ) ... </store> ...
+            <store> ( "epiGiven" |-> true ) ... </store> ...        @\label{lstline:epi-true}@
           </machine>
           <inputBuffer> "administerShock" , IN => IN </inputBuffer>
-          <outputBuffer> OUT
+          <outputBuffer> OUT                                        @\label{lstline:shock-response-begin}@
           => OUT +JSONs jsonResponse( shockMachine
                                     | checkRhythm
                                     | confirmShock("CPR for
-                                                    2 Minutes" ) )
+                                                    2 Minutes" ) )  @\label{lstline:shock-response-end}@
           </outputBuffer>
 \end{lstlisting}
-The rule abovfires when the rhythm is \textit{shockable}, and the user
-wants to administer a shock. Additionally, CPR hasn't been administered (line 9), but
-Epinephrine has been administered (line 13). In such a situation, a suggestion to
-administer CPR for two minutes is displayed to the user (lines 19-20). We draw
-the user's attention to the \textit{succinctness} and \textit{simplicity}
+
+We draw the user's attention to the \textit{succinctness} and \textit{simplicity}
 of the rule. Despite expressing the interaction between three different machines,
 $\K$'s configuration abstraction mechanism ensures that only relevant parts of
 each machine are mentioned, making the transition \textit{comprehensible}.
