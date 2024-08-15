@@ -1,4 +1,4 @@
-\chapter{\K{}-based Computer Interpretable Guidelines}
+\chapter{\K{}-based Computer Interpretable Guidelines}\label{chapter:k-based-guidelines}
 
 In \autoref{chapter:separating-concerns}, we described an
 architecture for building safe and modular clinical decision support systems.
@@ -52,7 +52,7 @@ $\K$ definition for execution.
 
 \begin{figure}[t!]
   \centering
-  \includegraphics[width=0.6\textwidth]{acls-algorithm}
+  \includegraphics[width=0.5\textwidth]{acls-algorithm}
   \caption{Advanced Cardiac Life Support Guidelines}\label{fig:acls-algorithm}
 \end{figure}
 
@@ -124,7 +124,7 @@ outcomes.
 
 \begin{figure}[t!]
   \centering
-  \includegraphics[width=0.65\textwidth]{acls-tool}
+  \includegraphics[width=0.85\textwidth]{acls-tool}
   \caption{Snapshot of \KACLS{}}\label{fig:kacls-snapshot}
 \end{figure}
 
@@ -394,7 +394,7 @@ the list). When the rule fires, the list is rewritten to
 just the tail, resulting in the removal \inlinek{"cprMachine.init"}
 event from the \inlinek{<inputBuffer>} cell.
 
-\subsubsection{CPRMachine}
+\subsubsection{CPR Machine}
 
 The \textit{CPR Machine} encodes the intended CPR procedure
 shown in figure \ref{fig:cpr-machine}. As mentioned earlier, when the user clicks
@@ -413,7 +413,7 @@ The rule does the following:
     in \autoref{lstline:idle-lessThan2Min}.
   \item Sends a \inlinek{startTimer} action to the frontend via the
     \inlinek{<outputBuffer>} (encoded as JSON) in
-    Lines \autoref{lstline:external-timer-start-begin}-\autoref{lstline:external-timer-start-end},
+    Lines \ref{lstline:external-timer-start-begin}-\ref{lstline:external-timer-start-end},
     which results in the start of a two minute timer in the frontend.
 \end{enumerate}
 Note how features of $\K$ discussed in \autoref{sec:k-framework}
@@ -609,4 +609,3 @@ We draw the user's attention to the \textit{succinctness} and \textit{simplicity
 of the rule. Despite expressing the interaction between three different machines,
 $\K$'s configuration abstraction mechanism ensures that only relevant parts of
 each machine are mentioned, making the transition \textit{comprehensible}.
-

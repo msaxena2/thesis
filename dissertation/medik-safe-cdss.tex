@@ -1,0 +1,36 @@
+\chapter{\MediK{}: Towards Safe Guidelines-based \CDSSs{}}
+
+In \autoref{chapter:k-based-guidelines}, we discussed the process
+of encoding best practice guidelines (\BPGs{}) as \K{} definitions
+to describe a systematic way of building \CDSSs{}. Specifically,
+we described the process of encoding medical knowledge in guidelines
+via notionally via workflows that can be expressed abstractly as
+concurrently executing finite state machines that communicate
+via passing messages. Next, we described the process of
+expressing state machines as \K{} definition, where \K{} features
+such as configuration abstraction and local rewriting
+enable \emph{conciseness}. We then combined the \K{} definition
+with a simple javascript-based frontend to develop a \CDSS{}
+for assisting healthcare practitioners (\HCPs{}) follow the
+Advanced Life Support (\ALS{}) guidelines for managing
+cardiac arrest published by the American Heart Association.
+
+In \autoref{chapter:hurdles-cdss-adoption}, we described
+that wider \CDSS{} adoption is incumbent on a having a
+systematic way of developing guidelines with validated
+content. The approach described in \autoref{sec:semantics-first}
+attempts to enable such a way. It dictates that:
+\begin{enumerate*}[label=(\roman*)]
+  \item the semantics of the language be formally defined, from
+  which tools are derived from a correct-by-construction fashion, and,
+  \item ensuring that semantics of medical knowledge is accurately
+  described.
+\end{enumerate*}
+As is typically the case, the \KACLS{} system from
+\autoref{sec:kacls-cdss} through collaboration between
+\HCPs{} and computer scientists. While the \K{}-based
+representation of the \ALS{} guideline was concise,
+it was not easily comprehensible to \HCPs{}, or to other
+software engineers without prior experience of using \K{}.
+
+
