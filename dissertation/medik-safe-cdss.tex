@@ -1,10 +1,10 @@
-\chapter{\MediK{}: Towards Safe Guidelines-based \CDSSs{}}
+\chapter{\MediK{}: Towards Safe Guidelines-based \CDSSs{}}\label{chapter:medik-safe-cdss}
 
 In \autoref{chapter:k-based-guidelines}, we discussed the process
 of encoding best practice guidelines (\BPGs{}) as \K{} definitions
 to describe a systematic way of building \CDSSs{}. Specifically,
 we described the process of encoding medical knowledge in guidelines
-via notionally via workflows that can be expressed abstractly as
+notionally via workflows that can be expressed abstractly as
 concurrently executing finite state machines that communicate
 via passing messages. Next, we described the process of
 expressing state machines as \K{} definition, where \K{} features
@@ -68,27 +68,34 @@ an infection, and is a major cause of morbidity and mortality
 in children. Evidence indicates that timely
 identification and prompt treatment with antibiotics and
 intravenous (IV) fluids is \emph{vital} is \emph{vital} for avoiding
-adverse outcomes \cite{Weiss2014CCM,Evans2018JAMA}. The
-\BPG{} has several concurrent workflows with inter-workflow
-dependencies, and can be used to study characteristics common to
-all \BPGs{}. We listed these in detail in \autoref{sec:bpg-background},
-and recall them here.
+adverse outcomes \cite{Weiss2014CCM,Evans2018JAMA}.
+The \BPG{} has several concurrent workflows with inter-workflow
+dependencies, making it suitable to study common characteristics of \BPGs{},
+which we recall here. Specifically, \BPGs{}:
+\begin{itemize}
+  \item Involve \stress{concurrent} workflows, such as administering drugs,
+    monitoring vitals, performing treatment, etc. There may also be
+    inter-workflow interactions. For instance, a diagnosis of sepsis during the
+    screening may require modifications to an ongoing course antibitiotics.
+  \item Often specified in a \stress{flowchart-like}
+    notation. See \cite{AHAFlowcharts} and \cite{CancerCareFlowcharts} for other flowchart-based \BPGs{} for management of \emph{cardiac arrest}, and
+    screening, risk-reduction, treatment and survivorship in
+    cancer care respectively.
+  \item Require communication between \stress{heterogeneous agents} such as
+     monitors and Electronic Health Records (EHRs).
+  \item Often use \stress{tables} indexed by parameters such as age, weight,
+    etc to present normal/abnormal ranges for measurements, or recommended dosages for drugs.
+\end{itemize}
+%While section
+%\autoref{sec:bpg-background} briefly discussed some sepsis workflows, here
+%we discuss remaining workflows and their interdependencies in detail.
 
+%Recall from \autoref{sec:bpg-background} that once sepsis has been detected,
+%it is treated by administering fluids and antibiotics.
+%Additionally, sepsis
+%lead to septic shock---a condition characterized by acute cardiovascular
+%distress.
 
-%\begin{figure}[b!]
-%  \centering
-%  \includegraphics[width=0.43\textwidth]{sepsis-screening-osf}
-%  %\includegraphics[width=0.5\textwidth]{screening-vitals}
-%  \caption{Pediatric sepsis screening \BPG{}}\label{fig:sepsis-screening}
-%\end{figure}
-
-%In this section, we introduce a real world \BPG{} for management of sepsis
-%in pediatric cases to motivate the need for Guidelines-based Clinical Decision Support Systems,
-%and to illustrate characteristics that are desired of a \DSL{} for such systems.
-%
-%Sepsis is life-threatening condition caused by the body's extreme response to
-%an infection \cite{RhodesICM17}, and is
-%a major cause of morbidity and mortality in children \cite{Eisenberg2021JP}.
 %Adverse outcomes can, however, be mitigated through timely
 %identification and prompt treatment with antibiotics and
 %intravenous (IV) fluids \cite{Weiss2014CCM,Evans2018JAMA}.
@@ -195,54 +202,42 @@ complex guidelines.
 
 \section{\MediK{}}\label{sec:medik}
 
-In this section, we introduce the \MediK{} \DSL{} for expressing \CIGs{}.
-\MediK{} has designed to describe \BPGLogic{} used in
-safety-critical systems. Thus, it is vital that:
+This section introduces the \MediK{} \DSL{} through its $\K$
+syntax and semantics.
+We developed $\MediK{}$ to realize
+the semantics-first approach discussed in \autoref{sec:semantics-first-cdss}.
+Thus, it has:
 \begin{itemize}
-  \item The interpreter is correct w.r.t. the formal semantics.
-  \item The language has a comprehensive suite of formal program analysis tools.
-  \item New features based on \HCP{} feedback can be
-    implemented quickly, conveniently, and correctly.
-\end{itemize}
-We achieve this by defining \MediK{} (i.e., its syntax and semantics) in $\K$.
-$\K{}$ is a rewriting-based framework for defining executable
-semantics of languages, type systems and formal analysis tools.
-It has been successfully used to define executable semantics
-of many real world languages such as C \cite{HathhornPLDI15}, Java
-\cite{BogdanasPOPL15}, Javascript \cite{ParkPLDI15}, and the
-Ethereum Virtual Machine \cite{HildenbrandtCSF18}.
-We will introduce $\K$ by need while discussing \MediK{}. For more details on
-$\K$, we refer the reader to \cite{SerbanutaETNCS14} \cite{RosuJLAP10}.
-%Once the executable
-%semantics of a language have been defined in $\K{}$, it provides us with
-%suite of tools such as an interpreter, deductive-verifier and a
-%model-checker as shown in \figurename{} \ref{fig:k-overview}.
-
-The $\K{}$ ecosystem provides a suite of tools, such as an interpreter,
-model-checker, and deductive verifier that are parametric over the language's
-semantics, as shown in \figurename{} \ref{fig:k-overview}. Thus, by
-defining the semantics of \MediK{} in $\K{}$, we obtain aforementioned
-tools for it without any extra effort. Additionally:
-\begin{itemize}
-  \item The $\K$-based interpreter for \MediK{} essentially executes the language's
-    semantics rules, it is correct-by-construction.
-  \item Incorporating changes to \MediK{} only requires updating
-   the semantics. Since the tools are derived from the semantics,
-   they're automatically updated.
+  \item A formally defined, unambiguous semantics.
+  \item A correct-by-construction interpreter derived from the semantics.
+    As discussed in \autoref{chapter:evaluating-k},
+  \item A comprehensive suite of formal program analysis tools.
+  \item The ability to quickly adapt physician feedback, as only the semantics
+    need to be changed an all tools evolve automatically.
 \end{itemize}
 
-The remainder of this section introduces \MediK{} and describes how it's
-designed around characteristics of \BPGs{} from Section \ref{sec:motivating-example}.
-Recall that \BPGs{} typically involve concurrent workflows, often expressed using a
-flowchart-like notation that may involve
-inter-workflow interactions. To ensure \MediK{} programs are comprehensible
-to \HCPs{}, they must be representable in a flowchart-like notation that \HCPs{}
-are already comfortable with, and be capable of expressing inter-workflow
-interactions succinctly. To address these diverse requirements, we borrow from
-existing state-of-art languages for modeling large concurrent
-systems, like P \cite{DesaiPLDI13}, but make adaptions to make expressing and
-validating \BPGs{} easier. We explore the differences
-to existing techniques in section \ref{sec:related-works}.
+The remainder of this section introduces the \MediK{} \DSL{}, and describes how it's
+designed to accommodate characteristics of \BPGs{} discussed in
+\autoref{sec:bpg-background}.
+
+\subsection{\HCP{} Comphrenesibility}
+
+Our approach stresses that \HCPs{} must be able to comprehend the
+guideline, and if necessary, making changes to on their own. As discussed
+in \autoref{chapter:hurdles-cdss-adoption}, this has several hurdles, chief
+among which is the factor that \HCPs{} are typically not trained to understand
+conventionally programming languages. To address this, we designed \MediK{}
+s.t. encoded guidelines resemble their physical, non-executable counterparts.
+
+From \autoref{sec:}\BPGs{} typically involve concurrent workflows,
+often expressed using a flowchart-like notation that may involve
+inter-workflow interactions. In \autoref{section:kacls-backend},
+we discussed the merits and suitability of concurrently executing
+state machines for modeling medical guidelines.
+Thus, we looked at state-of-art languages for modeling large concurrent
+systems using state machines, such as P \cite{DesaiPLDI13}, but made
+adaptions to make expressing \BPGs{} easier.
+
 In \MediK{}, like in P, programs are expressed as concurrently
 executing instances of state machines that communicate via passing messages.
 Given a \BPG{} where each workflow is expressed as a flowchart,
@@ -254,6 +249,35 @@ passing events. Note the distinction between
 machine and its instance. A machine
 is analogous to an Object Oriented Programming (OOP) class, whereas
 its instance is analogous to an OOP object.
+
+
+%We achieve this by defining \MediK{} (i.e., its syntax and semantics) in $\K$.
+%$\K{}$ is a rewriting-based framework for defining executable
+%semantics of languages, type systems and formal analysis tools.
+%It has been successfully used to define executable semantics
+%of many real world languages such as C \cite{HathhornPLDI15}, Java
+%\cite{BogdanasPOPL15}, Javascript \cite{ParkPLDI15}, and the
+%Ethereum Virtual Machine \cite{HildenbrandtCSF18}.
+%We will introduce $\K$ by need while discussing \MediK{}. For more details on
+%$\K$, we refer the reader to \cite{SerbanutaETNCS14} \cite{RosuJLAP10}.
+%Once the executable
+%semantics of a language have been defined in $\K{}$, it provides us with
+%suite of tools such as an interpreter, deductive-verifier and a
+%model-checker as shown in \figurename{} \ref{fig:k-overview}.
+
+%The $\K{}$ ecosystem provides a suite of tools, such as an interpreter,
+%model-checker, and deductive verifier that are parametric over the language's
+%semantics, as shown in \figurename{} \ref{fig:k-overview}. Thus, by
+%defining the semantics of \MediK{} in $\K{}$, we obtain aforementioned
+%tools for it without any extra effort. Additionally:
+%\begin{itemize}
+%  \item The $\K$-based interpreter for \MediK{} essentially executes the language's
+%    semantics rules, it is correct-by-construction.
+%  \item Incorporating changes to \MediK{} only requires updating
+%   the semantics. Since the tools are derived from the semantics,
+%   they're automatically updated.
+%\end{itemize}
+
 
 %The remainder of this section introduces \MediK{} and describes
 %how it's designed around characteristics of \BPGs{} from Section \ref{sec:motivating-example}.
@@ -277,7 +301,8 @@ its instance is analogous to an OOP object.
 %is analogous to an Object Oriented Programming (OOP) class, whereas
 %its instance is analogous to an OOP object.
 
-Next, we describe \MediK{} using its $\K$-framework definition. The $\K{}$ definition
+Next, we describe \MediK{} using its $\K$-framework definition.
+Recall from \autoref{chapter:semantics-in-k}, the $\K{}$ definition
 of a language has two components. The first is the language's
 syntax, which is defined using a BNF-like notation. $\K{}$
 utilizes this grammar to generate a parser for program in the language. We
