@@ -63,11 +63,12 @@ state-of-art in addressing challenges from \autoref{chapter:hurdles-cdss-adoptio
 
 In \autoref{sec:bpg-background}, we presented a best practice
 guideline for management of sepsis in pediatric cases.
-Sepsis is life-threatening condition caused by the body's extreme response to
+We briefly describe the guidelines here. Recall that
+sepsis is life-threatening condition caused by the body's extreme response to
 an infection, and is a major cause of morbidity and mortality
 in children. Evidence indicates that timely
 identification and prompt treatment with antibiotics and
-intravenous (IV) fluids is \emph{vital} is \emph{vital} for avoiding
+intravenous (IV) fluids is \emph{vital} for avoiding
 adverse outcomes \cite{Weiss2014CCM,Evans2018JAMA}.
 The \BPG{} has several concurrent workflows with inter-workflow
 dependencies, making it suitable to study common characteristics of \BPGs{},
@@ -220,16 +221,24 @@ The remainder of this section introduces the \MediK{} \DSL{}, and describes how 
 designed to accommodate characteristics of \BPGs{} discussed in
 \autoref{sec:bpg-background}.
 
-\subsection{\HCP{} Comphrenesibility}
+\subsection{\HCP{} Comprehensibility}
 
 Our approach stresses that \HCPs{} must be able to comprehend the
 guideline, and if necessary, making changes to on their own. As discussed
 in \autoref{chapter:hurdles-cdss-adoption}, this has several hurdles, chief
-among which is the factor that \HCPs{} are typically not trained to understand
-conventionally programming languages. To address this, we designed \MediK{}
-s.t. encoded guidelines resemble their physical, non-executable counterparts.
+among which is the fact that \HCPs{} are typically not trained to understand
+conventionally programming languages. Thus, \HCPs{} need to work collaboratively
+to translate the \BPG{} into a computable medium.
+In essence, the \BPG{} serves as a functional
+specification for implementing the \CDSS{}. But, this may lead to
+a gap in the \HCPs{}' understanding of the system, and the actual
+behavior.
+To address this, we designed \MediK{}
+s.t. encoded guidelines resemble their physical, non-executable counterparts,
+with the intention that familiarity with non-executable guidelines
+would also translate to computable \MediK{} ones.
 
-From \autoref{sec:}\BPGs{} typically involve concurrent workflows,
+Recall from \autoref{sec:} \BPGs{} typically involve concurrent workflows,
 often expressed using a flowchart-like notation that may involve
 inter-workflow interactions. In \autoref{section:kacls-backend},
 we discussed the merits and suitability of concurrently executing
@@ -291,15 +300,6 @@ its instance is analogous to an OOP object.
 %systems, like P \cite{DesaiPLDI13}, but make adaptions to make expressing and
 %validating \BPGs{} easier. We explore the differences
 %to existing techniques in section \ref{sec:related-works}.
-%In \MediK{}, programs are expressed as concurrently
-%executing instances of state machines that communicate via passing messages.
-%Given a \BPG{} where each workflow is expressed as a flowchart,
-%we express said flowcharts as State Machines in \MediK{}. During execution,
-%instances of these machines are created, that interact with each other by
-%passing events. Note the distinction between
-%machine and its instance. A machine
-%is analogous to an Object Oriented Programming (OOP) class, whereas
-%its instance is analogous to an OOP object.
 
 Next, we describe \MediK{} using its $\K$-framework definition.
 Recall from \autoref{chapter:semantics-in-k}, the $\K{}$ definition
@@ -308,8 +308,7 @@ syntax, which is defined using a BNF-like notation. $\K{}$
 utilizes this grammar to generate a parser for program in the language. We
 describe \MediK{}'s syntax in depth in Section \ref{sec:syntax}.
 The second is the semantics, which is defined using a $\K{}$-configuration and
-rewrite rules.
-The $\K{}$-configuration
+rewrite rules. The $\K{}$-configuration
 organizes the program's execution state. Rewrite rules
 that operate over said configuration dictate the evolution
 of program state during execution.
@@ -318,31 +317,34 @@ We describe the semantics in greater depth in Section
  \cite{medikUrl}.}
 
 \subsection{Syntax}\label{sec:syntax}
-We use the skeleton of a \MediK{} machine below, and use
+We use the skeleton of a \MediK{} machine in \autoref{lst:machine-syntax}, and use
 it to describe the syntax.
 Note that we use \inlinemedik{[...]} to denote
 optional constructs, \inlinemedik{<...>} for mandatory constructs, lowercase for
 terminals, and uppercase for non-terminals.
-\begin{lstlisting}[style=mediksty
-,language=medik
-,basicstyle=\ttfamily\scriptsize
-,numbers=left
-,numberstyle=\tiny
-,framexleftmargin=1.5em
-,xleftmargin=2em
+\begin{lstlisting}[
+  float=ht,
+  frame=single,
+  style=mediksty,
+  language=medik,
+  numbers=left,
+  numberstyle=\tiny,
+  caption={\MediK{} Machine Skeleton},
+  label={lst:medik-skeleton},
+  xleftmargin=3ex
 ]
-[init] machine <IDENTIFIER>
-  receives <IDENTIFIER_LIST> {
-  vars <IDENTIFIER_LIST>;
+[init] machine <IDENTIFIER>                     @\label{lstline:machine-declaration}@
+  receives <IDENTIFIER_LIST> {                  @\label{lstline:machine-receives}@
+  vars <IDENTIFIER_LIST>;                       @\label{lstline:global-declarations}@
 
-  [init] state <IDENTIFIER> {
-    entry [(IDENTIFIER_LIST)] {
+  [init] state <IDENTIFIER> {                   @\label{lstline:state-block-start}@
+    entry [(IDENTIFIER_LIST)] {                 @\label{lstline:entry-block-start}@
       <STMT> // entry block
-    }
-    on <IDENTIFIER> [(IDENTIFIER_LIST)] do {
+    }                                           @\label{lstline:entry-block-end}@
+    on <IDENTIFIER> [(IDENTIFIER_LIST)] do {    @\label{lstline:handler-block-start}@
       <STMT> // event handler
-    }
-  }
+    }                                           @\label{lstline:handler-block-end}@
+  }                                             @\label{lstline:state-block-end}@
 }
 \end{lstlisting}
 %A machine $m = \left(S, E, \Var, s_i\right)$,
@@ -351,52 +353,59 @@ terminals, and uppercase for non-terminals.
 %As shown in \figurename{} \ref{fig:machine-def}, a typical
 
 A \MediK{} program consists of a set of machine definitions.
-A machine definition starts with the keyword \inlinemedik{machine},
-followed by its name (line 1). On line 2, following the
-\inlinemedik{receives} keyword, is a comma-separated list of identifiers
-signifying the events that the machine can receive from other machines.
-One machine in a program can be
-prefixed with the \inlinemedik{init} keyword. This machine is referred to as the
-initial machine.
-On line 3, following the keyword
-\inlinemedik{vars}, another comma-separeted list of identifiers signifies
-the instance-variables. During execution, each instance maintains a mapping from
-these variables to values. Each machine defines a set of states, such as
-the one in lines 5-11. A state
- has a name, an optional entry block (lines 6-8),
-and a set of event handlers (lines 9-11). The entry block
-begins with the keyword \inlinemedik{entry}, and may contain a list of variables
-that are bound to values when the state is entered during execution.
-One state in the machine may be prefixed with \inlinemedik{init}, specifying the
-initial state. When execution begins, an implicit instance
-of the initial machine is created, and the \inlinemedik{entry} block of
-its initial state is executed. When an instance of a machine is dynamically
-created during runtime, the \inlinemedik{entry} block of its initial state is executed.
-Event handlers within a state begin with \inlinemedik{on} followed by the event name
-and an optional list of variables. When the event handler is executed, data from
-the received event's payload is bound to aforementioned variables which
-can be used in the code block that follows the \inlinemedik{do} keyword.
+\autoref{lst:machine-definition} shows the skeleton of a machine
+definition. It consists of:
+\begin{itemize}
+  \item (Lines \ref{lstline:machine-declaration}-\ref{lst:lstline:machine-receives})
+    The keyword \inlinemedik{machine}, followed by the name
+    and a comma-separated list of identifiers signifying events that
+    it \inlinemedik{receives} via the broadcast mechanism.
+    One state in every machine, and one machine in a program can be
+    prefixed with the keyword \inlinemedik{init}. On execution, an implicit instance
+    of this machine the created, and the \inlinemedik{entry} block of
+    initial state executed.
+  \item (\autoref{lstline:global-declarations}) A set of instance variables.
+  \item (Lines \ref{lstline:state-block-start}-\ref{lstline:state-block-end}) A set of state declarations. Each
+    state has a name, an optional entry block (Lines
+    \ref{lstline:entry-block-start}-\ref{lstline:entry-block-end}),
+    and a set of event handlers (Lines \ref{lstline:handler-block-start}-\ref{lstline:handler-block-end}).
+    The entry block begins with the keyword \inlinemedik{entry}, and may contain a list of variables
+    that are bound to values when an instance enters the state during execution.
+    One state in the machine may be prefixed with \inlinemedik{init}, specifying the
+    initial state that an instance starts execution in.
+  \item Event handlers begin with \inlinemedik{on} followed by the event name,
+    an optional list of variables bound to data in the event, followed by the
+    keyword \inlinemedik{do} a block of the handler's code.
+\end{itemize}
+%A machine definition starts with the keyword \inlinemedik{machine},
+%followed by its name (\autoref{lstline:machine-declaration}). On
+%\autoref{lstline:machine-receives}, following the
+%\inlinemedik{receives} keyword, is a comma-separated list of identifiers
+%signifying the events that the machine can receive from other machines.
+%One machine in a program can be
+%prefixed with the \inlinemedik{init} keyword. This machine is referred to as the
+%initial machine.
+%On \autoref{lstline:global-declarations}, following the keyword
+%\inlinemedik{vars}, another comma-separeted list of identifiers signifies
+%the instance-variables. During execution, each instance maintains a mapping from
+%these variables to values. Each machine defines a set of states, such as
+%the one in Lines \ref{lstline:state-block-start}-\ref{lstline:state-block-end}.
+%A state has a name, an optional entry block
+%(\autoref{lstline:entry-block-start}-\autoref{lstline:entry-block-end}),
+%and a set of event handlers (Lines
+%\ref{lstline:handle-block-start}-\ref{lstline:handler-block-end}). The entry block
+%begins with the keyword \inlinemedik{entry}, and may contain a list of variables
+%that are bound to values when the state is entered during execution.
+%One state in the machine may be prefixed with \inlinemedik{init}, specifying the
+%initial state. When execution begins, an implicit instance
+%of the initial machine is created, and the \inlinemedik{entry} block of
+%its initial state is executed. When an instance of a machine is dynamically
+%created during runtime, the \inlinemedik{entry} block of its initial state is executed.
+%Event handlers within a state begin with \inlinemedik{on} followed by the event name
+%and an optional list of variables. When the event handler is executed, data from
+%the received event's payload is bound to aforementioned variables which
+%can be used in the code block that follows the \inlinemedik{do} keyword.
 %A machine definition consists of:
-%\begin{itemize}
-%  \item (\textbf{lines 1-2}) The keyword \inlinemedik{machine}, followed by the name
-%    and a comma-separated list of identifiers signifying events that
-%    it \inlinemedik{receives} via the broadcast mechanism.
-%    One machine in a program can be
-%    prefixed with the \inlinemedik{init} keyword. On execution, an implicit instance
-%    of this machine the created, and the \inlinemedik{entry} block of
-%    initial state executed.
-%  \item (line 3) A set of instance variables.
-%  \item (\textbf{lines 5-11}) A set of state declarations. Each
-%    state has a name, an optional entry block (\textbf{lines 6-8}),
-%    and a set of event handlers (\textbf{lines 9-11}). The entry block
-%    begins with the keyword \inlinemedik{entry}, and may contain a list of variables
-%    that are bound to values when an instance enters the state during execution.
-%    One state in the machine may be prefixed with \inlinemedik{init}, specifying the
-%    initial state that an instance starts execution in.
-%  \item Event handlers begin with \inlinemedik{on} followed by the event name,
-%    an optional list of variables bound to data in the event, followed by the
-%    keyword \inlinemedik{do} a block of the handler's code.
-%\end{itemize}
 
 %\begin{figure}[h]
 %  \centering
@@ -419,22 +428,67 @@ can be used in the code block that follows the \inlinemedik{do} keyword.
 %\end{figure}
 
 Within the entry and event handler code blocks, there may be
-statements. Below, we give a simplified version
-of the $\K$-grammar for statements. In $\K$, productions
+statements. A simplified version of the grammar for statements is
+shown in \autoref{lst:medik-grammar}.
+Recall from \autoref{sec:semantics-in-k},
+in $\K$, productions
 are defined using the keyword \inlinek{syntax} (lines 1, 7).
 Terminals are enclosed in quotes (\inlinek{""}), and non-terminals
 begin with an upppercase character.
 
+
 \begin{lstlisting}[
-  style=ksty
-  ,language=k
-  ,basicstyle=\ttfamily\scriptsize
+  float=ht,
+  frame=single,
+  style=ksty,
+  basicstyle=\ttfamily\footnotesize,
+  language=k,
+  numbers=left,
+  numberstyle=\tiny,
+  framexleftmargin=1.5em,
+  xleftmargin=2em,
+]
+syntax StandaloneExp ::= "new" Id "(" Exps ")"                       [strict(2)]
+                       | "createFromInterface" "(" Id "," String ")" [strict(2)]
+                       | Id "(" Exps ")"                             [strict(2)]
+                       | "exit"
+                       | "stop"
+syntax Exp ::= Id
+             | Val
+             | Rat
+             | FloatLiteral
+             | "this"
+             | UndefExp
+             | "obtainFrom" "(" Exp "," Exp ")"            [seqstrict]
+             | "(" Exp ")"                                 [bracket]
+             > Exp "." Exp                                 [strict(1), left]
+             > Exp "+" Exp                                 [seqstrict, left]
+             | Exp "-" Exp                                 [seqstrict, left]
+             | Exp "*" Exp                                 [seqstrict, left]
+             | Exp "/" Exp                                 [seqstrict, left]
+             | Exp ">" Exp                                 [seqstrict, left]
+             | Exp "<" Exp                                 [seqstrict, left]
+             | Exp ">=" Exp                                [seqstrict, left]
+             | Exp "<=" Exp                                [seqstrict, left]
+             | "!" Exp                                     [seqstrict, left]
+             | Exp "&&" Exp                                [strict(1), left]
+             | Exp "||" Exp                                [strict(1), left]
+             > Exp "==" Exp                                [seqstrict, left]
+             | "interval" "(" Exp "," Exp ")"
+             > Exp "in" Exp
+             | "parseInt" "(" Exp ")"                      [strict]
+             | StandaloneExp
+\end{lstlisting}
+
+\begin{lstlisting}[
+  ,style=mediksty
+  ,language=medik
   ,numbers=left
   ,numberstyle=\tiny
   ,framexleftmargin=1.5em
-  ,showspaces=false
   ,xleftmargin=2em
-  ]
+  ,showspaces=false
+]
 syntax Exp ::= Id | Val | "this"
   | Exp "." Exp
   | "obtainFrom" "(" Exp "," Exp ")"
@@ -1362,6 +1416,3 @@ was executed on a machine with 64 GB of memory, and took roughly 90 minutes, and
 reported no such state was possible. To the best of our knowledge, this makes
 ours the first system for screening and management of sepsis with some formal
 safety guarantees.
-
-
-
