@@ -238,9 +238,10 @@ s.t. encoded guidelines resemble their physical, non-executable counterparts,
 with the intention that familiarity with non-executable guidelines
 would also translate to computable \MediK{} ones.
 
-Recall from \autoref{sec:} \BPGs{} typically involve concurrent workflows,
+Recall from \autoref{sec:k-based-background} that \BPGs{}
+typically involve concurrent workflows,
 often expressed using a flowchart-like notation that may involve
-inter-workflow interactions. In \autoref{section:kacls-backend},
+inter-workflow interactions. In \autoref{sec:kacls-backend},
 we discussed the merits and suitability of concurrently executing
 state machines for modeling medical guidelines.
 Thus, we looked at state-of-art languages for modeling large concurrent
@@ -427,14 +428,28 @@ definition. It consists of:
 %\caption{Machine Definition in \MediK{}}\label{fig:machine-def}
 %\end{figure}
 
-Within the entry and event handler code blocks, there may be
-statements. A simplified version of the grammar for statements is
-shown in \autoref{lst:medik-grammar}.
+Each entry and event handler block contains statements defined
+by syntax shown in \autoref{lst:medik-stmt-syntax}. The statements
+are written over expressions given by the syntax in
+\autoref{lst:medik-expr-syntax}.
+
 Recall from \autoref{sec:semantics-in-k},
 in $\K$, productions
-are defined using the keyword \inlinek{syntax} (lines 1, 7).
-Terminals are enclosed in quotes (\inlinek{""}), and non-terminals
+are defined using the keyword \inlinek{syntax}, where
+terminals are enclosed in quotes (\inlinek{""}), and non-terminals
 begin with an upppercase character.
+
+\MediK{} uses statement over expressions resemble counterparts in many commonly
+used programming languages. For instance, Lines
+\ref{lstline:value-start}-\ref{lstline:value-end} enable one to write
+expressions over program identifiers (denoted by the builtin $\K{}$ production
+\inlinek{Id}), and values such as booleans, or rationals, or \say{\inlinek{this}}, which enables
+an instance to refer to itself. Line 2 defines the usual dot operator (\inlinek{.}),
+which can be used to access members of an instance. \inlinek{obtainFrom} (line 3),
+\inlinek{interval} (line 4) and \inlinek{in} (line 5) are useful in context of
+defining \BPGs{}, and are described through an example in section \ref{sec:evaluation}.
+Apart from these, \MediK{} also supports common expressions such as \inlinek{+,
+-. >, >=} over rationals and \inlinek{&&, ||} over booleans.
 
 
 \begin{lstlisting}[
@@ -447,22 +462,24 @@ begin with an upppercase character.
   numberstyle=\tiny,
   framexleftmargin=1.5em,
   xleftmargin=2em,
+  caption={\MediK{} Expressions Syntax},
+  label={lst:exp-syntax}
 ]
 syntax StandaloneExp ::= "new" Id "(" Exps ")"                       [strict(2)]
                        | "createFromInterface" "(" Id "," String ")" [strict(2)]
                        | Id "(" Exps ")"                             [strict(2)]
                        | "exit"
                        | "stop"
-syntax Exp ::= Id
+syntax Exp ::= Id                                                                @\label{lstline:value-start}@
              | Val
              | Rat
              | FloatLiteral
-             | "this"
+             | "this"                                                            @\label{lstline:value-end}@
              | UndefExp
              | "obtainFrom" "(" Exp "," Exp ")"            [seqstrict]
              | "(" Exp ")"                                 [bracket]
-             > Exp "." Exp                                 [strict(1), left]
-             > Exp "+" Exp                                 [seqstrict, left]
+             > Exp "." Exp                                 [strict(1), left]     @\label{lstline:dot-syntax}@
+             > Exp "+" Exp                                 [seqstrict, left]     @\label{lstline:arith-exp-syntax}@
              | Exp "-" Exp                                 [seqstrict, left]
              | Exp "*" Exp                                 [seqstrict, left]
              | Exp "/" Exp                                 [seqstrict, left]
@@ -481,41 +498,54 @@ syntax Exp ::= Id
 \end{lstlisting}
 
 \begin{lstlisting}[
-  ,style=mediksty
-  ,language=medik
+  float=hb
+  ,style=ksty
+  ,language=k
+  ,basicstyle=\ttfamily\footnotesize,
   ,numbers=left
   ,numberstyle=\tiny
   ,framexleftmargin=1.5em
   ,xleftmargin=2em
   ,showspaces=false
+  ,caption={\MediK{} Statement Syntax}
+  ,label={lst:medik-stmt-syntax}
 ]
-syntax Exp ::= Id | Val | "this"
-  | Exp "." Exp
-  | "obtainFrom" "(" Exp "," Exp ")"
-  | "interval" "(" Exp "," Exp ")"
-  | Exp "in" Exp
-
-syntax Stmt ::= Exp "=" Exp ";"
-  | "if" "(" Exp ")" Block "else" Block
-  | "new" Id "(" Exps ")" ";"
-  | "createFromInterface" "(" Id "," String ")" ";"
-  | "sleep" "(" Exp ")" ";"
-  | "send" Exp "," Id "," "(" Exps ")" ";"
-  | "broadcast" Id "," "(" Exps ")" ";"
-  | "goto" Id "(" Exps ")" ";"
-  | Exp "in" "{" CaseDecl "}"
+  syntax Stmt ::= StandaloneExp ";"                               [strict]
+                | "sleep" "(" Exp ")" ";"                         [strict(1)]
+                | "send" Exp "," ExtId ";"                        [macro]
+                | "send" Exp "," ExtId "," "(" Exps ")" ";"       [seqstrict(1, 3)]
+                | "broadcast" Id ";"                              [macro]
+                | "broadcast" Id "," "(" Exps ")" ";"             [strict(2)]
+                | "goto" Id ";"                                   [macro]
+                | "goto" Id "(" Exps ")" ";"                      [strict(2)]
+                | "print" "(" Exp ")" ";"                         [strict]
+                > "return" ";"                                    [macro]
+                | "return" Exp ";"                                [strict(1)]
+                | "var" Id "=" Exp ";"                            [macro]
+                > Exp "=" Exp ";"                                 [strict(2)] @\label{lstline:assignment}@
+                > "var" Id ";"
+                | "vars" Ids ";"                                  [macro-rec]
+                | Block
+                > "if" "(" Exp ")" Block                          [strict(1)] @\label{lstline:if-stmt}@
+                | "if" "(" Exp ")" Block "else" Block             [strict(1)] @\label{lstline:if-else-stmt}@
+                | "while" "(" Exp ")" Block                                   @\label{lstline:while-stmt}@
+                | "entry" Block                                   [macro]
+                | "entry" "(" Ids ")" Block
+                | "on" ExtId "do" Block                           [macro]
+                | "on" ExtId "(" Ids ")" "do" Block
+                | "fun" Id "(" Ids ")" Block
+                | NonDetStmt
+                | Exp "in" "{" CaseDecl "}"
+                | StateDecl
+                > "machine" Id Block                              [macro]
+                | "machine" Id "receives" Ids Block
+                | "interface" Id Block                            [macro]
+                | "interface" Id "receives" Ids Block
+                | "init" "machine" Id Block                       [macro]
+                | "init" "machine" Id "receives" Ids Block
+                | "yield" ";"
+                > Stmt Stmt                                       [right]
 \end{lstlisting}
-
-Lines 1-5 define the syntax of \MediK{} expressions.
-Line 1 defines basic expressions such as
-identifiers (denoted by the builtin $\K{}$ production \inlinek{Id}),
-values such as booleans, or rationals, or \say{\inlinek{this}}, which enables
-an instance to refer to itself. Line 2 defines the usual dot operator (\inlinek{.}),
-which can be used to access members of an instance. \inlinek{obtainFrom} (line 3),
-\inlinek{interval} (line 4) and \inlinek{in} (line 5) are useful in context of
-defining \BPGs{}, and are described through an example in section \ref{sec:evaluation}.
-Apart from these, \MediK{} also supports common expressions such as \inlinek{+,
--. >, >=} over rationals and \inlinek{&&, ||} over booleans.
 
 In lines 7-15, we define syntax for \MediK{} statements. Some of these,
 such as variable assignment (line 7), \inlinek{if-else} (line 8)
