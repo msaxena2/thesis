@@ -462,8 +462,7 @@ in upcoming sections.
   language=k,
   numbers=left,
   numberstyle=\tiny,
-  framexleftmargin=1.5em,
-  xleftmargin=2em,
+  xleftmargin=3ex,
   caption={\MediK{} Expressions Syntax},
   label={lst:medik-exp-syntax}
 ]
@@ -499,20 +498,21 @@ syntax Exp ::= Id                                                               
 
 As reflected in \autoref{lst:medik-stmt-syntax} \MediK{} support many statements
 commonly found in conventional programming languages, such as
-variable assignment (\autoref{lstline:assignment-stmt}), \inlinek{if-else}
-(Lines \ref{lstline:if-stmt} and \ref{lstline:if-else-stmt}) and \inlinek{while}
-(\autoref{lstline:while-stmt}).
+variable assignment (\autoref{lstline:assignment-stmt}), \inlinemedik{if-else}
+(Lines \ref{lstline:if-stmt} and \ref{lstline:if-else-stmt}) and \inlinemedik{while}
+(\autoref{lstline:while-stmt}). Others, such as \inlinemedik{broadcast} (Lines
+\ref{lstline:broadcast-stmt-macro} and \ref{lstline:broadcast-stmt-syntax}),
+\inlinemedik{goto} and \inlinek{interface} declarations have nuanced meanings,
+and will be explained in upcoming sections.
 
 \begin{lstlisting}[
-  float=hb
+  float=h
   ,style=ksty
   ,language=k
   ,basicstyle=\ttfamily\footnotesize,
   ,numbers=left
   ,numberstyle=\tiny
-  ,framexleftmargin=1.5em
-  ,xleftmargin=2em
-  ,showspaces=false
+  ,xleftmargin=3ex
   ,caption={\MediK{} Statement Syntax}
   ,label={lst:medik-stmt-syntax}
 ]
@@ -521,7 +521,7 @@ variable assignment (\autoref{lstline:assignment-stmt}), \inlinek{if-else}
                 | "send" Exp "," ExtId ";"                        [macro]
                 | "send" Exp "," ExtId "," "(" Exps ")" ";"       [seqstrict(1, 3)]
                 | "broadcast" Id ";"                              [macro]     @\label{lstline:broadcast-stmt-macro}@
-                | "broadcast" Id "," "(" Exps ")" ";"             [strict(2)] @\label{lstline:broadcast-stmt-alternative}@
+                | "broadcast" Id "," "(" Exps ")" ";"             [strict(2)] @\label{lstline:broadcast-stmt-syntax}@
                 | "goto" Id ";"                                   [macro]
                 | "goto" Id "(" Exps ")" ";"                      [strict(2)]
                 | "print" "(" Exp ")" ";"                         [strict]
@@ -545,8 +545,8 @@ variable assignment (\autoref{lstline:assignment-stmt}), \inlinek{if-else}
                 | StateDecl
                 > "machine" Id Block                              [macro]
                 | "machine" Id "receives" Ids Block
-                | "interface" Id Block                            [macro]
-                | "interface" Id "receives" Ids Block
+                | "interface" Id Block                            [macro]    @\label{lstline:interface-declaration}@
+                | "interface" Id "receives" Ids Block                        @\label{lstline:interface-declaration}@
                 | "init" "machine" Id Block                       [macro]
                 | "init" "machine" Id "receives" Ids Block
                 | "yield" ";"
