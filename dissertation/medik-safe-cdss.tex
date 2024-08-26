@@ -47,14 +47,14 @@ best of our knowledge, is the first such system with formal safety
 guarantees.
 
 The rest of this chapter is organized as follows. In \autoref{sec:sepsis-bpg}
-we recall the example \BPG{} from section \autoref{sec:background}
+we recall the example \BPG{} from section \autoref{sec:bpg-background}
 for management of sepsis, to illustrate common requirements
 that \DSL{} for modeling \BPGs{} should satisfy.
 In \autoref{sec:medik}, we introduce the \MediK{} \DSL{}, and illustrate how
 it has been specifically designed to address said requirements.
 In \autoref{sec:evalution}, we evaluate the effectiveness of our approach
 by utilizing it to build a \CDSSs{} intended for real-world use.
-In section \autoref{sec:related-works}, we discuss how \MediK{} builds on
+In section \autoref{sec:discussion}, we discuss how \MediK{} builds on
 existing approaches in \autoref{chapter:related-work} to advance the
 state-of-art in addressing challenges from \autoref{chapter:hurdles-cdss-adoption}.
 
@@ -206,7 +206,7 @@ complex guidelines.
 This section introduces the \MediK{} \DSL{} through its $\K$
 syntax and semantics.
 We developed $\MediK{}$ to realize
-the semantics-first approach discussed in \autoref{sec:semantics-first-cdss}.
+the semantics-first approach discussed in \autoref{sec:semantics-first}.
 Thus, it has:
 \begin{itemize}
   \item A formally defined, unambiguous semantics.
@@ -238,7 +238,7 @@ s.t. encoded guidelines resemble their physical, non-executable counterparts,
 with the intention that familiarity with non-executable guidelines
 would also translate to computable \MediK{} ones.
 
-Recall from \autoref{sec:k-based-background} that \BPGs{}
+Recall from \autoref{sec:generic-bpg} that \BPGs{}
 typically involve concurrent workflows,
 often expressed using a flowchart-like notation that may involve
 inter-workflow interactions. In \autoref{sec:kacls-backend},
@@ -259,7 +259,6 @@ passing events. Note the distinction between
 machine and its instance. A machine
 is analogous to an Object Oriented Programming (OOP) class, whereas
 its instance is analogous to an OOP object.
-
 
 %We achieve this by defining \MediK{} (i.e., its syntax and semantics) in $\K$.
 %$\K{}$ is a rewriting-based framework for defining executable
@@ -303,7 +302,7 @@ its instance is analogous to an OOP object.
 %to existing techniques in section \ref{sec:related-works}.
 
 Next, we describe \MediK{} using its $\K$-framework definition.
-Recall from \autoref{chapter:semantics-in-k}, the $\K{}$ definition
+Recall from \autoref{sec:semantics-in-k}, the $\K{}$ definition
 of a language has two components. The first is the language's
 syntax, which is defined using a BNF-like notation. $\K{}$
 utilizes this grammar to generate a parser for program in the language. We
@@ -318,7 +317,7 @@ We describe the semantics in greater depth in Section
  \cite{medikUrl}.}
 
 \subsection{Syntax}\label{sec:syntax}
-We use the skeleton of a \MediK{} machine in \autoref{lst:machine-syntax}, and use
+We use the skeleton of a \MediK{} machine in \autoref{lst:machine-skeleton}, and use
 it to describe the syntax.
 Note that we use \inlinemedik{[...]} to denote
 optional constructs, \inlinemedik{<...>} for mandatory constructs, lowercase for
@@ -330,8 +329,8 @@ terminals, and uppercase for non-terminals.
   language=medik,
   numbers=left,
   numberstyle=\tiny,
-  caption={\MediK{} Machine Skeleton},
-  label={lst:medik-skeleton},
+  caption={Skeleton of a \MediK{} Machine},
+  label={lst:machine-skeleton},
   xleftmargin=3ex
 ]
 [init] machine <IDENTIFIER>                     @\label{lstline:machine-declaration}@
@@ -353,11 +352,10 @@ terminals, and uppercase for non-terminals.
 %$\Var$, the set of instance variables, and $s_i$ the initial state.
 %As shown in \figurename{} \ref{fig:machine-def}, a typical
 
-A \MediK{} program consists of a set of machine definitions.
-\autoref{lst:machine-definition} shows the skeleton of a machine
-definition. It consists of:
+A \MediK{} program consists of a set of machine definitions, where
+a machine definition consists of:
 \begin{itemize}
-  \item (Lines \ref{lstline:machine-declaration}-\ref{lst:lstline:machine-receives})
+  \item (Lines \ref{lstline:machine-declaration}-\ref{lstline:machine-receives})
     The keyword \inlinemedik{machine}, followed by the name
     and a comma-separated list of identifiers signifying events that
     it \inlinemedik{receives} via the broadcast mechanism.
@@ -431,10 +429,9 @@ definition. It consists of:
 Each entry and event handler block contains statements defined
 by syntax shown in \autoref{lst:medik-stmt-syntax}. The statements
 are written over expressions given by the syntax in
-\autoref{lst:medik-expr-syntax}.
+\autoref{lst:medik-exp-syntax}.
 
-Recall from \autoref{sec:semantics-in-k},
-in $\K$, productions
+Recall from \autoref{sec:semantics-in-k}, in $\K$, productions
 are defined using the keyword \inlinek{syntax}, where
 terminals are enclosed in quotes (\inlinek{""}), and non-terminals
 begin with an upppercase character.
@@ -442,15 +439,20 @@ begin with an upppercase character.
 \MediK{} uses statement over expressions resemble counterparts in many commonly
 used programming languages. For instance, Lines
 \ref{lstline:value-start}-\ref{lstline:value-end} enable one to write
-expressions over program identifiers (denoted by the builtin $\K{}$ production
+expressions using program identifiers (denoted by the builtin $\K{}$ production
 \inlinek{Id}), and values such as booleans, or rationals, or \say{\inlinek{this}}, which enables
-an instance to refer to itself. Line 2 defines the usual dot operator (\inlinek{.}),
-which can be used to access members of an instance. \inlinek{obtainFrom} (line 3),
-\inlinek{interval} (line 4) and \inlinek{in} (line 5) are useful in context of
-defining \BPGs{}, and are described through an example in section \ref{sec:evaluation}.
-Apart from these, \MediK{} also supports common expressions such as \inlinek{+,
--. >, >=} over rationals and \inlinek{&&, ||} over booleans.
-
+an instance to refer to itself. \autoref{lstline:dot-syntax} defines the usual dot operator (\inlinek{.}),
+which can be used to access members of an instance.
+Lines \ref{lstline:exp-syntax-begin}-\ref{lstline:exp-syntax-end} declare
+common expressions such as \inlinek{+, -. >, >=} over rationals and \inlinek{&&, ||, !} over booleans.
+We use the production \inlinek{StandaloneExp} to define certain expressions that
+are typically not used in conjunction with other expressions, such as
+\inlinek{new (...)} on \autoref{lstline:new-syntax} that resembles constructs in
+OOP languages used to create object instances. Note however, that \MediK{} also
+has several constructs not commonly found in other languages, such as
+\inlinek{createFromInterface(...)} (\autoref{lstline:create-from-interface-syntax}) and \inlinek{obtainFrom(...)}
+(\autoref{lstline:obtain-from-syntax}). We shall describe their need and purpose
+in upcoming sections.
 
 \begin{lstlisting}[
   float=ht,
@@ -463,23 +465,21 @@ Apart from these, \MediK{} also supports common expressions such as \inlinek{+,
   framexleftmargin=1.5em,
   xleftmargin=2em,
   caption={\MediK{} Expressions Syntax},
-  label={lst:exp-syntax}
+  label={lst:medik-exp-syntax}
 ]
-syntax StandaloneExp ::= "new" Id "(" Exps ")"                       [strict(2)]
-                       | "createFromInterface" "(" Id "," String ")" [strict(2)]
+syntax StandaloneExp ::= "new" Id "(" Exps ")"                       [strict(2)] @\label{lstline:new-syntax}@
+                       | "createFromInterface" "(" Id "," String ")" [strict(2)] @\label{create-from-interface-syntax}@
                        | Id "(" Exps ")"                             [strict(2)]
-                       | "exit"
-                       | "stop"
 syntax Exp ::= Id                                                                @\label{lstline:value-start}@
              | Val
              | Rat
              | FloatLiteral
              | "this"                                                            @\label{lstline:value-end}@
              | UndefExp
-             | "obtainFrom" "(" Exp "," Exp ")"            [seqstrict]
+             | "obtainFrom" "(" Exp "," Exp ")"            [seqstrict]           @\label{lstline:obtain-from-syntax}@
              | "(" Exp ")"                                 [bracket]
              > Exp "." Exp                                 [strict(1), left]     @\label{lstline:dot-syntax}@
-             > Exp "+" Exp                                 [seqstrict, left]     @\label{lstline:arith-exp-syntax}@
+             > Exp "+" Exp                                 [seqstrict, left]     @\label{lstline:exp-syntax-begin}@
              | Exp "-" Exp                                 [seqstrict, left]
              | Exp "*" Exp                                 [seqstrict, left]
              | Exp "/" Exp                                 [seqstrict, left]
@@ -490,12 +490,18 @@ syntax Exp ::= Id                                                               
              | "!" Exp                                     [seqstrict, left]
              | Exp "&&" Exp                                [strict(1), left]
              | Exp "||" Exp                                [strict(1), left]
-             > Exp "==" Exp                                [seqstrict, left]
+             > Exp "==" Exp                                [seqstrict, left]     @\label{lstline:exp-syntax-end}@
              | "interval" "(" Exp "," Exp ")"
              > Exp "in" Exp
              | "parseInt" "(" Exp ")"                      [strict]
              | StandaloneExp
 \end{lstlisting}
+
+As reflected in \autoref{lst:medik-stmt-syntax} \MediK{} support many statements
+commonly found in conventional programming languages, such as
+variable assignment (\autoref{lstline:assignment-stmt}), \inlinek{if-else}
+(Lines \ref{lstline:if-stmt} and \ref{lstline:if-else-stmt}) and \inlinek{while}
+(\autoref{lstline:while-stmt}).
 
 \begin{lstlisting}[
   float=hb
@@ -514,15 +520,15 @@ syntax Exp ::= Id                                                               
                 | "sleep" "(" Exp ")" ";"                         [strict(1)]
                 | "send" Exp "," ExtId ";"                        [macro]
                 | "send" Exp "," ExtId "," "(" Exps ")" ";"       [seqstrict(1, 3)]
-                | "broadcast" Id ";"                              [macro]
-                | "broadcast" Id "," "(" Exps ")" ";"             [strict(2)]
+                | "broadcast" Id ";"                              [macro]     @\label{lstline:broadcast-stmt-macro}@
+                | "broadcast" Id "," "(" Exps ")" ";"             [strict(2)] @\label{lstline:broadcast-stmt-alternative}@
                 | "goto" Id ";"                                   [macro]
                 | "goto" Id "(" Exps ")" ";"                      [strict(2)]
                 | "print" "(" Exp ")" ";"                         [strict]
                 > "return" ";"                                    [macro]
                 | "return" Exp ";"                                [strict(1)]
                 | "var" Id "=" Exp ";"                            [macro]
-                > Exp "=" Exp ";"                                 [strict(2)] @\label{lstline:assignment}@
+                > Exp "=" Exp ";"                                 [strict(2)] @\label{lstline:assignment-stmt}@
                 > "var" Id ";"
                 | "vars" Ids ";"                                  [macro-rec]
                 | Block
@@ -1446,3 +1452,5 @@ was executed on a machine with 64 GB of memory, and took roughly 90 minutes, and
 reported no such state was possible. To the best of our knowledge, this makes
 ours the first system for screening and management of sepsis with some formal
 safety guarantees.
+
+\section{Discussion}\label{sec:discussion}
