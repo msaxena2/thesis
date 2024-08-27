@@ -56,7 +56,7 @@ In \autoref{sec:evalution}, we evaluate the effectiveness of our approach
 by utilizing it to build a \CDSSs{} intended for real-world use.
 In section \autoref{sec:discussion}, we discuss how \MediK{} builds on
 existing approaches in \autoref{chapter:related-work} to advance the
-state-of-art in addressing challenges from \autoref{chapter:hurdles-cdss-adoption}.
+tate-of-art in addressing challenges from \autoref{chapter:hurdles-cdss-adoption}.
 
 
 \section{Pediatric Sepsis Management \BPG{}}\label{sec:sepsis-bpg}
@@ -500,7 +500,8 @@ As reflected in \autoref{lst:medik-stmt-syntax} \MediK{} support many statements
 commonly found in conventional programming languages, such as
 variable assignment (\autoref{lstline:assignment-stmt}), \inlinemedik{if-else}
 (Lines \ref{lstline:if-stmt} and \ref{lstline:if-else-stmt}) and \inlinemedik{while}
-(\autoref{lstline:while-stmt}). Others, such as \inlinemedik{broadcast} (Lines
+(\autoref{lstline:while-stmt}).
+Others, such as \inlinemedik{broadcast} (Lines
 \ref{lstline:broadcast-stmt-macro} and \ref{lstline:broadcast-stmt-syntax}),
 \inlinemedik{goto} and \inlinek{interface} declarations have nuanced meanings,
 and will be explained in upcoming sections.
@@ -553,12 +554,15 @@ and will be explained in upcoming sections.
                 > Stmt Stmt                                       [right]
 \end{lstlisting}
 
-In lines 7-15, we define syntax for \MediK{} statements. Some of these,
-such as variable assignment (line 7), \inlinek{if-else} (line 8)
-and \inlinek{new Id(..);} (line 9) are commonly found in other languages, and
-have expected meanings. The remaining statements (lines 10-15) have nuanced
-meanings in context of state machines. We shall go over these while discussing
-\MediK{}'s semantics in section \ref{sec:semantics}.
+%\autoref{lst:medik-stmt-syntax} defines syntax of \MediK{} statements.
+%Some of these, such as variable assignment (\autoref{lstline:var-assing}),
+%\inlinek{if-else} (Lines \ref{lstline:if-stmt}-\autoref{lstline:if-else-stmt})
+%and \inlinek{new Id(..);} (\autoref{lstline:new-syntax) are commonly found in other languages,
+%and have expected meanings.
+%Remaining statements such as \inlinemedik{broadcast} (Lines
+%\ref{lstline:broadcast-stmt-macro} and \ref{lstline:broadcast-stmt-syntax}),
+%\inlinemedik{goto} and \inlinek{interface} declarations have nuanced meanings,
+%and will be explained in upcoming sections.
 
 %\begin{figure}[b]
 %  \centering
