@@ -449,7 +449,6 @@ syntax StandaloneExp
                 ::= "new" Id "(" Exps ")"                     [strict(2)] @\label{lstline:new-syntax}@
                 | "createFromInterface" "(" Id "," String ")" [strict(2)] @\label{lstline:create-from-interface-syntax}@
                 | Id "(" Exps ")"                             [strict(2)]
-
 syntax Exp ::= Id                                                                @\label{lstline:value-start}@
              | Val
              | Rat
@@ -574,12 +573,9 @@ is organized into units called emph{cells}, which are labeled may be nested.
 \autoref{lst:medik-configuration} shows a simplified version of $\MediK's{}$ configuration.
 
 \subsection{Semantics}\label{sec:semantics}
-% Once the syntax has been defined, $\K$ can
-% automatically generate a parser for programs in the language.
-% The semantics, described via $\K$ rewrite rules, describe
-% how the program evolves
-% during execution.
-Semantics of a language defined in $\K$ has two components:
+Recall from \autoref{sec:semantics-in-k} that $\K$ uses the \BNF{} grammar
+to generate a parser for the language. The
+Semantics has two components:
 \begin{enumerate*}[label=(\arabic*)]
   \item description of program state via $\K$-configurations, and
   \item $\K$ rules that dictate state evolution.
@@ -587,7 +583,7 @@ Semantics of a language defined in $\K$ has two components:
 Next we describe these components in detail.
 
 \subsubsection{$\K{}$-Configuration}
-$\K$ represents program execution state using $\K$-configurations.
+Recall that $\K$ represents program execution state using $\K$-configurations.
 A $\K$-configuration is an unordered list of (potentially nested) \emph{cells},
 specified using an XML-like notation.
 When declaring rules (as rewrites) over this state,
@@ -603,38 +599,40 @@ Recall that the keyword \inlinek{configuration}
 (\autoref{lstline:instances-cell-begin}) defines a $\K{}$-configuration,
 followed by xml-like notation for the $\K$-cells. For example \inlinek{<foo> ... </foo>}
 corresponds to a $\K$-cell with the name \inlinek{foo}.
-The \inlinek{<instance>} cell
-(Lines \ref{lstline:instance-cell-begin}-\ref{lstline:instance-cell-end})
-contains state of each \MediK{}
-machine instance during execution. Each instance manages its
-instance variables using a map in the \inlinek{<genv>} cell
-(\autoref{lstline:genv-cell}),
-a buffer of incoming events in the \inlinek{<inBuffer>} cell
-(\autoref{lstline:in-buffer-cell})
-and the currently executing code in the \inlinek{<k>} cell
-(Lines \ref{lstline:start-cell}).\footnote{For brevity, we present a simplified version of the configuration. See \cite{medikUrl} for the entire configuration.}
-When a \MediK{} program is executed, $\K$ replaces \inlinek{$PGM} (line 3) with the Abstract Syntax Tree (AST)
-of the program, obtained by parsing the program using the syntax from
-section \ref{sec:syntax}.
-The \inlinek{createMachineDefs} constructs
-is defined (using rewrite rules) to traverse the program AST
-and populate the configuration with information related to each machine.
-The \inlinek{createInitInstances} creates an instance for the machine
-with the \inlinek{init} keyword, leading to execution of the initial
-machine's entry block. Recall that \scantokens{\lstinline{~>}} symbol
-(\autoref{lstline:start-cell})
-is interpreted by $\K$ as \say{followed-by}, i.e., execution of \inlinek{createMachineDefs}
-is followed by execution of \inlinek{createInitInstances}.
-The attribute \inlinek{multiplicity="*"}
-on Lines \ref{lstline:instance-cell-begin}, \ref{lstline:machine-cell-begin}, and
-\ref{lstline:interface-cell-begin} signifies that multiple copies of the
-corresponding cells, in this case \inlinek{<instance>}, \inlinek{<machine>} and
-\inlinek{<interface>} cells can exist in the configuration during execution.
-This allows for multiple machine definitions, each with multiple
-instances, to exist. We shall discuss interfaces, which are held under the
-\inlinek{<interfaces>} cell in upcoming section.
-The \inlinek{<machine>} cell (Lines
-\ref{lstline:machine-cell-begin}-\ref{lstline:machine-cell-end}) holds information relevant to
+
+A \MediK{} program consists of instances of concurrently executing state machines
+that communicate by passing events, where every instance manages its own environment.
+This is clearly reflected in $\MediK{}$'s
+configuration in \autoref{lst:medik-configuration}. The configuration consists of the following cells,
+each with a similar composition:
+\begin{enumerate}[label=(\alph*)]
+  \item An \inlinek{<instances>} cell (Lines \ref{lstline:instances-cell-begin}-\ref{lstline:instances-cell-end})
+    that encapsulates \inlinek{<instance>} cells.
+  \item A \inlinek{<machines>} cell (Lines \ref{lstline:machine-cell-begin}-\ref{lstline:machine-cell-end}
+    that holds \inlinek{<machine>} cells.
+  \item An \inlinek{<instances>} cell (Lines \ref{lstline:interfaces-cell-begin}-\ref{lstline:interfaces-cell-end})
+    that holds \inlinek{<interface>} cells.
+\end{enumerate}
+The sub-cells under each of the aforementioned cells the attribute \inlinek{multiplicity=*} (Lines
+\ref{lstline:instance-cell-begin}, \ref{lstline:machine-cell-begin}, \ref{lstline:interface-cell-begin}),
+denoting that zero-or-more copies of the cell may exist in the configuration. We briefly describe
+the purpose of each such sub-cell.
+
+\inlinek{<instance>} cells (Lines \ref{lstline:instance-cell-begin}-\ref{lstline:instance-cell-end})
+hold the state of each \MediK{} machine instance during execution.
+As is the case with instances in OOP languages, each instance manages its
+instance variables using a map in the \inlinek{<genv>} cell (\autoref{lstline:genv-cell}).
+Additional, each instance maintains a buffer of incoming events in the
+\inlinek{<inBuffer>} cell (\autoref{lstline:in-buffer-cell})
+and the currently executing code in the \inlinek{<k>} cell (Lines \ref{lstline:start-cell}).
+Note that unlike the example single-threaded language in \autoref{sec:semantics-in-k},
+$\MediK{}$ is inherently concurrent, as reflected by the presence of multiple \inlinek{<k>} cells.
+At runtime, if multiple rewrite rules can apply on the configuration, $\K$ non-deterministically chooses
+a rule and applies it, allowing one to specify concurrency through interleavings. However,
+for $\MediK{}$, we utilize a structured scheduling algorithm, which will be discussed in upcoming sections.
+
+The \inlinek{<machine>} cell (Lines \ref{lstline:machine-cell-begin}-\ref{lstline:machine-cell-end})
+holds information relevant to
 a machine definition, such as the name in the \inlinek{<machineName>}
 cell (\autoref{lstline:machine-name-cell}) and states in the \inlinek{<states>} cell
 (Lines \ref{lstline:states-cell-begin}-\ref{lstline:states-cell-end})
@@ -642,9 +640,47 @@ The \inlinek{<state>} cell holds information
 relevant to a state, such as the entry block in cell
 \inlinek{<entryBlock>} (\autoref{lstline:entry-block}) and event handlers in cell
 \inlinek{<eventHandlers>} (Lines \ref{lstline:event-handler-begin}-\ref{lstline:event-handler-end}).
-%using the \inlinek{createMachineDefs}
-%construct, and new instances for those definitions, using the \inlinek{new} keyword.
+Similarly, an \inlinek{<interface>} cell holds information regarding interface definitions.
+In $\MediK$, interfaces facilitate communication with the external world, and will be discussed
+in upcoming sections.
 
+Recall that on execution, $\K$ replaces \inlinek{$PGM}
+with the Abstract Syntax Tree (AST)
+of the program, obtained by parsing the program using the language's syntax definition.
+As \inlinek{$PGM} in \MediK{} exists under
+
+%$\K{}$ replaces \inlinek{$PGM} (\autoref{lstline:k-cell})
+with the Abstract Syntax Tree (AST)
+of the program, obtained by parsing the program using
+the syntax defined in \autoref{sec:syntax}.
+In case of a \MediK{} program, $\K$ adds a
+\inlinek{<instance>} cell that has a \inlinek{<k>} cell with
+\inlinek{populateCells($PGM) ~> createInitInstances} at its top
+to the initial configuration. This instance, also referred to as the
+\emph{implicit} or \emph{initial}, is responsible
+for populating the configuration with relevant information from the program
+AST before execution can begin.
+The \inlinek{populateCells(...)} construct at the top of the \inlinek{<k>}
+cell of the implicit instance
+is defined (using rewrite rules) to recursively traverse the program AST
+translate each \inlinemedik{machine} in the \MediK{} program to a
+corresponding \inlinek{<machine> ... </machine>} sub-configuration.
+Next, the \inlinek{createInitInstances} creates an instance for the machine
+with the \inlinek{init} keyword, and schedules its \inlinemedik{entry} block
+for execution. Recall that \inlinek{\~>} symbol (\autoref{lstline:start-cell})
+is interpreted by $\K$ as \say{followed-by}, i.e., execution of \inlinek{populateCells}
+is followed by execution of \inlinek{createInitInstances}. During execution,
+as instances are created using the \inlinek{new} keyword, the configuration
+grows dynamically to accommodate them.
+In \MediK{}, interaction with the external world is handled
+through \inlinemedik{interface} definitions that make up
+\inlinek{<interface>} under the
+\inlinek{<interfaces>} cell (Lines \ref{lstline:interfaces-cell-begin}-\ref{lstline:interfaces-cell-end}).
+Interface definitions will be discussed in detail in upcoming sections.
+Also note cells \inlinek{<executorAvailable>}, \inlinek{<epoch>}, \inlinek{<stuck>}
+and \inlinek{<shouldAdvanceEpoch>}
+(Lines \ref{lstline:scheduling-cell-begin}-\ref{lstline:scheduling-cell-end}).
+These cells are utilized in implementing the scheduling strategy \MediK{}
 
 \begin{lstlisting}[
   float=h,
@@ -658,50 +694,54 @@ relevant to a state, such as the entry block in cell
   caption={\MediK{} Configuration},
   label={lst:medik-configuration}
 ]
-  configuration <instances>                                                  @\label{lstline:instances-cell-begin}@
-                  <instance multiplicity="*" type="Map">                     @\label{lstline:instance-cell-begin}@
-                    <id> 0 </id>
-                    <k> populateCells($PGM:Stmt) ~> createInitInstances </k> @\label{lstline:start-cell}@
-                    <env> .Map </env>
-                    <genv> .Map </genv>                                      @\label{lstline:genv-cell}@
-                    <activeState> . </activeState>
-                    <callerId> . </callerId>
-                    <inBuffer> .List </inBuffer>                             @\label{lstline:in-buffer-cell}@
-                  </instance>                                                @\label{lstline:instance-cell-end}@
-                </instances>                                                 @\label{lstline:instances-cell-end}@
-                <machines>                                                   @\label{lstline:machine-cell-begin}@
-                  <machine multiplicity="*" type="Map">                      @\label{lstline:machine-cell-begin}@
-                    <machineName> . </machineName>                           @\label{lstline:machine-name-cell}@
-                    <declarationCode> nothing; </declarationCode>
-                    <isInitMachine> false </isInitMachine>
-                    <receiveEvents> .Set </receiveEvents>
-                    <states>                                                 @\label{lstline:states-cell-begin}@
-                      <state multiplicity="*" type="Map">                    @\label{lstline:state-cell-begin}@
-                        <stateName> . </stateName>                           @\label{lstline:state-name}@
-                        <stateDeclarations> nothing; </stateDeclarations>
-                        <entryBlock>  nothing; </entryBlock>                 @\label{lstline:entry-block}@
-                        <eventHandlers>
-                          <eventHandler multiplicity="*" type="Set">         @\label{lstline:event-handler-begin}@
-                            <eventId> . </eventId>
-                            <handlerCode> nothing; </handlerCode>
-                          </eventHandler>                                    @\label{lstline:event-handler-end}@
-                        </eventHandlers>
-                      </state>                                               @\label{lstline:machine-cell-end}@
-                    </states>                                                @\label{lstline:states-cell-end}@
-                </machines>
-                <interfaces>                                                 @\label{lstline:interfaces-cell-begin}@
-                  <interface multiplicity="*" type="Map">                    @\label{lstline:interface-cell-begin}@
-                    <interfaceName> . </interfaceName>
-                    <interfaceDeclarations> nothing; </interfaceDeclarations>
-                    <interfaceReceiveEvents> .Set </interfaceReceiveEvents>
-                  </interface>                                               @\label{lstline:interface-cell-end}@
-                </interfaces>                                                @\label{lstline:interfaces-cell-begin}@
+configuration <instances>                                                  @\label{lstline:instances-cell-begin}@
+                <instance multiplicity="*" type="Map">                     @\label{lstline:instance-cell-begin}@
+                  <id> 0 </id>
+                  <k> populateCells($PGM:Stmt) ~> createInitInstances </k> @\label{lstline:start-cell}@
+                  <env> .Map </env>
+                  <genv> .Map </genv>                                      @\label{lstline:genv-cell}@
+                  <activeState> . </activeState>
+                  <callerId> . </callerId>
+                  <inBuffer> .List </inBuffer>                             @\label{lstline:in-buffer-cell}@
+                </instance>                                                @\label{lstline:instance-cell-end}@
+              </instances>                                                 @\label{lstline:instances-cell-end}@
+              <machines>                                                   @\label{lstline:machine-cell-begin}@
+                <machine multiplicity="*" type="Map">                      @\label{lstline:machine-cell-begin}@
+                  <machineName> . </machineName>                           @\label{lstline:machine-name-cell}@
+                  <declarationCode> nothing; </declarationCode>
+                  <isInitMachine> false </isInitMachine>
+                  <receiveEvents> .Set </receiveEvents>
+                  <states>                                                 @\label{lstline:states-cell-begin}@
+                    <state multiplicity="*" type="Map">                    @\label{lstline:state-cell-begin}@
+                      <stateName> . </stateName>                           @\label{lstline:state-name}@
+                      <stateDeclarations> nothing; </stateDeclarations>
+                      <entryBlock>  nothing; </entryBlock>                 @\label{lstline:entry-block}@
+                      <eventHandlers>
+                        <eventHandler multiplicity="*" type="Set">         @\label{lstline:event-handler-begin}@
+                          <eventId> . </eventId>
+                          <handlerCode> nothing; </handlerCode>
+                        </eventHandler>                                    @\label{lstline:event-handler-end}@
+                      </eventHandlers>
+                    </state>                                               @\label{lstline:machine-cell-end}@
+                  </states>                                                @\label{lstline:states-cell-end}@
+              </machines>
+              <interfaces>                                                 @\label{lstline:interfaces-cell-begin}@
+                <interface multiplicity="*" type="Map">                    @\label{lstline:interface-cell-begin}@
+                  <interfaceName> . </interfaceName>
+                  <interfaceDeclarations> nothing; </interfaceDeclarations>
+                  <interfaceReceiveEvents> .Set </interfaceReceiveEvents>
+                </interface>                                               @\label{lstline:interface-cell-end}@
+              </interfaces>                                                @\label{lstline:interfaces-cell-end}@
+              <executorAvailable> true </executorAvailable>                @\label{lstline:scheduling-cell-begin}@
+              <stuck> false </stuck>
+              <epoch> 0 </epoch>
+              <shouldAdvanceEpoch> false </shouldAdvanceEpoch>             @\label{lstline:scheduling-cell-end}@
 \end{lstlisting}
 
-\subsubsection{$\K$-Rules}
-$\K$-rules operate over the configuration and
-define the evolution of program state during execution. A $\K$-rule
-begins with the keyword \inlinek{rule}, and is a statement of the form $\phi
+\subsubsection{Rules}
+We briefly recall $\K$ rules from \autoref{sec:k-rules}.
+A rule begins with the keyword \inlinek{rule},
+and is a statement of the form $\phi
 \Rightarrow \psi$, where $\phi$ and $\psi$ are
 patterns over configuration terms and $\K$-variables. We
 say $\phi$ is the $\LHS$ and $\psi$ is the $\RHS$ of the rule.
@@ -716,11 +756,9 @@ For example, consider the following rule for updating the value of a local progr
 \begin{lstlisting}[
   style=ksty
   ,language=k
-  ,basicstyle=\ttfamily\scriptsize
   ,numbers=left
   ,numberstyle=\tiny
-  ,framexleftmargin=1.5em
-  ,xleftmargin=2em
+  ,xleftmargin=3ex
   ]
 rule <k> I:Id = V:Val => V ... </k>
      <env> (I |-> Loc) ... </env>
@@ -735,14 +773,15 @@ Typically, the top of the \inlinek{k} cell contains the statement currently
 being executed. Suppose we're executing the statment \inlinek{i = 2;}. In this
 case, the current configuration will have a \inlinek{k} cell of the form
 \inlinek{<k> i = 2 ... </k>}, an environment cell \inlinek{env} where variable
-\inlinek{i} maps to some pointer $p$, and a store cell
-\inlinek{store} containing a map $M$ with some value pointed-to by $p$.
+\inlinek{i} maps to some pointer $pt$, and cell
+\inlinek{<store>} containing a map $\rho$ with some value pointed-to by $pt$.
 The $\LHS$ matches with substitution
-$\theta = \left(I \mapsto i, V \mapsto 2, Loc \mapsto p, Store \mapsto M\right)$,
+\inlinekmath{$\theta$ = (I\ $\mapsto$ i, V\ $\mapsto$ 2, Loc\ $\mapsto pt$, Store\ $\mapsto \rho$ )},
 resulting in the top of the \inlinek{k} cell to be rewritten to the value $2$,
-and pointer $p$ updated to point to $2$ in $M$.
-Note if there exist multiple rules that can match the current configuration,
-then one rule is non-deterministically chosen and applied. An execution is a
+and pointer $pt$ updated to point to $2$ in $\rho$.
+%Note if there exist multiple rules that can match the current configuration,
+%then one rule is non-deterministically chosen and applied.
+An execution is a
 sequence of rule applications that continues until no rule matches the configuration.
 
 The following sections we present several \MediK{} constructs relevant to
