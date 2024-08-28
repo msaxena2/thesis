@@ -431,6 +431,50 @@ by syntax shown in \autoref{lst:medik-stmt-syntax}. The statements
 are written over expressions given by the syntax in
 \autoref{lst:medik-exp-syntax}.
 
+\begin{lstlisting}[
+  float=ht,
+  frame=single,
+  style=ksty,
+  basicstyle=\ttfamily\small,
+  language=k,
+  numbers=left,
+  numberstyle=\tiny,
+  xleftmargin=3ex,
+  caption={\MediK{} Expressions Syntax},
+  label={lst:medik-exp-syntax}
+]
+syntax StandaloneExp
+                ::= "new" Id "(" Exps ")"                     [strict(2)] @\label{lstline:new-syntax}@
+                | "createFromInterface" "(" Id "," String ")" [strict(2)] @\label{lstline:create-from-interface-syntax}@
+                | Id "(" Exps ")"                             [strict(2)]
+
+syntax Exp ::= Id                                                                @\label{lstline:value-start}@
+             | Val
+             | Rat
+             | FloatLiteral
+             | "this"                                                            @\label{lstline:value-end}@
+             | UndefExp
+             | "obtainFrom" "(" Exp "," Exp ")" [seqstrict]           @\label{lstline:obtain-from-syntax}@
+             | "(" Exp ")"                      [bracket]
+             > Exp "." Exp                      [strict(1), left]     @\label{lstline:dot-syntax}@
+             > Exp "+" Exp                      [seqstrict, left]     @\label{lstline:exp-syntax-begin}@
+             | Exp "-" Exp                      [seqstrict, left]
+             | Exp "*" Exp                      [seqstrict, left]
+             | Exp "/" Exp                      [seqstrict, left]
+             | Exp ">" Exp                      [seqstrict, left]
+             | Exp "<" Exp                      [seqstrict, left]
+             | Exp ">=" Exp                     [seqstrict, left]
+             | Exp "<=" Exp                     [seqstrict, left]
+             | "!" Exp                          [seqstrict, left]
+             | Exp "&&" Exp                     [strict(1), left]
+             | Exp "||" Exp                     [strict(1), left]
+             > Exp "==" Exp                     [seqstrict, left]     @\label{lstline:exp-syntax-end}@
+             | "interval" "(" Exp "," Exp ")"
+             > Exp "in" Exp
+             | "parseInt" "(" Exp ")"           [strict]
+             | StandaloneExp
+\end{lstlisting}
+
 Recall from \autoref{sec:semantics-in-k}, in $\K$, productions
 are defined using the keyword \inlinek{syntax}, where
 terminals are enclosed in quotes (\inlinek{""}), and non-terminals
@@ -455,45 +499,50 @@ has several constructs not commonly found in other languages, such as
 in upcoming sections.
 
 \begin{lstlisting}[
-  float=ht,
-  frame=single,
-  style=ksty,
-  basicstyle=\ttfamily\footnotesize,
-  language=k,
-  numbers=left,
-  numberstyle=\tiny,
-  xleftmargin=3ex,
-  caption={\MediK{} Expressions Syntax},
-  label={lst:medik-exp-syntax}
+  float=ht
+  ,style=ksty
+  ,language=k
+  ,numbers=left
+  ,numberstyle=\tiny
+  ,xleftmargin=3ex
+  ,caption={\MediK{} Statement Syntax}
+  ,label={lst:medik-stmt-syntax}
 ]
-syntax StandaloneExp ::= "new" Id "(" Exps ")"                       [strict(2)] @\label{lstline:new-syntax}@
-                       | "createFromInterface" "(" Id "," String ")" [strict(2)] @\label{create-from-interface-syntax}@
-                       | Id "(" Exps ")"                             [strict(2)]
-syntax Exp ::= Id                                                                @\label{lstline:value-start}@
-             | Val
-             | Rat
-             | FloatLiteral
-             | "this"                                                            @\label{lstline:value-end}@
-             | UndefExp
-             | "obtainFrom" "(" Exp "," Exp ")"            [seqstrict]           @\label{lstline:obtain-from-syntax}@
-             | "(" Exp ")"                                 [bracket]
-             > Exp "." Exp                                 [strict(1), left]     @\label{lstline:dot-syntax}@
-             > Exp "+" Exp                                 [seqstrict, left]     @\label{lstline:exp-syntax-begin}@
-             | Exp "-" Exp                                 [seqstrict, left]
-             | Exp "*" Exp                                 [seqstrict, left]
-             | Exp "/" Exp                                 [seqstrict, left]
-             | Exp ">" Exp                                 [seqstrict, left]
-             | Exp "<" Exp                                 [seqstrict, left]
-             | Exp ">=" Exp                                [seqstrict, left]
-             | Exp "<=" Exp                                [seqstrict, left]
-             | "!" Exp                                     [seqstrict, left]
-             | Exp "&&" Exp                                [strict(1), left]
-             | Exp "||" Exp                                [strict(1), left]
-             > Exp "==" Exp                                [seqstrict, left]     @\label{lstline:exp-syntax-end}@
-             | "interval" "(" Exp "," Exp ")"
-             > Exp "in" Exp
-             | "parseInt" "(" Exp ")"                      [strict]
-             | StandaloneExp
+syntax Stmt ::= StandaloneExp ";"                         [strict]
+              | "sleep" "(" Exp ")" ";"                   [strict(1)]
+              | "send" Exp "," ExtId ";"                  [macro]
+              | "send" Exp "," ExtId "," "(" Exps ")" ";" [seqstrict(1, 3)]
+              | "broadcast" Id ";"                        [macro]     @\label{lstline:broadcast-stmt-macro}@
+              | "broadcast" Id "," "(" Exps ")" ";"       [strict(2)] @\label{lstline:broadcast-stmt-syntax}@
+              | "goto" Id ";"                             [macro]
+              | "goto" Id "(" Exps ")" ";"                [strict(2)]
+              | "print" "(" Exp ")" ";"                   [strict]
+              > "return" ";"                              [macro]
+              | "return" Exp ";"                          [strict(1)]
+              | "var" Id "=" Exp ";"                      [macro]
+              > Exp "=" Exp ";"                           [strict(2)] @\label{lstline:assignment-stmt}@
+              > "var" Id ";"
+              | "vars" Ids ";"                            [macro-rec]
+              | Block
+              > "if" "(" Exp ")" Block                    [strict(1)] @\label{lstline:if-stmt}@
+              | "if" "(" Exp ")" Block "else" Block       [strict(1)] @\label{lstline:if-else-stmt}@
+              | "while" "(" Exp ")" Block                             @\label{lstline:while-stmt}@
+              | "entry" Block                             [macro]
+              | "entry" "(" Ids ")" Block
+              | "on" ExtId "do" Block                     [macro]
+              | "on" ExtId "(" Ids ")" "do" Block
+              | "fun" Id "(" Ids ")" Block
+              | NonDetStmt
+              | Exp "in" "{" CaseDecl "}"
+              | StateDecl
+              > "machine" Id Block                        [macro]
+              | "machine" Id "receives" Ids Block
+              | "interface" Id Block                      [macro]    @\label{lstline:interface-declaration}@
+              | "interface" Id "receives" Ids Block                  @\label{lstline:interface-declaration}@
+              | "init" "machine" Id Block                 [macro]
+              | "init" "machine" Id "receives" Ids Block
+              | "yield" ";"
+              > Stmt Stmt                                 [right]
 \end{lstlisting}
 
 As reflected in \autoref{lst:medik-stmt-syntax} \MediK{} support many statements
@@ -506,53 +555,6 @@ Others, such as \inlinemedik{broadcast} (Lines
 \inlinemedik{goto} and \inlinek{interface} declarations have nuanced meanings,
 and will be explained in upcoming sections.
 
-\begin{lstlisting}[
-  float=h
-  ,style=ksty
-  ,language=k
-  ,basicstyle=\ttfamily\footnotesize,
-  ,numbers=left
-  ,numberstyle=\tiny
-  ,xleftmargin=3ex
-  ,caption={\MediK{} Statement Syntax}
-  ,label={lst:medik-stmt-syntax}
-]
-  syntax Stmt ::= StandaloneExp ";"                               [strict]
-                | "sleep" "(" Exp ")" ";"                         [strict(1)]
-                | "send" Exp "," ExtId ";"                        [macro]
-                | "send" Exp "," ExtId "," "(" Exps ")" ";"       [seqstrict(1, 3)]
-                | "broadcast" Id ";"                              [macro]     @\label{lstline:broadcast-stmt-macro}@
-                | "broadcast" Id "," "(" Exps ")" ";"             [strict(2)] @\label{lstline:broadcast-stmt-syntax}@
-                | "goto" Id ";"                                   [macro]
-                | "goto" Id "(" Exps ")" ";"                      [strict(2)]
-                | "print" "(" Exp ")" ";"                         [strict]
-                > "return" ";"                                    [macro]
-                | "return" Exp ";"                                [strict(1)]
-                | "var" Id "=" Exp ";"                            [macro]
-                > Exp "=" Exp ";"                                 [strict(2)] @\label{lstline:assignment-stmt}@
-                > "var" Id ";"
-                | "vars" Ids ";"                                  [macro-rec]
-                | Block
-                > "if" "(" Exp ")" Block                          [strict(1)] @\label{lstline:if-stmt}@
-                | "if" "(" Exp ")" Block "else" Block             [strict(1)] @\label{lstline:if-else-stmt}@
-                | "while" "(" Exp ")" Block                                   @\label{lstline:while-stmt}@
-                | "entry" Block                                   [macro]
-                | "entry" "(" Ids ")" Block
-                | "on" ExtId "do" Block                           [macro]
-                | "on" ExtId "(" Ids ")" "do" Block
-                | "fun" Id "(" Ids ")" Block
-                | NonDetStmt
-                | Exp "in" "{" CaseDecl "}"
-                | StateDecl
-                > "machine" Id Block                              [macro]
-                | "machine" Id "receives" Ids Block
-                | "interface" Id Block                            [macro]    @\label{lstline:interface-declaration}@
-                | "interface" Id "receives" Ids Block                        @\label{lstline:interface-declaration}@
-                | "init" "machine" Id Block                       [macro]
-                | "init" "machine" Id "receives" Ids Block
-                | "yield" ";"
-                > Stmt Stmt                                       [right]
-\end{lstlisting}
 
 %\autoref{lst:medik-stmt-syntax} defines syntax of \MediK{} statements.
 %Some of these, such as variable assignment (\autoref{lstline:var-assing}),
@@ -564,31 +566,9 @@ and will be explained in upcoming sections.
 %\inlinemedik{goto} and \inlinek{interface} declarations have nuanced meanings,
 %and will be explained in upcoming sections.
 
-%\begin{figure}[b]
-%  \centering
-%\begin{lstlisting}[style=ksty,language=k,basicstyle=\ttfamily\scriptsize,numbers=right]
-%configuration
-%  <instance multiplicity="*" type="Map"> ...
-%    <k> createMachineDefs($PGM)
-%     ~> createInitInstances </k>
-%    <genv> .Map </genv>
-%    <env> .Map </env>
-%    <inBuffer> .List </inBuffer>
-%    <activeState> . </activeState>
-%  </instance>
-%  <machine multiplicity="*" type="Map"> ...
-%    <machineName> . </machineName>
-%    <states>
-%      <state multiplicity="*" type="Map">
-%        <stateName> . </stateName>
-%        <entryBlock> . </entryBlock>
-%        <eventHandlers> ... </eventHandlers>
-%      </state>
-%    </states>
-%  </machine>
-%\end{lstlisting}
-%\caption{\MediK{}'s $\K$ Configuration}\label{fig:k-config}
-%\end{figure}
+Recall from \autoref{sec:semantics-in-k} that execution data in $\K$
+is organized into units called emph{cells}, which are labeled may be nested.
+\autoref{lst:medik-configuration} shows a simplified version of $\MediK's{}$ configuration.
 
 \subsection{Semantics}\label{sec:semantics}
 % Once the syntax has been defined, $\K$ can
@@ -611,46 +591,76 @@ When declaring rules (as rewrites) over this state,
 any subset of the cells present in the configuration can be mentioned.
 This allows specifying only necessary parts of the state for a given rule,
 letting $\K{}$ assume that the rest of the configuration remains unchanged.
-The following configuration defines the initial state for any \MediK{} program:
+The configuration in \autoref{lst:medik-configuration} defines
+the initial state of any $\MediK{}$ program. For brevity, we only show
+a part of the configuration to illustrate organization of data in the
+semantics.
 
 \begin{lstlisting}[
-  style=ksty
-  ,language=k
-  ,basicstyle=\ttfamily\scriptsize
-  ,numbers=left
-  ,numberstyle=\tiny
-  ,framexleftmargin=1.5em
-  ,xleftmargin=2em
-  ]
-configuration
-  <instance multiplicity="*" type="Map"> ...
-    <k> createMachineDefs($PGM)
-     ~> createInitInstances </k>
-    <genv> .Map </genv>
-    <env> .Map </env>
-    <inBuffer> .List </inBuffer>
-    <activeState> . </activeState>
-  </instance>
-  <machine multiplicity="*" type="Map"> ...
-    <machineName> . </machineName>
-    <states>
-      <state multiplicity="*" type="Map">
-        <stateName> . </stateName>
-        <entryBlock> . </entryBlock>
-        <eventHandlers> ... </eventHandlers>
-      </state>
-    </states>
-  </machine>
+  float=ht,
+  frame=single,
+  style=ksty,
+  language=k,
+  numbers=left,
+  numberstyle=\tiny,
+  xleftmargin=3ex,
+  caption={\MediK{} Configuration},
+  label={lst:medik-configuration}
+]
+  configuration <instances>                                                  @\label{lstline:instances-cell-begin}@
+                  <instance multiplicity="*" type="Map">                     @\label{lstline:instance-cell-begin}@
+                    <id> 0 </id>
+                    <k> populateCells($PGM:Stmt) ~> createInitInstances </k> @\label{lstline:start-cell}@
+                    <env> .Map </env>
+                    <genv> .Map </genv>                                      @\label{lstline:genv-cell}@
+                    <activeState> . </activeState>
+                    <callerId> . </callerId>
+                    <inBuffer> .List </inBuffer>
+                  </instance>                                                @\label{lstline:instance-cell-end}@
+                </instances>                                                 @\label{lstline:instances-cell-end}@
+                <machines>                                                   @\label{lstline:machine-cell-begin}@
+                  <machine multiplicity="*" type="Map">
+                    <machineName> . </machineName>
+                    <declarationCode> nothing; </declarationCode>
+                    <isInitMachine> false </isInitMachine>
+                    <receiveEvents> .Set </receiveEvents>
+                    <states>
+                      <state multiplicity="*" type="Map">
+                        <stateName> . </stateName>
+                        <stateDeclarations> nothing; </stateDeclarations>
+                        <entryBlock>  nothing; </entryBlock>
+                        <eventHandlers>
+                          <eventHandler multiplicity="*" type="Set">
+                            <eventId> . </eventId>
+                            <handlerCode> nothing; </handlerCode>
+                          </eventHandler>
+                        </eventHandlers>
+                      </state>
+                    </states>
+                </machines>                                                  @\label{lstline:machine-cell-end}@
+                <interfaces>                                                 @\label{lstline:interface-cell-begin}@
+                  <interface multiplicity="*" type="Map">
+                    <interfaceName> . </interfaceName>
+                    <interfaceDeclarations> nothing; </interfaceDeclarations>
+                    <interfaceReceiveEvents> .Set </interfaceReceiveEvents>
+                  </interface>
+                </interfaces>                                                @\label{lstline:interface-cell-begin}@
 \end{lstlisting}
 
-The keyword \inlinek{configuration} (line 1) defines a $\K{}$-configuration,
+Recall that the keyword \inlinek{configuration}
+(\autoref{lstline:instances-cell-begin}) defines a $\K{}$-configuration,
 followed by xml-like notation for the $\K$-cells. For example \inlinek{<foo> ... </foo>}
 corresponds to a $\K$-cell with the name \inlinek{foo}.
-The \inlinek{<instance>} cell (lines 2-9) contains state of each \MediK{}
+The \inlinek{<instance>} cell
+(Lines \ref{lstline:instance-cell-begin}-\ref{lstline:instance-cell-end})
+contains state of each \MediK{}
 machine instance during execution. Each instance manages its
-instance variables using a map in the \inlinek{<genv>} cell (line 5),
-a buffer of incoming events in the \inlinek{<inBuffer>} cell (line 7)
-and the currently executing code in the \inlinek{<k>} cell (lines 3-4).\footnote{For brevity, we present a simplified version of the configuration. See \cite{medikUrl} for the entire configuration.}
+instance variables using a map in the \inlinek{<genv>} cell
+(\autoref{lstline:genv-cell}),
+a buffer of incoming events in the \inlinek{<inBuffer>} cell
+(\autoref{lstline:in-buffer-cell})
+and the currently executing code in the \inlinek{<k>} cell
+(Lines \ref{lstline:start-cell}).\footnote{For brevity, we present a simplified version of the configuration. See \cite{medikUrl} for the entire configuration.}
 When a \MediK{} program is executed, $\K$ replaces \inlinek{$PGM} (line 3) with the Abstract Syntax Tree (AST)
 of the program, obtained by parsing the program using the syntax from
 section \ref{sec:syntax}.
@@ -659,7 +669,8 @@ is defined (using rewrite rules) to traverse the program AST
 and populate the configuration with information related to each machine.
 The \inlinek{createInitInstances} creates an instance for the machine
 with the \inlinek{init} keyword, leading to execution of the initial
-machine's entry block. Note that \scantokens{\lstinline{~>}} symbol (line 3)
+machine's entry block. Recall that \scantokens{\lstinline{~>}} symbol
+(\autoref{lstline:start-cell})
 is interpreted by $\K$ as \say{followed-by}, i.e., execution of \inlinek{createMachineDefs}
 is followed by execution of \inlinek{createInitInstances}.
 The attribute \inlinek{multiplicity="*"}
