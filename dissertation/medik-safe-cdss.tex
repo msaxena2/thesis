@@ -328,6 +328,7 @@ terminals, and uppercase for non-terminals.
   style=mediksty,
   language=medik,
   numbers=left,
+  numbersep=5pt,
   numberstyle=\tiny,
   caption={Skeleton of a \MediK{} Machine},
   label={lst:machine-skeleton},
@@ -441,6 +442,7 @@ are written over expressions given by the syntax in
   numberstyle=\tiny,
   xleftmargin=3ex,
   caption={\MediK{} Expressions Syntax},
+  numbersep=5pt,
   label={lst:medik-exp-syntax}
 ]
 syntax StandaloneExp
@@ -504,6 +506,7 @@ in upcoming sections.
   ,language=k
   ,numbers=left
   ,numberstyle=\tiny
+  ,numbersep=5pt,
   ,xleftmargin=3ex
   ,caption={\MediK{} Statement Syntax}
   ,label={lst:medik-stmt-syntax}
@@ -596,57 +599,6 @@ the initial state of any $\MediK{}$ program. For brevity, we only show
 a part of the configuration to illustrate organization of data in the
 semantics.
 
-\begin{lstlisting}[
-  float=ht,
-  frame=single,
-  style=ksty,
-  language=k,
-  numbers=left,
-  numberstyle=\tiny,
-  xleftmargin=3ex,
-  caption={\MediK{} Configuration},
-  label={lst:medik-configuration}
-]
-  configuration <instances>                                                  @\label{lstline:instances-cell-begin}@
-                  <instance multiplicity="*" type="Map">                     @\label{lstline:instance-cell-begin}@
-                    <id> 0 </id>
-                    <k> populateCells($PGM:Stmt) ~> createInitInstances </k> @\label{lstline:start-cell}@
-                    <env> .Map </env>
-                    <genv> .Map </genv>                                      @\label{lstline:genv-cell}@
-                    <activeState> . </activeState>
-                    <callerId> . </callerId>
-                    <inBuffer> .List </inBuffer>
-                  </instance>                                                @\label{lstline:instance-cell-end}@
-                </instances>                                                 @\label{lstline:instances-cell-end}@
-                <machines>                                                   @\label{lstline:machine-cell-begin}@
-                  <machine multiplicity="*" type="Map">
-                    <machineName> . </machineName>
-                    <declarationCode> nothing; </declarationCode>
-                    <isInitMachine> false </isInitMachine>
-                    <receiveEvents> .Set </receiveEvents>
-                    <states>
-                      <state multiplicity="*" type="Map">
-                        <stateName> . </stateName>
-                        <stateDeclarations> nothing; </stateDeclarations>
-                        <entryBlock>  nothing; </entryBlock>
-                        <eventHandlers>
-                          <eventHandler multiplicity="*" type="Set">
-                            <eventId> . </eventId>
-                            <handlerCode> nothing; </handlerCode>
-                          </eventHandler>
-                        </eventHandlers>
-                      </state>
-                    </states>
-                </machines>                                                  @\label{lstline:machine-cell-end}@
-                <interfaces>                                                 @\label{lstline:interface-cell-begin}@
-                  <interface multiplicity="*" type="Map">
-                    <interfaceName> . </interfaceName>
-                    <interfaceDeclarations> nothing; </interfaceDeclarations>
-                    <interfaceReceiveEvents> .Set </interfaceReceiveEvents>
-                  </interface>
-                </interfaces>                                                @\label{lstline:interface-cell-begin}@
-\end{lstlisting}
-
 Recall that the keyword \inlinek{configuration}
 (\autoref{lstline:instances-cell-begin}) defines a $\K{}$-configuration,
 followed by xml-like notation for the $\K$-cells. For example \inlinek{<foo> ... </foo>}
@@ -674,21 +626,77 @@ machine's entry block. Recall that \scantokens{\lstinline{~>}} symbol
 is interpreted by $\K$ as \say{followed-by}, i.e., execution of \inlinek{createMachineDefs}
 is followed by execution of \inlinek{createInitInstances}.
 The attribute \inlinek{multiplicity="*"}
-on lines 2 and 10 signifies that multiple copies of the
-corresponding cells, in this case \inlinek{<machine>} and \inlinek{<instance>} cells,
-can exist in the configuration during execution. This allows, during execution,
-for multiple machine definitions, each with multiple
-instances, to exist.
-The \inlinek{<machine>} cell (lines 10-19) holds information relevant to
+on Lines \ref{lstline:instance-cell-begin}, \ref{lstline:machine-cell-begin}, and
+\ref{lstline:interface-cell-begin} signifies that multiple copies of the
+corresponding cells, in this case \inlinek{<instance>}, \inlinek{<machine>} and
+\inlinek{<interface>} cells can exist in the configuration during execution.
+This allows for multiple machine definitions, each with multiple
+instances, to exist. We shall discuss interfaces, which are held under the
+\inlinek{<interfaces>} cell in upcoming section.
+The \inlinek{<machine>} cell (Lines
+\ref{lstline:machine-cell-begin}-\ref{lstline:machine-cell-end}) holds information relevant to
 a machine definition, such as the name in the \inlinek{<machineName>}
-cell (line 11) and states in the \inlinek{<states>} cell (lines 12-18).
-The \inlinek{<state>} (lines 13-17) holds information
+cell (\autoref{lstline:machine-name-cell}) and states in the \inlinek{<states>} cell
+(Lines \ref{lstline:states-cell-begin}-\ref{lstline:states-cell-end})
+The \inlinek{<state>} cell holds information
 relevant to a state, such as the entry block in cell
-\inlinek{<entryBlock>} (line 15) and event handlers in cell
-\inlinek{<eventHandlers>} (line 16).
+\inlinek{<entryBlock>} (\autoref{lstline:entry-block}) and event handlers in cell
+\inlinek{<eventHandlers>} (Lines \ref{lstline:event-handler-begin}-\ref{lstline:event-handler-end}).
 %using the \inlinek{createMachineDefs}
 %construct, and new instances for those definitions, using the \inlinek{new} keyword.
 
+
+\begin{lstlisting}[
+  float=h,
+  frame=single,
+  style=ksty,
+  language=k,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=5pt,
+  xleftmargin=3ex,
+  caption={\MediK{} Configuration},
+  label={lst:medik-configuration}
+]
+  configuration <instances>                                                  @\label{lstline:instances-cell-begin}@
+                  <instance multiplicity="*" type="Map">                     @\label{lstline:instance-cell-begin}@
+                    <id> 0 </id>
+                    <k> populateCells($PGM:Stmt) ~> createInitInstances </k> @\label{lstline:start-cell}@
+                    <env> .Map </env>
+                    <genv> .Map </genv>                                      @\label{lstline:genv-cell}@
+                    <activeState> . </activeState>
+                    <callerId> . </callerId>
+                    <inBuffer> .List </inBuffer>                             @\label{lstline:in-buffer-cell}@
+                  </instance>                                                @\label{lstline:instance-cell-end}@
+                </instances>                                                 @\label{lstline:instances-cell-end}@
+                <machines>                                                   @\label{lstline:machine-cell-begin}@
+                  <machine multiplicity="*" type="Map">                      @\label{lstline:machine-cell-begin}@
+                    <machineName> . </machineName>                           @\label{lstline:machine-name-cell}@
+                    <declarationCode> nothing; </declarationCode>
+                    <isInitMachine> false </isInitMachine>
+                    <receiveEvents> .Set </receiveEvents>
+                    <states>                                                 @\label{lstline:states-cell-begin}@
+                      <state multiplicity="*" type="Map">                    @\label{lstline:state-cell-begin}@
+                        <stateName> . </stateName>                           @\label{lstline:state-name}@
+                        <stateDeclarations> nothing; </stateDeclarations>
+                        <entryBlock>  nothing; </entryBlock>                 @\label{lstline:entry-block}@
+                        <eventHandlers>
+                          <eventHandler multiplicity="*" type="Set">         @\label{lstline:event-handler-begin}@
+                            <eventId> . </eventId>
+                            <handlerCode> nothing; </handlerCode>
+                          </eventHandler>                                    @\label{lstline:event-handler-end}@
+                        </eventHandlers>
+                      </state>                                               @\label{lstline:machine-cell-end}@
+                    </states>                                                @\label{lstline:states-cell-end}@
+                </machines>
+                <interfaces>                                                 @\label{lstline:interfaces-cell-begin}@
+                  <interface multiplicity="*" type="Map">                    @\label{lstline:interface-cell-begin}@
+                    <interfaceName> . </interfaceName>
+                    <interfaceDeclarations> nothing; </interfaceDeclarations>
+                    <interfaceReceiveEvents> .Set </interfaceReceiveEvents>
+                  </interface>                                               @\label{lstline:interface-cell-end}@
+                </interfaces>                                                @\label{lstline:interfaces-cell-begin}@
+\end{lstlisting}
 
 \subsubsection{$\K$-Rules}
 $\K$-rules operate over the configuration and
