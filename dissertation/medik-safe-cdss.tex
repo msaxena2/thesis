@@ -734,7 +734,8 @@ Interface definitions will be discussed in detail in upcoming sections.
 Also note cells \inlinek{<executorAvailable>}, \inlinek{<epoch>}, \inlinek{<stuck>}
 and \inlinek{<shouldAdvanceEpoch>}
 (Lines \ref{lstline:scheduling-cell-begin}-\ref{lstline:scheduling-cell-end}).
-These cells are utilized in implementing the scheduling strategy \MediK{} uses.
+These cells are utilized in implementing the scheduling strategy \MediK{} uses, and will be
+discussed in subsequent sections.
 
 \section{Rules}\label{sec:rules}
 
@@ -751,20 +752,19 @@ During execution, if the current configuration $C$, i.e. program execution state
 matches $\phi$ with substitution $\theta$, then it is rewritten to
 $\psi\theta$. We say pattern $\phi$ matches configuration $C$ iff
 there exists a substition $\theta$ s.t. $C = \phi\theta$.
-For example, consider the following rule for updating the value of a local program variable.
+For example, consider the rule in \autoref{lst:variable-assignment} for updating the value of a local program variable.
 \begin{lstlisting}[
-  style=ksty
+  float=h
+  ,style=ksty
   ,language=k
-  ,numbers=left
-  ,numberstyle=\tiny
-  ,numbersep=5pt
-  ,xleftmargin=3ex
-  ]
+  ,label={lst:variable-assignment}
+  ,caption={Variable Assignment}
+]
 rule <k> I:Id = V:Val => V ... </k>
      <env> (I |-> Loc) ... </env>
      <store> Store => Store[Loc <- V] </store>
 \end{lstlisting}
-Here, \inlinek{I}, \inlinek{V}, \inlinek{Loc}, and \inlinek{Store}
+In the rule, \inlinek{I}, \inlinek{V}, \inlinek{Loc}, and \inlinek{Store}
 are $\K$-variables. Note the distinction between program variables and $\K$-variables:
 while program variables are simply identifiers, $\K$-variables have logical meaning.
 The \inlinek{...} is used to denote parts of the configuration
