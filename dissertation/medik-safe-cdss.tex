@@ -703,7 +703,7 @@ Similarly, an \inlinek{<interface>} cell holds information regarding interface d
 In $\MediK$, interfaces facilitate communication with the external world, and will be discussed
 in upcoming sections.
 
-Recall that on execution, $\K{}$ replaces \inlinek{\$PGM} (\autoref{lstline:k-cell})
+Recall that on execution, $\K{}$ replaces \inlinek{\$PGM} (\autoref{lstline:start-cell})
 with the Abstract Syntax Tree (AST)
 of the program, obtained by parsing the program using
 the syntax defined in \autoref{sec:syntax}.
@@ -791,16 +791,49 @@ as objects. The rule in \autoref{lst:new-rule} depicts
 the semantics of the \inlinemedik{new} operator. The
 rule will match any \inlinek{<k>} cell that has \inlinek{new}
 at the top of the cell, and rewrite it to a temporary \inlinek{wait} construct (\autoref{lstline:source-k-cell}).
-The \K{} variable \inlinek{MName} matches the name of the machine whose instance is being created.
-The rule then looks for an \inlinek{<machine>} sub-configuration that
-has the same name, i.e., the name that variable \inlinek{MName} matches
-on \autoref{lstline:source-k-cell} to obtain the instance variable
-declarations, matched by variable \inlinek{MachineDecls} on \autoref{lstline:declaration-code}
-and the state prefixed with the keyword \inlinek{init} (Lines \ref{lstline:init-state-begin}-\ref{lstline:init-state-end}).
-Then a new \inlinek{<instance>} cell is added to the configuration (Lines \ref{lstline:new-instance-begin}-\ref{lstline:new-instance-end}),
-and its unique id, stored under the \inlinek{<id>} cell, is added to the set of
-active instances (\autoref{lstline:active-instances-update}).
+Note that the same \K{} variable, \inlinek{MName}, is used at the following places in the rule's \LHS{}:
+\begin{itemize}
+  \item On \autoref{lstline:source-k-cell} to match against the name of the machine whose instance is being created.
+  \item On \autoref{lstline:machine-name} to identify the \inlinek{<machine>}
+    (Lines \ref{lstline:machine-cell-begin}-\ref{lstline:machine-cell-end})
+    with the same name as the one being initialized.
+\end{itemize}
+By matching a \inlinek{<machineName>} cell that has the same name as the
+one being using \inlinek{new} on \autoref{lstline:source-k-cell}, appropriate
+instance variable and the state marked with the \inlinek{init} keyword
+can be determined by matching against the contents of the \inlinek{<declarationCode>}
+and \inlinek{<state>} cells, as shown on  \autoref{lstline:declaration-code} and
+Lines \ref{lstline:init-state-begin}-\ref{lstline:init-state-end} respectively.
+Finally, a new \inlinek{<instance>} cell can be added to the configuration (Lines
+\ref{lstline:new-instance-begin}-\ref{lstline:new-instance-end}) containing:
+\begin{itemize}
+  \item An \inlinek{<id>} cell containing a unique identifier (\autoref{lstline:id-cell})
+    that is also added to the set of active instances (\autoref{lstline:active-instances-update}).
+  \item A \inlinek{<k>} cell (\autoref{lstline:new-k-cell}) containing code to initialize instance variables
+    and enter the initial state, obtained by matching on appropriate parts of the \inlinek{<machine>} cell
+    as described earlier.
+\end{itemize}
+Note that when \inlinek{new} is executed, control is transferred from the
+caller, i.e., the original instance, to the callee, i.e., the created instance.
+Once the entry block of the callee completes execution, control is transferred
+back to the caller along with a \emph{reference} to the newly created instance.
+We chose this behavior for the \inlinek{new} operator to maintain consistency
+with most OOP languages where an object is considered instantiated and ready
+for use only after all relevant constructors have been executed.
+While \MediK{} machines
+do not have direct analogues to OOP constructors, we treat the \inlinek{entry}
+blocks of intial states as such, and typically place code commonly found
+in constructors, such as initialization of instance variables, under them.
+Upcoming sections shall discuss \MediK{}'s scheduling semantics, and
+our motivations behind them in greater depth.
 
+%a new \inlinek{<instance>}
+%sub-configuration (Lines \ref{lstline:new-instance-begin}-\ref{lstline:new-instance-end}),
+%containing a \inlinek{<k>} cell with constructs to first initialize appropriate
+%instance variables and then enter state prefixed with the \inlinek{init} keyword (\autoref{lstline:new-k-cell}),
+%obtained by matching on cells \inlinek{<declarationCode>} (\autoref{lstline:declaration-code})
+%and \inlinek{<state>} (Lines \ref{lstline:state-cell-begin}-\ref{lstline:state-cell-end})
+%under the appropriate \inlinek{<machine>} cell.
 \begin{lstlisting}[
   float=h!,
   frame=single,
@@ -810,13 +843,13 @@ active instances (\autoref{lstline:active-instances-update}).
   numberstyle=\tiny,
   numbersep=5pt,
   xleftmargin=3ex,
-  caption={Creating Instances via the \inlinek{new} Operator},
+  caption={New Instance Creation},
   label={lst:new-rule}
 ]
 rule <id> SourceId </id>
      <k> new MName (Args) => wait ... </k>                             @\label{lstline:source-k-cell}@
      ( .Bag => <instance>                                              @\label{lstline:new-instance-begin}@
-                <id> Loc </id>
+                <id> Loc </id>                                         @\label{lstline:id-cell}@
                 <k> MachineDecls ~> enterState(InitState | Args ) </k> @\label{lstline:new-k-cell}@
                 <callerId> SourceId </callerId>                        @\label{lstline:source-caller-id}@
                 <class> MName </class> ...                             @\label{lstline:source-machine-name}@
@@ -824,7 +857,7 @@ rule <id> SourceId </id>
      <nextLoc> Loc => Loc +Int 1 </nextLoc>
      <store> ( .Map => (Loc |-> instance(Loc))) ... </store>
      <machine>                                                         @\label{lstline:machine-cell-begin}@
-      <machineName> MName </machineName>
+      <machineName> MName </machineName>                               @\label{lstline:machine-name}@
       <declarationCode> MachineDecls </declarationCode>                @\label{lstline:declaration-code}@
       <state>                                                          @\label{lstline:init-state-begin}@
         <stateName> InitState </stateName>
@@ -834,65 +867,85 @@ rule <id> SourceId </id>
      <activeInstances> ... (.Set => SetItem(Loc)) </activeInstances>   @\label{lstline:active-instances-update}@
 \end{lstlisting}
 
+\subsection{Sending and Receiving Messages}
 
-\hfill\newline
+\MediK{} machines communicating by passing messages.
+This is facilitated by the \inlinek{send} statement
+that enables a machine
+to deliver an event to a particular machine through
+a reference to the receiver machine. This is captured
+by the rule in \autoref{lst:send-stmt}.
 
-We first present the
-rule for sending and receiving messages.
 \begin{lstlisting}[
-  style=ksty
+  float=ht
+  ,style=ksty
   ,language=k
-  ,basicstyle=\ttfamily\scriptsize
   ,numbers=left
-  ,numberstyle=\tiny
-  ,framexleftmargin=1.5em
-  ,xleftmargin=2em
+  ,xleftmargin=3ex
+  ,label={lst:send-stmt},
+  ,caption={\MediK{} Send Statement Semantics}
   ]
-rule
-<instance>
- <k> send instance(RecvId) , EventName:Id , ( Args )
-     =>  done ... </k> ...
-</instance>
-<instance>
- <id> RecvId </id> ....
- <inBuffer> ... (.List
-  => ListItem(
-      eventArgsPair(EventName | Args | Epoch + 1
-      )))
- </inBuffer> ...
-</instance>
-<epoch> Epoch </epoch>
+rule <instance>                                                             @\label{lstlin:instance-a-begin}@
+      <k> send instance(RecvId) , EventName:Id , ( Args ) =>  done ... </k> @\label{lstline:k-send}@
+       ...
+     </instance>                                                            @\label{lstline:instance-a-end}@
+     <instance>                                                             @\label{lstline:instance-b-begin}@
+      <id> RecvId </id>
+      <inBuffer> ...
+      (.List => ListItem( eventArgsPair(EventName | Args | Epoch + 1)))     @\label{lstline:instance-b-end}@
+      </inBuffer>
+        ...
+      </instance>
+      <epoch> Epoch </epoch>
 \end{lstlisting}
-When the top of the \inlinek{k} cell has
-\inlinek{send},  the rule above
-\begin{enumerate*}[label=(\roman*)]
+
+When an instance the top of the \inlinek{<k>} cell has
+\inlinek{send}, the rule:
+\begin{enumerate}[label=(\roman*)]
   \item obtains the \inlinek{id} of the receiver instance,
     the event name and the event arguments by matching
     the variables \inlinek{RecvId}, \inlinek{EventName} and \inlinek{Args}
-    against the current configuration (line 3),
-  \item rewrites the top of the \inlinek{k} cell (line 4) to \inlinek{done},
+    against the current configuration (\autoref{lstline:k-send}),
+  \item rewrites the top of the \inlinek{k} cell to \inlinek{done},
     marking the completion of execution for the construct,
   \item adds the event and associated arguments to the
-    buffer of incoming events (lines 8-12) of the instance
-    with \inlinek{id} \inlinek{RecvId} (line 7).
+    buffer of incoming events of the instance
+    with \inlinek{id} \inlinek{RecvId} (Lines \ref{lstline:instance-b-begin}-\ref{lstline:isntance-b-end}).
   \item The \epoch{} decides when the machine can run, and is discussed in
     Section \ref{sec:scheduling-semantics}.
-\end{enumerate*}
+\end{enumerate}
 
-To handle interaction with heterogeneous external sources, \MediK{}
-models them as interfaces. An interface is a \FSM{} that has its
-transition system defined externally. For example, certain measurements
-such as the heart rate are often obtained from sensors.
-The following code shows the process of obtaining external measurements in
+\subsection{External Agents}
+
+Recall from \autoref{sec:sepsis-bpg} that \CDSSs{} need to
+interact with heterogeneous external agents, such as sensors
+and monitors for various patient parameters and \EHR{} systems.
+Ideally, we would like a \MediK{} program to be agnostic to
+specific details of external agents it interacts with, and for
+machines to utilize a \emph{uniform} communication mechanism
+that serves both external and internal communication.
+
+We achieve this by treating all external agents as state machines
+with transition systems defined outside the \MediK{} program, similar
+to how other languages, such as Object-Oriented Maude,
+handle external agents \cite{OOPMaudeUrl}. These
+external agents are modeled in \MediK{} as \inlinemedik{interface}s.
+An interface is simply a state machine that has its
+transition system defined externally.
+It is common to obtain certain measurements,
+such as the patient's most recent heart rate, from sensors attached to
+the patient. \autoref{lst:external-interaction} depicts one
+way of connecting the sensor.
+
 \MediK{}.
 \begin{lstlisting}[
-  style=mediksty
+  frame=hb
+  ,style=mediksty
   ,language=medik
-  ,basicstyle=\ttfamily\scriptsize
   ,numbers=left
   ,numberstyle=\tiny
-  ,framexleftmargin=1.5em
-  ,xleftmargin=2em
+  ,xleftmargin=3ex,
+  ,caption={{\MediK{} External Agents}}
   ]
 interface HeartRateSensor { }
 
