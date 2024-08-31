@@ -937,7 +937,8 @@ and use \inlinek{send} to add the \inlinemedik{EventName} to each machine's
 \inlinemedik{<inputBuffer>} (\autoref{lstline:broadcast-helper-end}).
 
 \begin{lstlisting}[
-  frame=ht
+  float=ht
+  ,frame=ht
   ,style=ksty
   ,language=k
   ,numbers=left
@@ -1026,71 +1027,76 @@ using the \inlinemedik{broacast} construct described in \autoref{sec:messaging}.
 
 \subsection{Simple Tables}\label{sec:tables}
 
-In \ref rule for supporting tables in \MediK{}.
-Once a measurement, such as the heart rate has been obtained
+Recall from \autoref{sec:sepsis-bpg} that tables indicating
+normality/abnormality for parameters indexed by age and weight occur
+commonly in \BPGs{}. For instance, in the running sepsis example,
+once a measurement, such as the heart rate has been obtained
 from a sensor, we need to use a table, such as \tablename{} \ref{table:vital-signs}
 to check if the measurement is within a normal range. In \MediK, we can write a
-function that does the required check, as shown in \figurename{}
-\ref{fig:hr-check-fun}.
-\begin{figure}[h]
-  \centering
+function that does the required check, as shown in \autoref{lst:hr-table}.
 \begin{lstlisting}[
-  style=mediksty
+  frame=hb
+  ,style=mediksty
   ,language=medik
-  ,basicstyle=\ttfamily\scriptsize
   ,numbers=left
   ,numberstyle=\tiny
-  ,framexleftmargin=1.5em
-  ,xleftmargin=2em
+  ,xleftmargin=3ex,
+  ,caption={{Vital Signs Tables}}
+  ,label={lst:hr-table}
   ]
 fun isHeartRateNormal() {
   days(age) in {
-    interval(days(0)  , months(1)): return hr > 205;
-    interval(months(1), months(3)): return hr > 205;
+    interval(days(0)  , months(1)): return hr > 205; @\label{lstline:interval-begin}@
+    interval(months(1), months(3)): return hr > 205; @\label{lstline:interval-end}@
     // omitting other cases
-    default                       : return hr > 100;
+    default                       : return hr > 100; @\label{lstline:default-clause}@
   }
 }
 \end{lstlisting}
-  \caption{Checking abnormality using tables}\label{fig:hr-check-fun}
-\end{figure}
-In the code, if the \inlinemedik{age} lies in
-any of the intervals (closed on the left, open on the right) on lines 3-5, the
+While the table in \autoref{lst:hr-table} could have also been implemented using
+simple \inlinemedik{if-else} constructs, we chose to present data in form of a table
+to improve overall readability and \HCP{} comprhenesibility, as \HCPs{} are
+already familiar with them from paper-based guidelines.
+If the heart rate lies any of the intervals (closed on the left, open on the right) on Lines \ref{lstline:interval-begin}-
+\ref{lstline:interval-end}, the
 corresponding statement to the right of the colon (\inlinemedik{:}) is run. Otherwise
-line 6 is run.
-In \MediK{}, the following rules are responsible for assigning semantics to
-the \inlinemedik{in-interval} construct:
+the default clause (\autoref{lstline:default-clause}) is run.
+We can then define the semantics of tables in terms of \inlinemedik{if-else} as shown in \autoref{lst:table-rules}.
 \begin{lstlisting}[
-  style=ksty
+  float=hb
+  ,frame=single
+  ,style=ksty
   ,language=k
-  ,basicstyle=\ttfamily\scriptsize
   ,numbers=left
   ,numberstyle=\tiny
-  ,framexleftmargin=1.5em
-  ,xleftmargin=2em
+  ,xleftmargin=3ex,
+  ,caption={{Implementing Tables}}
+  ,label={lst:table-rules}
   ]
-rule E in interval(L, U) => (E >= L) && (E < U)
-  [macro]
+rule E in interval(L, R) => (E >= L) && (E < R)
 rule E in { interval(L, U): S:Stmt Cs:CaseDecl }
-  => if (E in interval(L, U)) {S} else {E in { Cs }}
-  [macro-rec]
+  => if ((E >= L) && (E < U)) { S } else { E in { Cs } }
+rule E in { interval(L, U): S:Stmt }
+  => if ((E >= L) && (E < U)) { S }
+rule E in { interval(L, U): S1:Stmt default: S2:Stmt }
+  => if  ((E >= L) && (E < U)) { S1 } else { S2 }
 \end{lstlisting}
 
-Note the rules above are marked with the attributes \inlinek{macro}
-(line 2) or \inlinek{macro-rec} (line 5). This specifies that
-these constructs are not part of the language's semantics, but merely
-syntactic sugar. On line 1, we specify that
-\inlinek{E in interval(L, R)} desugars to checking the expression \inlinek{e}
-is between the lower and upper bound \inlinek{L} and \inlinek{U} respectively.
-Similary we desugar each case statement to an \inlinek{if-else} statement.
-In lines 3-5, we say that if the expression \inlinek{E} is in
-\inlinek{interval} with lower and upper bounds \inlinek{L} and \inlinek{U}
-respectively, then execute \inlinek{S}, otherwise check \inlinek{E} against the
-remaining cases \inlinek{Cs}. Note the postfix \inlinek{-rec} after
-\inlinek{macro} specifies that the rule applies recursively, to desugar
-the remaining case statements.
+%Note the rules above are marked with the attributes \inlinek{macro}
+%(line 2) or \inlinek{macro-rec} (line 5). This specifies that
+%these constructs are not part of the language's semantics, but merely
+%syntactic sugar. On line 1, we specify that
+%\inlinek{E in interval(L, R)} desugars to checking the expression \inlinek{e}
+%is between the lower and upper bound \inlinek{L} and \inlinek{U} respectively.
+%Similary we desugar each case statement to an \inlinek{if-else} statement.
+%In lines 3-5, we say that if the expression \inlinek{E} is in
+%\inlinek{interval} with lower and upper bounds \inlinek{L} and \inlinek{U}
+%respectively, then execute \inlinek{S}, otherwise check \inlinek{E} against the
+%remaining cases \inlinek{Cs}. Note the postfix \inlinek{-rec} after
+%\inlinek{macro} specifies that the rule applies recursively, to desugar
+%the remaining case statements.
 
-\paragraph{\MediK{} Scheduling Semantics}\label{sec:scheduling-semantics}
+\section{\MediK{} Scheduling Semantics}\label{sec:scheduling-semantics}
 
 Since the $\K{}$-generated
 interpreter is single-threaded, \MediK{} employs interleaving-semantics
