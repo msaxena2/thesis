@@ -908,18 +908,53 @@ rule <instance>                                                             @\la
 When an instance the top of the \inlinek{<k>} cell has
 \inlinek{send}, the rule:
 \begin{enumerate}[label=(\roman*)]
-  \item obtains the \inlinek{id} of the receiver instance,
+  \item Obtains the \inlinek{id} of the receiver instance,
     the event name and the event arguments by matching
     the variables \inlinek{RecvId}, \inlinek{EventName} and \inlinek{Args}
-    against the current configuration (\autoref{lstline:k-send}),
-  \item rewrites the top of the \inlinek{k} cell to \inlinek{done},
-    marking the completion of execution for the construct,
-  \item adds the event and associated arguments to the
+    against the current configuration (\autoref{lstline:k-send}) respectively.
+  \item Rewrites the top of the \inlinek{k} cell to \inlinek{done},
+    marking the completion of execution for the construct.
+  \item Adds the event and associated arguments to the
     buffer of incoming events of the instance
-    with \inlinek{id} \inlinek{RecvId} (Lines \ref{lstline:instance-b-begin}-\ref{lstline:isntance-b-end}).
+    with \inlinek{id} \inlinek{RecvId} (Lines
+    \ref{lstline:instance-b-begin}-\ref{lstline:instance-b-end}).
   \item The \epoch{} decides when the machine can run, and is discussed in
     Section \ref{sec:scheduling-semantics}.
 \end{enumerate}
+
+While the \inlinemedik{send} construct enables communication between pairs of
+machines, \MediK{} also supports \emph{multicast} communication, that enables
+a machine to send to multiple machines at the same time. The \inlinemedik{broadcast}
+construct that facilitates this is described in \autoref{lst:broadcast-rule}.
+Recall from \autoref{lst:machine-skeleton} (\autoref{lstline:machine-receives})
+that a machine specifies the list of events it accepts as part of its definition, which
+we refer to as the \say{receives-list} of the machine.
+To define the semantics of \inlinek{broadcast} for some
+event \inlinemedik{EventName} (\autoref{lstline:broadcast}), we utilize a
+helper function symbol \inlinemedik{getReceivers} (\autoref{lstline:broadcast-helper}),
+to obtain all machines that declare \inlinemedik{EventName} in their \say{receives-lists},
+and use \inlinek{send} to add the \inlinemedik{EventName} to each machine's
+\inlinemedik{<inputBuffer>} (\autoref{lstline:broadcast-helper-end}).
+
+\begin{lstlisting}[
+  frame=ht
+  ,style=mediksty
+  ,language=medik
+  ,numbers=left
+  ,numberstyle=\tiny
+  ,xleftmargin=3ex,
+  ,caption={{Broadcast Mechanism}}
+  ,label={lst:broadcast-rule}
+]
+rule broadcast EventName:Id , ( Args ) ;                              @\label{lstline:broadcast}@
+  => performBroadcast ( EventName | Args | getRecievers(EventName))   @\label{lstline:broadcast-helper}@
+
+rule performBroadcast ( EventName | Args | ListItem(Id) Recievers)    @\label{lstline:broadcast-helper-begin}@
+  =>   send instance(Id), EventName, ( Args ) ;
+    ~> performBroadcast ( EventName | Args | Recievers)               @\label{lstline:broadcast-helper-end}@
+
+rule performBroadcast(_ | _ | .List) => .
+\end{lstlisting}
 
 \subsection{External Agents}
 
@@ -931,19 +966,7 @@ specific details of external agents it interacts with, and for
 machines to utilize a \emph{uniform} communication mechanism
 that serves both external and internal communication.
 
-We achieve this by treating all external agents as state machines
-with transition systems defined outside the \MediK{} program, similar
-to how other languages, such as Object-Oriented Maude,
-\cite{OOPMaudeUrl}. These
-external agents are modeled in \MediK{} as \inlinemedik{interface}s.
-We define an interface as a state machine that has its
-transition system defined externally.
-For \CDSSs{}, it is common to obtain certain measurements,
-such as the patient's most recent heart rate, from sensors attached to
-the patient. \autoref{lst:external-interaction} depicts one
-way of connecting the sensor.
 
-\MediK{}.
 \begin{lstlisting}[
   frame=hb
   ,style=mediksty
@@ -952,40 +975,55 @@ way of connecting the sensor.
   ,numberstyle=\tiny
   ,xleftmargin=3ex,
   ,caption={{\MediK{} External Agents}}
+  ,label={lst:external-interaction}
   ]
-interface HeartRateSensor { }
+interface HeartRateSensor { }                                             @\label{lstline:hr-interface-decl}@
 
 machine TreatmentMachine { ...
-  var hrSensor = createFromInterface(HeartRateSensor,
-                              "heartRateSensor");
-  var heartRate = obtainFrom(hrSensor, "heartRate");
+  var hrSensor = createFromInterface(HeartRateSensor, "heartRateSensor"); @\label{lstline:sensor-creation}@
+  var heartRate = obtainFrom(hrSensor, "heartRate");                      @\label{lstline:obtain-from-sensor}@
 }
 \end{lstlisting}
+
+We achieve this by treating all external agents as state machines
+with transition systems defined outside the \MediK{} program, similar
+to other languages, such as Object-Oriented Maude, \cite{OOPMaudeUrl}.
+These external agents are modeled in \MediK{} as \inlinemedik{interface}s.
+We define an interface as a state machine that has its
+transition system defined externally.
+In case of \CDSSs{}, it is common to utilize external sensors to obtain
+various patient parameters. \autoref{lst:external-interaction} shows
+such as example, where data is obtained from an external Heart Rate sensor.
+
 Since we don't have the transition system for
-the heart rate sensor, we declare it as an interface (line 1).
+the heart rate sensor, we declare it as an interface
+(\autoref{lstline:hr-interface-decl}).
 Next, instead of using \inlinemedik{new} to create an instance, we use
 a builtin \MediK{} construct \inlinemedik{createFromInterface}, which takes as
 arguments
 \begin{enumerate*}[label=(\alph*)]
-  \item the inteface name (lines 4),
+  \item the inteface name
   \item a unique identifier string used to identify the
-    instance outside the \MediK{} process.
+    instance outside the \MediK{} process \autoref{lstline:sensor-creation}.
 \end{enumerate*}
 All other \MediK{} machines can interact with external sensor using
-variable \inlinemedik{hrSensor}. There is no need to make any distinction
+variable \inlinemedik{hrSensor} (\autoref{lstline:obtain-from-sensor}). There is no need to make any distinction
 between external, and \MediK{}-based machines.
 To deal with external interactions, input and output
 pipes are provided to the \MediK{} process at launch.
 When the \inlinemedik{send} construct is used on an external machine,
-\MediK{} will write
-a JSON \cite{jsonUrl} message with the event data, the
-identifier from line 5, and a unique transaction id
+\MediK{} will write a JSON \cite{jsonUrl} message with the event data, the
+identifier from \autoref{lstline:sensor-creation}, and a unique transaction id
 to the \emph{write-end} of the output pipe. At the
 \emph{read-end}, we need to write external code (in any programming language)
-to handle the JSON message. In the example above, this involves reading from
-the external heart rate sensor. To send data to \MediK{}, a JSON message in
-a pre-specified format needs to be written to the \emph{write-end} of the
-input pipe.
+to handle the JSON message. In the case of the example in \autoref{lst:external-interaction},
+this involves reading from an external heart rate sensor and sending the data back to the
+\MediK{} process that made the request. To send data to \MediK{}, a JSON message in
+a pre-specified format that also contains the unique transaction id of the request
+needs to be written to the \emph{write-end} of the input pipe. Note that the \inlinemedik{obtainFrom}
+construct implements a \emph{request-response} mechanism, where a request initiated from \MediK{} is
+responded to by an external agent. But, external agents can also initiate communicate
+
 
 Next, we desribe the rule for supporting tables in \MediK{}.
 Once a measurement, such as the heart rate has been obtained
