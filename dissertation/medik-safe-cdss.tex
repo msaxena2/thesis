@@ -781,8 +781,14 @@ resulting in the top of the \inlinek{<k>} cell to be rewritten to the value $2$,
 and pointer $pt$ updated to point to $2$ in $\rho$.
 Execution is a sequence of rule applications that continues until
 no rule can match the current configuration.
+
 Next, we explain several features of \MediK{} relevant to
-defining \BPGs{} using their corresponding $\K$-rules.
+defining \BPGs{} using their corresponding $\K$-rules. Note that
+we only discuss rules related to idiosyntacries of \MediK{}. Other
+rules, that implement statement that resemble other definitions
+are omittted for brevity. For instance, the rules for
+Arithmetic Expressions and boolean expressions, that
+resemble counterparts in other languages are ignored.
 
 \subsection{Instance Creation}
 \MediK{}, machine definitions are analogous to OOP classes,
@@ -928,11 +934,11 @@ that serves both external and internal communication.
 We achieve this by treating all external agents as state machines
 with transition systems defined outside the \MediK{} program, similar
 to how other languages, such as Object-Oriented Maude,
-handle external agents \cite{OOPMaudeUrl}. These
+\cite{OOPMaudeUrl}. These
 external agents are modeled in \MediK{} as \inlinemedik{interface}s.
-An interface is simply a state machine that has its
+We define an interface as a state machine that has its
 transition system defined externally.
-It is common to obtain certain measurements,
+For \CDSSs{}, it is common to obtain certain measurements,
 such as the patient's most recent heart rate, from sensors attached to
 the patient. \autoref{lst:external-interaction} depicts one
 way of connecting the sensor.
