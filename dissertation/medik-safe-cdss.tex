@@ -873,7 +873,7 @@ rule <id> SourceId </id>
      <activeInstances> ... (.Set => SetItem(Loc)) </activeInstances>   @\label{lstline:active-instances-update}@
 \end{lstlisting}
 
-\subsection{Sending and Receiving Messages}
+\subsection{Sending and Receiving Messages}\label{sec:messaging}
 
 \MediK{} machines communicating by passing messages.
 This is facilitated by the \inlinek{send} statement
@@ -938,8 +938,8 @@ and use \inlinek{send} to add the \inlinemedik{EventName} to each machine's
 
 \begin{lstlisting}[
   frame=ht
-  ,style=mediksty
-  ,language=medik
+  ,style=ksty
+  ,language=k
   ,numbers=left
   ,numberstyle=\tiny
   ,xleftmargin=3ex,
@@ -965,7 +965,6 @@ Ideally, we would like a \MediK{} program to be agnostic to
 specific details of external agents it interacts with, and for
 machines to utilize a \emph{uniform} communication mechanism
 that serves both external and internal communication.
-
 
 \begin{lstlisting}[
   frame=hb
@@ -1023,9 +1022,11 @@ a pre-specified format that also contains the unique transaction id of the reque
 needs to be written to the \emph{write-end} of the input pipe. Note that the \inlinemedik{obtainFrom}
 construct implements a \emph{request-response} mechanism, where a request initiated from \MediK{} is
 responded to by an external agent. But, external agents can also initiate communicate
+using the \inlinemedik{broacast} construct described in \autoref{sec:messaging}.
 
+\subsection{Simple Tables}\label{sec:tables}
 
-Next, we desribe the rule for supporting tables in \MediK{}.
+In \ref rule for supporting tables in \MediK{}.
 Once a measurement, such as the heart rate has been obtained
 from a sensor, we need to use a table, such as \tablename{} \ref{table:vital-signs}
 to check if the measurement is within a normal range. In \MediK, we can write a
