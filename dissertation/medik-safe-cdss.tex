@@ -385,7 +385,7 @@ syntax Exp ::= Id                                                         @\labe
              | Exp "||" Exp                     [strict(1), left]
              > Exp "==" Exp                     [seqstrict, left]     @\label{lstline:exp-syntax-end}@
              | "interval" "(" Exp "," Exp ")"
-             > Exp "in" Exp
+             > Exp "in" Exp                     [macro]               @\label{lstline:case-stmt}@
              | "parseInt" "(" Exp ")"           [strict]
              | StandaloneExp
 \end{lstlisting}
@@ -437,7 +437,7 @@ syntax Stmt ::= StandaloneExp ";"                         [strict]
               | "on" ExtId "(" Ids ")" "do" Block
               | "fun" Id "(" Ids ")" Block
               | NonDetStmt
-              | Exp "in" "{" CaseDecl "}"
+              | Exp "in" "{" CaseDecl "}"                 [macro-rec] @\label{lstline:case-2-stmt}@
               | StateDecl
               > "machine" Id Block                        [macro]
               | "machine" Id "receives" Ids Block
@@ -996,8 +996,7 @@ various patient parameters. \autoref{lst:external-interaction} shows
 such as example, where data is obtained from an external Heart Rate sensor.
 
 Since we don't have the transition system for
-the heart rate sensor, we declare it as an interface
-(\autoref{lstline:hr-interface-decl}).
+the heart rate sensor, we declare it as an interface (\autoref{lstline:hr-interface-decl}).
 Next, instead of using \inlinemedik{new} to create an instance, we use
 a builtin \MediK{} construct \inlinemedik{createFromInterface}, which takes as
 arguments
@@ -1025,21 +1024,21 @@ construct implements a \emph{request-response} mechanism, where a request initia
 responded to by an external agent. But, external agents can also initiate communicate
 using the \inlinemedik{broacast} construct described in \autoref{sec:messaging}.
 
-\subsection{Simple Tables}\label{sec:tables}
+\subsection{Tables}\label{sec:tables}
 
 Recall from \autoref{sec:sepsis-bpg} that tables indicating
 normality/abnormality for parameters indexed by age and weight occur
-commonly in \BPGs{}. For instance, in the running sepsis example,
+commonly in \BPGs{}. For instance, in case of the sepsis \BPG{} from \autoref{sec:sepsis-bpg},
 once a measurement, such as the heart rate has been obtained
 from a sensor, we need to use a table, such as \tablename{} \ref{table:vital-signs}
 to check if the measurement is within a normal range. In \MediK, we can write a
 function that does the required check, as shown in \autoref{lst:hr-table}.
 \begin{lstlisting}[
-  frame=hb
+  float=hb
+  ,frame=single
   ,style=mediksty
   ,language=medik
   ,numbers=left
-  ,numberstyle=\tiny
   ,xleftmargin=3ex,
   ,caption={{Vital Signs Tables}}
   ,label={lst:hr-table}
@@ -1057,8 +1056,8 @@ While the table in \autoref{lst:hr-table} could have also been implemented using
 simple \inlinemedik{if-else} constructs, we chose to present data in form of a table
 to improve overall readability and \HCP{} comprhenesibility, as \HCPs{} are
 already familiar with them from paper-based guidelines.
-If the heart rate lies any of the intervals (closed on the left, open on the right) on Lines \ref{lstline:interval-begin}-
-\ref{lstline:interval-end}, the
+If the heart rate lies any of the intervals (closed on the left, open on the right) on
+Lines \ref{lstline:interval-begin}-\ref{lstline:interval-end}, the
 corresponding statement to the right of the colon (\inlinemedik{:}) is run. Otherwise
 the default clause (\autoref{lstline:default-clause}) is run.
 We can then define the semantics of tables in terms of \inlinemedik{if-else} as shown in \autoref{lst:table-rules}.
@@ -1068,7 +1067,6 @@ We can then define the semantics of tables in terms of \inlinemedik{if-else} as 
   ,style=ksty
   ,language=k
   ,numbers=left
-  ,numberstyle=\tiny
   ,xleftmargin=3ex,
   ,caption={{Implementing Tables}}
   ,label={lst:table-rules}
@@ -1079,8 +1077,16 @@ rule E in { interval(L, U): S:Stmt Cs:CaseDecl }
 rule E in { interval(L, U): S:Stmt }
   => if ((E >= L) && (E < U)) { S }
 rule E in { interval(L, U): S1:Stmt default: S2:Stmt }
-  => if  ((E >= L) && (E < U)) { S1 } else { S2 }
+  => if ((E >= L) && (E < U)) { S1 } else { S2 }
 \end{lstlisting}
+
+Note the syntax declarations for tables on \autoref{lstline:case-stmt} of \autoref{lst:medik-exp-syntax}
+and \autoref{lstline:case-2-stmt} of \autoref{lst:medik-stmt-syntax}
+have the attributes \inlinek{[macro]} and \inlinek{[macro-rec]} respectively.
+These attributes specify that the corresponding constructs are merely
+syntactic sugar, and rules written over such constructs \say{de-sugar}
+them into other symbols. In fact, these rules are applied statically at parse time,
+before execution begins so that macros don't appear
 
 %Note the rules above are marked with the attributes \inlinek{macro}
 %(line 2) or \inlinek{macro-rec} (line 5). This specifies that
@@ -1098,8 +1104,8 @@ rule E in { interval(L, U): S1:Stmt default: S2:Stmt }
 
 \section{\MediK{} Scheduling Semantics}\label{sec:scheduling-semantics}
 
-Since the $\K{}$-generated
-interpreter is single-threaded, \MediK{} employs interleaving-semantics
+Since the $\K{}$-generated interpreter is single-threaded,
+\MediK{} employs interleaving-semantics
 for concurrency, using a single \inlinemedik{executor} thread shared
 between machine instances. A machine instance that is either at the start of
 an entry block, or has an event in the input buffer that it can handle is
