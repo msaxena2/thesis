@@ -1,0 +1,43 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:129.0) Gecko/20100101 Firefox/129.0" version="24.7.10">
+  <diagram name="Page-1" id="sReNzexHo98JS3CuufBL">
+    <mxGraphModel dx="1048" dy="634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="cyNzipAdQJfE3Z-S69iO-1" value="" style="shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=70;" parent="1" vertex="1">
+          <mxGeometry x="190" y="440" width="460" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="cyNzipAdQJfE3Z-S69iO-2" value="" style="shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=60;" parent="1" vertex="1">
+          <mxGeometry x="260" y="320" width="320" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="cyNzipAdQJfE3Z-S69iO-3" value="" style="shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=60;" parent="1" vertex="1">
+          <mxGeometry x="320" y="210" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="cyNzipAdQJfE3Z-S69iO-4" value="MediK" style="shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=60;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="380" y="130" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="cyNzipAdQJfE3Z-S69iO-5" value="&lt;u&gt;Specification-Implementation Gap&lt;/u&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="210" y="560" width="420" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cyNzipAdQJfE3Z-S69iO-6" value="&lt;div align=&quot;center&quot;&gt;Arden Syntax&amp;nbsp;&lt;/div&gt;&lt;div align=&quot;center&quot;&gt;DILLEMA&amp;nbsp;&lt;/div&gt;&lt;div align=&quot;center&quot;&gt;GEODE-CM&amp;nbsp;&lt;/div&gt;&lt;div align=&quot;center&quot;&gt;GLIF&amp;nbsp;&lt;/div&gt;&lt;div align=&quot;center&quot;&gt;EON&amp;nbsp;&lt;/div&gt;&lt;div align=&quot;center&quot;&gt;SAGE&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="355" y="450" width="140" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="cyNzipAdQJfE3Z-S69iO-7" value="&lt;u&gt;Formal Semantics&lt;br&gt;&lt;/u&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="280" y="410" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cyNzipAdQJfE3Z-S69iO-9" value="&lt;div&gt;PROforma&lt;/div&gt;&lt;div&gt;GLARE&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="350" y="360" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="cyNzipAdQJfE3Z-S69iO-10" value="&lt;u&gt;Formal Analysis Tools&lt;br&gt;&lt;/u&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="280" y="290" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cyNzipAdQJfE3Z-S69iO-11" value="&lt;div&gt;Asbru&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="355" y="260" width="125" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="cyNzipAdQJfE3Z-S69iO-13" value="&lt;u&gt;Holistic Safety&lt;br&gt;&lt;/u&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="380" y="190" width="80" height="10" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

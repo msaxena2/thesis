@@ -1059,7 +1059,7 @@ fun isHeartRateNormal() {
 \end{lstlisting}
 While the table in \autoref{lst:hr-table} could have also been implemented using
 simple \inlinemedik{if-else} constructs, we chose to present data in form of a table
-to improve overall readability and \HCP{} comprhenesibility, as \HCPs{} are
+to improve overall readability and \HCP{} comprehensibility, as \HCPs{} are
 already familiar with them from paper-based guidelines.
 If the heart rate lies any of the intervals (closed on the left, open on the right) on
 Lines \ref{lstline:interval-begin}-\ref{lstline:interval-end}, the
@@ -1271,7 +1271,7 @@ in the current \epoch{}, and \textit{enabled}, then the \epoch{} advances by one
 \section{Timer Semantics}\label{sec:timer-semantics}
 
 Next, we discuss how \MediK{} handles temporal aspects of \BPGs{}. For instance, consider the
-Fluid resuscitation guideline \BPG{} from Section \ref{fig:fluid-therapy}.
+Fluid resuscitation guideline \BPG{} from \autoref{fig:fluid-therapy}.
 After administering fluids, the \BPG{} recommends waiting for 15 minutes
 before evaluating their effectiveness. This waiting behavior in
 \MediK{} is implemented using a \inlinemedik{sleep(duration)} statement.
@@ -1490,7 +1490,7 @@ machine SepsisScreening receives .. {
   state ObtainWeight { ... }                @\label{lstline:obtain-weight}@
   state ObtainHighRiskConditions { ... }    @\label{lstline:obtain-hr-conditions}@
   state CalculateScore {                    @\label{lstline:calculate-score-begin}@
-      var hrAbnormal = !isInNormalRange("HR", ...);
+      var hrAbnormal = !isInNormalRange("HR", ...); @\label{lstline:isInNormalRange}@
       var bucket1    = hrAbnormal ||  ...
       var bucket3    = mentalStatusAbnormal || ...
 
@@ -1503,22 +1503,23 @@ machine SepsisScreening receives .. {
 }
 \end{lstlisting}
 
-%Apart from structurally resembling the workflow, the code
-%permits communication with heterogenous external agents, and
-%\emph{obtains} patient parameters such as age and weight, and
-%uses them to evaluate the patient for sepsis. For instance on line 9,
-%we send an event to the external machine that is the tablet held by the \HCP{},
-%to obtain the patient's age. Once the age is entered, an event
-%\inlinemedik{ConfirmAgeEntered} is sent to the machine, prompting the machine to
-%move on to collecting the patient's weight.
-% When evaluating whether the patient
-%meets the criteria for sepsis, we use functions, such as the one on line 18,
-%that obtain the value from a sensor, and check whether
-%it lies in acceptable ranges using tables
-%indexed by the patient's age and weight, similar to the paper-based \BPG{}.
-%Treatment machines \emph{receive} events from
-%the screening machine, and are triggered if the diagnosis is \textit{sepsis
-%positive}, suggesting commencement of treatment.
+Apart from structurally resembling the workflow, the code
+permits communication with heterogenous external agents, and
+\emph{obtains} patient parameters such as age and weight, and
+uses them to evaluate the patient for sepsis. For instance on
+\autoref{lstline:instruct-get-age},
+we send an event to the external machine that is the tablet held by the \HCP{},
+to obtain the patient's age. Once the age is entered, an event
+\inlinemedik{ConfirmAgeEntered} is sent to the machine, prompting the machine to
+move on to collecting the patient's weight.
+ When evaluating whether the patient
+meets the criteria for sepsis, we use functions, such as the one on \autoref{lstline:isInNormalRange},
+that obtain the value from a sensor, and check whether
+it lies in acceptable ranges using tables
+indexed by the patient's age and weight, similar to the paper-based \BPG{}.
+Treatment machines \emph{receive} events from
+the screening machine, and are triggered if the diagnosis is \textit{sepsis
+positive}, suggesting commencement of treatment.
 
 \begin{lstlisting}[
   float=b!
@@ -1541,15 +1542,12 @@ machine FluidTherapy
       goto ObtainRisks;
     }
   }
-
   state ObtainRisks {                                   @\label{lstline:obtain-risks-begin}@
     // Obtain fluid overload related risks
   }                                                     @\label{lstline:obtain-risks-end}@
-
   state SuggestFluidDosage {                            @\label{lstline:suggest-dose-begin}@
     // Suggest a dosage based on risks
   }                                                     @\label{lstline:suggest-dose-end}@
-
   state WaitForAdministerFluidConfirmation {            @\label{lstline:hcp-confirm-dose-begin}@
     // Handler for Normal Saline Administration
     on ConfirmNormalSalineAdministered do {
@@ -1557,15 +1555,12 @@ machine FluidTherapy
       goto EvaluateResponsiveness;
     }
   }                                                     @\label{lstline:hcp-confirm-dose-end}@
-
-
   state EvaluateResponsiveness {
     entry {                                             @\label{lstline:evaluate-responsiveness-begin}@
       send tablet
         , Instruct
         , ("get responsiveness to fluids");
     }
-
     on FluidResponsivenessEntered(responsiveness) do {
       isResponsiveToFluids = responsiveness;
       goto ObtainFluidOverloadSigns;
@@ -1574,7 +1569,6 @@ machine FluidTherapy
   state ObtainFluidOverloadSigns {                      @\label{lstline:evaluate-overload-begin}@
     // Obtain signs of fluid overload
   }                                                     @\label{lstline:evaluate-overload-end}@
-
   state AskNextStep {
     entry {
       var recommendation;
@@ -1676,13 +1670,18 @@ Due to this, ghosts machines may have statements to express non-determinism
 in processes. Consider, for instance, on a positive sepsis diagnosis, a
 \HCP{} may chose to either administer fluids first, followed by antibiotics, or
 vice-versa. \MediK{} supports such non-determinism using \inlinemedik{either-or}
-statements as follows:
-\begin{lstlisting}[style=mediksty
-,language=medik
-,basicstyle=\ttfamily\scriptsize
-,numberstyle=\tiny
-,framexleftmargin=1.5em
-,xleftmargin=2em
+statements as shown in \autoref{lst:non-determinism}.
+\begin{lstlisting}[
+  float=tb
+  ,frame=single
+  ,language=medik
+  ,style=mediksty
+  ,numbers=left
+  ,numbersep=5pt,
+  ,numberstyle=\tiny
+  ,xleftmargin=3ex,
+  ,caption={Modeling Non-Determinism}
+  ,label={lst:non-determinism}
 ]
 either {
   broadcast StartFluidTherapy;
@@ -1698,22 +1697,22 @@ encompass all possible values that may be encountered during execution.
 For instance, when modeling entering a parameter such as the Heart Rate,
 we need to use an abstract value, representing all possible concrete values.
 To this end, we allow using an abstract value \inlinemedik{#nondet} in ghost machines,
-with the following abstract semantics:
+that have semantics shown in \autoref{lst:abstract-semantics}.
 \begin{lstlisting}[
   style=ksty
   ,language=k
-  ,basicstyle=\ttfamily\scriptsize
   ,numbers=left
+  ,numbersep=5pt,
   ,numberstyle=\tiny
-  ,framexleftmargin=1.5em
-  ,showspaces=false
-  ,xleftmargin=2em
-  ]
-  rule #nondet + _:Val    => #nondet
-  rule _:Val   <= #nondet => #nondet
-  rule #nondet && _       => #nondet
-  rule if (#nondet) Block => Block
-  rule if (#nondet) _     => .
+  ,xleftmargin=3ex,
+  ,label={lst:abstract-semantics}
+  ,caption={Abstract Semantics}
+]
+rule #nondet + _:Val    => #nondet
+rule _:Val   <= #nondet => #nondet
+rule #nondet && _       => #nondet
+rule if (#nondet) Block => Block
+rule if (#nondet) _     => .
 \end{lstlisting}
 
 The use of abstract encodings leads to a reduction of the state space.
@@ -1725,41 +1724,41 @@ Recall from Section \ref{sec:bpg-background} that we needed to:
     ranges.
 \end{enumerate*}
 For example, determining whether the patient's heart rate is abnormal
-is performed using the \inlinemedik{in-interval} construct as show in \figurename{} \ref{fig:hr-check-fun}.
+is performed using the \inlinemedik{in-interval} construct as shown in \autoref{lst:hr-table}.
 Recall that the \inlinemedik{in-interval} construct is merely syntatic
 sugar for nested \inlinemedik{if-else} statements. When using ghost machines for
 model checking, since the actual measurement is an abstract value, we know the
 final result of this abnormality checking operation is an abstract boolean value. Thus,
 instead of exploring each branch of \inlinemedik{if-else} statements
-corresponding to \inlinemedik{in-interval} constructs in \figurename{}
-\ref{fig:hr-check-fun}, we replace the entire checking process with an
+corresponding to \inlinemedik{in-interval} constructs in \autoref{lst:hr-table}, we replace the entire checking process with an
 final abstract boolean value.
 This reduces the state space but still allows us to explore all treatment options for both the normal and abnormal cases.
 
 \subsection{Model Checking the Sepsis \CDSS{}}
 To verify responsiveness of the Sepsis \CDSS{}, we implemented ghost machines
 for the external components using support for non-determinism and abstract
-values. We then added the following rule to the semantics, that takes
+values. We then added the rule in \autoref{lst:stuck-rule}, that takes
 a machine in an active state with an unhandled event at the
 head of the input buffer to a terminal \inlinemedik{stuck} state.
 
 \begin{lstlisting}[
-  style=ksty
+  float=tb
+  ,frame=single
   ,language=k
-  ,basicstyle=\ttfamily\scriptsize
+  ,style=ksty
   ,numbers=left
+  ,numbersep=5pt,
   ,numberstyle=\tiny
-  ,framexleftmargin=1.5em
-  ,showspaces=false
-  ,xleftmargin=2em
+  ,xleftmargin=3ex,
+  ,label={lst:stuck-rule}
+  ,caption={Unresponsive Machine Transition}
   ]
 rule <k> handleEvents ~> _ => stuck </k>
      <activeState> ActiveState </activeState>
      <class> MachineName </class>
      <inBuffer>
       ListItem(event(InputEvent | _ | _ )) ...
-     </inBuffer> ...
-    </k>
+     </inBuffer>
 \end{lstlisting}
 We utilize the semantics-generated bounded model checker
 to search the state space to a depth of 300,000
@@ -1769,6 +1768,126 @@ both the fluid and antibiotics machines simultaneously. The search command
 was executed on a machine with 64 GB of memory, and took roughly 90 minutes, and
 reported no such state was possible. To the best of our knowledge, this makes
 ours the first system for screening and management of sepsis with some formal
-safety guarantees.
+analysis.
 
 \section{Discussion}\label{sec:discussion}
+
+In \autoref{sec:sepsis-bpg}, we described several characteristics
+of \BPGs{} that a language for expressing computer interpretable
+best practice guidelines should ideally accommodate. These include
+\begin{enumerate*}[label=(\roman*)]
+  \item comprehensibility for healthcare providers to enable them to
+    verify correctness of medical logic,
+  \item ability to accommodate diverse external agents,
+  \item execution and analysis tools with correctness guarantees.
+\end{enumerate*}
+
+In \autoref{chapter:related-work}, we discussed progress made by existing approaches
+towards addressing them. We measured progress along the following lines:
+\begin{itemize}
+  \item \textbf{Implementation-Specification Gap:} The textual \BPG{}
+    can also be used \say{as-is} in a \CDSS{} implementation, eliminating
+    any translation from a textual document to its computable encoding.
+  \item \textbf{Formal Semantics:} The language has a complete
+    formally defined semantics that serves as a manual for implementing
+    tools and associated ecosystem.
+  \item \textbf{Formal Analysis Tools:} Existence of a comprehensive set
+    of analysis tools that can be used to analyze \BPGs{} implemented in the
+    language that evolve as the language evolves.
+  \item \textbf{Holistic Safety:} Comprehensive support for formal analysis
+    and tools, including execution engines, with correctness guarantees.
+\end{itemize}
+
+  \begin{table}[b!]
+    \begin{tabularx}{\textwidth}
+   {>{\centering\arraybackslash}X
+   || >{\centering\arraybackslash}X
+   | >{\centering\arraybackslash}X
+   | >{\centering\arraybackslash}X
+   | >{\centering\arraybackslash}X
+ }
+                                    & Implementation-Specification Gap & Complete Formal Semantics & Formal Analysis Tools & Holistic Safety  \\
+    Arden Syntax                    & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    DILLEMA                         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    \GEODECM{}                      & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    EON                             & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    \GLIF{}                         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    Asbru                           & $\greencheck$                    & $\circ$                   & $\greencheck$         & $\redcross$ \\
+    PROforma                        & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
+    \GLARE                          & $\greencheck$                    & $\circ$                   & $\circ$               & $\circ$     \\
+    \GPROVE{}                       & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
+    HELEN                           & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    PRODIGY                         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    SAGE                            & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    Hierarchical Plans              & $\redcross$                      & $\circ$                   & $\greencheck$         & $\circ$     \\
+    \MDA{}                          & $\redcross$                      & $\redcross$               & $\greencheck$         & $\redcross$ \\
+    \textbf{\MediK{}}               & $\greencheck$                    & $\greencheck$             & $\greencheck$         & $\greencheck$
+  \end{tabularx}
+    \caption{\MediK{} vs Existing Approaches}\label{table:medik-comparison}
+  \end{table}
+
+
+When compared to existing approaches from \autoref{chapter:related-work},
+\MediK{} is the first computer-interpretable guideline language that has
+a complete executable semantics. As \MediK{}'s tools are derived from its
+semantics, they are by definition correct-by-construction. As the tools
+don't have to be maintained independently, updates to the language to
+accommodate \HCP{} feedback only require corresponding changes to the
+semantics, and tools evolve automatically.
+
+\begin{figure}[th!]
+  \centering
+  \includegraphics[width=0.5\textwidth]{medik-pyramid}
+  \caption{Our Contribution}\label{fig:our-contribution}
+\end{figure}
+
+
+This work attempted to establish that the semantics-first approach
+embodied by \MediK{} makes building safer \CDSSs{} easier.
+We show that \MediK{}'s communicating state machines-based approach provides a
+convenient medium for expressing medical knowledge by utilizing
+it to build a real-world complex \CDSS{} for management of
+sepsis in pediatric cases in collaboration with OSF St. Francis
+Medical Center. \MediK{}'s support for modeling external agents as
+\emph{ghosts} provides a uniform way of formal analysis. We use this
+to model-check the sepsis \CDSSs{} for responsiveness, To the best of our knowledge,
+knowledge, our is the first system for sepsis management with any form of formal
+analysis.
+We be briefly summarize how \MediK{} compares against existing approaches in \autoref{table:medik-comparison}.
+
+In \autoref{chapter:semantics-first-cdss}, we described incremental progress made
+by existing approaches towards enabling greater \CDSS{} adoption through the
+use of \autoref{fig:our-contribution}. Specifically, upper rungs of the
+pyramid incorporate features and learnings of the lower rungs. Our contribution
+can be described by the run marked in red, as our work incorporates the ability
+to implement \HCP{}-comprehensible, computable \BPGs{} of earlier approaches
+with a complete formal semantics, comprehensive support for formal analysis,
+and correctness guarantees for all tools.
+
+
+%Guideline-based Clinical Decision Support Systems (CDSSs)
+%are now considered vital to the future of Medical Decision making in general,
+%But, to find widespread adoption, guideline-based \CDSSs{} must be
+%held to the highest standards for safety-critical systems. While
+%several advances have been made to \CDSS{} over the years, several
+%limitations have also been identified. This work fixed said
+%limitations by introducing \MediK{} - a new \DSL{} for expressing
+%\BPGs{} that uses a semantics-first approach to build \CDSS.
+%\MediK{} programs consist of \emph{concurrently} executing \emph{instances}
+%of \emph{State Machine}. \MediK{} models
+%external agents as machines with \emph{transition systems}
+%external to the program called \emph{interfaces}, allowing for a \emph{uniform} way of dealing with \emph{heterogenous external agents}. For program analysis, \MediK{} allows
+%modeling external agents via ghost machines that support
+%\emph{non-determinism}, enabling model-checking \CDSSs{} for responsiveness.
+%We collaborated with the Children's Hospital of Illinois at OSF St. Francis
+%Medical Center to develop
+%a system for screening and management of pediatric sepsis using \MediK, and
+%demonstrated it satisfies desired safety properties. To the best of our
+%knowledge, our is the first system for sepsis management with any formal safety
+%guarantees.
+%
+
+
+
+
+
