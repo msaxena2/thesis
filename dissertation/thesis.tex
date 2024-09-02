@@ -83,30 +83,46 @@
 
 \begin{document}
 
-\title{A Semantics-First Approach to Clinical Decision Support}
+\title{A Semantics-First Approach to Safe Clinical Decision Support}
 \author{Manasvi Saxena}
 \department{Computer Science}
 \phdthesis
 \degreeyear{2024}
 \committee{
   Professor Grigore Ro\c{s}u, Chair \& Director of Research\\
-    Professor Lui Sha,
+    Professor Lui Sha\\
     TBD}
 \maketitle
 
 \frontmatter
 
 \begin{abstract}
-  Abstract...
+Clinical Best Practice Guidelines (BPGs) are systematically developed,
+evidence-based statements published by medical institutions and associations
+that standardize diagnosis and treatment for various clinical scenarios. When
+expressed in an executable medium, BPGs can be utilized to build systems that
+assist healthcare professionals (HCPs) with situation-specific advice. Such
+systems, known as Guideline-based Clinical Decision Support Systems (CDSSs),
+  have been shown to improve patient outcomes.
+
+Several Domain-Specific Languages (DSLs) have been proposed to facilitate expressing BPGs in a computer-interpretable format that is easily comprehensible to HCPs.
+Given the safety-critical nature of CDSSs, the need for such languages to have complete formal semantics and an ecosystem of formal analysis tools has been recognized.
+Moreover, since these languages evolve over time to accommodate complexities in modeling BPGs, tools for them must also be adaptable to changes.
+But, existing languages lack complete formal semantics, or analysis tools derived from them.
+
+This work introduces \MediK{}: a new DSL for expressing BPGs with a complete executable formal semantics,
+and formal analysis tools, including a model checker, symbolic execution engine, and deductive verifier.
+As MediK's tools are derived from its semantics, any update to the language is automatically reflected across all tools. To evaluate our approach, we collaborated with a major pediatric hospital to develop a MediK-based CDSS for the screening and management of Pediatric Sepsis and validated that it satisfies desired safety properties.
+Our CDSS is Institutional Review Board (IRB) approved and is slated to undergo clinical simulations.
 \end{abstract}
-
-\begin{dedication}
-To my family
-\end{dedication}
-
-\begin{acknowledgments}
-  Write Here
-\end{acknowledgments}
+%
+%\begin{dedication}
+%To my family
+%\end{dedication}
+%
+%\begin{acknowledgments}
+% ...
+%\end{acknowledgments}
 
 {
     \hypersetup{linkcolor=black}  % disable link coloring locally
@@ -119,52 +135,52 @@ To my family
 \chapter{List of Abbreviations}
 
 \begin{abbrevlist}
-\item[PCAST]    President's Council of Advisors on Science and Technology
-\item[CAST]     Commercial Aviation Safety Team
-\item[PME]      Preventable Medical Error
-\item[CDSS]     Clinical Decision Support System
-\item[BPG]      Best Practice Guideline
-\item[HCP]      Healthcare Practitioner
-\item[ONC]      Office of the National Coordinator for Health Information Technology
-\item[NAM]      National Academy of Medicine
-\item[EHR]      Electronic Health Record
-\item[BNF]      Backus-Naur Form
-\item[MLM]      Medical Logic Module
-\item[GEODE-CM] Guided Entry of Data Elements for Clinical Management
-\item[GLIF]     Guideline Interchange Format
-\item[P-CAPE]   Partners Computerized Algorithm Processor and Editor
-\item[DeGeL]    Digital Electronic Guideline Library
-\item[GLARE]    Guideline Acquisition, Representation, and Execution
-\item[GPROVE]   Guideline PRocess cOnformance VErification Framework
-\item[GOSpeL]   Guideline prOcess Specification Language
-\item[GEE]      Guideline Execution Engine
 \item[AAP]      American Academic of Pediatrics
-\item[NHS]      National Health Service
-\item[GP]       General Practitioner
-\item[SAGE]     Standards-based Guidelines Environment
-\item[MBA]      Model-based Architecture
-\item[CTL]      Computation Tree Logic
-\item[LTL]      Linear Temporal Logic
-\item[SOS]      Structural Operational Semantics
 \item[AAP]      American Academy of Pediatrics
-\item[ITL]      Interval Temporal Logic
-\item[EVM]      Ethereum Virtual Machine
-\item[AHA]      American Heart Association
 \item[ACLS]     Advanced Cardiovascular Life Support
+\item[AED]      Automatic Emergency Defibrillator
+\item[AHA]      American Heart Association
 \item[ALS]      Advanced Life Support
 \item[BLS]      Basic Life Support
-\item[AED]      Automatic Emergency Defibrillator
-\item[ROSC]     Return of Spontaneous Circulation
+\item[BNF]      Backus-Naur Form
+\item[BPG]      Best Practice Guideline
+\item[CAST]     Commercial Aviation Safety Team
+\item[CDSS]     Clinical Decision Support System
 \item[CPR]      Cardiopulmonary Resuscitation
 \item[CSM]      Communicating State Machines
+\item[CTL]      Computation Tree Logic
+\item[DeGeL]    Digital Electronic Guideline Library
+\item[EHR]      Electronic Health Record
+\item[EVM]      Ethereum Virtual Machine
+\item[GEE]      Guideline Execution Engine
+\item[GEODE-CM] Guided Entry of Data Elements for Clinical Management
+\item[GLARE]    Guideline Acquisition, Representation, and Execution
+\item[GLIF]     Guideline Interchange Format
+\item[GOSpeL]   Guideline prOcess Specification Language
+\item[GPROVE]   Guideline PRocess cOnformance VErification Framework
+\item[GP]       General Practitioner
+\item[HCP]      Healthcare Practitioner
+\item[ITL]      Interval Temporal Logic
+\item[LTL]      Linear Temporal Logic
+\item[MBA]      Model-based Architecture
+\item[MLM]      Medical Logic Module
+\item[NAM]      National Academy of Medicine
+\item[NHS]      National Health Service
+\item[ONC]      Office of the National Coordinator for Health Information Technology
+\item[P-CAPE]   Partners Computerized Algorithm Processor and Editor
+\item[PCAST]    President's Council of Advisors on Science and Technology
+\item[PME]      Preventable Medical Error
+\item[ROSC]     Return of Spontaneous Circulation
+\item[SAGE]     Standards-based Guidelines Environment
+\item[SOS]      Structural Operational Semantics
 \end{abbrevlist}
 
-\chapter{List of Symbols}
-
-\begin{symbollist}[0.7in]
-\item[$\tau$] Time taken to drink one cup of coffee.
-\item[$\mu$g] Micrograms (of caffeine, generally).
-\end{symbollist}
+%\chapter{List of Symbols}
+%
+%\begin{symbollist}[0.7in]
+%\item[$\tau$] Time taken to drink one cup of coffee.
+%\item[$\mu$g] Micrograms (of caffeine, generally).
+%\end{symbollist}
 
 \mainmatter
 
