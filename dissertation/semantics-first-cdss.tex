@@ -639,6 +639,15 @@ by the example Imp defintion as:
     indicating $\K{}$'s suitability for semantics-first language design.
 \end{itemize}
 
+Note the difference between program identifiers and $\K$ variables. While
+program variables are simply terms belonging to sort \inlinek{Id},
+$\K$ variables have logical meaning. If multiple rules can match
+the configuration term, then one rule is non-deterministically chosen.
+Execution is a sequence of rule applications that continues until no
+rule can match the configuration. Since in the running example the
+$\K{}$ the \inlinek{<k>}-cell becomes empty after all statement are evaluated,
+indicating successful completion.
+
 \subsection{Matching Logic: Theoretical Foundations of \K{}}
 
 In \autoref{sec:related-work-discussion}, we discussed how
@@ -807,16 +816,6 @@ reasoning using its ML encoding $\Gamma^{L}$. Thus, reasoning that
 an initial configuration $\varphi_{\text{init}}$ reaches a final configuration
 $\varphi_{\text{final}}$ is showing $\Gamma^{L} \vdash \varphi_{\text{init}} \To
 \varphi_{\text{final}}$.
-
-%
-%Note the difference between program identifiers and $\K$ variables. While
-%program variables are simply terms belonging to sort \inlinek{Id},
-%$\K$ variables have logical meaning. If multiple rules can match
-%the configuration term, then one rule is non-deterministically chosen.
-%Execution is a sequence of rule applications that continues until no
-%rule can match the configuration. Since in the running example the
-%$\K{}$ the \inlinek{<k>}-cell becomes empty after all statement are evaluated,
-%indicating successful completion.
 
 \section{Pitfalls of the Semantics-First Approach}\label{sec:semantics-first-pitfalls}
 

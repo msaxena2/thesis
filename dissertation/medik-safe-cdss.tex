@@ -887,6 +887,8 @@ by the rule in \autoref{lst:send-stmt}.
   ,style=ksty
   ,language=k
   ,numbers=left
+  ,numberstyle=\tiny
+  ,numbersep=5pt
   ,xleftmargin=3ex
   ,label={lst:send-stmt},
   ,caption={\MediK{} Send Statement Semantics}
@@ -942,6 +944,7 @@ and use \inlinek{send} to add the \inlinemedik{EventName} to each machine's
   ,style=ksty
   ,language=k
   ,numbers=left
+  ,numbersep=5pt,
   ,numberstyle=\tiny
   ,xleftmargin=3ex,
   ,caption={{Broadcast Mechanism}}
@@ -972,6 +975,7 @@ that serves both external and internal communication.
   ,style=mediksty
   ,language=medik
   ,numbers=left
+  ,numbersep=5pt,
   ,numberstyle=\tiny
   ,xleftmargin=3ex,
   ,caption={{\MediK{} External Agents}}
@@ -1034,11 +1038,12 @@ from a sensor, we need to use a table, such as \tablename{} \ref{table:vital-sig
 to check if the measurement is within a normal range. In \MediK, we can write a
 function that does the required check, as shown in \autoref{lst:hr-table}.
 \begin{lstlisting}[
-  float=hb
+  float=ht
   ,frame=single
   ,style=mediksty
   ,language=medik
   ,numbers=left
+  ,numberstyle=\tiny
   ,xleftmargin=3ex,
   ,caption={{Vital Signs Tables}}
   ,label={lst:hr-table}
@@ -1068,6 +1073,7 @@ We can then define the semantics of tables in terms of \inlinemedik{if-else} as 
   ,language=k
   ,numbers=left
   ,xleftmargin=3ex,
+  ,numberstyle=\tiny
   ,caption={{Implementing Tables}}
   ,label={lst:table-rules}
   ]
@@ -1085,8 +1091,10 @@ and \autoref{lstline:case-2-stmt} of \autoref{lst:medik-stmt-syntax}
 have the attributes \inlinek{[macro]} and \inlinek{[macro-rec]} respectively.
 These attributes specify that the corresponding constructs are merely
 syntactic sugar, and rules written over such constructs \say{de-sugar}
-them into other symbols. In fact, these rules are applied statically at parse time,
-before execution begins so that macros don't appear
+them into other symbols. Rules that operate over symbols with attribute
+\inlinek{[macro]} are applied statically at parse time,
+before execution begins, allowing the productions to be used as
+convenient syntactic sugar.
 
 %Note the rules above are marked with the attributes \inlinek{macro}
 %(line 2) or \inlinek{macro-rec} (line 5). This specifies that
@@ -1110,8 +1118,10 @@ for concurrency, using a single \inlinemedik{executor} thread shared
 between machine instances. A machine instance that is either at the start of
 an entry block, or has an event in the input buffer that it can handle is
 said to be \emph{enabled}, i.e. one that can run once the \inlinemedik{executor}
-becomes available. But, a naive strategy that non-deterministically
-chooses one \emph{enabled} machine instance may lead to unfairness.
+becomes available. Recall from \autoref{sec:k-rules} that if multiple
+$\K$ rules can match the current configuration, then for execution,
+$\K$ will choose one non-deterministically. This, in case of a program
+comprising of concurrent $\MediK{}$ machines may lead to \emph{unfairness},
 Specifically, there may be situations where a machine instance is
 \emph{enabled} but is never chosen for execution.
 Therefore, to ensure fairness, we use a scheduling strategy based on a monotonically
@@ -1119,23 +1129,22 @@ increasing global counter called the \epoch{}.
 % Instead of just tracking
 % \emph{enabled} machines, we also track the \epoch{} value at which
 % said machines became enabled.
-We show this execution strategy in \figurename{}
-\ref{fig:scheduling-semantics}
+We show this execution strategy in \autoref{alg:scheduling-semantics}
 
-\begin{figure}[ht]
+\begin{algorithm}[ht]
   \centering
     \begin{algorithmic}[1]
 
     \State $\epoch{} \gets 0$
-      \State $\scheduled{} \gets \left\{ \Instance_{\Machine{}_{0},0}^{0} \right\}$
+      \State $\scheduled{} \gets \left\{ \Instance_{\Machine{}_{0},0}^{0} \right\}$ \label{algline:init-scheduled}
     \While{$\scheduled{} \neq \emptyset$}
        \State \begin{varwidth}[t]{\linewidth}
-           $\Instance_{\Machine_{i},j}^{\tau} \gets \textit{choose}\left(\scheduled{}\right) \text{ s.t. }$
+         $\Instance_{\Machine_{i},j}^{\tau} \gets \textit{choose}\left(\scheduled{}\right) \text{ s.t. }$ \label{algline:choose}
            \par
               \hskip\algorithmicindent $\qquad \tau \leq \epoch{} \wedge \enabled(\Instance_{\Machine_{i},j}^{\tau})$ \par
             \end{varwidth}
       \State $\scheduled{} \gets \scheduled \setminus \Instance_{\Machine_{i},j}^{\tau}$
-      \State $\textit{execute}(\Instance_{\Machine_{i},j}^{\tau}, \scheduled{})$
+      \State $\textit{execute}(\Instance_{\Machine_{i},j}^{\tau}, \scheduled{})$ \label{algline:execute}
       \If{$\not\exists i',j',\tau'$ s.t.
       $(\Instance_{\Machine_{i'},j'}^{\tau'} \in \scheduled{})$
       \\ \qquad \qquad $\wedge (\tau' \leq \epoch{}) \wedge (\enabled(\Instance_{\Machine_{i'},j'}^{\tau'}))$}
@@ -1144,8 +1153,8 @@ We show this execution strategy in \figurename{}
       \EndIf
     \EndWhile
   \end{algorithmic}
-  \caption{\MediK{} Scheduling Semantics}\label{fig:scheduling-semantics}
-\end{figure}
+  \caption{\MediK{} Scheduling Semantics}\label{alg:scheduling-semantics}
+\end{algorithm}
 
 Recall from Section \ref{sec:syntax} that a \MediK{} program consists of a set
 of machines, of which one, prefixed with the keyword \inlinemedik{init}, is the \emph{initial} machine.
@@ -1166,11 +1175,11 @@ Recall that a state definition may have an entry block, containing code
 that is executed when the state is entered, or event handlers containing
 code that is executed when an event is dequeued from the input buffer. When execution
 begins, the entry block of the \emph{initial state} of the \emph{implicit instance}
-of the \emph{initial machine} $\Instance_{\Machine_0,0}$ becomes scheduled (line 2) at \epoch{} 0.
-On line 4, an instance $\Instance_{\Machine_{i},j}^{\tau}$ is
+of the \emph{initial machine} $\Instance_{\Machine_0,0}$ becomes scheduled (Line \ref{algline:init-scheduled}) at \epoch{} 0.
+On \autoref{algline:choose}, an instance $\Instance_{\Machine_{i},j}^{\tau}$ is
 non-deterministically chosen from all machines that are both scheduled to run when
 $\tau \leq \epoch{}$ and \textit{enabled}. We use
-$\textit{execute}(\Instance_{\Machine_{i},j}^{\tau}, \scheduled{})$ on line 5
+$\textit{execute}(\Instance_{\Machine_{i},j}^{\tau}, \scheduled{})$ on Line \autoref{algline:execute}
 to denote this execution process. Execution of the entry or event handler block is atomic,
 i.e., a context-switch can only occur at the end of the block. Note that when
 a new instance of a machine is created using the keyword \inlinemedik{new}, the

@@ -4,6 +4,7 @@
 \usepackage[inference]{semantic}
 \usepackage[english]{babel}
 \usepackage{csquotes}
+\usepackage{algorithm}
 \usepackage{pifont}
 \usepackage{stmaryrd}
 \usepackage{microtype}
@@ -35,6 +36,12 @@
 
 % Settings for listings
 \usepackage{algpseudocode}
+\makeatletter
+\patchcmd{\ALG@step}{\addtocounter{ALG@line}{1}}{\refstepcounter{ALG@line}}{}{}
+\newcommand{\ALG@lineautorefname}{Line}
+\makeatother
+
+\newcommand{\algorithmautorefname}{Algorithm}
 \newcommand\CONDITION[2]%
   {\begin{tabular}[t]{@{}l@{}l@{}}
      #1&#2
