@@ -1541,24 +1541,25 @@ machine FluidTherapy
     }
   }
 
-  state ObtainRisks {
+  state ObtainRisks {                                   @\label{lstline:obtain-risks-begin}@
     // Obtain fluid overload related risks
-  }
+  }                                                     @\label{lstline:obtain-risks-end}@
 
-  state SuggestFluidDosage {
+  state SuggestFluidDosage {                            @\label{lstline:suggest-dose-begin}@
     // Suggest a dosage based on risks
-  }
+  }                                                     @\label{lstline:suggest-dose-end}@
 
-  state WaitForAdministerFluidConfirmation {
+  state WaitForAdministerFluidConfirmation {            @\label{lstline:hcp-confirm-dose-begin}@
     // Handler for Normal Saline Administration
     on ConfirmNormalSalineAdministered do {
-      sleep(900);
+      sleep(900);                                       @\label{lstline:wait}@
       goto EvaluateResponsiveness;
     }
-  }
+  }                                                     @\label{lstline:hcp-confirm-dose-end}@
+
 
   state EvaluateResponsiveness {
-    entry {
+    entry {                                             @\label{lstline:evaluate-responsiveness-begin}@
       send tablet
         , Instruct
         , ("get responsiveness to fluids");
@@ -1567,17 +1568,17 @@ machine FluidTherapy
     on FluidResponsivenessEntered(responsiveness) do {
       isResponsiveToFluids = responsiveness;
       goto ObtainFluidOverloadSigns;
-    }
+    }                                                   @\label{lstline:evaluate-responsiveness-end}@
   }
-  state ObtainFluidOverloadSigns {
+  state ObtainFluidOverloadSigns {                      @\label{lstline:evaluate-overload-begin}@
     // Obtain signs of fluid overload
-  }
+  }                                                     @\label{lstline:evaluate-overload-end}@
 
   state AskNextStep {
     entry {
       var recommendation;
       if (this.fluidOverload) {
-        recommendation = "handle fluid overload";
+        recommendation = "handle fluid overload";       @\label{lstline:handle-overload}@
       } else {
         // obtain total saline dose
         if ((totalSalineDose >
@@ -1606,21 +1607,22 @@ one of the guideline suggested actions include administering fluids as shown in
 we show the corresponding \MediK{} code for administering fluids.
 The process starts when an external \inlinemedik{StartFluidTherapy} event,
 corresponding to a button press by the \HCP{} is received (\autoref{lstline:start-fluid-therapy}).
-The next steps include
-\begin{enumerate*}[label=(\alph*)]
-  \item obtaining any \emph{risks} associated with administering
-    fluids (lines 11-13),
-  \item suggesting an appropriate \emph{dose} to administer based
-    on the risks, if any (lines 15-17), and,
-  \item waiting for the \HCP{} to confirm that the suggested dose was
-    administered (line 21).
-\end{enumerate*}
+The next steps include:
+\begin{enumerate}[label=(\alph*)]
+  \item Obtaining any \emph{risks} associated with administering
+    fluids (Lines \ref{lstline:obtain-risks-begin}-\ref{lstline:obtain-risks-end}).
+  \item Suggesting an appropriate \emph{dose} to administer based
+    on the risks, if any (Lines \ref{lstline:suggest-dose-begin}-\ref{lstline:suggest-dose-end}).
+  \item Waiting for the \HCP{} to confirm that the suggested
+    dose was administered (Lines \ref{lstline:hcp-confirm-dose-begin}-\ref{lstline:hcp-confirm-dose-end}).
+\end{enumerate}
 Once the dose is administered, the machine waits for the
-for 15 minutes as specified by the guideline (line 22), before prompting
+for 15 minutes as specified by the guideline (\autoref{lstline:wait}), before prompting
 the \HCP{} to evaluate the patient's responsiveness to the administered fluid
-dose (lines 27-38), and check for any signs of fluid overload (lines 39-41).
+dose (Lines \ref{lstline:evaluate-responsiveness-begin}-\ref{lstline:evaluate-responsiveness-end}),
+and check for any signs of evaluate overload (Lines \ref{lstline:evaluate-overload-begin}-\ref{lstline:evaluate-overload-end}).
 If the patient exhibits any signs of fluid overload, then a recommendation
-to handle the overload is made (line 47). Otherwise,
+to handle the overload is made (\autoref{lstline:handle-overload}). Otherwise,
 the total dose of administered fluid is obtained from an external source (line 50).
 If the total dose is above the maximum allowed dose, then
 a recommendation based on the patient's responsiveness to administered
@@ -1717,7 +1719,7 @@ with the following abstract semantics:
 \end{lstlisting}
 
 The use of abstract encodings leads to a reduction of the state space.
-Recall from Section \ref{sec:motivating-example} that we needed to:
+Recall from Section \ref{sec:bpg-background} that we needed to:
 \begin{enumerate*}[label=(\arabic*)]
   \item utilize patient's basic information such as age and weight to calculate normal ranges
     for clinical measurements such as blood pressure and heart rate, and,
