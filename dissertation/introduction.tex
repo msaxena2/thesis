@@ -334,20 +334,20 @@ the \CDSS{} consists of three independent components:
 The \BPGLogic{} of the \CDSS{} is implemented as a $\MediK{}$ program.
 This computer interpretable guideline in $\MediK$ expresses
 medical knowledge \emph{succinctly}, and allows establishing desired \emph{safety} properties.
-For the sepsis management \CDSS{}, we used $\MediK{}'s$ semantics-based model checker to
+For the sepsis management \CDSS{}, we used $\MediK{}$'s semantics-based model checker to
 establish \emph{responsiveness}. We say the system is \emph{responsive} if,
 under certain reasonable assumptions about the UI and interactions with external
 agents such as sensors, health records, all possible inputs to the
 system lead to a response. This ensures that the system does not
 \say{freeze} or \say{hang} when being used. But, beyond \emph{responsiveness},
-we need to ensure that the $\MediK{}$ program captures medical knowledge \emph{accurately}. To
-To this end, we utilize \emph{visual representations} of the programs that
-resemble flowcharts that practitioners intuitively understand,
+we need to ensure that the $\MediK{}$ program captures medical knowledge \emph{accurately}.
+To this end, we try to ensure that $\MediK{}$ programs resemble
+existing flowcharts-based \BPGs{} that practitioners are familiar with,
 enabling them to validate the semantics of the $\MediK{}$-based
 computer-interpretable guideline. Once verified and validated, the $\MediK{}$ program
 can be combined with a customizable UI to obtain a complete \CDSS{} with
-strong safety guarantees. To the best of our knowledge, our is the first
-comprehensive \CDSSs{} for sepsis management to provide such \emph{safety
+safety guarantees. To the best of our knowledge, our is the first
+comprehensive \CDSSs{} for sepsis management to provide any \emph{safety
 guarantees}.
 
 Recall from \autoref{sec:hurdles-cdss-adoption}, the four challenges from
