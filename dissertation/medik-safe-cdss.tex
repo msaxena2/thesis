@@ -52,7 +52,7 @@ for management of sepsis, to illustrate common requirements
 that \DSL{} for modeling \BPGs{} should satisfy.
 In \autoref{sec:medik}, we introduce the \MediK{} \DSL{}, and illustrate how
 it has been specifically designed to address said requirements.
-In \autoref{sec:evalution}, we evaluate the effectiveness of our approach
+In \autoref{sec:medik-psepsis}, we evaluate the effectiveness of our approach
 by utilizing it to build a \CDSSs{} intended for real-world use.
 In section \autoref{sec:discussion}, we discuss how \MediK{} builds on
 existing approaches in \autoref{chapter:related-work} to advance the
@@ -667,7 +667,7 @@ each with a similar composition:
 \begin{enumerate}[label=(\alph*)]
   \item An \inlinek{<instances>} cell (Lines \ref{lstline:instances-cell-begin}-\ref{lstline:instances-cell-end})
     that encapsulates \inlinek{<instance>} cells.
-  \item A \inlinek{<machines>} cell (Lines \ref{lstline:machine-cell-begin}-\ref{lstline:machine-cell-end}
+  \item A \inlinek{<machines>} cell (Lines \ref{lstline:machine-cell-begin}-\ref{lstline:machine-cell-end})
     that holds \inlinek{<machine>} cells.
   \item An \inlinek{<instances>} cell (Lines \ref{lstline:interfaces-cell-begin}-\ref{lstline:interfaces-cell-end})
     that holds \inlinek{<interface>} cells.
@@ -898,13 +898,13 @@ rule <instance>                                                             @\la
        ...
      </instance>                                                            @\label{lstline:instance-a-end}@
      <instance>                                                             @\label{lstline:instance-b-begin}@
-      <id> RecvId </id>
-      <inBuffer> ...
-      (.List => ListItem( eventArgsPair(EventName | Args | Epoch + 1)))     @\label{lstline:instance-b-end}@
-      </inBuffer>
-        ...
-      </instance>
-      <epoch> Epoch </epoch>
+     <id> RecvId </id>
+     <inBuffer> ...
+       (.List => ListItem( eventArgsPair(EventName | Args | Epoch + 1)))    @\label{lstline:instance-b-end}@
+     </inBuffer>
+       ...
+     </instance>
+     <epoch> Epoch </epoch>
 \end{lstlisting}
 
 When an instance the top of the \inlinek{<k>} cell has
@@ -1149,7 +1149,7 @@ We show this execution strategy in \autoref{alg:scheduling-semantics}
       $(\Instance_{\Machine_{i'},j'}^{\tau'} \in \scheduled{})$
       \\ \qquad \qquad $\wedge (\tau' \leq \epoch{}) \wedge (\enabled(\Instance_{\Machine_{i'},j'}^{\tau'}))$}
       \newline
-       \State $\epoch{} \gets \epoch{} + 1$
+       \State $\epoch{} \gets \epoch{} + 1$ \label{algline:epoch-advance}
       \EndIf
     \EndWhile
   \end{algorithmic}
@@ -1175,7 +1175,7 @@ Recall that a state definition may have an entry block, containing code
 that is executed when the state is entered, or event handlers containing
 code that is executed when an event is dequeued from the input buffer. When execution
 begins, the entry block of the \emph{initial state} of the \emph{implicit instance}
-of the \emph{initial machine} $\Instance_{\Machine_0,0}$ becomes scheduled (Line \ref{algline:init-scheduled}) at \epoch{} 0.
+of the \emph{initial machine} $\Instance_{\Machine_0,0}$ becomes scheduled (\autoref{algline:init-scheduled}) at \epoch{} 0.
 On \autoref{algline:choose}, an instance $\Instance_{\Machine_{i},j}^{\tau}$ is
 non-deterministically chosen from all machines that are both scheduled to run when
 $\tau \leq \epoch{}$ and \textit{enabled}. We use
@@ -1196,7 +1196,35 @@ after the next epoch, i.e., $\scheduled{} \gets \scheduled{} \cup
 \{\Instance_{\Machine_{i'}, j'}^{\epoch{}+1}\}$. Similary, if a \inlinemedik{goto}
 statement is encoutered, the entry block of the target state is scheduled
 for execution at \epoch{} + 1. If no other machine is both \textit{scheduled} to run
-in the current \epoch{}, and \textit{enabled}, then the \epoch{} advances by one (line 8).
+in the current \epoch{}, and \textit{enabled}, then the \epoch{} advances by one (\autoref{algline:epoch-advance}).
+
+%Consider the rule for
+%
+%\begin{lstlisting}[
+%  frame=ht
+%  ,style=ksty
+%  ,language=k
+%  ,numbers=left
+%  ,numbersep=5pt,
+%  ,numberstyle=\tiny
+%  ,xleftmargin=3ex,
+%  ,caption={{Semantics of \inlinemedik{goto}}}
+%  ,label={lst:goto-semantics}
+%]
+%
+%  rule <k> goto Target:Id ( Args:Vals ) ; ~> _
+%       =>  clearEnv(values(Rho))
+%        ~> clearStack(Stack)
+%        ~> clearFStack(FStack)
+%        ~> releaseExecutor
+%        ~> enterState(Target | Args | Epoch +Int 1 )        @\label{lstline:enter-state}@
+%       </k>
+%       <env> Rho => .Map </env>
+%       <stack> Stack => .List </stack>
+%       <fstack> FStack => .List </fstack>
+%       <epoch> Epoch </epoch>
+%       <shouldAdvanceEpoch> _ => true </shouldAdvanceEpoch>
+%\end{lstlisting}
 
 %\MediK{} employs a simple epoch-based scheduling approach.
 %Execution begins in epoch 0, with
@@ -1240,7 +1268,8 @@ in the current \epoch{}, and \textit{enabled}, then the \epoch{} advances by one
 %\end{enumerate*}
 
 
-\paragraph{Timer Semantics}
+\section{Timer Semantics}\label{sec:timer-semantics}
+
 Next, we discuss how \MediK{} handles temporal aspects of \BPGs{}. For instance, consider the
 Fluid resuscitation guideline \BPG{} from Section \ref{fig:fluid-therapy}.
 After administering fluids, the \BPG{} recommends waiting for 15 minutes
@@ -1248,81 +1277,89 @@ before evaluating their effectiveness. This waiting behavior in
 \MediK{} is implemented using a \inlinemedik{sleep(duration)} statement.
 Formalizing the execution semantics of such a statement in $\K{}$ presents
 a challenge as $\K{}$ does not provide builtin support for timers. Therefore,
-in \MediK{}, \inlinemedik{sleep(duration)} is described by the following rule:
+in \MediK{}, \inlinemedik{sleep(duration)} is described by the rule in \autoref{lst:sleep-rule}:
 \begin{lstlisting}[
-  style=ksty
+  float=ht
+  ,frame=single
+  ,style=ksty
   ,language=k
-  ,basicstyle=\ttfamily\scriptsize
   ,numbers=left
+  ,numbersep=5pt,
   ,numberstyle=\tiny
-  ,framexleftmargin=1.5em
-  ,xleftmargin=2em
+  ,xleftmargin=3ex,
+  ,label={lst:sleep-rule}
+  ,caption={Semantics of \inlinemedik{sleep}}
   ]
-rule <k> sleep(Duration:Int) ;
-      =>    jsonWrite( { "action"   : "sleep"
-                       , "duration" : Duration
-                       , "tid"      : TId }
-                       , ... )
-         ~> releaseExecutor
-         ~> waitForSleepResponse(TId) ...
+rule <k> sleep(Duration:Int) ;                    @\label{lstline:sleep-stmt}@
+      =>    jsonWrite( { "action"   : "sleep"     @\label{lstline:json-start}@
+                       , "duration" : Duration    @\label{lstline:sleep-duration}@
+                       , "tid"      : TId }       @\label{lstline:transaction-id}@
+                       , ... )                    @\label{lstline:json-end}@
+         ~> releaseExecutor                       @\label{lstline:context-switch}@
+         ~> waitForSleepResponse(TId) ...         @\label{lstline:wait-for-response}@
      </k>
-     <tidCount> TId => TId +Int 1 </tidCount>
+     <tidCount> TId => TId +Int 1 </tidCount>     @\label{lstline:tid-increment}
 \end{lstlisting}
+
 \inlinemedik{sleep} results in a JSON message being sent to a remote
-endpoint (lines 1-5) specified when the \MediK{} process is launched. This mimics
+endpoint (Lines \ref{lstline:json-start}-\ref{lstline:json-end})
+specified when the \MediK{} process is launched. This mimics
 sending an event to an external \emph{timer} machine, with the desired duration
 as the payload. At the remote endpoint,
 code must be provided (in any programming language) to parse the message, and
 respond with a JSON message indicating the expiration of the timer
-once the desired duration has passed. A unique transaction-id (lines 4, 7, 9),
+once the desired duration has passed. A unique transaction-id
+(Lines \ref{lstline:transaction-id}, \ref{lstline:wait-for-response} and \ref{lstline:tid-increment}),
 which the code at the endpoint is expected to provide in the response,
 uniquely identifies the machine instance being responded to.
-\inlinemedik{sleep} causes a context-switch to occur on line 6, releasing the
-executor lock to process other \emph{scheduled} machines.
+\inlinemedik{sleep} causes a context-switch to occur on \autoref{lstline:context-switch},
+releasing the executor lock to process other \emph{scheduled} machines.
 
 When a message signifying the expiration of the timer is sent to
 the \MediK{} process, along with the transaction id of source instance,
 the corresponding event signalling the completion of the sleep statement
 is placed at the \emph{beginning} of the source machine instance's input buffer,
 and the instance is scheduled to resume execution in the next epoch.
-The following rule handles the external response:
+The rule that handles the external response is shown in \autoref{lst:sleep-completion}.
 \begin{lstlisting}[
-  style=ksty
+  float=ht
+  ,frame=single
+  ,style=ksty
   ,language=k
-  ,basicstyle=\ttfamily\scriptsize
   ,numbers=left
+  ,numbersep=5pt,
   ,numberstyle=\tiny
-  ,framexleftmargin=1.5em
-  ,xleftmargin=2em
-  ]
-rule
-<k> waitForSleepResponse(TId) => . ... </k>
-<inBuffer>
-  (ListItem(event($SleepDone | TId | Tau ))
- => .List)  ...
-</inBuffer>
-<executorAvailable>
-  true => false
-</executorAvailable>
-<epoch> Epoch </epoch>
-  requires Tau <=Int Epoch
+  ,xleftmargin=3ex,
+  ,caption={Sleep Completion}
+  ,label={lst:sleep-completion}
+]
+rule <k> waitForSleepResponse(TId) => . ... </k> @\label{lstline:sleep-wait}@
+     <inBuffer> @\label{lstline:in-buffer-begin}@
+        (ListItem(event($SleepDone | TId | Tau )) => .List)  ... @\label{lstline:external-response}@
+      </inBuffer> @\label{lstline:in-buffer-end}@
+     <executorAvailable> true => false </executorAvailable> @\label{lstline:execution-lock}@
+     <epoch> Epoch </epoch> @\label{lstline:current-epoch}@
+  requires Tau <=Int Epoch @\label{lstline:epoch-condition}@
 \end{lstlisting}
-The \inlinemedik{waitForSleepResponse(TId)}
+The \inlinemedik{waitForSleepResponse(TId)} (\autoref{lstline:sleep-wait})
 blocks execution until the external response indicating
-the expiration of the sleep timer is received in the input buffer (line 4).
+the expiration of the sleep timer is received in the input buffer (Line \ref{lstline:in-buffer-begin}-\ref{lstline:in-buffer-end}).
 Once the response is received, the machine instance resumes execution when
 \begin{enumerate*}[label=(\alph*)]
   \item the execution lock becomes available
-  (indicated by \inlinemedik{true} on line 8), and,
-  \item the epoch the instance was scheduled in (line 4) is less than or equal to the current
-  epoch (lines 10-11).
+    (indicated by \inlinemedik{true} on \autoref{lstline:execution-lock}), and,
+  \item the epoch the instance was scheduled to resume execution in (\autoref{lstline:external-response})
+    is less than or equal to the current epoch (Lines \ref{lstline:current-epoch}-\ref{lstline:epoch-condition}).
 \end{enumerate*}
 
-An \inlinemedik{obtainFrom} statement also results in a context switch.
+An \inlinemedik{obtainFrom} statement also results in a context switch as
+shown in \autoref{lst:obtain-from-request}.
 Just as in the case of sleep, a json message is sent to the remote
-endpoint, while the machine instance release the execution lock, and waits for a
-response. Once data for the requested field is available, it's communicated as an
-event to the \MediK{} process, and the machine resumes execution.
+endpoint with the \emph{name} of the parameter being requested and a unique transaction
+(Lines \ref{lstline:obtain-from-begin}-ref{lstline:obtain-from-end}),
+while the machine instance releases the execution lock (\autoref{lstline:obtain-from-release}),
+and waits for a response, as shown in \autoref{lst:obtain-from-request}.
+
 %
 %\begin{lstlisting}[style=ksty,language=k,basicstyle=\ttfamily\scriptsize,numbers=right]
 %rule
@@ -1336,7 +1373,55 @@ event to the \MediK{} process, and the machine resumes execution.
 %\end{lstlisting}
 
 
-\section{Evaluation}\label{sec:evaluation}
+\begin{lstlisting}[
+  float=ht
+  ,frame=single
+  ,style=ksty
+  ,language=k
+  ,numbers=left
+  ,numbersep=5pt,
+  ,numberstyle=\tiny
+  ,xleftmargin=3ex,
+  ,caption={Obtain From Request}
+  ,label={lst:obtain-from-request}
+]
+rule <k> obtainFrom(instance(Id:Int), Field:String)
+      =>   jsonWrite( { "name"      : "Obtain"                     @\label{lstline:obtain-from-begin}@
+                      , "args"      : [ Field , .JSONs ] } ...)    @\label{lstline:obtain-from-end}@
+        ~> releaseExecutor                                         @\label{lstline:obtain-from-release}@
+        ~> waitForObtainResponse(TId) ...
+     </k>
+     <tidCount> TId => TId +Int 1 </tidCount>
+\end{lstlisting}
+
+As depicted in \autoref{lst:obtain-from-response},
+once data for the requested field is available, it's communicated as an
+event to the \MediK{} process as a JSON message, where the response
+consists of a JSON message with the requested data and the unqiue \inlinemedik{transactionId},
+placed at the \emph{head} of the \inlinemedik{<inBuffer>} cell, and scheduled for
+execution in the next epoch (Lines \ref{lstline:response-buffer-begin}-\ref{lstline:response-buffer-end}).
+
+\begin{lstlisting}[
+  float=hb
+  ,frame=single
+  ,style=ksty
+  ,language=k
+  ,numbers=left
+  ,numbersep=5pt,
+  ,numberstyle=\tiny
+  ,xleftmargin=3ex,
+  ,caption={Obtain From Response}
+  ,label={lst:obtain-from-response}
+]
+ rule <k> waitForObtainResponse(_) => V ... </k>
+      <inBuffer> (ListItem(event($ObtainResponse | V:Val  | Epoch )) => .List) @\label{lstline:response-buffer-begin}@
+                  ...
+      </inBuffer>                                                              @\label{lstline:response-buffer-end}@
+      <executorAvailable> true => false </executorAvailable>
+      <epoch> Epoch </epoch>
+\end{lstlisting}
+
+\section{\MediK{} Pediatric Sepsis System}\label{sec:medik-psepsis}
 
 \subsection{Sepsis Management \CDSS}
 
@@ -1346,9 +1431,9 @@ of Illinois at OSF St. Francis Medical Center to develop a \MediK{}-based
 for screening and management of Pediatric Sepsis \footnote{the entire \CDSS{}
 for sepsis management is available at \cite{psepsis-url}.}.
 
-Recall from \figurename{} \ref{fig:sepsis-screening} the guideline
+Recall from \autoref{fig:sepsis-screening} the guideline
 for sepsis screening.
-In \figurename{} \ref{fig:medik-sepsis-screening}, we show
+In \autoref{lst:medik-sepsis-screening}, we show
 \MediK{} code corresponding to the sepsis screening guideline.
 When modeled in \MediK{}, a flowchart in the guideline is represented using
 a \MediK{} machine. \emph{Nodes} in the flowchart are represented as
@@ -1359,31 +1444,35 @@ Also, while it's desirable to represent each flowchart \emph{node} as a
 state machine \emph{state}, the task in the flowchart \emph{node} may warrant using
 multiple state-machine \emph{states}. For example,
 in \figurename{} \ref{fig:sepsis-screening}, the step \say{Obtain Patient Age,
-Weight, and High Risk Conditions} is translated to states \inlinemedik{ObtainAge} (lines
-7-13), \inlinemedik{ObtainWeight} (line 14), and
-\inlinemedik{ObtainHighRiskConditions} (line 15) in \figurename{} \ref{fig:medik-sepsis-screening}.
+Weight, and High Risk Conditions} is translated to states \inlinemedik{ObtainAge} (Lines
+\ref{lstline:obtain-age-begin}-\ref{lstline:obtain-age-end}),
+\inlinemedik{ObtainWeight} (\autoref{lstline:obtain-weight}), and
+\inlinemedik{ObtainHighRiskConditions} (\autoref{lstline:obtain-hr-conditions}) in \autoref{lst:medik-sepsis-screening}.
 Within each of these states, the code
 permits communication with heterogeneous external agents for obtaining
-required parameters. For instance, on line 9, an
+required parameters. For instance, on \autoref{lstline:instruct-get-age}, an
 \inlinemedik{Instruct} event is sent to an external \inlinemedik{tablet} machine
 with the payload \inlinemedik{"get age"}. The recipient process
 runs on a tablet held by the Healthcare Provider, and handles
 the event by prompting the provider to enter the patient's age.
 A \inlinemedik{ConfirmAgeEntered} event, emitted once the age
 is obtained, enables the screening machine to proceed to the next
-step (lines 11-13). Once all appropriate measurements have been obtained,
-they are checked for abnormality (lines 18-26) using tables shown in \figurename{}
-\ref{fig:hr-check-fun} to arrive upon a diagnosis.
+step . Once all appropriate measurements have been obtained,
+they are checked for abnormality (Lines \ref{lstline:calculate-score-begin}-\ref{lstline:calculate-score-end})
+using tables shown in
+to arrive upon a diagnosis.
 
-\begin{figure}
-  \centering
-\begin{lstlisting}[style=mediksty
-,language=medik
-,basicstyle=\ttfamily\scriptsize
-,numbers=left
-,numberstyle=\tiny
-,framexleftmargin=1.5em
-,xleftmargin=2em
+\begin{lstlisting}[
+  float=ht
+  ,frame=single
+  ,style=mediksty
+  ,language=medik
+  ,numbers=left
+  ,numbersep=5pt,
+  ,numberstyle=\tiny
+  ,xleftmargin=3ex,
+  ,caption={Sepsis Screening in \MediK{}}
+  ,label={lst:medik-sepsis-screening}
 ]
 machine SepsisScreening receives .. {
   init state Start {
@@ -1391,16 +1480,16 @@ machine SepsisScreening receives .. {
       goto ObtainAge;
     }
   }
-  state ObtainAge {
+  state ObtainAge {                         @\label{lstline:obtain-age-begin}@
     entry {
-      send tablet, Instruct, ("get age");
+      send tablet, Instruct, ("get age");   @\label{lstline:instruct-get-age}@
     } on ConfirmAgeEntered do {
       goto ObtainWeight;
     }
-  }
-  state ObtainWeight { ... }
-  state ObtainHighRiskConditions { ... }
-  state CalculateScore {
+  }                                         @\label{lstline:obtain-age-end}@
+  state ObtainWeight { ... }                @\label{lstline:obtain-weight}@
+  state ObtainHighRiskConditions { ... }    @\label{lstline:obtain-hr-conditions}@
+  state CalculateScore {                    @\label{lstline:calculate-score-begin}@
       var hrAbnormal = !isInNormalRange("HR", ...);
       var bucket1    = hrAbnormal ||  ...
       var bucket3    = mentalStatusAbnormal || ...
@@ -1410,11 +1499,9 @@ machine SepsisScreening receives .. {
 
       send tablet, SepsisDiagnosis
         , (sepsisSuspected);
-  }
+  }                                         @\label{lstline:calculate-score-end}@
 }
 \end{lstlisting}
-  \caption{Sepsis Screening in \MediK{}}\label{fig:medik-sepsis-screening}
-\end{figure}
 
 %Apart from structurally resembling the workflow, the code
 %permits communication with heterogenous external agents, and
@@ -1433,22 +1520,23 @@ machine SepsisScreening receives .. {
 %the screening machine, and are triggered if the diagnosis is \textit{sepsis
 %positive}, suggesting commencement of treatment.
 
-\begin{figure}[b!]
-  \centering
-\begin{lstlisting}[style=mediksty
-,language=medik
-,basicstyle=\ttfamily\scriptsize
-,numbers=left
-,numberstyle=\tiny
-,framexleftmargin=1.5em
-,xleftmargin=2em
+\begin{lstlisting}[
+  float=h
+  ,frame=single
+  ,language=medik
+  ,style=mediksty
+  ,numbers=left
+  ,numbersep=5pt,
+  ,numberstyle=\tiny
+  ,xleftmargin=3ex,
+  ,caption={Fluid Therapy Guidelines}
+  ,label={lst:medik-fluid-therapy}
 ]
 machine FluidTherapy
   receives StartFluidTherapy, ... {
 
-
   init state Start {
-    on StartFluidTherapy do {
+    on StartFluidTherapy do {                           @\label{lstline:start-fluid-therapy}@
       goto ObtainRisks;
     }
   }
@@ -1510,16 +1598,14 @@ machine FluidTherapy
   }
 }
 \end{lstlisting}
-  \caption{Fluid Resuscitation in \MediK{}}\label{fig:medik-fluid-therapy}
-\end{figure}
 
 
-Recall from Section \ref{sec:motivating-example} that once a sepsis diagnosis has been arrived upon,
+Recall from \autoref{sec:bpg-background} that once a sepsis diagnosis has been arrived upon,
 one of the guideline suggested actions include administering fluids as shown in
-\figurename{} \ref{fig:fluid-therapy}. In \figurename{} \ref{fig:medik-fluid-therapy},
+\autoref{fig:fluid-therapy}. In \autoref{lst:medik-fluid-therapy},
 we show the corresponding \MediK{} code for administering fluids.
 The process starts when an external \inlinemedik{StartFluidTherapy} event,
-corresponding to a button press by the \HCP{} is received (line 6).
+corresponding to a button press by the \HCP{} is received (\autoref{lstline:start-fluid-therapy}).
 The next steps include
 \begin{enumerate*}[label=(\alph*)]
   \item obtaining any \emph{risks} associated with administering
@@ -1557,7 +1643,7 @@ the code.
 
 
 
-\subsection{Formal Analysis using \MediK{}}
+\subsection{Formal Analysis using \MediK{}}\label{sec:formal-analysis}
 
 During execution of a \MediK{} program, a machine may be considered
 \emph{stuck} if an event at the head of its input buffer does not
@@ -1667,14 +1753,13 @@ head of the input buffer to a terminal \inlinemedik{stuck} state.
   ,showspaces=false
   ,xleftmargin=2em
   ]
-  rule
-  <k> handleEvents ~> _ => stuck </k>
-   <activeState> ActiveState </activeState>
-   <class> MachineName </class>
-   <inBuffer>
-    ListItem(event(InputEvent | _ | _ )) ...
-   </inBuffer> ...
-  </k>
+rule <k> handleEvents ~> _ => stuck </k>
+     <activeState> ActiveState </activeState>
+     <class> MachineName </class>
+     <inBuffer>
+      ListItem(event(InputEvent | _ | _ )) ...
+     </inBuffer> ...
+    </k>
 \end{lstlisting}
 We utilize the semantics-generated bounded model checker
 to search the state space to a depth of 300,000
