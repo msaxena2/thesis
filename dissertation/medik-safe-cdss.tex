@@ -1521,10 +1521,11 @@ machine SepsisScreening receives .. {
 %positive}, suggesting commencement of treatment.
 
 \begin{lstlisting}[
-  float=h
+  float=b!
   ,frame=single
   ,language=medik
   ,style=mediksty
+  ,basicstyle=\ttfamily\scriptsize
   ,numbers=left
   ,numbersep=5pt,
   ,numberstyle=\tiny
@@ -1580,18 +1581,18 @@ machine FluidTherapy
       if (this.fluidOverload) {
         recommendation = "handle fluid overload";       @\label{lstline:handle-overload}@
       } else {
-        // obtain total saline dose
+        // obtain total saline dose                     @\label{lstline:obtain-fluid-dose}@
         if ((totalSalineDose >
               measurementBounds.salineDosageUpperBound) {
           if (isResponseiveToFluids) {
-            recommendation = "maintainence fluids"
-          } else {
+            recommendation = "maintainence fluids"      @\label{lstline:maintain-fluid}@
+          } else {                                      @\label{lstline:inotropic-support-begin}@
             recommendation = "consider inotropic support";
             broadcast ConsiderInotropicSupport;
-          }
-        } else {
+          }                                             @\label{lstline:inotropic-support-end}@
+        } else {                                        @\label{lstline:more-bolus-begin}@
           recommendation = "repeat fluid bolus";
-        }
+        }                                               @\label{lstline:more-bolus-end}@
       }
       // Send recommendation to tablet
       // Wait for HCP response
@@ -1623,27 +1624,24 @@ dose (Lines \ref{lstline:evaluate-responsiveness-begin}-\ref{lstline:evaluate-re
 and check for any signs of evaluate overload (Lines \ref{lstline:evaluate-overload-begin}-\ref{lstline:evaluate-overload-end}).
 If the patient exhibits any signs of fluid overload, then a recommendation
 to handle the overload is made (\autoref{lstline:handle-overload}). Otherwise,
-the total dose of administered fluid is obtained from an external source (line 50).
+the total dose of administered fluid is obtained from an external source (\autoref{lstline:obtain-fluid-dose}).
 If the total dose is above the maximum allowed dose, then
 a recommendation based on the patient's responsiveness to administered
 fluids is made to either
 \begin{enumerate*}[label=(\alph*)]
-  \item reduce the fluid flow to maintenance levels (line
-53), or,
-  \item switch to inotropic support to address circulatory issues is made (lines 52-58).
+  \item reduce the fluid flow to maintenance levels (\autoref{lstline:maintain-fluid}), or,
+  \item switch to inotropic support to address circulatory issues is made (Lines \ref{lstline:inotropic-support-begin}-\ref{lstline:inotropic-support-end}).
 \end{enumerate*}
 If the total dose of administered
 fluids is less than the maximum allowed limit, then a recommendation to
-administer one more fluid bolus made (lines 58-60).
+administer one more fluid bolus made (Lines \ref{lstline:more-bolus-begin}-\ref{lstline:more-bolus-end}) ).
 
 Note that both the \inlinemedik{SepsisScreening} and
 \inlinemedik{FluidTherapy} machines structurally resemble their
-paper based counterparts in \figurename{} \ref{fig:sepsis-screening} and
-\figurename{} \ref{fig:fluid-therapy} respectively, making
+paper based counterparts in \autoref{fig:sepsis-screening} and
+\autoref{fig:fluid-therapy} respectively, making
 it easier for Healthcare Providers to comprehend and validate
 the code.
-
-
 
 \subsection{Formal Analysis using \MediK{}}\label{sec:formal-analysis}
 
