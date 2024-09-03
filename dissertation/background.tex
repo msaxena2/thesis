@@ -1,8 +1,10 @@
 \chapter{Background}\label{chapter:background}
 
-This chapter introduces relevant background information on
-best practice guidelines (\BPG{}) and guidelines-based clinical decision support
-systems (\CDSS{}).
+\autoref{chapter:introduction} conceptually introduced
+best practice guidelines (\BPGs{}) and
+clinical decision support systems (\CDSSs{}).
+This chapter introduces relevant background details
+on \BPGs{} and \CDSSs{}.
 In \autoref{sec:bpg-background}, we utilize a real-world \BPG{}
 to explain the motivation behind codifying treatment
 in the form of clinical guidelines. We also briefly discuss
@@ -171,28 +173,31 @@ across many \BPGs{}. Specifically \BPGs{} typically:
     etc to present normal/abnormal ranges for measurements, or recommended dosages for drugs.
 \end{itemize}
 
-Note that the aforementioned characteristics are \emph{not} specific
-to one guideline. According to a review paper on \CIGs{} \cite{ClerqAIM03},
-such \DSLs{} should additionally
-\begin{enumerate*}[label=(\alph*)]
-  \item be formally defined, i.e, have a formal syntax and semantics, and
-  \item have an execution engine to provide decision support.
-\end{enumerate*}
+%Note that the aforementioned characteristics are \emph{not} specific
+%to one guideline. According to a review paper on \CIGs{} \cite{ClerqAIM03},
+%such \DSLs{} should additionally
+%\begin{enumerate*}[label=(\alph*)]
+%  \item be formally defined, i.e, have a formal syntax and semantics, and
+%  \item have an execution engine to provide decision support.
+%\end{enumerate*}
 
 \section{Clinical Decision Support Systems}\label{sec:cdss-background}
 
-\BPGs{} are developed with the intention of improving patient outcomes
-by reducing preventable medical errors. But, such guidelines can only be
-effective if they are followed in practice, which can be challenging.
- For instance, consider the Advanced Cardiac Life Support (ACLS):
-a \BPG{} published by the American Heart Association (AHA) for management
-of a life-threatening condition called in-hospital cardiac arrest
-\cite{AHAGuidelineAdult, AHAGuidelinePed}. Studies suggest that management
-of IHCA in 30\% of adult, and 17\% of pediatric cases deviates from the
-AHA-prescribed \BPG{}, resulting in worse patient outcomes \cite{Ornato2012DeviationAdult,Wolfe2020DeviationPediatric,
-Crowley2020DeviationAdult,Honarmand2018Adherence,Mcevoy2014Adherence}.
+%\BPGs{} are developed with the intention of improving patient outcomes
+%by reducing preventable medical errors.
+%But, such guidelines can only be
+%effective if they are followed in practice, which can be challenging.
+% For instance, consider the Advanced Cardiac Life Support (ACLS):
+%a \BPG{} published by the American Heart Association (AHA) for management
+%of a life-threatening condition called in-hospital cardiac arrest
+%\cite{AHAGuidelineAdult, AHAGuidelinePed}. Studies suggest that management
+%of IHCA in 30\% of adult, and 17\% of pediatric cases deviates from the
+%AHA-prescribed \BPG{}, resulting in worse patient outcomes \cite{Ornato2012DeviationAdult,Wolfe2020DeviationPediatric,
+%Crowley2020DeviationAdult,Honarmand2018Adherence,Mcevoy2014Adherence}.
 
-The benefits of \BPGs{} have resulted in them being widely adopted
+\BPGs{} are developed with the intention of improving patient outcomes
+by reducing preventable medical errors, and their
+have resulted in them being widely adopted
 in daily practice \cite{WoolfBMJ99}. However, \BPG{} adoption in
 clinical settings has several challenges. \BPGs{} are complex documents,
 which may also contain some vagueness.
@@ -223,7 +228,13 @@ To illustrate how a \CDSSs{} can enable better \BPG{} adherence,
 we utilize an example \CDSS{} that codifies the sepsis management \BPG{}
 to administer decision support.
 
-In \autoref{fig:sepsis-tool}, we show an overview
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.9\textwidth]{sepsis-tool-main}
+  \caption{Sepsis Tool Main Screen}\label{fig:sepsis-tool-main}
+\end{figure}
+
+\autoref{fig:sepsis-tool-main} and \autoref{fig:sepsis-graphs-view} show an overview
 of a \CDSS{} for sepsis management.
 The \CDSS{} is intended to work as tablet at
 the patient's beside in a hospital's emergency department (ED).
@@ -259,31 +270,26 @@ toggles the window in \autoref{fig:sepsis-graphs-view} depicting
 the patient's vitals over time punctuated by points at which
 drugs were administered.
 
-%\begin{figure}[t]
-%  \centering
-%  \includegraphics[width=0.7\textwidth]{sepsis-tool-main}
-%  \caption{Sepsis Tool Main Screen}\label{fig:sepsis-tool-main}
-%\end{figure}
-%
-%\begin{subfigure}[b]
-%  \centering
-%  \includegraphics[width=0.5\textwidth]{sepsis-graphs}
-%  \subcaption{Patient Vitals vs Time}\label{fig:sepsis-graphs-view}
-%\end{subfigure}
 
-\begin{figure*}[t!]
-  \begin{subfigure}[t]{0.69\textwidth}
-    \centering
-    \includegraphics[height=2.5in]{sepsis-tool-main}
-    \subcaption{Main Screen}\label{fig:sepsis-tool-main}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.3\textwidth}
-    \centering
-    \includegraphics[height=2.5in]{sepsis-graphs}
-    \subcaption{Patient Vitals vs Time}\label{fig:sepsis-graphs-view}
-  \end{subfigure}
-  \caption{$\MediK{}$-based Sepsis Management \CDSS{}}\label{fig:sepsis-tool}
-\end{figure*}
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.35\textwidth]{sepsis-graphs}
+  \subcaption{Patient Vitals vs Time}\label{fig:sepsis-graphs-view}
+\end{figure}
+
+%\begin{figure*}[t!]
+%  \begin{subfigure}[t]{0.69\textwidth}
+%    \centering
+%    \includegraphics[height=2.5in]{sepsis-tool-main}
+%    \subcaption{Main Screen}\label{fig:sepsis-tool-main}
+%  \end{subfigure}
+%  \begin{subfigure}[t]{0.3\textwidth}
+%    \centering
+%    \includegraphics[height=2.5in]{sepsis-graphs}
+%    \subcaption{Patient Vitals vs Time}\label{fig:sepsis-graphs-view}
+%  \end{subfigure}
+%  \caption{$\MediK{}$-based Sepsis Management \CDSS{}}\label{fig:sepsis-tool}
+%\end{figure*}
 
 \subsection{\CDSS{} Components}\label{sec:cdss-components}
 
@@ -299,16 +305,17 @@ as systems at the patient bedsides, desktops or tablets carried by
 practitioners and smartphones. This versatility
 has further enhanced \CDSSs{} adoption \cite{SuttonNature20}.
 
-\begin{figure}[t!]
+In \autoref{fig:cdss-architecture}, we provide an overview
+of the components of a typical \CDSS{}, and the underlying architecture.
+A typical guidelines-based \CDSS{} conceptually consists of the
+following components \cite{SuttonNature20}:
+
+\begin{figure}[h]
   \centering
   \includegraphics[width=0.75\textwidth]{cdss-architecture}
   \caption{\CDSS{} Components}\label{fig:cdss-architecture}
 \end{figure}
 
-In \autoref{fig:cdss-architecture}, we provide an overview
-of the components of a typical \CDSS{}, and the underlying architecture.
-A typical guidelines-based \CDSS{} conceptually consists of the
-following components \cite{SuttonNature20}:
 
 \paragraph{Knowledge Base:}
 
