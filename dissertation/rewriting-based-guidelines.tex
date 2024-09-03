@@ -306,16 +306,16 @@ program itself.
   label={lst:initial-configuration},
   xleftmargin=3ex
 ]
-    configuration
-        <machines>                                @\label{lstline:machines-cell-start}@
-            <machine multiplicity="*" type="Set"> @\label{lstline:machine-cell-start}@
-                <id>    .K   </id>
-                <state> .K   </state>
-                <store> .Map </store>
-            </machine>                           @\label{lstline:machine-cell-end}@
-        </machines>                              @\label{lstline:machines-cell-end}@
-        <inputBuffer>  .JSONs </inputBuffer>     @\label{lstline:input-buffer-cell}@
-        <outputBuffer> .JSONs </outputBuffer>    @\label{lstline:output-buffer-cell}@
+configuration
+    <machines>                                @\label{lstline:machines-cell-start}@
+        <machine multiplicity="*" type="Set"> @\label{lstline:machine-cell-start}@
+            <id>    .K   </id>
+            <state> .K   </state>
+            <store> .Map </store>
+        </machine>                           @\label{lstline:machine-cell-end}@
+    </machines>                              @\label{lstline:machines-cell-end}@
+    <inputBuffer>  .JSONs </inputBuffer>     @\label{lstline:input-buffer-cell}@
+    <outputBuffer> .JSONs </outputBuffer>    @\label{lstline:output-buffer-cell}@
 \end{lstlisting}
 
 Lines \ref{lstline:machines-cell-start}-\ref{lstline:machines-cell-end} declare
@@ -364,16 +364,16 @@ entry state of the machine in \autoref{fig:cpr-machine}.
   label={lst:cpr-initialization},
   xleftmargin=3ex
 ]
- rule <machines>
-       ( .Bag => <machine>                                      @\label{lstline:machine-add-begin}@
-                     <id> cprMachine </id>
-                     <state> idle </state>
-                     <store> "cprRunning" |-> false </store>
-                     ...
-                  </machine> )                                  @\label{lstline:machine-add-end}@
-       ...
-      </machines>
-      <inputBuffer> "cprMachine.init" , IN => IN </inputBuffer> @\label{lstline:init-inputBuffer}@
+rule <machines>
+      ( .Bag => <machine>                                      @\label{lstline:machine-add-begin}@
+                    <id> cprMachine </id>
+                    <state> idle </state>
+                    <store> "cprRunning" |-> false </store>
+                    ...
+                 </machine> )                                  @\label{lstline:machine-add-end}@
+      ...
+     </machines>
+     <inputBuffer> "cprMachine.init" , IN => IN </inputBuffer> @\label{lstline:init-inputBuffer}@
 \end{lstlisting}
 Instead of starting \inlinek{<machines>} cell that is pre-populated with
 \inlinek{<machine>} cells from the start, we dynamically initialize
@@ -450,18 +450,18 @@ make the definition \emph{concise} yet \emph{descriptive}. Specifically:
   label={lst:cpr-machine-start},
   xleftmargin=3ex
 ]
-  rule <machine>
-            <id> cprMachine </id>
-            <state> idle => lessThan2Min </state>                    @\label{lstline:idle-lessThan2Min}@
-            <store> ( "cprRunning" |-> (_ => true) ) ... </store>    @\label{lstline:store-abstraction-dots}@
-            ...                                                      @\label{lstline:machine-abstraction-dots}@
-       </machine>
-       <inputBuffer> "StartCpr" , IN => IN </inputBuffer>            @\label{lstline:read-inputBuffer}@
-       <outputBuffer>                                                @\label{lstline:external-timer-start-begin}@
-           OUT => OUT +JSONs jsonResponse( cprMachine
-                                         | lessThan2Min
-                                         | startTimer( .JSONs ) )
-       </outputBuffer>                                               @\label{lstline:external-timer-start-end}@
+rule <machine>
+          <id> cprMachine </id>
+          <state> idle => lessThan2Min </state>                    @\label{lstline:idle-lessThan2Min}@
+          <store> ( "cprRunning" |-> (_ => true) ) ... </store>    @\label{lstline:store-abstraction-dots}@
+          ...                                                      @\label{lstline:machine-abstraction-dots}@
+     </machine>
+     <inputBuffer> "StartCpr" , IN => IN </inputBuffer>            @\label{lstline:read-inputBuffer}@
+     <outputBuffer>                                                @\label{lstline:external-timer-start-begin}@
+         OUT => OUT +JSONs jsonResponse( cprMachine
+                                       | lessThan2Min
+                                       | startTimer( .JSONs ) )
+     </outputBuffer>                                               @\label{lstline:external-timer-start-end}@
 \end{lstlisting}
 
 \subsubsection{Epinephrine Machine}
@@ -475,22 +475,22 @@ make the definition \emph{concise} yet \emph{descriptive}. Specifically:
   label={lst:epi-machine-rule},
   xleftmargin=3ex
 ]
-  rule <machine>
-        <id> epiMachine </id>
-        <state> givenLessThan3Min
-            => earlyOrderWarningNotification
-        </state>
-        <store> .Map => ("tentativeOrder" |-> ORDERED) ... </store>
-      </machine>
-      <inputBuffer> { "event" : "orderEpi"                              @\label{lstline:input-buffer-json-read-begin}@
-                    , "data"  : [ ORDERED:Int ] } , IN
-                => IN
-      </inputBuffer>                                                    @\label{lstline:input-buffer-json-read-end}@
-      <outputBuffer> OUT                                                @\label{lstline:output-buffer-warning-begin}@
-        => OUT +JSONs jsonResponse( epiMachine
-                                  | earlyOrderWarningNotification
-                                  | showEarlyOrderWarning( .JSONs ) )   @\label{lstline:output-buffer-warning-end}@
-      </outputBuffer>
+rule <machine>
+      <id> epiMachine </id>
+      <state> givenLessThan3Min
+          => earlyOrderWarningNotification
+      </state>
+      <store> .Map => ("tentativeOrder" |-> ORDERED) ... </store>
+    </machine>
+    <inputBuffer> { "event" : "orderEpi"                              @\label{lstline:input-buffer-json-read-begin}@
+                  , "data"  : [ ORDERED:Int ] } , IN
+              => IN
+    </inputBuffer>                                                    @\label{lstline:input-buffer-json-read-end}@
+    <outputBuffer> OUT                                                @\label{lstline:output-buffer-warning-begin}@
+      => OUT +JSONs jsonResponse( epiMachine
+                                | earlyOrderWarningNotification
+                                | showEarlyOrderWarning( .JSONs ) )   @\label{lstline:output-buffer-warning-end}@
+    </outputBuffer>
 \end{lstlisting}
 
 The \textit{Epinephrine Machine} encapsulates instructions for administering
@@ -582,27 +582,27 @@ rhythm.
   label={lst:shock-machine},
   xleftmargin=3ex
 ]
-    rule <machine>
-            <id> shockMachine </id>
-            <state>
-              shockableRhythm => checkRhythm                         @\label{lstline:shock-state}@
-            </state> ...
-          </machine>
-          <machine>
-            <id> cprMachine </id>
-            <store> ( "cprRunning" |-> false ) ... </store> ...      @\label{lstline:cpr-false}@
-          </machine>
-          <machine>
-            <id> epiMachine </id>
-            <store> ( "epiGiven" |-> true ) ... </store> ...        @\label{lstline:epi-true}@
-          </machine>
-          <inputBuffer> "administerShock" , IN => IN </inputBuffer>
-          <outputBuffer> OUT                                        @\label{lstline:shock-response-begin}@
-          => OUT +JSONs jsonResponse( shockMachine
-                                    | checkRhythm
-                                    | confirmShock("CPR for
-                                                    2 Minutes" ) )  @\label{lstline:shock-response-end}@
-          </outputBuffer>
+rule <machine>
+        <id> shockMachine </id>
+        <state>
+          shockableRhythm => checkRhythm                         @\label{lstline:shock-state}@
+        </state> ...
+      </machine>
+      <machine>
+        <id> cprMachine </id>
+        <store> ( "cprRunning" |-> false ) ... </store> ...      @\label{lstline:cpr-false}@
+      </machine>
+      <machine>
+        <id> epiMachine </id>
+        <store> ( "epiGiven" |-> true ) ... </store> ...        @\label{lstline:epi-true}@
+      </machine>
+      <inputBuffer> "administerShock" , IN => IN </inputBuffer>
+      <outputBuffer> OUT                                        @\label{lstline:shock-response-begin}@
+      => OUT +JSONs jsonResponse( shockMachine
+                                | checkRhythm
+                                | confirmShock("CPR for
+                                                2 Minutes" ) )  @\label{lstline:shock-response-end}@
+      </outputBuffer>
 \end{lstlisting}
 
 We draw the user's attention to the \textit{succinctness} and \textit{simplicity}

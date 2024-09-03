@@ -443,7 +443,7 @@ the simple program \inlinemedik{int x; x = 2 + 3;}.
 At the start of execution, \K{} replaces the \inlinek{$PGM}
 in the configuration declaration with the program's \AST{}.
 Thus, we get the following initial configuration:
-\begin{lstlisting}[language=k,style=ksty]
+\begin{lstlisting}[language=k,style=ksty,frame=single]
 <T>
   <k> int x, .Ids; x = 2 + 3; </k>
   <state> .Map </state>
@@ -512,7 +512,7 @@ Recall that the attribute assignment statement has the attribute
 construct must be evaluated first. Thus,
 $\K$ will \emph{heat}, or pull-out the second
 argument for evaluation. This results in the configuration:
-\begin{lstlisting}[language=k,style=ksty]
+\begin{lstlisting}[language=k,style=ksty,frame=single]
 <T>
   <k> 2 + 3 ~> x = []; </k>
   <state> x |-> 0 </state>
@@ -530,7 +530,7 @@ by an application of the arithmetic addition rule on
 we specify any term of sort \inlinek{Int} to be a \inlinek{KResult}.
 This signifies that the term can no longer be evaluated, and can be \emph{cooled}
 or plugged-back into its corresponding hole, resulting in the configuration:
-\begin{lstlisting}[language=k,style=ksty]
+\begin{lstlisting}[language=k,style=ksty,frame=single]
 <T>
   <k> x = 5; </k>
   <state> x |-> 0 </state>
@@ -540,7 +540,7 @@ Now the LHS of the assignment rule can \emph{match} with substitution
 \inlinekmath{$\theta$\ =\ (X\ $\mapsto$\ x, I\ $\mapsto$\ 5)}, to
 update the value of \inlinek{x} in the \inlinek{<state>} cell
 to \inlinek{5}, resulting in the final configuration:
-\begin{lstlisting}[language=k,style=ksty]
+\begin{lstlisting}[language=k,style=ksty,frame=single]
 <T>
   <k> . </k>
   <state> x |-> 5 </state>
@@ -560,7 +560,7 @@ we slightly modify the imp program to have two simple statements
 after the variable declaration instead of one.
 Assume the program has the form \inlinek{int x; x = 5; x = x + 2}.
 variable declaration, we would have:
-\begin{lstlisting}[language=k,style=ksty]
+\begin{lstlisting}[language=k,style=ksty,frame=single]
 <T>
   <k> x = 5; x = x + 2; </k>
   <state> x |-> 0 </state>
@@ -579,7 +579,7 @@ only match a standalone statement. Thus, the rule on
 substitution
 \inlinekmath{$\theta$\ =\ (S\ $\mapsto$\ x = 2 + 3;,\ Ss\ $\mapsto$\ x = x + 2;)}
 to give us the following configuration:
-\begin{lstlisting}[language=k,style=ksty]
+\begin{lstlisting}[language=k,style=ksty,frame=single]
 <T>
   <k> x = 5; ~> x = x + 2; </k>
   <state> x |-> 0 </state>
@@ -594,7 +594,7 @@ abstracts away the remaining computation, which in our example
 is \lstinline[style=ksty]{~> x = x + 2;}. The rule can then
 rewrite the assignment \inlinek{x = 5;} to nothing (denoted by
 \inlinek{.}), which leads to the configuration:
-\begin{lstlisting}[language=k,style=ksty]
+\begin{lstlisting}[language=k,style=ksty,frame=single]
 <T>
   <k> x = x + 2; </k>
   <state> x |-> 5 </state>
