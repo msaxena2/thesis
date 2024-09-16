@@ -13,4 +13,57 @@ indeed sound. In this section, we briefly outline the steps to prove the
 soundness of our abstraction-based analysis, and outline limitations that
 prevented us from establishing it.
 
-Recall that in \autoref{sec:theoretical-foundations}
+Recall that in \autoref{sec:theoretical-foundations}, we presented the
+matching logic: the theoretical foundations of the $\K$ framework. We explained
+that a $\K$ definition of a language $L$, compiles to a matching logic theory
+$\Gamma^L$. A symbol $\snext \in \Sigma$ is then defined as a part of the
+signature to capture dynamic behavior of rewrite rules.
+Intuitively, given a configuration
+pattern $\gamma$, the pattern $\snext \gamma$ matches all possible
+configurations that $\gamma$ can rewrite to in one-step. Thus
+the one-step rewrite relation can be defined as:
+$$
+  \varphi \To^1 \psi \equiv \varphi \to \snext \psi
+$$
+
+Next, the reflexive, transitive closure of the one-step rewrite relation
+can be defined using fixed-points as:
+$$
+  \eventually \varphi \equiv \mu X \ldot \varphi \vee \snext X
+$$
+and the rewrite $\varphi \To \psi$ as:
+$$
+  \varphi \To \psi \equiv \varphi \to \eventually \psi
+$$
+In other words, if a configuration matches
+$\varphi$ then it matches $\varphi$ in zero or more steps.
+Note that the existence of a fixed point of $\eventually\varphi$
+is guaranteed by the Knaster-Tarski theorem as long as the interpretation
+$\mathcal{F}^{\rho}_{X,\varphi} = \interpret{\varphi}{\rho\left[A / X\right]}$
+is monotone \cite{ChenLICS19}.
+
+%When $\varphi,\psi$ are \inlinek{configuration} patterns,
+
+Typically, establishing soundness of abstraction-based static analysis
+requires coming up partial order over abstract states,
+$\left(\Abs, \sqsubseteq\right)$, and, semantic rules defined over $\Abs$.
+For $a_1, a_2 \in \Abs$, $a_1 \sqsubseteq a_2$ typically means $a_1$ is
+\emph{more precise} than $a_2$. Recall that in \autoref{sec:formal-analysis},
+that we defined a value \inlinek{#nondet}, denoting the very simple abstract
+domain $\top$ or \emph{undetermined},
+and rules that operate over it. Let $\ToAbs$ be the transition
+system defined by rules over the abstract state. We first need to
+establish that for any $a_1, a_2 \in \Abs$, if $a_1 \ToAbs a_2$ then $a_1
+\sqsubseteq a_2$. In other words, we need to show that the transition relation
+$\ToAbs$ is monotonic w.r.t. the ordering $\sqsubseteq$.
+
+
+
+
+%
+%
+%containing axioms of the form $\varphi \to \snext\psi$ that
+%encode rewrite rules $\varphi \To \psi$, where $\eventually\psi \equiv \mu X \ldot
+%\psi \vee \snext X$. The symbol $\snext \in \Sigma$, referred to as the
+%\say{one-path next}, defines a transition $\ToExec$ system as follows:
+
