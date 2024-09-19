@@ -62,15 +62,38 @@ $\Abstract$. We can then utilize $\beta$ to define a complete lattice
 configuration terms. Recall from \autoref{sec:configuration} that
 $\MediK{}$'s configuration comprises of an \inlinek{<store>}-cell that
 stores map $\rho$ of pointer-value bindings.
-Given configuration terms $\tau_1, \tau_2 \in
-\Abs$ with \inlinek{<store>} cells containing maps $\rho_{\tau_1}$ and
-$\rho_{\tau_2}$ respectively. We say $\tau_1 \sqsubseteq \tau_2$ iff
+Given configuration terms $\overline{\tau}_1, \overline{\tau}_2 \in
+\Abs$ with \inlinek{<store>} cells containing maps $\rho_{\overline{\tau}_1}$ and
+$\rho_{\overline{\tau}_2}$ respectively.
+We say $\overline{\tau}_1 \sqsubseteq \overline{\tau}_2$ iff
 they only differ in their
 \inlinek{<store>} cell (all other cells are similar), and, for every
-pointer in $p \in$ \inlinekmath{keys($\rho_{\tau_1} \cup \rho_{\tau_2}$)}
-we have $\rho_{\tau_1}[p] \sqsubseteq \rho_{\tau_2}[p]$. Note we
-say $\rho[p] = \bot$ for any $p \not\in$ \inlinekmath{keys($\rho$)}.
+pointer in $p \in$ \inlinekmath{keys($\rho_{\overline{\tau}_1} \cup \rho_{\overline{\tau}_2}$)}
+we have $\rho_{\overline{\tau}_1}[p] \sqsubseteq \rho_{\overline{\tau}_2}[p]$. Note we
+say, given a map $\rho$ of pointer-value bindings,
+$\rho[p] = \bot$ for any $p \not\in$ \inlinekmath{keys($\rho$)}.
 
+To complete the soundness argument, we need to need to make the complete the connection
+between concrete and abstract executions. Given homomorphism $\beta: \Concrete \to \Abstract$
+from concrete values to abstract values, and a concrete configuration term
+$\tau$. We derive an abstract configuration term $\overline{\beta}\left(\tau\right)$ from $\tau$ s.t.
+every \inlinekmath{$($pointer $\ \mapsto\ $ value$)$} pair in $\tau$'s
+\inlinek{<store>}-cell is mapped to \inlinekmath{$($pointer $\ \mapsto\ \beta($value$))$}
+in $\overline{\beta}\left(\tau\right)$'s \inlinek{<store>}-cell.
+We then need to show that for
+concrete terms $\tau, \tau'$ and abstract term $\overline{\tau}$, if
+\begin{enumerate*}[label=(\alph*)]
+  \item $\tau \To \tau'$, and,
+  \item $\overline{\beta}\left(\tau\right) \sqsubseteq \overline{\tau}$
+\end{enumerate*}
+then there exists an abstract state $\overline{\tau}'$ such that
+$\overline{\tau} \ToAbs \overline{\tau}'$ and $\overline{\beta}\left(\tau'\right) \sqsubseteq \overline{\tau}'$.
+This, along with the proof of monotonicity of $\ToAbs$ w.r.t. the ordering
+$\sqsubseteq$ enables us to show that any trace in the concrete semantics is safely approximated
+by a corresponding trace in the abstract semantics, as shown in
+\cite{SchmidtLISP98}. However, while we briefly sketch out a proof outline
+in this work, a complete proof for a language as complex as \MediK{} is a
+significant undertaking, which we leave to future work.
 
 
 %Say $\varphi, \psi$ are $\K{}$ $\K$ configuration
