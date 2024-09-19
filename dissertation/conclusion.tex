@@ -1,0 +1,73 @@
+\chapter{Conclusion}\label{chapter:conclusion}
+
+Chapter \ref{chapter:introduction} explains the persistent challenge
+that preventable medical errors (\PMEs{}) present in medicine.
+The seriousness of the problem can be gauged by the fact that
+President's Council on Science and Technology (\PCAST{})
+declared the prevalence of \PMEs{} to be an
+\say{urgent national public health issue}.
+
+Among the solutions
+outlined in the PCAST{} report include:
+\begin{enumerate*}[label=(\roman*)]
+  \item Utilizing \emph{evidence-based} medicine.
+  \item Investing in technology that assists healthcare
+  practitioners (\HCPs{}) in decision making.
+\end{enumerate*}
+Clinical best practice guidelines (\BPGs{}) exemplify evidence-based medicine.
+Produced by hospital and medical associations, these guidelines
+are evidence-based statements that codify recommended treatment for
+various clinical scenarios, and growing evidence supports their use
+in medicine to reduce \PMEs{}. But, their effectiveness in practice is often
+limited by challenges in their uptake and adoption. As outlined in
+\autoref{chapter:hurdles-cdss-adoption}, integrating \BPGs{} into \HCP{} workflows
+and following them in practice is often difficult, resulting in treatment
+that deviates from prescribed best-practices, and as a result, leads to
+worse outcomes. Guidelines-based clinical decision support systems
+that assist \HCPs{} with situation-specific advice to enhance guideline
+adherence have hence been shown to improve patient outcomes.
+
+Despite many apparent benefits, the prevalence of \CDSSs{} in practice
+remains low, due to factors outlined in \autoref{chapter:hurdles-cdss-adoption}.
+In this work, we utilize a semantics-first approach to building safe clinical
+decision support systems.
+
+By semantics-first, we mean that:
+\begin{itemize}
+  \item The semantics of medical knowledge are accurately captured in the
+  system.
+  \item The language for expressing medical knowledge has a well defined, formal
+  semantics from which tools for execution and formal analysis are derived.
+\end{itemize}
+
+\CDSSs{} are typically developed by software developers lacking expertise in
+medicine. Thus, it is possible for medical knowledge in a \CDSS{} to be incorrectly
+encoded during development. As \CDSSs{} operate in safety critical settings, such
+bugs can lead to adverse outcomes for patients. To address this,
+we developed a domain specific language for describing medical knowledge
+called \MediK{}. Developed as an academic endeavor, \MediK{} has been designed to be
+comprehensible to \HCPs{}. This allows \HCPs{} to examine and validate the accuracy
+medical knowledge in a \MediK-based \CDSS{}, enabling greater transparency in
+the source of the \CDSS{}'s recommendations.
+
+As outlined in \autoref{chapter:related-work}, the need for \DSLs{} for
+expressing \BPGs{} to have formal semantics and support for comprehensive
+support for formal analysis has already been recognized. \MediK{} builds
+on the state-of-art in modeling concurrent systems and medical knowledge
+to enable complex medical guidelines with multiple concurrent workflows
+and interdependencies to be conveniently expressed. To demonstrate this,
+we collaborate with OSF St. Francis Hospital in Peoria, Illinois--a
+major pediatric hospital to develop a \CDSS{} for their pediatric
+sepsis management guidelines. During the development process, bugs in
+medical logic were uncovered by collaborating physicians by examining
+\MediK{} code, and learnings from our endeavor were incorporated into the
+design of the language.
+
+We believe the work outlined in this thesis presents the first steps towards
+addressing challenges inhibiting broader \CDSS{} uptake. But, a comprehensive
+solution involves addressing several more challenges, some of which are
+outlined \autoref{chapter:future-work}. Some of these challenges demand
+collaboration from multiple stake-holders, from both computer-science and
+medicine. Thus, they remain unaddressed for now. But, we hope addressing
+them, as part of building on top of work presented here, can lower \PMEs{},
+leading to better quality healthcare at reduced costs.
