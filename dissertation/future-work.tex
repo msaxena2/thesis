@@ -1,7 +1,9 @@
 \chapter{Future Work}\label{chapter:future-work}
 
-This chapter outlines major tasks that remain towards enhancing the capabilities
-of our system.
+So far, we have described objectives that have already been completed
+as part of this work. This chapter, however, describes remaining
+objectives that are important for a comprehensive solution to the
+challenges outlined in \autoref{chapter:hurdles-cdss-adoption}.
 
 \section{Soundness of Model Checking Abstraction}\label{sec:abstraction-soundness}
 
@@ -209,7 +211,7 @@ as evaluating any such $e$ would eventually result in $\star$.
 %of the transition system an abstracted abstract state machine, where their
 %treatment of Abstract Machine matches the one in \cite{VanhornArxiv10}.
 
-In this work, we plan to utilize ideas from \cite{KoppelICFP22}
+To generate visual representations, we plan to utilize ideas from \cite{KoppelICFP22}
 in conjunction with the $\K{}$-Summarizer toolchain. The $\K{}$-
 Summarizer is an effort to improve performance of semantics-based tools
 by modifying the $\K$-definition itself. One of the primary objectives
@@ -251,12 +253,12 @@ project, it has also been used to optimize $\K$ definitions
 by \emph{merging} multiple rules that take smaller steps into
 one rule that \emph{summarizes} all of them. This is similar
 to the translation from \SOS{} to abstract machine presented in
-\cite{KoppelICFP22}. In our work, we plan to generate such
+\cite{KoppelICFP22}. In the future, we plan to generate such
 \emph{summaries} soundly, and utilize them to generate visualizations
 of \MediK{} programs. Note, that both $\K$ Summarizer and the work
-in \cite{KoppelICFP22} have been tried in \emph{deterministic} settings.
-We plan to address additional challenges from \emph{non-determinism} in our
-work.
+in \cite{KoppelICFP22} have been tried in \emph{deterministic} settings,
+and we anticipate additional challenges in translating it to concurrent
+settings.
 
 \section{Applicability to other \CDSSs{}}\label{subsec:applicability}
 
