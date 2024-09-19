@@ -1,4 +1,4 @@
-\chapter{Future Work}
+\chapter{Future Work}\label{chapter:future-work}
 
 This chapter outlines major tasks that remain towards enhancing the capabilities
 of our system.
@@ -47,9 +47,12 @@ requires coming up partial order over abstract states,
 $\left(\Abs, \sqsubseteq\right)$, and, semantic rules defined over $\Abs$.
 For $a_1, a_2 \in \Abs$, $a_1 \sqsubseteq a_2$ typically means $a_1$ is
 \emph{more precise} than $a_2$. Recall that in \autoref{sec:formal-analysis},
-that we defined a value \inlinek{#nondet}, denoting the very simple abstract
-domain $\top$ or \emph{undetermined},
-and rules that operate over it. Let $\ToAbs$ be the transition
+that we defined a value \inlinek{#nondet}, which represents the definition of a
+the very simple abstract
+domain $\left\{\top,\bot\right\}$, where $\top$ represents
+\emph{undetermined} or \emph{all-possible} values, and $\bot$ represents
+\emph{missing/no-possible} value. We then define rewrite rules
+that operate over these abstract values. Let $\ToAbs$ be the transition
 system defined by rules over the abstract state. We first need to
 establish that for any $a_1, a_2 \in \Abs$, if $a_1 \ToAbs a_2$ then $a_1
 \sqsubseteq a_2$. In other words, we need to show that the transition relation
@@ -262,16 +265,28 @@ a case study for clinical decision support systems.
 While the \BPG{} is a real-world, complex
 \CDSSs{} for management of sepsis in pediatric cases, it remains
 to be seen if \MediK{} can act as a convenient medium for building \CDSSs{} in general.
-To answer this, we plan to implement at least one more real-world \CDSS{}
-using \MediK{}. To this end, we plan to express the American Heart Institute's
-(AHA) \BPG{} for management of cardiac arrest \cite{AHAUrl}. Our choice
+This can most conveniently be answered through implementing more \CDSSs{} using
+our approach.
+
+Recall in \autoref{chapter:k-based-guidelines} we presented a \CDSS{}
+for management of cardiac arrest in adult cases based on the
+advanced cardiac life support (\ACLS{}) guidelines published by the American Heart Association (\AHA{}).
+In \autoref{sec:kacls-cdss}, we presented the $\KACLS{}$ \CDSS{} for
+management of cardiac arrest. The $\KACLS{}$ system
+medical logic has been expressed as $\K$ definition,
+which, while great for conciseness, required prior
+experience with $\K$ to understand.
+Thus, as a first step towards standardizing more guidelines
+in $\MediK{}$, and evaluating its applicability, we intend
+to translate embed the existing $\KACLS{}$ \BPG{} into
+\MediK{}. Our choice
 is motivated by the following reasons:
 \begin{enumerate*}[label=(\roman*)]
   \item an effective \CDSS{} for cardiac arrest can significantly improve
     outcomes,
   \item enables us to evaluate the \MediK{} code against directly encoding
     the guideline in $\K$, as we had used the same \BPG{} for a $\K$-based \CDSSs{}
-    (see section \ref{subsec:BPG-in-K}).
+    from \autoref{sec:kacls-cdss}.
 \end{enumerate*}
 
 
