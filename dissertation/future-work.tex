@@ -42,8 +42,6 @@ is guaranteed by the Knaster-Tarski theorem as long as the interpretation
 $\mathcal{F}^{\rho}_{X,\varphi} = \interpret{\varphi}{\rho\left[A / X\right]}$
 is monotone \cite{ChenLICS19}.
 
-%When $\varphi,\psi$ are \inlinek{configuration} patterns,
-
 Typically, establishing soundness of abstraction-based static analysis
 requires coming up partial order over abstract states,
 $\left(\Abs, \sqsubseteq\right)$, and, semantic rules defined over $\Abs$.
@@ -56,6 +54,29 @@ system defined by rules over the abstract state. We first need to
 establish that for any $a_1, a_2 \in \Abs$, if $a_1 \ToAbs a_2$ then $a_1
 \sqsubseteq a_2$. In other words, we need to show that the transition relation
 $\ToAbs$ is monotonic w.r.t. the ordering $\sqsubseteq$.
+
+Next, we need to relate the concrete transition system $\To$ to $\ToAbs$.
+Typically, this is done by defining a homomorphism $\beta: \Concrete \to \Abstract$
+from the set of concrete values $\Concrete$ to the set of abstract values
+$\Abstract$. We can then utilize $\beta$ to define a complete lattice
+configuration terms. Recall from \autoref{sec:configuration} that
+$\MediK{}$'s configuration comprises of an \inlinek{<store>}-cell that
+stores map $\rho$ of pointer-value bindings.
+Given configuration terms $\tau_1, \tau_2 \in
+\Abs$ with \inlinek{<store>} cells containing maps $\rho_{\tau_1}$ and
+$\rho_{\tau_2}$ respectively. We say $\tau_1 \sqsubseteq \tau_2$ iff
+they only differ in their
+\inlinek{<store>} cell (all other cells are similar), and, for every
+pointer in $p \in$ \inlinekmath{keys($\rho_{\tau_1} \cup \rho_{\tau_2}$)}
+we have $\rho_{\tau_1}[p] \sqsubseteq \rho_{\tau_2}[p]$. Note we
+say $\rho[p] = \bot$ for any $p \not\in$ \inlinekmath{keys($\rho$)}.
+
+
+
+%Say $\varphi, \psi$ are $\K{}$ $\K$ configuration
+%terms, i.e., terms  of the form \inlinekmath{<k> .. </k> <store> ... </store> ...}.
+
+
 
 
 
