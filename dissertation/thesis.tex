@@ -91,31 +91,110 @@
 \degreeyear{2024}
 \committee{
   Professor Grigore Ro\c{s}u, Chair \& Director of Research\\
-    Professor Lui Sha\\
-    TBD}
+  Professor Jose Meseguer \\
+  Professor Lui Sha\\
+  Doctor Serdar Tasiran
+}
 \maketitle
 
 \frontmatter
 
 \begin{abstract}
-Clinical Best Practice Guidelines (BPGs) are systematically developed,
-evidence-based statements published by medical institutions and associations
-that standardize diagnosis and treatment for various clinical scenarios. When
-expressed in an executable medium, BPGs can be utilized to build systems that
-assist healthcare professionals (HCPs) with situation-specific advice. Such
-systems, known as Guideline-based Clinical Decision Support Systems (CDSSs),
-  have been shown to improve patient outcomes.
+  Preventable medical errors (PMEs), characterized by misdiagnosis or mistreatment,
+  pose a significant challenge in healthcare.
+  %According to a September 2023 report
+  %by the President's Council on Science and Technology (PCAST) on patient safety,
+  %a quarter of Medicare patients experience adverse outcomes during hospitalization,
+  %of which 40\% were due to PMEs.
+  In the United States, PMEs were estimated to have caused between
+  44,000 and 98,000 deaths in 1997,
+  rising to more than 250,000 in 2013. Additionally, the
+  financial burden of PMEs to the U.S. economy in 2008 was estimated at \$19.5 billion.
 
-Several Domain-Specific Languages (DSLs) have been proposed to facilitate expressing BPGs in a computer-interpretable format that is easily comprehensible to HCPs.
-Given the safety-critical nature of CDSSs, the need for such languages to have complete formal semantics and an ecosystem of formal analysis tools has been recognized.
-Moreover, since these languages evolve over time to accommodate complexities in modeling BPGs, tools for them must also be adaptable to changes.
-But, existing languages lack complete formal semantics, or analysis tools derived from them.
+  One strategy to reduce PMEs in medicine is through the use of
+  clinical best practice guidelines (BPGs). BPGs are systematically developed,
+  evidence-based statements published by medical institutions and associations
+  that standardize diagnosis and treatment for various clinical scenarios.
+  %Growing evidence indicates BPG-conformant treatment lowers the risk of preventable
+  %medical errors.
+ % However, following these guidelines in practice can be
+ % challenging.
+  %To assist with BPG-conformance, computerized
+  %decision support systems that encode
+  %medical knowledge in BPGs, and provide HCPs with relevant, situation-specific,
+  %guideline-prescribed advice can be utilized.
+  BPG-conformance has been linked with reduced rates of PMEs, but,
+  following BPGs in practice can be challenging.
+  Computerized Decision Support Systems (CDSSs) aim to improve conformance
+  by encoding medical knowledge in BPGs and providing HCPs with
+  situation-specific, guideline-conformant advice.
+  Growing evidence suggests that
+  effective CDSSs can reduce PMEs by boosting adherence to best practice guidelines.
 
-This work introduces \MediK{}: a new DSL for expressing BPGs with a complete executable formal semantics,
-and formal analysis tools, including a model checker, symbolic execution engine, and deductive verifier.
-As MediK's tools are derived from its semantics, any update to the language is automatically reflected across all tools. To evaluate our approach, we collaborated with a major pediatric hospital to develop a MediK-based CDSS for the screening and management of Pediatric Sepsis and validated that it satisfies desired safety properties.
-Our CDSS is Institutional Review Board (IRB) approved and is slated to undergo clinical simulations.
+  This work presents a semantics-first approach to implementing safe clinical
+  decision support systems. By semantics-first,
+  we mean that (i) semantics of medical knowledge is
+  accurately captured in the CDSS, and, (ii) the semantics of the programming language
+  used to encode medical knowledge is formally defined.
+  At the core of our approach is MediK: a novel domain specific language
+  for expressing best practice guidelines that emphasizes comprehensibility
+  to HCPs, enabling them to validate the accuracy of medical knowledge in its
+  programs. MediK has a complete, executable formal semantics in the K Framework,
+  from which all execution and analysis tools are derived in a
+  correct-by-construction manner.
+
+  To evaluate our approach, we collaborated with a major pediatric hospital
+  to develop a complex real-world CDSS for the screening and management of
+  Sepsis in pediatric cases, and validated that it satisfies desired safety properties.
+  We outline how our approach improves upon the existing state-of-art,
+  optimizations to address domain-specific needs of healthcare practitioners,
+  and discuss challenges for future work.
+  %Our CDSS is Institutional Review Board (IRB) approved and is slated to undergo clinical simulations.
+
+
+  %Despite their benefits, widespread CDSS adoption is hindered by several
+  %challenges.
+
+  %Several Domain-Specific Languages (DSLs) have been proposed to facilitate expressing BPGs
+  %in a computer-interpretable format that is easily comprehensible to HCPs.
+  %Given the safety-critical nature of CDSSs, the need for such languages to have complete
+  %formal semantics and an ecosystem of formal analysis tools has been recognized.
+  %Moreover, since these languages evolve over time to accommodate complexities in modeling BPGs,
+  %tools for them must also be adaptable to changes. But, existing languages lack complete formal semantics,
+  %or analysis tools and execution tools derived from them.
+
+  %This work presents a semantics-first approach to building safe CDSSs.
+  %By semantics-first, we mean that (i) semantics of medical knowledge is
+  %accurately captured in the CDSS, and, (ii)
+  %This work introduces MediK: a new DSL for expressing BPGs with a complete executable formal semantics, and formal analysis tools, including a model checker, symbolic execution engine, and deductive verifier. As MediK's tools are derived from its semantics, any update to the language is automatically reflected across all tools. To evaluate our approach, we collaborated with a major pediatric hospital to develop a MediK-based CDSS for the screening and management of Pediatric Sepsis and validated that it satisfies desired safety properties. Our CDSS is Institutional Review Board (IRB) approved and is slated to undergo clinical simulations.
+
 \end{abstract}
+
+
+
+
+
+%According to a September 2023 President's Council on Science and Technology Report,
+%a quarter of medicare patients suffer adverse outcomes during hospitalization,
+%of which 40\% were \emph{preventable}
+%Clinical Best Practice Guidelines (BPGs) are systematically developed,
+%evidence-based statements published by medical institutions and associations
+%that standardize diagnosis and treatment for various clinical scenarios. When
+%expressed in an executable medium, BPGs can be utilized to build systems that
+%assist healthcare professionals (HCPs) with situation-specific advice. Such
+%systems, known as Guideline-based Clinical Decision Support Systems (CDSSs),
+%  have been shown to improve patient outcomes.
+%
+%Several Domain-Specific Languages (DSLs) have been proposed to facilitate expressing BPGs in a computer-interpretable format that is easily comprehensible to HCPs.
+%Given the safety-critical nature of CDSSs, the need for such languages to have complete formal semantics and an ecosystem of formal analysis tools has been recognized.
+%Moreover, since these languages evolve over time to accommodate complexities in modeling BPGs, tools for them must also be adaptable to changes.
+%But, existing languages lack complete formal semantics, or analysis tools derived from them.
+%
+%This work introduces \MediK{}: a new DSL for expressing BPGs with a complete executable formal semantics,
+%and formal analysis tools, including a model checker, symbolic execution engine, and deductive verifier.
+%As MediK's tools are derived from its semantics, any update to the language is automatically reflected across all tools. To evaluate our approach, we collaborated with a major pediatric hospital to develop a MediK-based CDSS for the screening and management of Pediatric Sepsis and validated that it satisfies desired safety properties.
+%Our CDSS is Institutional Review Board (IRB) approved and is slated to undergo clinical simulations.
+%\end{abstract}
 %
 %\begin{dedication}
 %To my family
@@ -173,6 +252,7 @@ Our CDSS is Institutional Review Board (IRB) approved and is slated to undergo c
 \item[PME]      Preventable Medical Error
 \item[ROSC]     Return of Spontaneous Circulation
 \item[SAGE]     Standards-based Guidelines Environment
+\item[SMT]      Satisfiability Modulo Theories
 \item[SOS]      Structural Operational Semantics
 \end{abbrevlist}
 
@@ -211,9 +291,9 @@ Our CDSS is Institutional Review Board (IRB) approved and is slated to undergo c
 \mainmatter
 \setcounter{page}{\value{counterforappendices}}
 
-\appendix
+%\appendix
 
-\chapter{An appendix}
+%\chapter{An appendix}
 
 
 % \input{Appendix.tex}
