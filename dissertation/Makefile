@@ -1,7 +1,7 @@
 TARGET=thesis
 
 LATEX=pdflatex -shell-escape
-BIBTEX=biber
+BIBTEX=bibtex
 TEXFILES = ${wildcard *.tex} # ${wildcard tables/*.tex} ${wildcard */*.tex}
 BIBFILES = ${wildcard *.bib} # ${wildcard bibtex/*.bib}
 # FIGFILES = $(wildcard figs/*.pdf)
