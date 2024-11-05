@@ -1,15 +1,17 @@
 \chapter{Background}\label{chapter:background}
 
-\autoref{chapter:introduction} conceptually introduced
+In \autoref{chapter:introduction}, we conceptually introduced
 best practice guidelines (\BPGs{}) and
 clinical decision support systems (\CDSSs{}).
 This chapter introduces relevant background details
 on \BPGs{} and \CDSSs{}.
-In \autoref{sec:bpg-background}, we utilize a real-world \BPG{}
-to explain the motivation behind codifying treatment
-in the form of clinical guidelines. We also briefly discuss
-common characteristics of such guidelines that enable medical knowledge
-to be represented efficiently and accurately.
+To this end, in \autoref{sec:bpg-background}, we utilize a real-world \BPG{}
+to explain, in detail, what such guidelines are,
+and motivations behind codifying treatment
+in the form of clinical guidelines. We then discuss
+certain characteristics that are common across \BPGs{},
+with the intention of describing how they influence
+design of domain-specific languages for expressing \BPGLogic{}.
 
 \BPGs{} are usually published by hospitals,
 research institutions and medical associations with the aim to improve quality of care by
@@ -22,13 +24,13 @@ research institutions and medical associations with the aim to improve quality o
 
 While in theory, following \BPGs{} should improve clinical outcomes,
 their effectiveness in practice is dictated by whether healthcare practitioners
-follow them or not. In \autoref{sec:cdss-background}, we present
-challenges that practitioners encounter in following \BPGs{}. We then argue
-that non-conformance results in worse patient outcomes.
-Next, we show how computerized systems that utilize data from available
+follow them or not. In \autoref{sec:cdss-background}, we discuss reasons behind
+non-conformance to \BPGs{} in clinical settings. We describe how
+non-conformance results in worse patient outcomes, and
+argue that computerized systems that utilize data from available
 heterogeneous sources such as electronic health records and sensors for
-patient parameters can improve patient outcomes by addressing challenges
-to following \BPGs{} encountered by practitioners.
+patient parameters can improve patient outcomes by enabling
+\BPG{}-conformance in practice.
 
 \section{Clinical Best Practice Guidelines}\label{sec:bpg-background}
 
@@ -68,9 +70,9 @@ that base recommendations on best available evidence \cite{GuerraInjury23}.
 As the body of evidence increases over time through research,
 \BPGs{} must be updated accordingly to reflect latest findings.
 
-\begin{figure}[t]
+\begin{figure}[b!]
   \centering
-  \includegraphics[width=0.5\textwidth]{sepsis-screening-osf}
+  \includegraphics[width=0.6\textwidth]{sepsis-screening-osf}
   %\includegraphics[width=0.5\textwidth]{screening-vitals}
   \caption{Pediatric sepsis screening \BPG{}}\label{fig:sepsis-screening}
 \end{figure}
@@ -132,7 +134,7 @@ at OSF. Briefly, if the patient is flagged as potentially septic, the guideline 
 \end{enumerate*}
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.5]{FluidWorkflow-fmcad.pdf}
+  \includegraphics[scale=0.6]{FluidWorkflow-fmcad.pdf}
   \caption{Fluid Resuscitation Guideline}\label{fig:fluid-therapy}
 \end{figure}
 
@@ -209,16 +211,44 @@ periodically updated to take into account latest evidence, and
 adapted according to local needs of the setting they're utilized
 in \cite{DeClerqSHTI08}.
 
+\subsection{Deviations From \BPG{}-Adherence}
+
+The reasons why healthcare practitioners deviate from guidelines
+can be hard to generalize as there may be reasons for non-compliance
+may differ between guidelines. In general, even though \HCPs{}
+recognize the \BPGs{}-compliance may lead to better outcomes, changing
+routines to adopt them may still be challenging. According to
+\cite{BarthCCLM16}, reasons for non-compliance can include:
+\begin{itemize}
+  \item The complexity of, or ambiguity in, the medical knowledge in the
+    guideline. Advice within a guideline can be unclear, or inconsistent
+    with advice from other guidelines.
+  \item Concerns over knowledge in the guideline being obsolete.
+  \item Overconfidence in their own ability over \BPG{}-based advice, or,
+        perception that guidelines were followed when they were not.
+  \item Pressure due to resource and time constraints, especially in guidelines
+    that deal with time-sensitive interventions.
+\end{itemize}
+
+\paragraph{Improving Safety through Better Adherence:}
+
 To mitigate aforementioned issues, systems that utilize available
 patient data to assess patient state and issue guideline-based
-decision support to practiioners can be utilized \cite{DeClerqSHTI08}.
+decision support to practitioners can be utilized \cite{DeClerqSHTI08}.
+Specifically, such systems attempt to integrate with existing patient care
+to administer support as seamlessly as possible. This may require
+either changes to existing care workflows to incorporate decision support,
+or building decision support that minimizes disruptions.
 Such computerized clinical decision support systems (\CDSSs{}) codify
 medical knowledge in \BPGs{} and provide practitioners with
 situation-specific advice that \say{guides} them towards adherence
 to the underlying \BPG{}.
+
 Well implemented \CDSSs{} have been shown to improve
 \BPG{}-adherence \cite{GargJAMA06,KawamotoBMJ05}, and reduce
 \PMEs{} based on evidence from multi-center clinical trials \cite{BenettJAMIA16,SahotaJIS11}.
+In the following section, we explain how such systems function through an
+example.
 
 \subsection{\CDSS{} Example}\label{sec:cdss-example}
 
@@ -228,9 +258,9 @@ To illustrate how a \CDSSs{} can enable better \BPG{} adherence,
 we utilize an example \CDSS{} that codifies the sepsis management \BPG{}
 to administer decision support.
 
-\begin{figure}[t]
+\begin{figure}[t!]
   \centering
-  \includegraphics[width=0.9\textwidth]{sepsis-tool-main}
+  \includegraphics[width=0.95\textwidth]{sepsis-tool-main}
   \caption{Sepsis Tool Main Screen}\label{fig:sepsis-tool-main}
 \end{figure}
 
@@ -273,7 +303,7 @@ drugs were administered.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.35\textwidth]{sepsis-graphs}
+  \includegraphics[width=0.45\textwidth]{sepsis-graphs}
   \subcaption{Patient Vitals vs Time}\label{fig:sepsis-graphs-view}
 \end{figure}
 
