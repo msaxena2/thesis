@@ -317,12 +317,13 @@ has the following advantages:
     and be accepted by the parser.
 \end{enumerate}
 
-\begin{lstlisting}[float=t,
+\begin{lstlisting}[float=t!,
   frame=single,
   style=ksty,
   language=k,
   numbers=left,
   numbersep=5pt,
+  basicstyle=\ttfamily\footnotesize,
   caption={$\K$ Semantics of Imp},
   label={lst:imp-semantics},
   xleftmargin=3ex
@@ -357,7 +358,8 @@ module IMP
   rule if (false) _ else S => S  @\label{lstline:imp-if-false-rule}@
   rule while (B) S => if (B) {S while (B) S} else {}  [structural]
 // Pgm
-  rule <k> int (X,Xs => Xs);_ </k> <state> Rho:Map (.Map => X|->0) </state> @\label{lstline:imp-vardec-rule}@
+  rule <k> int (X,Xs => Xs);_ </k>              @\label{lstline:imp-vardec-rule-begin}@
+       <state> Rho:Map (.Map => X|->0) </state> @\label{lstline:imp-vardec-rule-end}@
     requires notBool (X in keys(Rho))  @\label{lstline:imp-vardec-requires}@
   rule int .Ids; S => S  [structural]  @\label{lstline:imp-emptydec-rule}@
 
@@ -452,7 +454,8 @@ Thus, we get the following initial configuration:
 where \inlinek{.Ids} is the identity element for the user-defined
 list of program identifiers, and \inlinek{.Map} is the map identity
 from the initial configuration declaration on \autoref{lstline:imp-pgm-state}
-Now the rule for variable declaration on \autoref{lstline:imp-vardec-rule}
+Now the rule for variable declaration on
+Lines \ref{lstline:imp-vardec-rule-begin}-\ref{lstline:imp-vardec-rule-end}
 can match with substition \inlinekmath{(X $\ \mapsto\ $ x, Xs\ $ \mapsto\ $ .Ids,
 Rho $\ \mapsto\ $.Map)}
 to rewrite the configuration to:
@@ -469,7 +472,7 @@ Note the following conveniences that \K{} offers to make writing rules easier:
     as only relevant parts of a term have to be mentioned on the \RHS{} of the
     rule.
   \item The underscore \inlinek{_} following \inlinek{int (X, Xs => Xs);}
-    on \autoref{lstline:imp-vardec-rule}
+    on Lines \ref{lstline:imp-vardec-rule-begin}-\ref{lstline:imp-vardec-rule-end}
     is an \emph{anonymous} variable that matches the remainder to the program.
     Since it's not anywhere on the \RHS{}, there is no need to provide an
     explicit variable name.
@@ -617,7 +620,8 @@ concise and mathematically precise. This is demonstrated well
 by the example Imp defintion as:
 \begin{itemize}
   \item Only the rules for variable lookup (\autoref{lstline:imp-lookup-rule}),
-    variable declaration (\autoref{lstline:imp-vardec-rule}) and
+    variable declaration (Lines
+    \ref{lstline:imp-vardec-rule-begin}-\ref{lstline:imp-vardec-rule-end}) and
     variable assignment (\autoref{lstline:imp-assgn-rule}) explicitly
     mention cells. All other rules use terms \emph{only involving} constructs
     whose semantics they define. For instance, the semantics of
