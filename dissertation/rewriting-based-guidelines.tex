@@ -355,6 +355,7 @@ the CPR Machine to start in state \inlinek{idle} corresponding to the
 entry state of the machine in \autoref{fig:cpr-machine}.
 
 \begin{lstlisting}[float=ht,
+  mathescape=true,
   frame=single,
   style=ksty,
   language=k,
@@ -363,18 +364,19 @@ entry state of the machine in \autoref{fig:cpr-machine}.
   caption={CPR Initialization},
   label={lst:cpr-initialization},
   xleftmargin=3ex
-]
-rule <machines>
-      ( .Bag => <machine>                                      @\label{lstline:machine-add-begin}@
-                    <id> cprMachine </id>
-                    <state> idle </state>
-                    <store> "cprRunning" |-> false </store>
-                    ...
-                 </machine> )                                  @\label{lstline:machine-add-end}@
-      ...
-     </machines>
-     <inputBuffer> "cprMachine.init" , IN => IN </inputBuffer> @\label{lstline:init-inputBuffer}@
+  ]
+<machines>
+  <machine>                                      @\label{lstline:machine-add-begin}@
+     <id> $\mathcal{M}$ </id>
+     <state> u </state>
+     ...
+  </machine>                                        @\label{lstline:machine-add-end}@
+  ...
+<machines>
+<inputBuffer> .JSONs </inputBuffer> @\label{lstline:init-inputBuffer}@
+<outputBuffer> .JSONs </outputBuffer> @\label{lstline:init-outputBuffer}@
 \end{lstlisting}
+
 Instead of starting \inlinek{<machines>} cell that is pre-populated with
 \inlinek{<machine>} cells from the start, we dynamically initialize
 machines once the corresponding frontend component is rendered and ready.

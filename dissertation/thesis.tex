@@ -1,5 +1,5 @@
 % For copyright and license information, see uiucthesis2021.dtx and derivatives.
-\documentclass[tocnosub,noragright,centerchapter,fullpagesingle,12pt]{uiuc_csthesis21}
+\documentclass[edeposit,tocnosub,noragright,centerchapter,fullpagesingle,12pt]{uiuc_csthesis21}
 
 \makeatletter
 
@@ -142,19 +142,12 @@
 % - all doctoral students
 % - master's students who have a master's committee
 \committee{Professor Grigore Ro\c{s}u, Chair\\
-        Professor Jose Meseguer
-        Professor Lui Sha
+        Professor Jose Meseguer \\
+        Professor Lui Sha \\
         Doctor Sedar Tasiran} % etc.
 
 \begin{document}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% COPYRIGHT
-%
-%\copyrightpage
-%\blankpage
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TITLE
 \maketitle
 %\raggedright
@@ -213,13 +206,17 @@
 
   This work presents a semantics-first approach to implementing safe clinical
   decision support systems. By semantics-first,
-  we mean that (i) semantics of medical knowledge is
-  accurately captured in the CDSS, and, (ii) the semantics of the programming language
-  used to encode medical knowledge is formally defined.
-  At the core of our approach is MediK: a novel domain specific language
+  we mean that
+  \begin{enumerate*}[label=\roman*]
+    \item semantics of medical knowledge is
+  accurately captured in the CDSS, and,
+  \item the semantics of the programming language
+    used to encode medical knowledge is formally defined.
+  \end{enumerate*}
+  At the core of our approach is \MediK{}: a novel domain specific language
   for expressing best practice guidelines that emphasizes comprehensibility
   to HCPs, enabling them to validate the accuracy of medical knowledge in its
-  programs. MediK has a complete, executable formal semantics in the K Framework,
+  programs. \MediK{} has a complete, executable formal semantics in the \K{} Framework,
   from which all execution and analysis tools are derived in a
   correct-by-construction manner.
 

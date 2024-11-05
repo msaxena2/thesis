@@ -141,7 +141,7 @@ quality and safety at healthcare facilities that use them.
 
 The PCAST report also stresses on adapting lessons from aviation in healthcare.
 In aviation, systems for automation, monitoring and error mitigation that
-reduce worklkoads and enhance situational awareness of pilots have
+reduce workloads and enhance situational awareness of pilots have
 improved safety as pilots became accustomed to using and relying on such
 systems through training and operating procedures. \CDSSs{} can play a similar
 role in healthcare, by ensuring \HCPs{}, who often work in stressful
@@ -202,15 +202,16 @@ new evidence or adaptions, corresponding updates must be made to the
 is accurately updated in the \CDSS{} as well.
 
 To address these limitations, instead of a monolithic system, our approach
-decomposes the \CDSSs{} into:
-\begin{enumerate}[label=(\alph*)]
-  \item the medical knowledge encoded in the \CDSS{}, which we refer to as the
-    \BPGLogic{}.
-  \item an interface for user-interaction.
-  \item additional infrastructure that integrates with external data sources
-  such as sensors, health records.
-\end{enumerate}
-
+decomposes the \CDSSs{} into components mentioned earlier from
+\cite{SuttonNature20}, i.e., the \BPGLogic{}, the user-interface, and additional
+infrastructure for integration with external data sources.
+%\begin{enumerate}[label=(\alph*)]
+%  \item the medical knowledge encoded in the \CDSS{}, which we refer to as the
+%    \BPGLogic{}.
+%  \item an interface for user-interaction.
+%  \item additional infrastructure that integrates with external data sources
+%  such as sensors, health records.
+%\end{enumerate}
 To ensure that the \BPGLogic{} accurately reflects medical knowledge,
 domain specific languages (\DSL{}) that allow medical guidelines to
 be described in a manner that is both \emph{computer interpretable} and
@@ -223,7 +224,7 @@ as both the system's functional specification, i.e. the \BPG{}, and implementati
 \BPGLogic{}. This ensures that there is no gap between the \BPG{} and the
 \CDSS{}' \BPGLogic{}.
 
-Given the safety-critical nature of \CDSSs{}, the need for \CIG{} \DSLs{} to
+As \CDSSs{} are safety-critical, the need for \CIG{} \DSLs{} to
 have a complete formal semantics that can be used to implement tools such as
 execution engines, model checkers, etc. has been recognized.
 It's also desirable for such languages to have execution engines with formal \emph{correctness
@@ -253,7 +254,7 @@ changes to the semantics are automatically reflected across all tools.
 
 \begin{figure}[t!]
   \centering
-  \includegraphics[width=0.44\textwidth]{k-overview}
+  \includegraphics[width=0.50\textwidth]{k-overview}
   \caption{Semantics-first philosophy}\label{fig:semantics-first}
 \end{figure}
 
@@ -270,7 +271,8 @@ choice for using $\K$ was motivated by
     \cite{ParkFSE18,StefanescuOOPSLA16}.
 \end{enumerate*}
 
-\CDSSs{} are complex systems. The complexity stems from:
+The challenges associated with implementing safe \CDSSs{} are
+also amplified by their inherent complexity, which stems from:
 \begin{enumerate}[label=(\roman*)]
   \item \emph{concurrency} to account for multiple diagnoses and treatments
     occur simultaneously, and,
