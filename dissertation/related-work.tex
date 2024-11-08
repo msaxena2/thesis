@@ -9,7 +9,7 @@ experts in medicine and software engineers for knowledge formalization, i.e.,
 the process of encoding medical knowledge in textual
 \BPGs{} in some programming language. Using a conventional programming
 language for knowledge formalization can lead to an inaccurate
-encoding medical knowledge, as experts in medicine, being unaccustomed
+encoding of medical knowledge, as experts in medicine, being unaccustomed
 to computer programming, cannot validate the accuracy of the encoding.
 To address this, \DSLs{} designed specifically for expressing
 \BPGs{} in a computer-interpretable format are utilized. \BPGs{} expressed
@@ -396,7 +396,7 @@ concurrent execution of plans, and a data abstraction
 unit that abstract signals to the said plans.
 
 The semantics of plan execution are described by
-expressing the transition system as a statecharts \cite{DammCOMPOS97}.
+expressing the transition system using statecharts \cite{DammCOMPOS97}.
 Statecharts are directed graphs representing state machines \cite{BalserICIDP02}.
 Plan states represents statechart nodes, and edges transitions. The transitions
 can then be conveniently formalized as \SOS{} rules. For instance, the rule:
@@ -412,7 +412,7 @@ expresses the semantics of a plan $P$ (expressed as a statechart $\text{psm}$)
 to transition from state \say{$\text{consider}$}
 to state \say{$\text{ready}$}. The \SOS{} rule expresses that
 if, under the environment $\sigma$,
-\begin{enumerate*}[label=(\alph*)]
+\begin{enumerate*}[label=(\roman*)]
   \item the filter condition $\Omega$ evalutes to $\true$ by the data
     abstraction unit $\text{da}$, and,
   \item the plan's current state is $\text{consider}$
@@ -682,12 +682,12 @@ department. In particular, the following \BPGs{} were modeled:
     American Academic of Pediatrics (\AAP{}) \cite{HyperbilirubinemiaAAP94}.
   \item Management of apnea in pre-term newborns \cite{BhatiaCP00}.
 \end{itemize}
-While the \BPG{} for hyperbilirubinemia management is largely a textual document
+The \BPG{} for hyperbilirubinemia management is largely a textual document
 with an accompanying non-executable flowchart, and is utilized mainly for
 illustration and training purposes. The \BPG{} for apnea management, on the
 other hand, forms a complex \CDSSs{} that utilizes nested algorithms to
 administer both advice and timing support \cite{SkonetzkiMIM04}. This highlights
-a versatile system capable of  accommodating diverse needs.
+HELEN's versatility in adapting to needs of diverse \BPGs{}.
 
 While the framework can be used to implement and execute \BPGs{}, it does not
 provide a way to systematically analyze them for semantic inconsistencies --
@@ -840,7 +840,7 @@ the number of test cases \cite{MillerJAMIA01}.
 
 \begin{figure}[th]
   \centering
-  \includegraphics[width=0.4\textwidth]{tgen}
+  \includegraphics[width=0.5\textwidth]{tgen}
   \caption{T/Gen Example}\label{fig:tgen-example}
 \end{figure}
 
@@ -924,12 +924,12 @@ denotes that $H$ is inferrable from rule base $\mathcal{R}$ if there
 is some environment $E$ s.t. $H$ is the logical consequence of supplying
 $E$ to rule $R$.
 
-In \cite{DuftschmidAIM01} describe a methodology to transform
-an Asbru plans-based guidelines to a rule base.
-base to capture Asbru's model of plan states $\MPS{}$ is described.
+In \cite{DuftschmidAIM01}, a methodology to transform
+an Asbru plans-based guidelines in
+Asbru's model of plan states to a rule base $\MPS{}$ is described.
 The rules specify the sequence in which the conditions of a plan
-are considered. As $\MPS$ encodes the semantics of Asbru, it has
-to only be specified once.
+are considered. Note that since $\MPS$ encodes the semantics of Asbru,
+the translation has to be specified only once.
 
 Next, each plan $P_i$ in the guideline is also encoded as a rule base
 $\PC_i$, and the guideline is defined as the rule base $\PC = \PC_1 \cup \PC_2,
