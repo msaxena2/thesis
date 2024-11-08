@@ -1172,16 +1172,17 @@ to lessons from implementing best practice guidelines (\BPGs{}),
 mechanisms must be in place to update all relevant tools, and not just
 ones needed for immediate use, such as execution engines.
 
-%\paragraph{Holistic Safety}
-%
-%Ensuring that computer interpretable guidelines
-%meet desired correctness properties is crucial,
-%but it is equally important to ensure that tools used
-%to execute and analyze said guidelines themselves are correct,
-%as bugs can compromise patient safety.
-%We use the term \say{holistic safety} to refer to approaches that
-%have a comprehensive suite of execution and formal analysis tools,
-%each with its own correctness guarantees.
+\paragraph{Holistic Safety}
+
+Ensuring that computer interpretable guidelines
+meet desired correctness properties is crucial,
+but it is equally important to ensure that tools used
+to execute and analyze said guidelines themselves are correct,
+as bugs can compromise patient safety.
+We use the term \say{holistic safety} to refer to approaches that
+have a complete formal semantics and a comprehensive suite of execution
+and formal analysis tools derived using them,
+each with correctness guarantees.
 
   \begin{table}[b!]
     \begin{tabularx}{\textwidth}
@@ -1189,23 +1190,23 @@ ones needed for immediate use, such as execution engines.
    || >{\centering\arraybackslash}X
    | >{\centering\arraybackslash}X
    | >{\centering\arraybackslash}X
-%   | >{\centering\arraybackslash}X
+   | >{\centering\arraybackslash}X
  }
-                                    & Implementation-Specification Gap & Complete Formal Semantics & Formal Analysis Tools \\%& Holistic Safety  \\
-    Arden Syntax                    & $\greencheck$                    & $\redcross$               & $\redcross$           \\%& $\redcross$ \\
-    DILLEMA                         & $\greencheck$                    & $\redcross$               & $\redcross$           \\%& $\redcross$ \\
-    \GEODECM{}                      & $\greencheck$                    & $\redcross$               & $\redcross$           \\%& $\redcross$ \\
-    EON                             & $\greencheck$                    & $\redcross$               & $\redcross$           \\%& $\redcross$ \\
-    \GLIF{}                         & $\greencheck$                    & $\redcross$               & $\redcross$           \\%& $\redcross$ \\
-    Asbru                           & $\greencheck$                    & $\circ$                   & $\greencheck$         \\%& $\redcross$ \\
-    PROforma                        & $\greencheck$                    & $\greencheck$             & $\redcross$           \\%& $\redcross$ \\
-    \GLARE                          & $\greencheck$                    & $\circ$                   & $\circ$               \\%& $\circ$     \\
-    \GPROVE{}                       & $\greencheck$                    & $\greencheck$             & $\redcross$           \\%& $\redcross$ \\
-    HELEN                           & $\greencheck$                    & $\redcross$               & $\redcross$           \\%& $\redcross$ \\
-    PRODIGY                         & $\greencheck$                    & $\redcross$               & $\redcross$           \\%& $\redcross$ \\
-    SAGE                            & $\greencheck$                    & $\redcross$               & $\redcross$           \\%& $\redcross$ \\
-    Hierarchical Plans              & $\redcross$                      & $\circ$                   & $\greencheck$         \\%& $\circ$     \\
-    \MDA{}                          & $\redcross$                      & $\redcross$               & $\greencheck$         \\%& $\redcross$ \\
+                                    & Implementation-Specification Gap & Complete Formal Semantics & Formal Analysis Tools & Holistic Safety  \\
+    Arden Syntax                    & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    DILLEMA                         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    \GEODECM{}                      & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    EON                             & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    \GLIF{}                         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    Asbru                           & $\greencheck$                    & $\circ$                   & $\greencheck$         & $\redcross$ \\
+    PROforma                        & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
+    \GLARE                          & $\greencheck$                    & $\circ$                   & $\circ$               & $\circ$     \\
+    \GPROVE{}                       & $\greencheck$                    & $\greencheck$             & $\redcross$           & $\redcross$ \\
+    HELEN                           & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    PRODIGY                         & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    SAGE                            & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
+    Hierarchical Plans              & $\redcross$                      & $\circ$                   & $\greencheck$         & $\circ$     \\
+    \MDA{}                          & $\redcross$                      & $\redcross$               & $\greencheck$         & $\redcross$ \\
   \end{tabularx}
   \caption{Comparison of Existing Approaches}\label{table:dsl-comparison}
   \end{table}
@@ -1233,17 +1234,17 @@ such DILLEMA (\autoref{sec:dilemma}) and \GEODECM{}
 and modular architectures that integrate with diverse systems.
 However, since these were among the earliest attempts at building modular \CDSSs{},
 functionality was prioritized over formal correctness.
-
-EON (\autoref{sec:eon}) switched from small, modular and
-independent guidelines from Arden Syntax to more complex,
-tightly coupled state machines-based representation to enable modeling
-interdependent workflows. Similarly, \GLIF{} (\autoref{sec:glif}) borrowed experiences from
-EON, \GEODECM{} and Arden Syntax to facilitate modeling complex workflows.
-The design and implementation of \GLIF{} was particularly influenced
-by the motivation to allow \GLIF{}-based guidelines to be easily shared
-between medical establishments. Similary, Prodigy (\autoref{sec:prodigy})
-tackled \CDSSs{} challenges encountered in practice, such as diversity in
-data sources, and their unreliability, while \SAGE{} (\autoref{sec:sage})
+%
+%EON (\autoref{sec:eon}) switched from small, modular and
+%independent guidelines from Arden Syntax to more complex,
+%tightly coupled state machines-based representation to enable modeling
+%interdependent workflows. Similarly, \GLIF{} (\autoref{sec:glif}) borrowed experiences from
+%EON, \GEODECM{} and Arden Syntax to facilitate modeling complex workflows.
+%The design and implementation of \GLIF{} was particularly influenced
+%by the motivation to allow \GLIF{}-based guidelines to be easily shared
+%between medical establishments. Similarly, Prodigy (\autoref{sec:prodigy})
+%tackled \CDSSs{} challenges encountered in practice, such as diversity in
+ data sources, and their unreliability, while \SAGE{} (\autoref{sec:sage})
 attempted to integrate with existing digital workflows as seamlessly as
 possible. It's important to note that these approaches demonstrated that computerized decision support
 systems can both
