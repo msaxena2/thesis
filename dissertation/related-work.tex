@@ -1031,7 +1031,7 @@ are based on existing work on simplifying verification for
 concurrent and reactive systems through safety and liveness patterns
 that contain informal descriptions of the property and
 well-defined translations to widely used temporal logics such
-as Computation Tree Logic (\CTL{}) and Linear Temporal Logic (\LTL{})
+as computation tree logic (\CTL{}) and linear temporal logic (\LTL{})
 \cite{DwyerFM98,DwyerICSE98,BitschSAFECOMP01,RyndinaThesis05}.
 
 To ensure that that patterns presented under the \MDA{} framework
@@ -1098,7 +1098,7 @@ is possible for the translations to diverge from the underlying \BPG{}
 in the OMG Systems Modeling Language. This can have serious
 consequences, as verification results may not be satisfied by the actual
 implementation. Thus, even though utilizing specification patterns
-may enalbe non-experts in verification to verify properties PROMELA model,
+may enable non-experts in verification to verify properties PROMELA model,
 expertise in formal reasoning may be required to ensure that the model
 corresponds to the original \BPG{} and the corresponding Java code.
 Second, only a subset OMG Systems Modeling Language is supported
@@ -1183,7 +1183,7 @@ ones needed for immediate use, such as execution engines.
 %have a comprehensive suite of execution and formal analysis tools,
 %each with its own correctness guarantees.
 
-  \begin{table}[th]
+  \begin{table}[b!]
     \begin{tabularx}{\textwidth}
    {>{\centering\arraybackslash}X
    || >{\centering\arraybackslash}X
@@ -1210,6 +1210,16 @@ ones needed for immediate use, such as execution engines.
   \caption{Comparison of Existing Approaches}\label{table:dsl-comparison}
   \end{table}
 
+
+Next, we discuss how approaches discusses in this chapter compare
+w.r.t. aforementioned themes. In \autoref{table:dsl-comparison}, we
+show whether each approach fully addressed ($\greencheck$), partly
+addresses $\circ$ or doesn't address ($\redcross$) issues related
+to said theme. For example, all $\DSLs{}$ specifically designed
+with comprehensibility to \HCPs{} in mind eliminate the
+implementation-specification gap, as guidelines expressed using these \DSLs{}
+can serve as both the \HCP{}-readable textual representation, and
+its computable translation as a \CDSS' \BPGLogic{}.
 
 The outlined languages can be categorized into either \DSLs{} for \CIGs{},
 or, general ones for building concurrent systems. For instance,
