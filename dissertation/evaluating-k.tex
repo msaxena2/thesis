@@ -1,7 +1,7 @@
 \chapter{Evaluating \K{}}\label{chapter:evaluating-k}
 
 In \autoref{chapter:semantics-first-cdss}, we introduced the
-semantics-first approach to building systems, and how $\K$,
+semantics-first approach to building systems, and discussed how $\K$,
 a framework for defining semantics of programming languages and
 type systems, enables it. Specifically, \autoref{sec:why-use-semantics-first}
 discusses the rationale for using the semantics-first approach over
@@ -21,6 +21,22 @@ We outlined the following concerns:
   serve as a comprehensive document to implement other tools for the language?
 \end{enumerate}
 In the following sections attempt to answer aforementioned questions.
+Specifically, in \autoref{sec:kevm}, we describe work on modeling the
+formal semantics of the Ethereum Virtual Machine (\EVM{}) in $\K$, where
+the generated interpreter's performance compares favorably against a
+custom C++ implementation, providing evidence that (Q1) can be addressed.
+Moreover, given the executable nature of the semantics, the $\K$ semantics
+elaborate on ambiguities in the yellowpaper---the official paper-based
+\EVM{} semantics. Not only can the $\K$-semantics replace an informal
+language description, their detailed nature can provide a solid foundation
+to base other tools on, addressing (Q2).
+
+In \autoref{sec:ethereum-abi-dsl}, we discuss work on implementing a
+\DSL{} for calling functions in ethereum smart contracts using the
+Application Binary Interface. Unlike previous $\K$ languages, this
+\DSL{} neither has an informal semantics, nor existing test suites.
+But, the language and tests were developed concurrently with the $\K$
+definition, providing evidence that (Q3) can addressed.
 
 \section{\KEVM: Semantics of the Ethereum Virtual Machine}\label{sec:kevm}
 
