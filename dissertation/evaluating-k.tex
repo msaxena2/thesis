@@ -26,8 +26,8 @@ formal semantics of the Ethereum Virtual Machine (\EVM{}) in $\K$, where
 the generated interpreter's performance compares favorably against a
 custom C++ implementation, providing evidence that (Q1) can be addressed.
 Moreover, given the executable nature of the semantics, the $\K$ semantics
-elaborate on ambiguities in the yellowpaper---the official paper-based
-\EVM{} semantics. Not only can the $\K$-semantics replace an informal
+elaborate on ambiguities in the Yellow Paper---the official paper-based
+specification of the \EVM{}. Not only can the $\K$-semantics replace an informal
 language description, their detailed nature can provide a solid foundation
 to base other tools on, addressing (Q2).
 
@@ -47,7 +47,7 @@ All \emph{smart contracts} on the blockchain
 must be specified in is an stack-based assembly-like language called
 the Ethereum Virtual Machine (\EVM{}). The semantics of the
 Ethereum Virtual Machine are described semi-formally in a specification
-called the Ethereum YellowPaper \cite{WoodReport14}.
+called the Ethereum Yellow Paper \cite{WoodReport14}.
 
 Smart contracts execute when a transaction calls the account, and, among other features,
 these contracts can tally user votes, communicate with other contracts,
@@ -65,12 +65,12 @@ To address these issues in a principled manner, in \cite{HildenbrandtCSF18}
 \footnote{Joint work with E. Hildenbrandt et al.},
 we formalized the semantics of the \EVM{} in \K{}, with the intention to
 utilize the semantics-generated tools for both execution and analysis of \KEVM{}
-program. Specifically, we intended to demonstrate that:
+programs. Specifically, we intended to demonstrate that:
 
 \begin{itemize}
   \item The $\K$ definition can be used not only to derive semantics-based
   tools, but also as an \emph{unambiguous alternative} to the
-  informal YellowPaper semantics specification to implement new tools. In other
+  informal Yellow Paper semantics specification to implement new tools. In other
   words, the semantics themselves are \emph{readable} to enable one to
   comprehend all subtleties and nuances of the language.
   \item The generated tools, including the interpreter, are \emph{performant}
@@ -166,8 +166,8 @@ The projects fit two categories: semantic specifications and smart contract anal
 
 \subsection{Semantic Specifications}
 
-\paragraph{Ethereum YellowPaper:}
-The YellowPaper is the official document describing the execution of the EVM
+\paragraph{Ethereum Yellow Paper:}
+The Yellow Paper is the official document describing the execution of the EVM
 \cite{WoodReport14},
     as well as other data, algorithms,
     and parameters required to build consensus-compatible
