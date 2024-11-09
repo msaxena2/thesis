@@ -52,8 +52,10 @@ As is evident in \autoref{fig:existing-work-pyramid}, no
 existing approach covers the \say{holistic safety} rung of the pyramid.
 Recall from \autoref{sec:related-work-discussion} that we say an
 approach tackles \say{holistic safety} if,
-besides support for analyzing guidelines,
-analysis and execution tools also have correctness guarantees.
+besides support for analyzing guidelines, the underlying
+language has a formal semantics, on which
+analysis and execution tools are based, leading to
+some correctness guarantees said tools themselves.
 In this work, we argue that such guarantees are necessary for
 trustworthy \CDSSs{}. We attempt to address \say{holistic safety}
 systematically by developing a \emph{semantics-first approach} for
@@ -66,7 +68,8 @@ we mean that:
   \item The semantics of medical knowledge are expressed accurately.
 \end{itemize}
 At the core of our approach is a novel domain-specific language for expressing
-medical knowledge called $\MediK{}$ (pronounced Medi-Kay). By being comprehensible to domain experts
+medical knowledge called $\MediK{}$ (pronounced Medi-Kay).
+By being comprehensible to domain experts
 in medicine, $\MediK{}$-based computer interpretable guidelines can serve
 both as a guideline's non-executable \HCP{}-comprehensible description, i.e.,
 the specification, and its encoding in a computable medium, i.e., the
@@ -247,7 +250,7 @@ for integers (\inlinek{Int}) and program identifiers
 Beyond simply defining the syntax, $\K{}$ also allows assigning semantics to
 constructs through the use of \emph{attributes} specified as a comma-separated list
 inside square brackets (\inlinek{[..]}) placed immediately after the \BNF{} production.
-For example, On \autoref{lstline:imp-aexp-div} and \autoref{lstline:imp-aexp-end},
+For example, on \autoref{lstline:imp-aexp-div} and \autoref{lstline:imp-aexp-end},
 the attribute \inlinek{left} is used to declare the
 corresponding operator as left associative. The \inlinek{strict} attribute is used
 to assign \emph{evaluation strategies}. Note its use
@@ -436,8 +439,8 @@ with substitution
 \inlinekmath{$\theta = $(I1\ $\mapsto$ 2, I2\ $\mapsto$\ 3)} and rewrite it \inlinek{2 +Int 3}, i.e. \inlinek{5}, as
 \inlinek{+Int} is $\K$-builtin for integer addition.
 
-We now discuss execution of an entire program to introduce $K{}$ nuances
-relevant to later chapter. Imp's grammar dictates that an
+We now discuss execution of an entire program to introduce $\K{}$ nuances
+relevant to later chapters. Imp's grammar dictates that an
 Imp program (denoted by production \inlinek{Pgm} on
 \autoref{lstline:imp-pgm} of \autoref{lst:imp-syntax})
 must declare all variables at the start of execution. Consider
@@ -453,7 +456,7 @@ Thus, we get the following initial configuration:
 \end{lstlisting}
 where \inlinek{.Ids} is the identity element for the user-defined
 list of program identifiers, and \inlinek{.Map} is the map identity
-from the initial configuration declaration on \autoref{lstline:imp-pgm-state}
+from the initial configuration declaration on \autoref{lstline:imp-pgm-state}.
 Now the rule for variable declaration on
 Lines \ref{lstline:imp-vardec-rule-begin}-\ref{lstline:imp-vardec-rule-end}
 can match with substition \inlinekmath{(X $\ \mapsto\ $ x, Xs\ $ \mapsto\ $ .Ids,
@@ -467,7 +470,7 @@ to rewrite the configuration to:
 \end{lstlisting}
 Note the following conveniences that \K{} offers to make writing rules easier:
 \begin{enumerate}[label=\roman*)]
-  \item The use of parenthesis limi scope of the rewrite to the
+  \item The use of parenthesis limits scope of the rewrite to the
     list of program identifiers. Localized rewriting reduces redundancy
     as only relevant parts of a term have to be mentioned on the \RHS{} of the
     rule.
@@ -480,7 +483,9 @@ Note the following conveniences that \K{} offers to make writing rules easier:
 Also that the rule has a side condition, expressed through the keyword \inlinek{requires}
 on \autoref{lstline:imp-vardec-requires}. This forces the rule to only apply if
 the program identifier has not already been declared. For instance,
-a program that starts with \inlineimp{int x, x;} will not execute to completion.
+a program that starts with \inlineimp{int x, x;} will not execute to completion,
+as the side condition prohibits already declared variables from being
+re-declared.
 Next, the rule on \autoref{lstline:imp-emptydec-rule} will eliminate
 \inlinek{int .Ids;}, leaving the following configuration after the rewrite:
 \begin{lstlisting}[language=k,style=ksty]
@@ -549,7 +554,11 @@ to \inlinek{5}, resulting in the final configuration:
   <state> x |-> 5 </state>
 </T>
 \end{lstlisting}
-Note the use of \inlinek{...} in the assignment rule. In $\K{}$,
+Note how the use of such evaluation strategies contributes to making the
+definition concise, as they eliminate the need for manually specifying
+related \emph{heating} and \emph{cooling} rules, enabling the definition
+to only contain relevant rules assigning semantics to various constructs.
+Also note the use of \inlinek{...} in the assignment rule. In $\K{}$,
 the \inlinek{...} is used to refer to parts of the term
 not relevant to the rule. For instance, in the \inlinek{<state>}
 cell, it signifies that there may be other other identifier-value
@@ -858,9 +867,21 @@ execution and analysis engines in a production setting?
 $\K{}$ has been used to analyze programs in real-world languages, but
 these languages had existing informal language descriptions
 and reference test-suites to assist in development and testing of
-the semantics. In our case,
-we intend to implement the language from scratch, and come up with reference tests
-for it at the same time, where both the definition and the corresponding tests
-need to be comprehensive enough to enable independent development of tools utilizing
-the semantics as a standard and tests as measures of compliance.
+the semantics. The typical process for developing $\K$ semantics for
+such languages involves:
+\begin{enumerate}[label=(\roman*)]
+  \item Coming up with the grammar in $\K$ using existing syntax
+    definitions and programs as tests.
+  \item Developing the semantics rules using the informal description,
+    until all tests pass.
+\end{enumerate}
+
+Unlike existing $\K$-semantics,
+in our case, we intend to implement the language from scratch,
+and come up with reference tests for it at the same time,
+where both the definition and the corresponding tests
+need to be comprehensive enough to enable independent development
+of tools utilizing the semantics as a standard and tests as measures
+of compliance. Thus, it remains an open question whether $\K$ can
+serve as an appropriate foundational framework for this application.
 
