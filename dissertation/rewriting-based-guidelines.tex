@@ -470,7 +470,7 @@ make the definition \emph{concise} yet \emph{descriptive}. Specifically:
     to \inlinek{true}, and ignore other parts of the map using \inlinek{...}
     notation.
 \end{itemize}
-\begin{lstlisting}[float=ht,
+\begin{lstlisting}[float=t,
   frame=single,
   style=ksty,
   language=k,
@@ -525,7 +525,7 @@ rule <machine>
 
 The \textit{Epinephrine Machine} encapsulates instructions for administering
 the drug Epinephrine to the patient. The corresponding machine is shown in figure
-\ref{fig:epi-machine}.  The user orders the drug using the
+\ref{fig:epi-machine}. The user orders the drug using the
 \say{Order 1mg} button and can administers it using the \say{Give} button in
 Epinephrine pane in figure \ref{fig:kacls-snapshot}. Giving the drug results in the
 start of a three minute timer, during which if a new order is placed, a warning
@@ -641,3 +641,40 @@ We draw the user's attention to the \textit{succinctness} and \textit{simplicity
 of the rule. Despite expressing the interaction between three different machines,
 $\K$'s configuration abstraction mechanism ensures that only relevant parts of
 each machine are mentioned, making the transition \textit{comprehensible}.
+
+\section{Discussion}
+
+This chapter describes the process of systematically encoding
+\BPGs{} expressed using informal flowchart-like notations as communicating
+state machines (\CSMs{}). The \CSMs{} can then be encoded in a $\K{}$,
+where, for every machine, $\mathcal{M}$, every transition
+$u \xrightarrow[]{\sigma} v$
+can be encoded as a rewrite rule of the form shown in
+\autoref{lst:general-rewrite}. We discussed how
+\emph{configuration abstraction}, \emph{localized rewriting} and
+the inherent concurrency of rewriting enable the $\K$ encoding of
+the guideline to be both \textit{succinct} and \textit{simple}.
+But, comprehending such $\K$ based guidelines precludes comprehending
+the $\K$ language, which is unreasonable to expect not only from domain
+experts in medicine, but also from software developers in general.
+The $\K$ language is designed for development and implementation of
+programming languages, and can have an associated learning curve, especially
+if one is unfamiliar with the theory of defining formal semantics.
+Thus, understanding \K{} may require additional effort
+for most software developers, who are more comfortable with
+popular general purpose programming languages such as Java, C and python.
+Moreover, the $\K$ definition can become harder to comprehend as
+more complex guidelines are modeled, requiring rules that encode
+transitions where multiple steps have to be performed and complex
+conditions to determine when the transitions can occur.
+
+In upcoming chapters, we address shortcomings of using $\K$ directly
+to model guidelines by coming up with a novel \DSL{} specifically
+designed to encode medical logic. This language, called $\MediK{}$,
+differs from $\K$ in many aspects. Notably $\MediK$:
+\begin{itemize}
+  \item Uses syntax that borrows from other languages for \CSMs{}, notably P
+    \cite{DesaiPLDI13}, to improve comprehensibility and readability, albeit at
+    the expense of succinctness.
+  \item
+\end{itemize}
