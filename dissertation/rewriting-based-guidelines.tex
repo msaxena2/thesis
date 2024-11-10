@@ -191,10 +191,9 @@ address that in later chapters.
 \subsubsection{Modeling \BPGs{} as State Machines}
 
 In this work, we choose to express medical logic using
-concurrently executing finite state machines that communicate
-with implicit queues for inter-machine communication. Communicating
-state machines (\CSMs{}) is a well-understood model of concurrency
-\cite{BrandJACM83}, and is well-suited  representing medical guidelines in a
+concurrently executing state machines with implicit queues for inter-machine communication.
+Communicating state machines (\CSMs{}) is a well-understood model of concurrency
+\cite{BrandJACM83}, and is well-suited for representing medical guidelines in a
 computer-interpretable format that is also \HCP{}-friendly.
 We shall discuss the motivations behind using \CSMs{} in upcoming
 chapters. For now, it suffices to describe how our choice addresses
@@ -229,11 +228,11 @@ At the start of \autoref{sec:kacls-cdss}, we mentioned that
 the \emph{frontend} of our \CDSS{} is a simple Javascript-based
 application to facilitate user interaction through buttons
 and popups. We can now elaborate what we mean by \emph{simple}.
-Button presses on the fronend correspond to \emph{events}
+Button presses on the frontend correspond to \emph{events}
 that trigger transitions in state machines shown in \autoref{fig:machine-defs}.
 For instance, pressing the \say{Start} button under
 the CPR part of the tool shown in \autoref{fig:kacls-snapshot} results in a
-a \inlinek{StartCPR} event that triggers the corresponding transition in
+\inlinek{StartCPR} event that triggers the corresponding transition in
 the machine in \autoref{fig:cpr-machine}.
 Similarly, certain machine states result in events being dispatched
 to the frontend that cause popups or messages to be displayed
@@ -349,10 +348,13 @@ events intended for the frontend are consumed from head of the \inlinek{<outputB
 \subsubsection{Initialization}
 
 Initialization involves populating the configuration with the
-initial state of each state machine. For instance,
-\autoref{lst:cpr-initialization} shows the rule that initializes
-the CPR Machine to start in state \inlinek{idle} corresponding to the
-entry state of the machine in \autoref{fig:cpr-machine}.
+initial state of each state machine. \autoref{lst:machine-initialization}
+depicts the template of a rule for initializing machine
+any machine \inlinekmath{$\mathcal{M}$}, with initial state \inlinek{u}
+
+%For instance, \autoref{lst:-initialization} shows the rule that initializes
+%the CPR Machine to start in state \inlinek{idle} corresponding to the
+%entry state of the machine in \autoref{fig:cpr-machine}.
 
 \begin{lstlisting}[float=ht,
   mathescape=true,
@@ -362,39 +364,65 @@ entry state of the machine in \autoref{fig:cpr-machine}.
   numbers=left,
   numbersep=5pt,
   caption={CPR Initialization},
-  label={lst:cpr-initialization},
+  label={lst:machine-initialization},
   xleftmargin=3ex
   ]
 <machines>
-  <machine>                                      @\label{lstline:machine-add-begin}@
-     <id> $\mathcal{M}$ </id>
-     <state> u </state>
-     ...
-  </machine>                                        @\label{lstline:machine-add-end}@
+  .Bag => ( <machine>                                      @\label{lstline:machine-add-begin}@
+              <id> $\mathcal{M}$ </id>
+              <state> u </state>
+              ...
+            </machine> )                                   @\label{lstline:machine-add-end}@
   ...
 <machines>
-<inputBuffer> .JSONs </inputBuffer> @\label{lstline:init-inputBuffer}@
-<outputBuffer> .JSONs </outputBuffer> @\label{lstline:init-outputBuffer}@
+<inputBuffer> $\mathcal{M}$.init, IN => IN </inputBuffer> @\label{lstline:init-inputBuffer}@
 \end{lstlisting}
 
 Instead of starting \inlinek{<machines>} cell that is pre-populated with
-\inlinek{<machine>} cells from the start, we dynamically initialize
+\inlinek{<machine>} cells, we dynamically initialize
 machines once the corresponding frontend component is rendered and ready.
-For instance, when the CPR part of the tool from
-\autoref{fig:kacls-snapshot} has successfully loaded, it sends a \inlinek{"cprMachine.init"},
+When the frontend component associated with machine $\mathcal{M}$
+is successfully loaded, it sends a \inlinekmath{"$\mathcal{M}$.init"} event,
 which is added to the head of the input buffer.
+For instance,  when the CPR part of the tool from
+\autoref{fig:kacls-snapshot} has successfully loaded, it sends a \inlinek{"cprMachine.init"},
+which is added to the head of the input buffer, where \inlinek{cprMachine} is
+the name of the machine in the encoded \K{} definition, stored under the \inlinek{<id>} cell.
 Lines \ref{lstline:machine-add-begin}-\ref{lstline:machine-add-end} of the rule
-introduce a new \inlinek{<machine>} cell with name \inlinek{cprMachine} and initial
-state \inlinek{idle}. The \inlinek{.Bag} in $\K$, seen on
-\autoref{lstline:init-inputBuffer}, represents the absence of a cell, which
+introduce a new \inlinek{<machine>} cell with name \inlinekmath{$\mathcal{M}$} and initial
+state \inlinek{u}. The \inlinek{.Bag} in $\K$, seen on
+\autoref{lstline:machine-add-begin}, represents the absence of a cell, which
 the rule rewrites to a \inlinek{<machine>} cell, resulting in its
 addition to the configuration under the \inlinek{<machines>} cell.
 On \autoref{lstline:init-inputBuffer}, the $\K$ variable \inlinek{IN} matches any list of
-JSON elements. Thus, \inlinek{"cprMachine.init" , IN} matches any list with
-\inlinek{"cprMachine.init"} at the head of the list (\inlinek{IN} matches the tail of
+JSON elements. Thus, \inlinekmath{"$\mathcal{M}$.init" , IN} matches any list with
+\inlinekmath{"$\mathcal{M}$.init"} at the head of the list (\inlinek{IN} matches the tail of
 the list). When the rule fires, the list is rewritten to
-just the tail, resulting in the removal \inlinek{"cprMachine.init"}
-event from the \inlinek{<inputBuffer>} cell.
+just the tail, resulting in the removal \inlinekmath{"$\mathcal{M}$.init"}
+event from the \inlinek{<inputBuffer>} cell. For instance, in case of the CPR
+machine, the initialization rule is:
+
+\begin{lstlisting}[float=ht,
+  frame=single,
+  style=ksty,
+  language=k,
+  ]
+<machines>
+  .Bag => ( <machine>
+              <id> cprMachine </id>
+              <state> idle </state>
+              ...
+            </machine> )
+  ...
+<machines>
+<inputBuffer> cprMachine.init, IN => IN </inputBuffer>
+\end{lstlisting}
+
+For each machine $\mathcal{M}$ in the guideline, the $\K$ definition
+contains a corresponding rule of the form shown in
+\autoref{lst:machine-initialization} in the definition. Next,
+we discuss each machine in detail to explain how we encode
+their transition systems in $\K$.
 
 \subsubsection{CPR Machine}
 
@@ -491,7 +519,7 @@ rule <machine>
     <outputBuffer> OUT                                                @\label{lstline:output-buffer-warning-begin}@
       => OUT +JSONs jsonResponse( epiMachine
                                 | earlyOrderWarningNotification
-                                | showEarlyOrderWarning( .JSONs ) )   @\label{lstline:output-buffer-warning-end}@
+                                | showEarlyOrderWarning( .JSONs ))   @\label{lstline:output-buffer-warning-end}@
     </outputBuffer>
 \end{lstlisting}
 
@@ -502,6 +530,21 @@ the drug Epinephrine to the patient. The corresponding machine is shown in figur
 Epinephrine pane in figure \ref{fig:kacls-snapshot}. Giving the drug results in the
 start of a three minute timer, during which if a new order is placed, a warning
 is issued.
+
+\begin{lstlisting}[float=b!,
+  frame=single,
+  style=ksty,
+  language=k,
+  label={lst:general-rewrite},
+  caption={Transitions as $\K$-Rules}
+]
+  <machine>
+    <id> @$\mathcal{M}$@ </id>
+    <state> @$u$@ => @$v$@ </state>
+    ...
+    <machine>
+  <inputBuffer> @$\sigma$@, IN => IN </inputBuffer>
+\end{lstlisting}
 
 \autoref{lst:epi-machine-rule} encodes the transition
 $\textssf{givenLessthan3Min} \xrightarrow[]{\textssf{orderEpi}}
@@ -519,6 +562,7 @@ guidelines. Thus, an appropriate warning message is presented to the user (Lines
 \ref{lstline:output-buffer-warning-begin}-\ref{lstline:output-buffer-warning-end}).
 
 \subsubsection{Encoding Remaining Transitions}
+
 Note that we only show a single rule from the \textit{CPR} and
 \textit{Epinephrine} Machines as other rules resemble the ones
 shown, and have a one-to-one correspondence to transitions in the
@@ -530,51 +574,8 @@ along with the initialization rule,
 we encode every transition $u \xrightarrow[]{\sigma} v$
 of machine $\mathcal{M}$ as a rewrite rule of the form shown in
 \autoref{lst:general-rewrite}
-\begin{lstlisting}[float=h,
-  frame=single,
-  style=ksty,
-  language=k,
-  label={lst:general-rewrite},
-  caption={Transitions as $\K$-Rules}
-]
-  <machine>
-    <id> @$\mathcal{M}$@ </id>
-    <state> @$u$@ => @$v$@ </state>
-    ...
-    <machine>
-  <inputBuffer> @$\sigma$@, IN => IN </inputBuffer>
-\end{lstlisting}
 
-\subsubsection{Shock Machine}
-
-We now desribe the \textit{Shock Machine}. Intuitively, this
-machine ensures:
-\begin{enumerate*}[label=(\alph*)]
-  \item shocks are only administered if the rhythm is shockable,
-  \item CPR is administered every two minutes, and,
-  \item drugs (such as Epinephrine) are periodically administered.
-\end{enumerate*}
-In case the of deviation appropriate warnings are issued. The \textit{Shock}
-machine differs from other machines, as its transitions depend
-on the status of both the \textit{CPR} and \textit{Epinephrine} machines.
-
-\autoref{lst:shock-machine} shows a rule from the \textit{Shock} machine.
-The rule fires when the rhythm is \textit{shockable}, and the user
-wants to administer a shock. Additionally, CPR hasn't been administered
-(\autoref{lstline:cpr-false}), but
-Epinephrine has been administered (\autoref{lstline:epi-true}).
-In such a situation, the user is informed that it is safe to
-administer a shock, which should be followed by
-two minutes of CPR (Lines
-\ref{lstline:shock-response-begin}-\ref{lstline:shock-response-end}).
-However, it is not safe to assume that the rhythm would remain
-\textit{shockable} for subsequent shocks. Thus, the machine moves from
-state \inlinek{shockableRhythm} to \inlinek{checkRhythm}. If the
-user tries to administer another shock, a prompt to confirm the rhythm will be
-displayed to ensure a shock is not administered in case of an \emph{unshockable}
-rhythm.
-
-\begin{lstlisting}[float=ht,
+\begin{lstlisting}[float=b!,
   frame=single,
   style=ksty,
   language=k,
@@ -606,6 +607,35 @@ rule <machine>
                                                 2 Minutes" ) )  @\label{lstline:shock-response-end}@
       </outputBuffer>
 \end{lstlisting}
+
+\subsubsection{Shock Machine}
+
+We now desribe the \textit{Shock Machine}. Intuitively, this
+machine ensures:
+\begin{enumerate*}[label=(\alph*)]
+  \item shocks are only administered if the rhythm is shockable,
+  \item CPR is administered every two minutes, and,
+  \item drugs (such as Epinephrine) are periodically administered.
+\end{enumerate*}
+In case the of deviation appropriate warnings are issued. The \textit{Shock}
+machine differs from other machines, as its transitions depend
+on the status of both the \textit{CPR} and \textit{Epinephrine} machines.
+
+\autoref{lst:shock-machine} shows a rule from the \textit{Shock} machine.
+The rule fires when the rhythm is \textit{shockable}, and the user
+wants to administer a shock. Additionally, CPR hasn't been administered
+(\autoref{lstline:cpr-false}), but
+Epinephrine has been administered (\autoref{lstline:epi-true}).
+In such a situation, the user is informed that it is safe to
+administer a shock, which should be followed by
+two minutes of CPR (Lines
+\ref{lstline:shock-response-begin}-\ref{lstline:shock-response-end}).
+However, it is not safe to assume that the rhythm would remain
+\textit{shockable} for subsequent shocks. Thus, the machine moves from
+state \inlinek{shockableRhythm} to \inlinek{checkRhythm}. If the
+user tries to administer another shock, a prompt to confirm the rhythm will be
+displayed to ensure a shock is not administered in case of an \emph{unshockable}
+rhythm.
 
 We draw the user's attention to the \textit{succinctness} and \textit{simplicity}
 of the rule. Despite expressing the interaction between three different machines,
