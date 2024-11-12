@@ -5,20 +5,21 @@ of encoding best practice guidelines (\BPGs{}) as \K{} definitions
 to describe a systematic way of building \CDSSs{}. Specifically,
 we described the process of encoding medical knowledge in guidelines
 notionally via workflows that can be expressed abstractly as
-concurrently executing finite state machines that communicate
-via passing messages. Next, we described the process of
+concurrently executing communicating state machines.
+Next, we described the process of
 expressing state machines as \K{} definition, where \K{} features
 such as configuration abstraction and local rewriting
 enable \emph{conciseness}. We then combined the \K{} definition
 with a simple javascript-based frontend to develop a \CDSS{}
 for assisting healthcare practitioners (\HCPs{}) follow the
-Advanced Life Support (\ALS{}) guidelines for managing
+Advanced Cardiac Life Support (\ACLS{}) guidelines for managing
 cardiac arrest published by the American Heart Association.
 
 In \autoref{chapter:hurdles-cdss-adoption}, we described
 that wider \CDSS{} adoption is incumbent on a having a
 systematic way of developing guidelines with validated
-content. The semantics-first approach we described in \autoref{sec:semantics-first}
+content. The semantics-first approach we described in
+\autoref{sec:semantics-first}
 attempts to enable such a way. It dictates that:
 \begin{enumerate*}[label=(\roman*)]
   \item the semantics of the language be formally defined, from
@@ -26,10 +27,11 @@ attempts to enable such a way. It dictates that:
   \item ensuring that semantics of medical knowledge is accurately
   described.
 \end{enumerate*}
-As is typically the case, the \KACLS{} system from
-\autoref{sec:kacls-cdss} through collaboration between
-\HCPs{} and computer scientists. While the \K{}-based
-representation of the \ALS{} guideline was concise,
+As is typically the case, the \KACLS{} system's functionality
+in \autoref{sec:kacls-cdss} was informed by collaboration between
+\HCPs{} and computer scientists. As discussed in
+\autoref{sec:rewriting-based-guidelines-discussion}, while the \K{}-based
+representation of the \ACLS{} guideline was concise,
 it was not easily comprehensible to \HCPs{}, or to other
 software engineers without prior experience of using \K{}.
 This chapter addresses limitations of our work from
@@ -57,7 +59,6 @@ by utilizing it to build a \CDSSs{} intended for real-world use.
 In section \autoref{sec:discussion}, we discuss how \MediK{} builds on
 existing approaches in \autoref{chapter:related-work} to advance the
 tate-of-art in addressing challenges from \autoref{chapter:hurdles-cdss-adoption}.
-
 
 \section{Pediatric Sepsis Management \BPG{}}\label{sec:sepsis-bpg}
 
@@ -223,33 +224,6 @@ designed to accommodate characteristics of \BPGs{} discussed in
 
 \subsection{\HCP{} Comprehensibility}
 
-\begin{lstlisting}[
-  float=b!,
-  frame=single,
-  style=mediksty,
-  language=medik,
-  numbers=left,
-  numbersep=5pt,
-  numberstyle=\tiny,
-  caption={Skeleton of a \MediK{} Machine},
-  label={lst:machine-skeleton},
-  xleftmargin=3ex
-]
-[init] machine <IDENTIFIER>                     @\label{lstline:machine-declaration}@
-  receives <IDENTIFIER_LIST> {                  @\label{lstline:machine-receives}@
-  vars <IDENTIFIER_LIST>;                       @\label{lstline:global-declarations}@
-
-  [init] state <IDENTIFIER> {                   @\label{lstline:state-block-start}@
-    entry [(IDENTIFIER_LIST)] {                 @\label{lstline:entry-block-start}@
-      <STMT> // entry block
-    }                                           @\label{lstline:entry-block-end}@
-    on <IDENTIFIER> [(IDENTIFIER_LIST)] do {    @\label{lstline:handler-block-start}@
-      <STMT> // event handler
-    }                                           @\label{lstline:handler-block-end}@
-  }                                             @\label{lstline:state-block-end}@
-}
-\end{lstlisting}
-
 Our approach stresses that \HCPs{} must be able to comprehend the
 guideline, and if necessary, making changes to on their own. As discussed
 in \autoref{chapter:hurdles-cdss-adoption}, this has several hurdles, chief
@@ -315,6 +289,34 @@ its instance is analogous to an OOP object.
 %   they're automatically updated.
 %\end{itemize}
 
+\begin{lstlisting}[
+  float=t!,
+  frame=single,
+  style=mediksty,
+  language=medik,
+  numbers=left,
+  numbersep=5pt,
+  numberstyle=\tiny,
+  caption={Skeleton of a \MediK{} Machine},
+  label={lst:machine-skeleton},
+  xleftmargin=3ex
+]
+[init] machine <IDENTIFIER>                     @\label{lstline:machine-declaration}@
+  receives <IDENTIFIER_LIST> {                  @\label{lstline:machine-receives}@
+  vars <IDENTIFIER_LIST>;                       @\label{lstline:global-declarations}@
+
+  [init] state <IDENTIFIER> {                   @\label{lstline:state-block-start}@
+    entry [(IDENTIFIER_LIST)] {                 @\label{lstline:entry-block-start}@
+      <STMT> // entry block
+    }                                           @\label{lstline:entry-block-end}@
+    on <IDENTIFIER> [(IDENTIFIER_LIST)] do {    @\label{lstline:handler-block-start}@
+      <STMT> // event handler
+    }                                           @\label{lstline:handler-block-end}@
+  }                                             @\label{lstline:state-block-end}@
+}
+\end{lstlisting}
+
+
 
 %The remainder of this section introduces \MediK{} and describes
 %how it's designed around characteristics of \BPGs{} from Section \ref{sec:motivating-example}.
@@ -347,10 +349,10 @@ We describe the semantics in greater depth in Sections
 \section{\MediK{} Syntax}\label{sec:syntax}
 
 \begin{lstlisting}[
-  float=b!,
+  float=t!,
   frame=single,
   style=ksty,
-  basicstyle=\ttfamily\small,
+  basicstyle=\ttfamily\footnotesize,
   language=k,
   numbers=left,
   numberstyle=\tiny,
@@ -360,9 +362,9 @@ We describe the semantics in greater depth in Sections
   label={lst:medik-exp-syntax}
 ]
 syntax StandaloneExp
-                ::= "new" Id "(" Exps ")"                     [strict(2)] @\label{lstline:new-syntax}@
-                | "createFromInterface" "(" Id "," String ")" [strict(2)] @\label{lstline:create-from-interface-syntax}@
-                | Id "(" Exps ")"                             [strict(2)]
+            ::= "new" Id "(" Exps ")"                     [strict(2)] @\label{lstline:new-syntax}@
+            | "createFromInterface" "(" Id "," String ")" [strict(2)] @\label{lstline:create-from-interface-syntax}@
+            | Id "(" Exps ")"                             [strict(2)]
 syntax Exp ::= Id                                                         @\label{lstline:value-start}@
              | Val
              | Rat
@@ -402,51 +404,53 @@ terminals, and uppercase for non-terminals.
 %As shown in \figurename{} \ref{fig:machine-def}, a typical
 
 \begin{lstlisting}[
-  float=ht
+  float=t!
   ,style=ksty
   ,language=k
   ,numbers=left
+  ,basicstyle=\ttfamily\small
   ,numberstyle=\tiny
   ,numbersep=5pt,
   ,xleftmargin=3ex
   ,caption={\MediK{} Statement Syntax}
   ,label={lst:medik-stmt-syntax}
 ]
-syntax Stmt ::= StandaloneExp ";"                         [strict]
-              | "sleep" "(" Exp ")" ";"                   [strict(1)]
-              | "send" Exp "," ExtId ";"                  [macro]
-              | "send" Exp "," ExtId "," "(" Exps ")" ";" [seqstrict(1, 3)]
-              | "broadcast" Id ";"                        [macro]     @\label{lstline:broadcast-stmt-macro}@
-              | "broadcast" Id "," "(" Exps ")" ";"       [strict(2)] @\label{lstline:broadcast-stmt-syntax}@
-              | "goto" Id ";"                             [macro]
-              | "goto" Id "(" Exps ")" ";"                [strict(2)]
-              | "print" "(" Exp ")" ";"                   [strict]
-              > "return" ";"                              [macro]
-              | "return" Exp ";"                          [strict(1)]
-              | "var" Id "=" Exp ";"                      [macro]
-              > Exp "=" Exp ";"                           [strict(2)] @\label{lstline:assignment-stmt}@
-              > "var" Id ";"
-              | "vars" Ids ";"                            [macro-rec]
-              | Block
-              > "if" "(" Exp ")" Block                    [strict(1)] @\label{lstline:if-stmt}@
-              | "if" "(" Exp ")" Block "else" Block       [strict(1)] @\label{lstline:if-else-stmt}@
-              | "while" "(" Exp ")" Block                             @\label{lstline:while-stmt}@
-              | "entry" Block                             [macro]
-              | "entry" "(" Ids ")" Block
-              | "on" ExtId "do" Block                     [macro]
-              | "on" ExtId "(" Ids ")" "do" Block
-              | "fun" Id "(" Ids ")" Block
-              | NonDetStmt
-              | Exp "in" "{" CaseDecl "}"                 [macro-rec] @\label{lstline:case-2-stmt}@
-              | StateDecl
-              > "machine" Id Block                        [macro]
-              | "machine" Id "receives" Ids Block
-              | "interface" Id Block                      [macro]    @\label{lstline:interface-declaration}@
-              | "interface" Id "receives" Ids Block                  @\label{lstline:interface-declaration}@
-              | "init" "machine" Id Block                 [macro]
-              | "init" "machine" Id "receives" Ids Block
-              | "yield" ";"
-              > Stmt Stmt                                 [right]
+syntax Stmt ::=
+      StandaloneExp ";"                         [strict]
+    | "sleep" "(" Exp ")" ";"                   [strict(1)]
+    | "send" Exp "," ExtId ";"                  [macro]
+    | "send" Exp "," ExtId "," "(" Exps ")" ";" [seqstrict(1, 3)]
+    | "broadcast" Id ";"                        [macro]     @\label{lstline:broadcast-stmt-macro}@
+    | "broadcast" Id "," "(" Exps ")" ";"       [strict(2)] @\label{lstline:broadcast-stmt-syntax}@
+    | "goto" Id ";"                             [macro]
+    | "goto" Id "(" Exps ")" ";"                [strict(2)]
+    | "print" "(" Exp ")" ";"                   [strict]
+    > "return" ";"                              [macro]
+    | "return" Exp ";"                          [strict(1)]
+    | "var" Id "=" Exp ";"                      [macro]
+    > Exp "=" Exp ";"                           [strict(2)] @\label{lstline:assignment-stmt}@
+    > "var" Id ";"
+    | "vars" Ids ";"                            [macro-rec]
+    | Block
+    > "if" "(" Exp ")" Block                    [strict(1)] @\label{lstline:if-stmt}@
+    | "if" "(" Exp ")" Block "else" Block       [strict(1)] @\label{lstline:if-else-stmt}@
+    | "while" "(" Exp ")" Block                             @\label{lstline:while-stmt}@
+    | "entry" Block                             [macro]
+    | "entry" "(" Ids ")" Block
+    | "on" ExtId "do" Block                     [macro]
+    | "on" ExtId "(" Ids ")" "do" Block
+    | "fun" Id "(" Ids ")" Block
+    | NonDetStmt
+    | Exp "in" "{" CaseDecl "}"                 [macro-rec] @\label{lstline:case-2-stmt}@
+    | StateDecl
+    > "machine" Id Block                        [macro]
+    | "machine" Id "receives" Ids Block
+    | "interface" Id Block                      [macro]    @\label{lstline:interface-declaration}@
+    | "interface" Id "receives" Ids Block                  @\label{lstline:interface-declaration}@
+    | "init" "machine" Id Block                 [macro]
+    | "init" "machine" Id "receives" Ids Block
+    | "yield" ";"
+    > Stmt Stmt                                 [right]
 \end{lstlisting}
 
 A \MediK{} program consists of a set of machine definitions, where
@@ -551,6 +555,63 @@ has several constructs not commonly found in other languages, such as
 (\autoref{lstline:obtain-from-syntax}). We shall describe their need and purpose
 in upcoming sections.
 
+\begin{lstlisting}[
+  float=t!,
+  frame=single,
+  style=ksty,
+  language=k,
+  numbers=left,
+  basicstyle=\ttfamily\small,
+  numberstyle=\tiny,
+  numbersep=5pt,
+  xleftmargin=3ex,
+  caption={\MediK{} Configuration},
+  label={lst:medik-configuration}
+]
+configuration
+  <instances>                                                  @\label{lstline:instances-cell-begin}@
+    <instance multiplicity="*" type="Map">                     @\label{lstline:instance-cell-begin}@
+      <id> 0 </id>
+      <k> populateCells($PGM:Stmt) ~> createInitInstances </k> @\label{lstline:start-cell}@
+      <env> .Map </env>
+      <genv> .Map </genv>                                      @\label{lstline:genv-cell}@
+      <activeState> . </activeState>
+      <callerId> . </callerId>
+      <inBuffer> .List </inBuffer>                             @\label{lstline:in-buffer-cell}@
+    </instance>                                                @\label{lstline:instance-cell-end}@
+  </instances>                                                 @\label{lstline:instances-cell-end}@
+  <machines>                                                   @\label{lstline:machine-cell-begin}@
+    <machine multiplicity="*" type="Map">                      @\label{lstline:machine-cell-begin}@
+      <machineName> . </machineName>                           @\label{lstline:machine-name-cell}@
+      <declarationCode> nothing; </declarationCode>
+      <isInitMachine> false </isInitMachine>
+      <receiveEvents> .Set </receiveEvents>
+      <states>                                                 @\label{lstline:states-cell-begin}@
+        <state multiplicity="*" type="Map">                    @\label{lstline:state-cell-begin}@
+          <stateName> . </stateName>                           @\label{lstline:state-name}@
+          <stateDeclarations> nothing; </stateDeclarations>
+          <entryBlock>  nothing; </entryBlock>                 @\label{lstline:entry-block}@
+          <eventHandlers>
+            <eventHandler multiplicity="*" type="Set">         @\label{lstline:event-handler-begin}@
+              <eventId> . </eventId>
+              <handlerCode> nothing; </handlerCode>
+            </eventHandler>                                    @\label{lstline:event-handler-end}@
+          </eventHandlers>
+        </state>                                               @\label{lstline:machine-cell-end}@
+      </states>                                                @\label{lstline:states-cell-end}@
+  </machines>
+  <interfaces>                                                 @\label{lstline:interfaces-cell-begin}@
+    <interface multiplicity="*" type="Map">                    @\label{lstline:interface-cell-begin}@
+      <interfaceName> . </interfaceName>
+      <interfaceDeclarations> nothing; </interfaceDeclarations>
+      <interfaceReceiveEvents> .Set </interfaceReceiveEvents>
+    </interface>                                               @\label{lstline:interface-cell-end}@
+  </interfaces>                                                @\label{lstline:interfaces-cell-end}@
+  <executorAvailable> true </executorAvailable>                @\label{lstline:scheduling-cell-begin}@
+  <stuck> false </stuck>
+  <epoch> 0 </epoch>
+  <shouldAdvanceEpoch> false </shouldAdvanceEpoch>             @\label{lstline:scheduling-cell-end}@
+\end{lstlisting}
 
 As reflected in \autoref{lst:medik-stmt-syntax} \MediK{} support many statements
 commonly found in conventional programming languages, such as
@@ -584,63 +645,6 @@ We discuss \MediK's configuration in \autoref{sec:configuration},
 and corresponding semantics rules in \autoref{sec:rules}.
 
 \section{$\MediK{}$ Configuration}\label{sec:configuration}
-
-\begin{lstlisting}[
-  float=t!,
-  frame=single,
-  style=ksty,
-  language=k,
-  numbers=left,
-  numberstyle=\tiny,
-  numbersep=5pt,
-  xleftmargin=3ex,
-  caption={\MediK{} Configuration},
-  label={lst:medik-configuration}
-]
-configuration <instances>                                                  @\label{lstline:instances-cell-begin}@
-                <instance multiplicity="*" type="Map">                     @\label{lstline:instance-cell-begin}@
-                  <id> 0 </id>
-                  <k> populateCells($PGM:Stmt) ~> createInitInstances </k> @\label{lstline:start-cell}@
-                  <env> .Map </env>
-                  <genv> .Map </genv>                                      @\label{lstline:genv-cell}@
-                  <activeState> . </activeState>
-                  <callerId> . </callerId>
-                  <inBuffer> .List </inBuffer>                             @\label{lstline:in-buffer-cell}@
-                </instance>                                                @\label{lstline:instance-cell-end}@
-              </instances>                                                 @\label{lstline:instances-cell-end}@
-              <machines>                                                   @\label{lstline:machine-cell-begin}@
-                <machine multiplicity="*" type="Map">                      @\label{lstline:machine-cell-begin}@
-                  <machineName> . </machineName>                           @\label{lstline:machine-name-cell}@
-                  <declarationCode> nothing; </declarationCode>
-                  <isInitMachine> false </isInitMachine>
-                  <receiveEvents> .Set </receiveEvents>
-                  <states>                                                 @\label{lstline:states-cell-begin}@
-                    <state multiplicity="*" type="Map">                    @\label{lstline:state-cell-begin}@
-                      <stateName> . </stateName>                           @\label{lstline:state-name}@
-                      <stateDeclarations> nothing; </stateDeclarations>
-                      <entryBlock>  nothing; </entryBlock>                 @\label{lstline:entry-block}@
-                      <eventHandlers>
-                        <eventHandler multiplicity="*" type="Set">         @\label{lstline:event-handler-begin}@
-                          <eventId> . </eventId>
-                          <handlerCode> nothing; </handlerCode>
-                        </eventHandler>                                    @\label{lstline:event-handler-end}@
-                      </eventHandlers>
-                    </state>                                               @\label{lstline:machine-cell-end}@
-                  </states>                                                @\label{lstline:states-cell-end}@
-              </machines>
-              <interfaces>                                                 @\label{lstline:interfaces-cell-begin}@
-                <interface multiplicity="*" type="Map">                    @\label{lstline:interface-cell-begin}@
-                  <interfaceName> . </interfaceName>
-                  <interfaceDeclarations> nothing; </interfaceDeclarations>
-                  <interfaceReceiveEvents> .Set </interfaceReceiveEvents>
-                </interface>                                               @\label{lstline:interface-cell-end}@
-              </interfaces>                                                @\label{lstline:interfaces-cell-end}@
-              <executorAvailable> true </executorAvailable>                @\label{lstline:scheduling-cell-begin}@
-              <stuck> false </stuck>
-              <epoch> 0 </epoch>
-              <shouldAdvanceEpoch> false </shouldAdvanceEpoch>             @\label{lstline:scheduling-cell-end}@
-\end{lstlisting}
-
 
 Recall that $\K$ represents program execution state using $\K$-configurations.
 A $\K$-configuration is an unordered list of (potentially nested) \emph{cells},
@@ -782,6 +786,41 @@ and pointer $pt$ updated to point to $2$ in $\rho$.
 Execution is a sequence of rule applications that continues until
 no rule can match the current configuration.
 
+\begin{lstlisting}[
+  float=b!,
+  frame=single,
+  style=ksty,
+  language=k,
+  basicstyle=\ttfamily\footnotesize,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=5pt,
+  xleftmargin=3ex,
+  caption={New Instance Creation},
+  label={lst:new-rule}
+]
+rule <id> SourceId </id>
+     <k> new MName (Args) => wait ... </k>                             @\label{lstline:source-k-cell}@
+     ( .Bag => <instance>                                              @\label{lstline:new-instance-begin}@
+                <id> Loc </id>                                         @\label{lstline:id-cell}@
+                <k> MachineDecls ~> enterState(InitState | Args ) </k> @\label{lstline:new-k-cell}@
+                <callerId> SourceId </callerId>                        @\label{lstline:source-caller-id}@
+                <class> MName </class> ...                             @\label{lstline:source-machine-name}@
+               </instance> )                                           @\label{lstline:new-instance-end}@
+     <nextLoc> Loc => Loc +Int 1 </nextLoc>
+     <store> ( .Map => (Loc |-> instance(Loc))) ... </store>
+     <machine>                                                         @\label{lstline:machine-cell-begin}@
+      <machineName> MName </machineName>                               @\label{lstline:machine-name}@
+      <declarationCode> MachineDecls </declarationCode>                @\label{lstline:declaration-code}@
+      <state>                                                          @\label{lstline:init-state-begin}@
+        <stateName> InitState </stateName>
+        <isInitState> true </isInitState> ...
+      </state> ...                                                     @\label{lstline:init-state-end}@
+     </machine>                                                        @\label{lstline:machine-cell-end}@
+     <activeInstances> ... (.Set => SetItem(Loc)) </activeInstances>   @\label{lstline:active-instances-update}@
+\end{lstlisting}
+
+
 Next, we explain several features of \MediK{} relevant to
 defining \BPGs{} using their corresponding $\K$-rules. Note that
 we only discuss rules related to idiosyntacries of \MediK{}. Other
@@ -840,39 +879,6 @@ our motivations behind them in greater depth.
 %obtained by matching on cells \inlinek{<declarationCode>} (\autoref{lstline:declaration-code})
 %and \inlinek{<state>} (Lines \ref{lstline:state-cell-begin}-\ref{lstline:state-cell-end})
 %under the appropriate \inlinek{<machine>} cell.
-\begin{lstlisting}[
-  float=h!,
-  frame=single,
-  style=ksty,
-  language=k,
-  numbers=left,
-  numberstyle=\tiny,
-  numbersep=5pt,
-  xleftmargin=3ex,
-  caption={New Instance Creation},
-  label={lst:new-rule}
-]
-rule <id> SourceId </id>
-     <k> new MName (Args) => wait ... </k>                             @\label{lstline:source-k-cell}@
-     ( .Bag => <instance>                                              @\label{lstline:new-instance-begin}@
-                <id> Loc </id>                                         @\label{lstline:id-cell}@
-                <k> MachineDecls ~> enterState(InitState | Args ) </k> @\label{lstline:new-k-cell}@
-                <callerId> SourceId </callerId>                        @\label{lstline:source-caller-id}@
-                <class> MName </class> ...                             @\label{lstline:source-machine-name}@
-               </instance> )                                           @\label{lstline:new-instance-end}@
-     <nextLoc> Loc => Loc +Int 1 </nextLoc>
-     <store> ( .Map => (Loc |-> instance(Loc))) ... </store>
-     <machine>                                                         @\label{lstline:machine-cell-begin}@
-      <machineName> MName </machineName>                               @\label{lstline:machine-name}@
-      <declarationCode> MachineDecls </declarationCode>                @\label{lstline:declaration-code}@
-      <state>                                                          @\label{lstline:init-state-begin}@
-        <stateName> InitState </stateName>
-        <isInitState> true </isInitState> ...
-      </state> ...                                                     @\label{lstline:init-state-end}@
-     </machine>                                                        @\label{lstline:machine-cell-end}@
-     <activeInstances> ... (.Set => SetItem(Loc)) </activeInstances>   @\label{lstline:active-instances-update}@
-\end{lstlisting}
-
 \subsection{Sending and Receiving Messages}\label{sec:messaging}
 
 \MediK{} machines communicating by passing messages.
@@ -888,13 +894,16 @@ by the rule in \autoref{lst:send-stmt}.
   ,language=k
   ,numbers=left
   ,numberstyle=\tiny
+  ,basicstyle=\ttfamily\footnotesize
   ,numbersep=5pt
   ,xleftmargin=3ex
   ,label={lst:send-stmt},
   ,caption={\MediK{} Send Statement Semantics}
   ]
 rule <instance>                                                             @\label{lstlin:instance-a-begin}@
-      <k> send instance(RecvId) , EventName:Id , ( Args ) =>  done ... </k> @\label{lstline:k-send}@
+      <k> send instance(RecvId) , EventName:Id , ( Args )                   @\label{lstline:k-send-start}@
+      =>  done ...
+      </k>                                                                  @\label{lstline:k-send-end}@
        ...
      </instance>                                                            @\label{lstline:instance-a-end}@
      <instance>                                                             @\label{lstline:instance-b-begin}@
@@ -913,7 +922,7 @@ When an instance the top of the \inlinek{<k>} cell has
   \item Obtains the \inlinek{id} of the receiver instance,
     the event name and the event arguments by matching
     the variables \inlinek{RecvId}, \inlinek{EventName} and \inlinek{Args}
-    against the current configuration (\autoref{lstline:k-send}) respectively.
+    against the current configuration (Lines \ref{lstline:k-send-start}-\ref{lstline:k-send-end}) respectively.
   \item Rewrites the top of the \inlinek{k} cell to \inlinek{done},
     marking the completion of execution for the construct.
   \item Adds the event and associated arguments to the
@@ -950,12 +959,12 @@ and use \inlinek{send} to add the \inlinemedik{EventName} to each machine's
   ,caption={{Broadcast Mechanism}}
   ,label={lst:broadcast-rule}
 ]
-rule broadcast EventName:Id , ( Args ) ;                              @\label{lstline:broadcast}@
-  => performBroadcast ( EventName | Args | getRecievers(EventName))   @\label{lstline:broadcast-helper}@
+rule broadcast EventName:Id , ( Args ) ;                             @\label{lstline:broadcast}@
+  => performBroadcast (EventName | Args | getRecievers(EventName))   @\label{lstline:broadcast-helper}@
 
-rule performBroadcast ( EventName | Args | ListItem(Id) Recievers)    @\label{lstline:broadcast-helper-begin}@
+rule performBroadcast ( EventName | Args | ListItem(Id) Recievers)   @\label{lstline:broadcast-helper-begin}@
   =>   send instance(Id), EventName, ( Args ) ;
-    ~> performBroadcast ( EventName | Args | Recievers)               @\label{lstline:broadcast-helper-end}@
+    ~> performBroadcast ( EventName | Args | Recievers)              @\label{lstline:broadcast-helper-end}@
 
 rule performBroadcast(_ | _ | .List) => .
 \end{lstlisting}
@@ -975,17 +984,18 @@ that serves both external and internal communication.
   ,style=mediksty
   ,language=medik
   ,numbers=left
+  ,basicstyle=\ttfamily\footnotesize,
   ,numbersep=5pt,
   ,numberstyle=\tiny
-  ,xleftmargin=3ex,
+  ,xleftmargin=2ex,
   ,caption={{\MediK{} External Agents}}
   ,label={lst:external-interaction}
   ]
-interface HeartRateSensor { }                                             @\label{lstline:hr-interface-decl}@
+interface HeartRateSensor { }                                @\label{lstline:hr-interface-decl}@
 
 machine TreatmentMachine { ...
   var hrSensor = createFromInterface(HeartRateSensor, "heartRateSensor"); @\label{lstline:sensor-creation}@
-  var heartRate = obtainFrom(hrSensor, "heartRate");                      @\label{lstline:obtain-from-sensor}@
+  var heartRate = obtainFrom(hrSensor, "heartRate");         @\label{lstline:obtain-from-sensor}@
 }
 \end{lstlisting}
 
