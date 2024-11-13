@@ -28,7 +28,6 @@
 \usepackage[inference]{semantic}
 \usepackage[english]{babel}
 \usepackage{csquotes}
-\usepackage{algorithm}
 \usepackage{pifont}
 \usepackage{stmaryrd}
 \usepackage{microtype}
@@ -60,13 +59,6 @@
 % uncomment the below to show a grid on all pages
 % \usepackage[grid, gridunit=in, gridcolor=blue!40, subgridcolor=blue!20]{eso-pic}
 
-% Settings for listings
-\usepackage{algpseudocode}
-\makeatletter
-\patchcmd{\ALG@step}{\addtocounter{ALG@line}{1}}{\refstepcounter{ALG@line}}{}{}
-\newcommand{\ALG@lineautorefname}{Line}
-\makeatother
-
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{lemma}{Lemma}[chapter]
@@ -80,33 +72,11 @@
 % ALGORITHM AND CODE PACKAGES (Comment out this section if unnecessary for your dissertation)
 %
 \usepackage{listings}  % Useful for formatting code blocks, see here for further information about formatting code: https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
-%\usepackage[ruled]{algorithm2e}  % Useful for formatting algorithms (pseudocode)
-%\numberwithin{algocf}{chapter}     % Change numbering of algorithms to meet the Graduate College standards
+\usepackage[ruled,linesnumbered]{algorithm2e}  % Useful for formatting algorithms (pseudocode)
+\numberwithin{algocf}{chapter}     % Change numbering of algorithms to meet the Graduate College standards
 
 
-\newcommand{\algorithmautorefname}{Algorithm}
-\newcommand\CONDITION[2]%
-  {\begin{tabular}[t]{@{}l@{}l@{}}
-     #1&#2
-   \end{tabular}%
-  }
-\algdef{SE}[WHILE]{While}{EndWhile}[1]%
-  {\algorithmicwhile\ \CONDITION{#1}{\ \algorithmicdo}}%
-  {\algorithmicend\ \algorithmicwhile}
-\algdef{SE}[FOR]{For}{EndFor}[1]%
-  {\algorithmicfor\ \CONDITION{#1}{\ \algorithmicdo}}%
-  {\algorithmicend\ \algorithmicfor}
-\algdef{S}[FOR]{ForAll}[1]%
-  {\algorithmicforall\ \CONDITION{#1}{\ \algorithmicdo}}
-\algdef{SE}[REPEAT]{Repeat}{Until}{\algorithmicrepeat}[1]%
-  {\algorithmicuntil\ \CONDITION{#1}{}}
-\algdef{SE}[IF]{If}{EndIf}[1]%
-  {\algorithmicif\ \CONDITION{#1}{\ \algorithmicthen}}%
-  {\algorithmicend\ \algorithmicif}%
-\algdef{C}[IF]{IF}{ElsIf}[1]%
-  {\algorithmicelse\ \algorithmicif\ \CONDITION{#1}{\ \algorithmicthen}}
 \input{lst-styles.tex}
-\algrenewcommand\alglinenumber[1]{\footnotesize #1}
 \newcommand{\inlinemedik}[1]{\lstinline[style=inlinemediksty,language=medik]{#1}}
 \newcommand{\inlinek}[1]{\lstinline[style=inlineksty,language=k]{#1}}
 \newcommand{\inlineimp}[1]{\lstinline[style=impsty,language=imp]{#1}}
@@ -116,8 +86,13 @@
 \lstset{ literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1} }
 \lstset{captionpos=b,escapeinside={@}{@}}
 \providecommand*{\lstnumberautorefname}{Line}
+\def\boxit#1{%
+  \smash{\color{red}\fboxrule=1pt\relax\fboxsep=2pt\relax%
+  \llap{\rlap{\fbox{\vphantom{0}\makebox[#1]{}}}~}}\ignorespaces
+}
 
 \graphicspath{{./figures}}
+
 %\addbibresource{./references.bib}
 
 %\newcounter{counterforappendices}

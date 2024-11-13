@@ -1136,35 +1136,51 @@ Specifically, there may be situations where a machine instance is
 \emph{enabled} but is never chosen for execution.
 Therefore, to ensure fairness, we use a scheduling strategy based on a monotonically
 increasing global counter called the \epoch{}.
-% Instead of just tracking
-% \emph{enabled} machines, we also track the \epoch{} value at which
-% said machines became enabled.
-We show this execution strategy in \autoref{alg:scheduling-semantics}
+Instead of just tracking
+\emph{enabled} machines, we also track the \epoch{} value at which
+said machines became enabled.
+We show this execution strategy in \autoref{alg:scheduling-semantics}.
 
-\begin{algorithm}[ht]
-  \centering
-    \begin{algorithmic}[1]
+%\begin{algorithm}[t]
+%  \centering
+%    \begin{algorithmic}[1]
+%    \State $\epoch{} \gets 0$
+%      \State $\scheduled{} \gets \left\{ \Instance_{\Machine{}_{0},0}^{0} \right\}$ \label{algline:init-scheduled}
+%    \While{$\scheduled{} \neq \emptyset$}
+%       \State \begin{varwidth}[t]{\linewidth}
+%         $\Instance_{\Machine_{i},j}^{\tau} \gets \textit{choose}\left(\scheduled{}\right) \text{ s.t. }$ \label{algline:choose}
+%           \par
+%              \hskip\algorithmicindent $\qquad \tau \leq \epoch{} \wedge \enabled(\Instance_{\Machine_{i},j}^{\tau})$ \par
+%            \end{varwidth}
+%      \State $\scheduled{} \gets \scheduled \setminus \Instance_{\Machine_{i},j}^{\tau}$
+%      \State $\textit{execute}(\Instance_{\Machine_{i},j}^{\tau}, \scheduled{})$ \label{algline:execute}
+%      \If{$\not\exists i',j',\tau'$ s.t.
+%      $(\Instance_{\Machine_{i'},j'}^{\tau'} \in \scheduled{})$
+%      \\ \qquad \qquad $\wedge (\tau' \leq \epoch{}) \wedge (\enabled(\Instance_{\Machine_{i'},j'}^{\tau'}))$}
+%      \newline
+%       \State $\epoch{} \gets \epoch{} + 1$ \label{algline:epoch-advance}
+%      \EndIf
+%    \EndWhile
+%  \end{algorithmic}
+%  \caption{\MediK{} Scheduling Semantics}\label{alg:scheduling-semantics}
+%\end{algorithm}
 
-    \State $\epoch{} \gets 0$
-      \State $\scheduled{} \gets \left\{ \Instance_{\Machine{}_{0},0}^{0} \right\}$ \label{algline:init-scheduled}
-    \While{$\scheduled{} \neq \emptyset$}
-       \State \begin{varwidth}[t]{\linewidth}
-         $\Instance_{\Machine_{i},j}^{\tau} \gets \textit{choose}\left(\scheduled{}\right) \text{ s.t. }$ \label{algline:choose}
-           \par
-              \hskip\algorithmicindent $\qquad \tau \leq \epoch{} \wedge \enabled(\Instance_{\Machine_{i},j}^{\tau})$ \par
-            \end{varwidth}
-      \State $\scheduled{} \gets \scheduled \setminus \Instance_{\Machine_{i},j}^{\tau}$
-      \State $\textit{execute}(\Instance_{\Machine_{i},j}^{\tau}, \scheduled{})$ \label{algline:execute}
-      \If{$\not\exists i',j',\tau'$ s.t.
-      $(\Instance_{\Machine_{i'},j'}^{\tau'} \in \scheduled{})$
-      \\ \qquad \qquad $\wedge (\tau' \leq \epoch{}) \wedge (\enabled(\Instance_{\Machine_{i'},j'}^{\tau'}))$}
-      \newline
-       \State $\epoch{} \gets \epoch{} + 1$ \label{algline:epoch-advance}
-      \EndIf
-    \EndWhile
-  \end{algorithmic}
+\begin{algorithm}[t]
+    \SetAlgoLined
+    \DontPrintSemicolon
+    $\epoch{} \longleftarrow 0$\;
+    $\scheduled{} \longleftarrow \left\{ \Instance_{\Machine{}_{0},0}^{0} \right\}${\label{algline:init-scheduled}}\;
+    \While{$\scheduled{} \neq \emptyset$}{
+       $\Instance_{\Machine_{i},j}^{\tau} \longleftarrow \textit{choose}\left(\scheduled{}\right) \text{ s.t. } \tau \leq \epoch{} \wedge \enabled(\Instance_{\Machine_{i},j}^{\tau})${\label{algline:choose}}\;
+       $\textit{execute}(\Instance_{\Machine_{i},j}^{\tau}, \scheduled{})${\label{algline:execute}}\;
+       \If{$\not\exists i',j',\tau'$ s.t. $\left(\Instance_{\Machine_{i'},j'}^{\tau'} \in \scheduled{}\right) \wedge \left(\tau' \leq \epoch{}\right) \wedge \left(\enabled\left(\Instance_{\Machine_{i'},j'}^{\tau'}\right)\right)$}{
+         $\epoch{} \longleftarrow \epoch{} + 1${\label{algline:epoch-advance}}\;
+       }
+    }
   \caption{\MediK{} Scheduling Semantics}\label{alg:scheduling-semantics}
 \end{algorithm}
+
+
 
 Recall from Section \ref{sec:syntax} that a \MediK{} program consists of a set
 of machines, of which one, prefixed with the keyword \inlinemedik{init}, is the \emph{initial} machine.
@@ -1424,9 +1440,11 @@ execution in the next epoch (Lines \ref{lstline:response-buffer-begin}-\ref{lstl
   ,label={lst:obtain-from-response}
 ]
  rule <k> waitForObtainResponse(_) => V ... </k>
-      <inBuffer> (ListItem(event($ObtainResponse | V:Val  | Epoch )) => .List) @\label{lstline:response-buffer-begin}@
-                  ...
-      </inBuffer>                                                              @\label{lstline:response-buffer-end}@
+      <inBuffer> @\label{lstline:response-buffer-begin}@
+        (ListItem(event($ObtainResponse | V:Val  | Epoch ))
+        => .List)
+        ...
+      </inBuffer>                                                     @\label{lstline:response-buffer-end}@
       <executorAvailable> true => false </executorAvailable>
       <epoch> Epoch </epoch>
 \end{lstlisting}
@@ -1831,7 +1849,8 @@ towards addressing them. We measured progress along the following lines:
     SAGE                            & $\greencheck$                    & $\redcross$               & $\redcross$           & $\redcross$ \\
     Hierarchical Plans              & $\redcross$                      & $\circ$                   & $\greencheck$         & $\circ$     \\
     \MDA{}                          & $\redcross$                      & $\redcross$               & $\greencheck$         & $\redcross$ \\
-    \textbf{\MediK{}}               & $\greencheck$                    & $\greencheck$             & $\greencheck$         & $\greencheck$
+      \boxit{0.9\textwidth}
+    \MediK{}                        & $\greencheck$                    & $\greencheck$             & $\greencheck$         & $\greencheck$
   \end{tabularx}
     \caption{\MediK{} vs Existing Approaches}\label{table:medik-comparison}
   \end{table}
