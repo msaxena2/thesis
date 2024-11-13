@@ -13,14 +13,14 @@ cause of death in the United States \cite{MakaryBMJ16}.
 The prevalence of \PMEs{} in healthcare now finds increasing recognition.
 In September 2023, the President's Council of Advisors on Science and
 Technology (PCAST) published a report stating
-patient safety to be an \say{urgent national public health issue}, and calling
+patient safety to be an \say{urgent national public health issue}, calling
 for a \say{transformational effort} to address the problem \cite{PCAST23}.
-Approximately a quarter of medicare
+Approximately one in four Medicare
 patients, the report mentioned, experienced adverse events during their hospitalization, with
 many catastrophic outcomes. Worryingly, 40\% of these adverse events were
 due to \PMEs{}. Thus, while recognizing the commitment that
 healthcare practitioners and their organizations towards ensuring quality
-care, the report deemed rates of medical errors and injuries as \say{alarmingly high}.
+care, the report deemed rates of medical errors and injuries as \say{alarmingly high.}
 
 The adverse effects of \PMEs{} extend beyond patient outcomes.
 \PMEs{} have a negative effect on healthcare providers (\HCPs). According to the authors of
@@ -36,7 +36,7 @@ of productivity from missed work due to short-term disability claims \cite{Andel
 
 In the United States, several initiatives to improve patient safety by
 reducing preventable errors have been undertaken at the federal government
-level. The aforementioned September 2023 PCAST report itself included several suggestions to
+level. The September 2023 PCAST report itself included several suggestions to
 address patient safety, such as:
 \begin{enumerate}[label=(\roman*)]
   \item ensuring patients receive evidence-based practice for preventing
@@ -54,7 +54,7 @@ address patient safety, such as:
     while employing best practices and engineering principles to mitigate safety
     and reliability of such systems.
 \end{enumerate}
-The report highlights that technology is expected to play a major role in
+The report highlights that technology is expected to play a significant role in
 addressing the problem. The emphasis on technology to reduce human errors
 isn't unprecedented. The report recommends the establishment of a
 multidisciplinary National Patient Safety Team, along the lines of
@@ -65,7 +65,7 @@ CAST was responsible for reducing the fatality risk for commercial aviation
 in the United States by 83\%, and aims to reduce the risk further by 50\% by
 2025. To put CAST's achievements into perspective, between 2008 and 2020,
 U.S. carriers transported more than 7.8 billion passengers. But, in the same
-time-frame, there were only 2 fatalities \cite{CASTSafetyReport20}.
+timeframe, there were only 2 fatalities \cite{CASTSafetyReport20}.
 Several solutions were instrumental in achieving such remarkable results, including:
 \begin{itemize}
   \item fly-by-wire control that optimizes pilot inputs for safety, reliability,
@@ -88,10 +88,10 @@ eventually led to widespread adoption and deployment \cite{CASTSafetySkybrary}.
 
 Unfortunately, despite similarities, improvements in aviation safety haven't
 been adapted in healthcare \cite{GerstleJPS18}.
-But, as evidenced by the September 2023 PCAST report, initiatives are been
+But, as evidenced by the September 2023 PCAST report, initiatives are being
 undertaken to address this. Addressing patient safety is a complex problem
 requiring multifaceted solutions, of which comprehensive use of technology is a part.
-This work in particular focuses on improving patient by enabling
+This work in particular focuses on improving patient safety by enabling
 the development of \emph{safe} and \emph{cost effective} guidelines-based clinical decision
 support systems (\CDSSs{}). These systems assist healthcare providers (\HCPs{}) follow
 evidence-based best practice guidelines (\BPGs{}) -- evidence-based
@@ -124,10 +124,10 @@ Typically, a \CDSS{} usually consists of the following components \cite{SuttonNa
 \begin{enumerate}[label=(\alph*)]
   \item a translation of the guideline to an executable medium, called the
   \BPGLogic{}.
-\item an user interface (\UI{}) that healthcare providers use to interact with
+\item a user interface (\UI{}) that healthcare providers use to interact with
   the system.
   \item additional infrastructure that integrates with external data sources
-  such as sensors, health records.
+  such as sensors and health records.
 \end{enumerate}
 The system utilizes available data to assess patient state, and
 supports the \HCP{} by providing guidelines-prescribed advice for treating
@@ -139,7 +139,7 @@ available via patient sensors and electronic health records to ascertain patient
 state. Well implemented \CDSSs{} can aid decision-making and improve overall
 quality and safety at healthcare facilities that use them.
 
-The PCAST report also stresses on adapting lessons from aviation in healthcare.
+The PCAST report also stresses adapting lessons from aviation in healthcare.
 In aviation, systems for automation, monitoring and error mitigation that
 reduce workloads and enhance situational awareness of pilots have
 improved safety as pilots became accustomed to using and relying on such
@@ -161,7 +161,7 @@ Record (\EHR{}) vendors to study the state of \CDSS{} in healthcare and barriers
 limiting adoption. Their findings were summarized in a National Association Medicine (NAM) special
 report \cite{Nam17}. Drawing from several publications on \CDSSs{}, including a
 literature review commissioned by the Agency for Healthcare Research Quality \cite{BrightAIM12},
-the report highlighted that despite significant evidence that demonstrates
+the report highlighted that despite considerable evidence that demonstrates
 \CDSSs{} reduce both errors and cost while improve quality of care,
 implementation and actualization of such systems remains \say{nascent} due to
 the following challenges (Cs):
@@ -169,7 +169,7 @@ the following challenges (Cs):
 \begin{enumerate}[label=C\arabic*.]
 \itemsep0.0em
 \item Absence of systematic ways of \emph{validating content}
-in a \emph{reliable}, \emph{accessible} and \emph{updateable} manner.
+in a \emph{reliable}, \emph{accessible}, and \emph{updateable} manner.
 \item Lack of \emph{reliable}, \emph{shareable} \CDSS{} content
 that can be easily adopted across healthcare organizations and their (Information
 Technology) \IT{} systems.
@@ -181,15 +181,15 @@ workflows.
 
 \section{Solution}
 
-Typically, \CDSS{} are implemented as cumbersome standalone systems.
+Typically, \CDSSs{} are implemented as cumbersome standalone systems.
 To develop a \CDSS{}, practitioners work with
-developers to come up with a requirements documentation
+developers to produce a requirements documentation
 that presents the \BPGs{}'s medical knowledge in a manner amenable to software development \cite{PelegJBI13}.
 This documentation is then utilized to develop the \CDSS{}.
 Thus, the \BPG{}
 serves as a functional specification for the medical knowledge encoded in the
 \CDSS{}.
-But, the aforementioned process has several limitations.
+But, this process has several limitations.
 First, the implementation, i.e., the medical knowledge within the \CDSS{},
 may not concur with its specification, i.e., the textual \BPG{}.
 \BPGs{} are long, complex textual documents,
@@ -197,8 +197,9 @@ where the exact meaning of terms may not be explicitly stated, and recommendatio
 Capturing and communicating these complexities via requirements documentation
 is challenging, and incorrect or incomplete documentation has resulted in failed
 implementations \cite{KubbenBook19}. Second, as \BPGs{} evolve to reflect
-new evidence or adaptions, corresponding updates must be made to the
-\CDSS{} as well. Thus, effort (and associated cost) must expended to ensure that the medical knowledge
+new evidence or adaptations, corresponding updates must be made to the
+\CDSS{} as well. Thus, effort (and associated cost) must be
+expended to ensure that the medical knowledge
 is accurately updated in the \CDSS{} as well.
 
 To address these limitations, instead of a monolithic system, our approach
@@ -229,7 +230,7 @@ have a complete formal semantics that can be used to implement tools such as
 execution engines, model checkers, etc. has been recognized.
 It's also desirable for such languages to have execution engines with formal \emph{correctness
 guarantees}, and accompanying tools for formal analysis.
-To this end, some existing \DSLs{} have partially-defined semantics and
+To this end, some existing \DSLs{} have partially defined semantics and
 support for verification via model-checking.
 However, as identified by the authors of \cite{SuttonAMIA03, ShaharAMIA96},
 existing languages lack a complete formal semantics,
@@ -247,8 +248,8 @@ implementing tools such as an interpreter,
 compiler, program verifier for a language from scratch in an ad-hoc way,
 the execution semantics of the language should be formally defined, from which
 said tools are derived, making them \emph{correct-by-construction}.
-This also enables $\MediK$ to quickly and
-systematically incorporate healthcare practitioner feedback, as only the
+This also enables $\MediK$ to incorporate healthcare practitioner feedback
+quickly and systematically, as only the
 semantics need to be updated. As the tools are derived from the semantics,
 changes to the semantics are automatically reflected across all tools.
 
@@ -280,7 +281,7 @@ also amplified by their inherent complexity, which stems from:
     health records, and practitioners.
 \end{enumerate}
 To support formal analysis of such systems, a \DSL{} for
-computer interpretable guidelines must take into account said \emph{complexity}
+computer interpretable guidelines must consider said \emph{complexity}
 while ensuring \emph{comprehensibility} to healthcare practitioners.
 
 To ensure \emph{comprehensibility}, we ensure $\MediK{}$-based guidelines \emph{resemble}
@@ -289,13 +290,13 @@ their existing textual counterparts that practitioners are already
 state-of-art \DSLs{} for expressing them in a \emph{computer-interpretable} way, and observed that
 \BPGs{} are often expressed in informal flowchart-like notation. For instance,
 see \cite{AHAFlowcharts} and \cite{CancerCareFlowcharts} for flowchart-based \BPGs{} for management of \emph{cardiac arrest}, and
-screening, risk-reduction, treatment and survivorship in cancer care.
+screening, risk-reduction, treatment, and survivorship in cancer care.
 To tackle \emph{complexity},
 we utilized concepts from existing state-of-art in modeling
-and verification of large concurrent systems like P \cite{DesaiPLDI13} and maude
+and verification of large concurrent systems like P \cite{DesaiPLDI13} and Maude
 \cite{MaudeBook}.
 In $\MediK$, like in P, a program is a collection of concurrently executing state
-machines that interact by passing messages. Just as in object-oriented maude,
+machines that interact by passing messages. Just as in object-oriented Maude,
 $\MediK{}$ treats external agents, such as the UI, sensors, etc., as state machines.
 Since \BPGs{} are often expressed using flowcharts, we represent each flowchart
 in $\MediK{}$ as a state machine. For formal analysis, we need to model
@@ -311,7 +312,7 @@ In collaboration with the Children's Hospital of Illinois at
 OSF St. Francis Medical Center (referred to as OSF in the remainder of this
 work), we used our $\MediK$-based approach  to implement a \CDSS{} for management pediatric sepsis
 based on OSF's guidelines.
-Sepsis is life-threatening condition caused by the body's extreme response to
+Sepsis is a life-threatening condition caused by the body's extreme response to
 an infection \cite{RhodesICM17}, and is
 a major cause of morbidity and mortality in children \cite{Eisenberg2021JP}.
 Adverse outcomes can, however, be mitigated through timely
@@ -329,7 +330,7 @@ the \CDSS{} consists of three independent components:
   \item A UI tailored to the preferences of practitioners at OSF.
   \item A $\MediK{}$ based computer interpretable guideline based on OSF's
     existing textual \BPG{}.
-  \item Additional infrastructure that glues aforementioned components together.
+  \item Additional infrastructure that glues said components together.
 \end{itemize}
 
 The \BPGLogic{} of the \CDSS{} is implemented as a $\MediK{}$ program.
