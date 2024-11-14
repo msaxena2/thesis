@@ -15,7 +15,7 @@ To address this, \DSLs{} designed specifically for expressing
 \BPGs{} in a computer-interpretable format are utilized. \BPGs{} expressed
 in such languages can serve as both textual guideline documents and knowledge
 bases in \CDSSs{}. But, medical knowledge in \BPGs{} has also been expressed
-and formalized using other non domain-specific approaches. The discussion in
+and formalized using other non-domain-specific approaches. The discussion in
 this chapter has also been split along the same lines. In \autoref{sec:dsl-based-approaches}, we discuss approaches involving \DSLs{} for
 computer interpretable guidelines. In \autoref{sec:general-approaches}, we
 discuss other approaches that aren't specific to \BPGs{}.
@@ -24,7 +24,7 @@ discuss other approaches that aren't specific to \BPGs{}.
 
 \subsection{Arden Syntax}\label{sec:arden-syntax}
 
-The Arden Syntax is among the earliest and most widely-used
+The Arden Syntax is among the earliest and most widely used
 standards for expressing medical logic, with the first
 draft of the standard appearing in 1989.
 It was also among the earliest attempts to create a domain
@@ -34,7 +34,7 @@ In Arden Syntax, code is organized into self-contained medical
 logic modules (\MLMs{}) that have a well-defined structure to
 separate higher-level medical logic from low-level implementation
 details such as variable declarations. The language continues to
-evolve to accommodate diverse uses, and is supported by multiple execution
+evolve to accommodate diverse uses and is supported by multiple execution
 engines \cite{AnandMed04,KaradimasAMIA02}.
 
 The maturity of the Arden Syntax platform is reflected in its
@@ -59,7 +59,7 @@ limitations. Notably:
 The Dilemma project was among the first attempts at
 standardizing \BPGs{} to originate out of Europe. In Dilemma, a
 protocol describes the set of activities that must be carried out
-in order to reach on objective based on clinical indications \cite{HerbertMPB95}.
+ to reach on objective based on clinical indications \cite{HerbertMPB95}.
 Protocols are recursively broken into smaller elementary protocols. Each
 protocol has one or more associated indication that determine when
 it becomes applicable, and a set of objectives that define the expected
@@ -90,11 +90,11 @@ states, where entry, exit and transitions between states were determined
 by data collected during execution \cite{StoufletJAMIA96}. Each
 clinical management state was represented as state machine nodes,
 and edges between nodes represented transitions between the various clinical
-mangement states \cite{MachadoJAMIA98}.
+management states \cite{MachadoJAMIA98}.
 
 \subsection{EON}\label{sec:eon}
 
-The EON langauge, developed at Stanford University, also
+The EON language, developed at Stanford University, also
 utilizes a state machine-based architecture for representing medical guidelines.
 Treatment protocols are first recursively composed into smaller granular
 elementary protocols that cannot be decomposed any further.
@@ -120,10 +120,10 @@ AIDS \cite{MusenJAMIA96} and Breast Cancer \cite{TuAMIA96}.
 
 \subsection{\GLIF{}}\label{sec:glif}
 
-The Guideline Interchange Format (\GLIF{}) was introduced in 1998 as a
-result of a collaboration between researchers from Columbia University,
+The Guideline Interchange Format (\GLIF{}) was introduced in 1998 through
+a collaboration between researchers from Columbia University,
 McGill University, Harvard University and Stanford \cite{ClerqAIM03}. Good medical
-guidelines improve healthcare quality, but require substantial work
+guidelines improve healthcare quality but require substantial work
 to develop and maintain. At the time, guidelines were published through
 unstructured text documents that were not easily shareable. The motivation
 behind the \GLIF{} project was to enable \BPG{} between institutions sharing
@@ -162,11 +162,11 @@ application for support in clinical consultations \cite{BoxwalaAMIA99} and
 the Partners Computerized Algorithm Processor and Editor (\PCAPE{}) system
 for creating and deploying \BPGs{} \cite{ZielstorffAMIA98}.
 
-The experience and lessons from implementing aforementioned \CDSSs{} in
+The experience and lessons from implementing these \CDSSs{} in
 \GLIF{} also revealed certain limitations of the language, such as:
 \begin{itemize}
   \item Integration of heterogeneous clinical systems was challenging.
-  \item Guidelines were cumbersome to develop and readability was suboptimal.
+  \item Guidelines were cumbersome to develop, and, readability was suboptimal.
 \end{itemize}
 
 To address these shortcomings, an updated version of the language called
@@ -191,7 +191,7 @@ defined.
 \subsection{PROforma}\label{sec:proforma}
 
 PROforma was initially developed at the Cancer Research UK Advanced Computation
-Laboratory, and has been utilized to develop several \CDSSs{} \cite{ClerqAIM03}.
+Laboratory and has been utilized to develop several \CDSSs{} \cite{ClerqAIM03}.
 In PROforma, guidelines are modeled as tasks and data items. Tasks are
 hierarchically organized into plan, and may be further divided into:
 \begin{itemize}
@@ -234,7 +234,7 @@ and diagnosis \cite{TaylorMIA99}, and support for breast cancer diagnosis and
 treatment \cite{FoxECAI06}.
 
 PROforma is also among the first \DSLs{} to identify the for a formally defined
-syntax and semantics, and expend significant effort in doing so.
+syntax and semantics and expend significant effort in doing so.
 In \cite{SuttonAMIA03}, the authors enunciate
 that PROforma \say{must have} open source syntax and semantics definitions
 to ensure that medical logic in PROforma is unambiguous, and to ensure
@@ -262,7 +262,7 @@ Thus, skeletal plans provide a broad framework for solving a class of problems,
 instead of fine-grained details required to solve a specific problem.
 This flexibility enables Asbru guidelines to have intended objectives that
 can be achieved in different ways. For instance, to manage diabetes,
-an \HCP{} can either administer additional insulin, or instruct
+an \HCP{} can either administer additional insulin, or, instruct
 the patient to consume less carbohydrates during a meal. Both actions
 have the intended outcome of moderating blood sugar levels.
 Specifically, an Asbru skeletal plan based guideline has:
@@ -273,8 +273,8 @@ Specifically, an Asbru skeletal plan based guideline has:
 \end{itemize}
 
 When executed, the \HCP{} applies the guideline by following actions,
-which are observed, recorded and abstrated over time into an absracted plan.
-both patient state, and the inferred intention is also recorded
+which are observed, recorded and abstracted over time into an abstract plan.
+Both patient state and the inferred intention are also recorded
 \cite{ShaharAIM98}. Asbru's execution model also provides the ability
 to critique execution along these axes:
 \begin{itemize}
@@ -282,18 +282,18 @@ to critique execution along these axes:
   \item Guideline-intended plan vs \HCP{} followed plan.
   \item Guideline-intended state vs the \HCP{}'s intended state.
   \item Guideline-intended state vs actual patient state.
-  \item \HCPs{}'s intended state vs actual patient state.
+  \item \HCP{}'s intended state vs actual patient state.
 \end{itemize}
 These axes provide 32 different scenarios of guideline execution
 \cite{ShaharAIM98}.
 
-Asbru provides comprehensive support for temporal aspects of guidelines through
-the use of time reference annotations.
+Asbru provides comprehensive support for temporal aspects of guidelines by using
+time reference annotations.
 These represent uncertainty in starting, ending and duration
 of time intervals. An annotation can be an absolute reference point,
 a reference point with uncertainty (defined by a region), or a function of
 some previous plan. Deviation from the reference point represent uncertainty
-in starting. Through the use of these annotations, intervals have an
+in starting. Because of these annotations, intervals have an
 earliest start shift, latest start shift, earliest finishing shift, latest
 finishing shift and minimum duration and maximum durations \cite{ShaharAIM98}.
 
@@ -310,7 +310,7 @@ instantiated. Apart from the name, arguments and time annotation, a plan also ha
 \begin{itemize}
   \item Preferences: Factors that influence the selection of a plan to
     achieve a goal. Examples include start conditions for the plan,
-    heuristics (such as exact-fit) to specify a selection criteria, etc.
+    heuristics (such as exact-fit) to specify a selection criterion, etc.
   \item Intentions: High level goals of the plan.
   \item Effects: Functional relations between arguments and measurable
     clinical parameters.
@@ -320,7 +320,7 @@ instantiated. Apart from the name, arguments and time annotation, a plan also ha
 \end{itemize}
 
 The Asbru language has been used to implement several guidelines in
-Endocrinology, Pulmonology, Gynaecology, such as diabetes mellitus, jaundice in
+Endocrinology, Pulmonology, Gynecology, such as diabetes mellitus, jaundice in
 infants, and mechanical ventilation in premature babies
 \cite{YoungAMIA05}. The language has a formal syntax in \BNF{}, and the earlier versions of the language
 also have a formal structural operational semantics \cite{BalserPIDP02}.
@@ -338,7 +338,7 @@ interpreter with any correctness guarantees.
 \subsubsection{KIV-based Verification}\label{sec:kiv-verification}
 
 In \cite{TenAIM06}, a formal-methods approach to improve Asbru-based guidelines
-is presented. The authors identify that in order to use formal methods
+is presented. The authors identify that using formal methods
 for systematic verification of guidelines and protocols requires
 an appropriate representation language with a clear and well-defined semantics.
 Two real-world guidelines were chosen, and analyzed using a
