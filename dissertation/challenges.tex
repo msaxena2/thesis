@@ -6,13 +6,13 @@ well implemented \CDSSs{} can significantly improve quality of care
 several challenges continue to inhibit wider \CDSS{} adoption \cite{Nam17}.
 Some challenges are non-technical, i.e., require changes to legislation,
 incentive mechanisms and practitioner education and training, and are beyond the
-scope of this work. But, several limitations in existing \CDSS{} technology have also
+scope of this work. But several limitations in existing \CDSS{} technology have also
 inhibited further adoption. This chapter discusses said challenges, and
 the progress made by existing state of art towards addressing them.
 
 Recall, from \autoref{sec:hurdles-cdss-adoption}, that in 2017,
 the National Academy of Medicine published a report on \CDSSs{} that
-laid out a roadmap to optmize \CDSS{} uptake in medicine. According to the
+laid out a roadmap to optimize \CDSS{} uptake in medicine. According to the
 report, several challenges need to be tackled for wider adoption, such as:
 
 
@@ -31,9 +31,9 @@ workflows.
 
 \section{Addressing Adoption Hurdles}\label{sec:addressing-hurdles}
 
-\CDSS{} first appeared in the 1960s, and have evolved over time
-to address aforementioned challenges. The following sections
-describe progress made towards addressing aforementioned challnges.
+\CDSS{} first appeared in the 1960s and have evolved over time
+to address aforementioned challenges. We describe this progress
+in upcoming chapters.
 
 \subsection{Monolithic \CDSSs{}}\label{sec:monolithic-cdss}
 
@@ -96,20 +96,21 @@ Approaches that utilize a component-based architecture
 enable medical knowledge to be shared more efficiently.
 But, it's possible for medical knowledge itself to be incorrectly
 encoded. \BPGs{} are generally expressed as long textual documents meant to
-be understood by \HCPs{} \cite{SchiffmanYMI13}. To build a \CDSS{}, the \BPG{} has to be
+be understood by \HCPs{} \cite{SchiffmanYMI13}. To build a \CDSS{}, the \BPG{}
+must be
 systematically expressed in a computable medium. This translation process,
 referred to as knowledge formalization, is generally ad-hoc, and can be
 the source of inconsistencies in encoded medical knowledge
 resulting in \CDSSs{} that render wrong advice \cite{ShaharIOS04}.
 
-Typically, in order to translate textual guidelines to a computable
+Typically, to translate textual guidelines to a computable
 medium, experts in medicine collaborate with computer scientists and
 software developers to come up with a requirements document.
 This is subsequently utilized to develop the knowledge base, i.e.,
 the computer interpretable encoding of the \BPG{} \cite{PelegJBI13} in a
 traditional programming language. Thus, the \BPG{} as a
 functional specification for the knowledge base.
-For instance, in the case of the aforementioned EvidencePoint,
+For instance, in the case of EvidencePoint,
 the knowledge base is expressed in  Javascript \cite{SolomonJMIR23}.
 
 However, since computer scientists/software
@@ -145,7 +146,7 @@ time \cite{ClerqAIM03}.
 
 Shortcomings regarding ability of the Arden Syntax to represent complex
 treatment protocols were addressed by formalisms such as GLIF \cite{PelegAMIA00}
-that permit encoding complex guidelines through the use of a multi-layer
+that permit encoding complex guidelines using a multi-layer
 approach to represent both high-level medical knowledge and low-level
 implementation details. However, just like the Arden Syntax, GLIF lacks
 a formal semantics or formal analysis tools.
@@ -169,15 +170,16 @@ model guidelines. A PROforma plan is made of a sequence of tasks.
 The plan defines constraints on their enactment, and circumstances
 for termination (for example, exceptions) \cite{SuttonAMIA03}. But, despite
 having complete formal semantics, PROforma's semantics is not executable.
-Therefore, an interpreter and analysis tools have to be implemented in an
+Therefore, an interpreter and analysis tools must be implemented in an
 ad-hoc manner.
 
 Several endeavors, mainly academic, but also involving the industry
 towards making \CDSSs{} safer, easier, effective and cheaper.
-We briefly talk about some related work in this chapter to
-provide an overview of existing progress and remaining questions.
-But, \autoref{chapter:related-work} provides an in-depth discussion
-of related work. In \autoref{sec:monolithic-cdss},
+We briefly talk about some related approaches in this chapter to
+provide an overview of existing progress and remaining questions
+but discuss them in greater detail in \autoref{chapter:related-work}, along with
+other related work.
+In \autoref{sec:monolithic-cdss},
 the earliest \CDSSs{} attempted to increased adherence to evidence-based best practices
 at medical establishments. To ensure \CDSSs{} could be scaled better,
 components-based architectures, discussed in
@@ -189,7 +191,7 @@ the \CDSS{}' knowledge base have been developed. However,
 the following issues still remain:
 \begin{itemize}
   \item Interpreters and compilers for said \DSLs{} are developed in an
-    ad-hoc way, and can be prone to bugs that manifest during execution.
+    ad-hoc way and remain prone to bugs that may manifest during execution.
   \item There is a lack of formal analysis tools such as model checkers and
     program verifiers that can be utilized to establish that the
     computer-interpretable \BPGs{} satisfy desired safety and liveness
@@ -198,8 +200,8 @@ the following issues still remain:
     as a language model for a suite of formal analysis and execution tools.
 \end{itemize}
 
-Addressing aforementioned issues is vital to improving \CDSS{} adoption.
-In order to have trustworthy and useable computer interpretable \BPGs{},
+Addressing these issues is vital to improving \CDSS{} adoption.
+To have trustworthy and useable computer interpretable \BPGs{},
 it's important to buttress  \HCP{}-friendly \DSLs{}
 with a suite of formal analysis tools that can establish desired safety
 properties, thus comprehensively addressing C1.
