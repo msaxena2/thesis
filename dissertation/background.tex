@@ -60,8 +60,8 @@ These developments facilitated a shift towards more rigorous
 development of \BPGs{}, where evidence was prioritized over expert opinion
 \cite{GuerraInjury23}.
 
-To be able to administer optimum care, practitioners must take into
-account evidence from ongoing research to guide treatment. This
+To be able to administer optimum care, practitioners must consider
+evidence from ongoing research to guide treatment. This
 can be particularly challenging, as available evidence can evolve rapidly.
 \BPGs{} enable findings from latest research to be quickly translated to
 practice. Well-designed \BPGs{} are usually developed and published by trusted medical
@@ -207,7 +207,7 @@ Exact meaning of terms is not always defined and recommended
 actions may not be clearly articulated. The long and cumbersome
 nature of \BPGs{} may make them difficult to effectively apply
 in regular practice. Additionally, such \BPGs{} need to be
-periodically updated to take into account latest evidence, and
+periodically updated to take into account latest evidence, and,
 adapted according to local needs of the setting they're utilized
 in \cite{DeClerqSHTI08}.
 
@@ -238,7 +238,7 @@ decision support to practitioners can be utilized \cite{DeClerqSHTI08}.
 Specifically, such systems attempt to integrate with existing patient care
 to administer support as seamlessly as possible. This may require
 either changes to existing care workflows to incorporate decision support,
-or building decision support that minimizes disruptions.
+or, building decision support that minimizes disruptions.
 Such computerized clinical decision support systems (\CDSSs{}) codify
 medical knowledge in \BPGs{} and provide practitioners with
 situation-specific advice that \say{guides} them towards adherence
@@ -267,7 +267,7 @@ to administer decision support.
 \autoref{fig:sepsis-tool-main} and \autoref{fig:sepsis-graphs-view} show an overview
 of a \CDSS{} for sepsis management.
 The \CDSS{} is intended to work as tablet at
-the patient's beside in a hospital's emergency department (ED).
+the patient's bedside in a hospital's emergency department (ED).
 \autoref{fig:sepsis-tool-main} depicts main screen that the practitioner sees on the tablet.
 The main screen consists of four panes (labeled and color coded for illustration
 purposes). Pane 1 shows a grid with the patient's vitals pulled
@@ -277,14 +277,14 @@ Red and green depict abnormality and normality respectively, while gray
 indicates missing measurements, which are assumed to be normal. As more
 measurements become available, corresponding boxes in the grid are updated
 to reflect their status. The two boxes in the top left corner depict whether
-the patient is suspected to have sepsis, and be in septic shock. The \CDSS{}
+the patient is suspected to have sepsis, and, be in septic shock. The \CDSS{}
 continually monitors these vitals to determine whether they satisfy the criteria
-for sepsis or septic shock specified in the hospitals guideline, where the
+for sepsis or septic shock specified in the hospital's guideline, where the
 guideline itself is a program in a computable medium that the practitioners
 can view and comprehend themselves. Pane 2 shows the tasks the practitioner is expected to perform
 once sepsis is detected. As these tasks are supposed to be performed within an
 hour (referred to as golden hour in sepsis treatment), the \CDSS{} tracks time
-since the first task is started by clicking the corresponding check-mark.
+since the first task is started by clicking the corresponding checkmark.
 For some complex tasks, such as fluid resuscitation and antibiotics
 administration, an auxiliary window guides the practitioner through the task. The
 example scenario shows a patient with concerning vitals despite having
@@ -367,23 +367,23 @@ programming language to enable its use in a functioning \CDSS{}.
 \paragraph{Clinical Data:}
 
 \CDSSs{} utilize clinical to assess patient state and
-generate recommendations as specified in the underlying \BPG{}. Typically this involves
+generate recommendations as specified in the underlying \BPG{}. Typically, this involves
 utilizing available data from various sources such as electronic health records,
 devices that monitor various patient vitals, and inputs from \HCPs{}.
 
 Consider the sepsis screening \BPG{} in \autoref{fig:sepsis-screening}.
-In order to screen a patient for sepsis, data and
+To screen a patient for sepsis, data and
 measurements such as the patient's age, associated high-risk conditions,
 mental status, heart rate, etc. is required. The origins
-of the data is generally very diverse. Information such
+of the data are generally very diverse. Information such
 as the patient's age, weight and associated high risk conditions
-remain static over the duration of sepsis management, and can be
+remain static over the duration of sepsis management and can be
 obtained from the patient's health records.
 On the other hand, information such as the patient's mental
 state or the condition of the patient's skin necessitates an assessment from an
 \HCP{} at the patient's bedside before it's manually entered into the system.
 Finally, for patient parameters such blood pressure or mean arterial pressure
-that change dynamically during the course of treatment, sensors or monitors
+that change dynamically during treatment, sensors or monitors
 that provide them in real-time should ideally be utilized.
 Typically, \CDSS{} must take said diversity in data sources into account
 to be effective.
@@ -400,8 +400,8 @@ The UI typically:
 
 The \UIs{} need to account for the diversity in devices used in modern
 healthcare. Interaction can occur through desktops, tablets, or even cell
-phones. The \UI{} of the our running example \CDSS{} for managing \CDSS{}
-is meant to be displayed on tablet at the patient's bedside, and is shown in
+phones. The \UI{} of our running example \CDSS{} for managing sepsis
+is meant to be displayed on tablet at the patient's bedside and is shown in
 \autoref{fig:sepsis-tool-main}.
 The displayed information is organized into distinct \say{panes}:
 Pane 1 for patient state, Pane 2 for treatment progress,
