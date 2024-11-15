@@ -119,33 +119,27 @@
 \committee{Professor Grigore Ro\c{s}u, Chair\\
         Professor Jose Meseguer \\
         Professor Lui Sha \\
-        Doctor Sedar Tasiran} % etc.
+        Doctor Serdar Tasiran, Amazon Web Services (AWS)} % etc.
 
 \begin{document}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% COPYRIGHT
+%
+%\copyrightpage
+%\blankpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TITLE
+%
 \maketitle
+
 %\raggedright
 \parindent 1em%
 
 \frontmatter
 
-
-
-%\title{A Semantics-First Approach to Safe Guidelines-based Clinical Decision Support}
-%\author{Manasvi Saxena}
-%\department{Computer Science}
-%\phdthesis
-%\degreeyear{2024}
-%\committee{
-%  Professor Grigore Ro\c{s}u, Chair \& Director of Research\\
-%  Professor Jose Meseguer \\
-%  Professor Lui Sha\\
-%  Doctor Serdar Tasiran
-%}
-%\maketitle
-%
-%\frontmatter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{abstract}
   Preventable medical errors (PMEs), characterized by misdiagnosis or mistreatment,
@@ -222,6 +216,61 @@
 
 \end{abstract}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DEDICATION (Uncomment this section if desired)
+%
+\begin{dedication}
+To my parents and my sister,
+for their love and unconditional support,
+and for always believing in me, even when challenges ensued.
+\end{dedication}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ACKNOWLEDGMENTS
+%
+\begin{acknowledgments}
+
+While my journey at the University of Illinois has been long and challenging,
+  I have been fortunate to have had the support of several wonderful people.
+
+  First, I would like to thank my advisor, Prof. Grigore Ro\c{s}u,
+  for his unwavering support and encouragement ever since I joined his research group as an undergraduate in the summer of 2014.
+
+I am also extremely grateful to Prof. Lui Sha,
+  with whom I have worked closely during the latter half of my PhD.
+  His guidance, insights, and encouragement have been invaluable.
+  I’d also like to thank him for his financial support, which enabled me to further develop my ideas.
+
+I would like to express my sincere thanks to
+  Dr. Serdar Tasiran for his mentorship during two summer internships at AWS’s S3 Automated Reasoning Group (S3-ARG),
+  where I also had the opportunity to collaborate with Dr. Ankush Desai and Dr. Dongyun Jin,
+  from whom I learned a great deal.
+  I am also thankful to Serdar for impressing upon me the importance of
+  effectively presenting ideas--a skill I have worked hard to improve based on his advice.
+
+I am grateful to Prof. Jose Meseguer for his valuable insights
+into implementing industrial-scale systems for use by non-experts in computer science.
+
+I would also like to thank Prof. Rosu, Prof. Meseguer, Prof. Sha,
+  and Dr. Tasiran for serving on my doctoral committee and for their time, expertise, and feedback.
+
+I’d like to thank my labmates,
+  both current and former, with whom I’ve had the pleasure of working with and learning from.
+  Thank you, Daejun, Yi, Owolabi, Lucas, Xiaohong, Mircea, Nishant, Shuang, and Simon.
+  A special shout-out goes to Nishant and Shuang for their companionship outside the lab,
+  and to old friends Amulya, Neelabh, Rajiv, Dhruv, Balaji, and Aditya for always keeping me in the loop,
+  even when I was too busy to respond.
+
+I would like to extend my deepest gratitude to my family,
+  both in the U.S. and in India.
+I'd like to thank my uncle, aunt, and cousins, who always made sure I had a home away from home.
+And to my parents and sister--thank you for the unconditional love, support, and unwavering belief in me, even during my moments of doubt.
+
+
+
+\end{acknowledgments}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -248,14 +297,6 @@
 %Our CDSS is Institutional Review Board (IRB) approved and is slated to undergo clinical simulations.
 %\end{abstract}
 %
-%\begin{dedication}
-%To my family
-%\end{dedication}
-%
-%\begin{acknowledgments}
-% ...
-%\end{acknowledgments}
-
 %{
 %    \hypersetup{linkcolor=black}  % disable link coloring locally
 %    \tableofcontents
@@ -307,7 +348,7 @@
 %\item[SMT]      Satisfiability Modulo Theories
 %\item[SOS]      Structural Operational Semantics
 %\end{abbrevlist}
-
+%
 %\chapter{List of Symbols}
 %
 %\begin{symbollist}[0.7in]
@@ -332,26 +373,5 @@
 
 \bibliographystyle{IEEE_ECE}
 \bibliography{references}  % Put references in BibTeX format in thesisrefs.bib.
-
-% per Graduate College preference, place the \appendix and the appendices content before the
-% bibliography (here) only if the appendices contain references.
-
-%\backmatter
-%
-%\printbibliography[heading=bibintoc,title={References}]
-%
-%% the below lines are only needed if bibliography precedes appendices
-%% uses https://tex.stackexchange.com/a/440212 to continue page numbering
-%\clearpage
-%\setcounter{counterforappendices}{\value{page}}
-%\mainmatter
-%\setcounter{page}{\value{counterforappendices}}
-
-%\appendix
-
-%\chapter{An appendix}
-
-
-% \input{Appendix.tex}
 
 \end{document}
