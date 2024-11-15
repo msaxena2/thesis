@@ -115,7 +115,7 @@ treatment has several parallel workflows such as:
   \item Administration of vital drugs such as
     epinephrine every few minutes.
 \end{itemize}
-As \autoref{fig:acls-algorithm} suggests, these workflows have to be
+As \autoref{fig:acls-algorithm} suggests, these workflows must be
 performed rapidly and periodically. As the duration of the intervention
 is typically a few minutes, making optimal use of available time is critical to
 outcomes.
@@ -143,14 +143,14 @@ confirmations regarding the patient rhythm's are provided on the screen
 through popups and progress bars. For example, when the leader instructs
 the team to start CPR, and presses the \say{Start} button under the \say{CPR}
 section of the screen. A timer displays the duration and appropriate warnings
-about prematurely stopping CPR, or exceeding the time for a \CPR{} cycle are
+about prematurely stopping CPR or exceeding the time for a \CPR{} cycle are
 displayed.
 
 In \autoref{sec:modular-cdss-architecture}, we described
 conceptual components of \CDSSs{}, and argued in favor
 of developing \CDSSs{} using independently developed and maintained codebases
 aligned with these components. The \KACLS{} system follows
-this philosophy, and has:
+this philosophy and has:
 \begin{enumerate*}[label=(\roman*)]
   \item a simple \emph{frontend} written in Javascript using React \cite{ReactJSUrl} that handles
     user interaction, and,
@@ -161,7 +161,7 @@ The use of the Javascript based frontend allows our application
 to run on any modern web-browser. As shown in figure \ref{fig:kacls-snapshot},
 our frontend consists of forms and buttons that correspond to procedures
 in the algorithm in figure \ref{fig:acls-algorithm}. For example, the
-\say{Start} button in the CPR box results in a two minute timer corresponding
+\say{Start} button in the CPR box results in a two-minute timer corresponding
 to the \say{2 minute continuous CPR} procedure in the informal description.
 The frontend is simple and doesn't contain any guideline conformance related
 logic. Interaction with the frontend simply results in dispatch of
@@ -174,13 +174,13 @@ logic. Interaction with the frontend simply results in dispatch of
 A computer-interpretable version of a guidelines, unlike its
 textual counterpart, may require specification of additional details
 for execution. Such details can often be gathered from context in case
-of textual guidelines, or may be unintentionally missing. This was also
+of textual guidelines or may be unintentionally missing. This was also
 discussed in context of related approaches in \autoref{chapter:related-work},
 especially in \autoref{sec:kiv-verification}.
 
 As discussed in \autoref{sec:generic-bpg}, \BPGs{} can be notionally
 represented using a collection of workflows. Each workflow has steps
-executed sequentially, but may be concurrently executed with steps from
+executed sequentially but may be concurrently executed with steps from
 other workflows. Consider the \ACLS{} guidelines discussed in
 \autoref{sec:acls}. Several procedures, such as administering drugs,
 and performing \CPR{} occur concurrently, where each procedure has
@@ -193,7 +193,7 @@ address that in later chapters.
 In this work, we choose to express medical logic using
 concurrently executing state machines with implicit queues for inter-machine communication.
 Communicating state machines (\CSMs{}) is a well-understood model of concurrency
-\cite{BrandJACM83}, and is well-suited for representing medical guidelines in a
+\cite{BrandJACM83} and is well-suited for representing medical guidelines in a
 computer-interpretable format that is also \HCP{}-friendly.
 We shall discuss the motivations behind using \CSMs{} in upcoming
 chapters. For now, it suffices to describe how our choice addresses
@@ -203,7 +203,7 @@ describe each workflow via a state machine. The fact that
 \CSMs{} can execute concurrently conveniently captures the
 inherent concurrency in workflows.
 
-\subsubsection{\ACLS{} Workflows As State Machines}
+\subsubsection{\ACLS{} Workflows as State Machines}
 
 \begin{figure}[tb!]
 \centering
@@ -249,7 +249,7 @@ process of details required for execution by expressing
 the \BPG{} using communicating state machines. For a functioning
 backend through, we need to translate the abstract state machines
 into an executable medium. We do this by encoding the
-state machines in a $\K$ definition. Before we describing the
+state machines in a $\K$ definition. Before we describe the
 encoding, we describe some additional challenges that we need
 to address in order to use $\K$ as a \CDSS{} backend.
 
@@ -257,7 +257,7 @@ to address in order to use $\K$ as a \CDSS{} backend.
 
 \paragraph{Asynchronous External Communication:}
 Communication with external process in \K{} is facilitated
-through the use of built-in I/O support. \K has built-in
+by built-in I/O support. \K{} has built-in
 functions for many operations that map directly to their
 POSIX counterparts \cite{KFrameworkIOUrl}. However,
 execution in $\K$ is single-threaded. Thus, to make \K{}
@@ -278,7 +278,7 @@ at the head of the \inlinek{<inputBuffer>} cell on expiration, which
 trigger corresponding transitions in state machines. For example,
 consider the CPR machine in \autoref{fig:cpr-machine}. When
 \CPR{} is started through the press of a button on the frontend,
-an external two minute timer is set, and the machine
+an external two-minute timer is set, and the machine
 transition from state \inlinek{idle} to \inlinek{lessThan2Min}.
 When the timer expires, the external timer sends a \inlinek{Timeout}
 event to the \K{}, makes the \CPR{} machine to transition from
@@ -429,7 +429,7 @@ their transition systems in $\K$.
 The \textit{CPR Machine} encodes the intended CPR procedure
 shown in figure \ref{fig:cpr-machine}. As mentioned earlier, when the user clicks
 the \say{Start} button in the CPR pane in figure \ref{fig:kacls-snapshot},
-an external two minute timer is started. If the user decides to stop CPR before
+an external two-minute timer is started. If the user decides to stop CPR before
 two minutes are up, a message is displayed to the user warning him of
 deviation from the intended guidelines. If the user stops CPR after
 two minutes, no warning message is displayed.
@@ -444,7 +444,7 @@ The rule does the following:
   \item Sends a \inlinek{startTimer} action to the frontend via the
     \inlinek{<outputBuffer>} (encoded as JSON) in
     Lines \ref{lstline:external-timer-start-begin}-\ref{lstline:external-timer-start-end},
-    which results in the start of a two minute timer in the frontend.
+    which results in the start of a two-minute timer in the frontend.
 \end{enumerate}
 Note how features of $\K$ discussed in \autoref{sec:k-framework}
 make the definition \emph{concise} yet \emph{descriptive}. Specifically:
@@ -466,8 +466,8 @@ make the definition \emph{concise} yet \emph{descriptive}. Specifically:
     depicted in $\K$ as
     \inlinekmath{($k_1$ |- $\ v_1$), ($k_2$ |- $\ v_2$), $\dots\ $, ($k_n$ |- $\
     v_n$)}. Localized rewriting enables us to only rewrite the
-    value mapped to key \inlinek{"cprRunning"} from any value to
-    to \inlinek{true}, and ignore other parts of the map using \inlinek{...}
+    value mapped to key \inlinek{"cprRunning"} from any value
+    to \inlinek{true} and ignore other parts of the map using \inlinek{...}
     notation.
 \end{itemize}
 \begin{lstlisting}[float=t,
@@ -528,7 +528,7 @@ the drug Epinephrine to the patient. The corresponding machine is shown in figur
 \ref{fig:epi-machine}. The user orders the drug using the
 \say{Order 1mg} button and can administers it using the \say{Give} button in
 Epinephrine pane in figure \ref{fig:kacls-snapshot}. Giving the drug results in the
-start of a three minute timer, during which if a new order is placed, a warning
+start of a three-minute timer, during which if a new order is placed, a warning
 is issued.
 
 \begin{lstlisting}[float=b!,
@@ -610,7 +610,7 @@ rule <machine>
 
 \subsubsection{Shock Machine}
 
-We now desribe the \textit{Shock Machine}. Intuitively, this
+We now describe the \textit{Shock Machine}. Intuitively, this
 machine ensures:
 \begin{enumerate*}[label=(\alph*)]
   \item shocks are only administered if the rhythm is shockable,
@@ -665,7 +665,7 @@ for most software developers, who are more comfortable with
 popular general purpose programming languages such as Java, C and python.
 Moreover, the $\K$ definition can become harder to comprehend as
 more complex guidelines are modeled, requiring rules that encode
-transitions where multiple steps have to be performed and complex
+transitions where multiple steps must be performed and complex
 conditions to determine when the transitions can occur.
 
 In upcoming chapters, we address shortcomings of using $\K$ directly
