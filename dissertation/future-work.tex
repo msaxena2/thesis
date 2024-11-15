@@ -22,7 +22,7 @@ $\Gamma^L$. A symbol $\snext \in \Sigma$ is then defined as a part of the
 signature to capture dynamic behavior of rewrite rules.
 Intuitively, given a configuration
 pattern $\gamma$, the pattern $\snext \gamma$ matches all possible
-configurations that $\gamma$ can rewrite to in one-step. Thus
+configurations that $\gamma$ can rewrite to in one-step. Thus,
 the one-step rewrite relation can be defined as:
 $$
   \varphi \To^1 \psi \equiv \varphi \to \snext \psi
@@ -63,7 +63,7 @@ $\ToAbs$ is monotonic w.r.t. the ordering $\sqsubseteq$.
 Next, we need to relate the concrete transition system $\To$ to $\ToAbs$.
 Typically, this is done by defining a homomorphism $\beta: \Concrete \to \Abstract$
 from the set of concrete values $\Concrete$ to the set of abstract values
-$\Abstract$. We can then utilize $\beta$ to define a complete lattice
+$\Abstract$. We can then utilize $\beta$ to define a complete lattice over
 configuration terms. Recall from \autoref{sec:configuration} that
 $\MediK{}$'s configuration comprises of an \inlinek{<store>}-cell that
 stores map $\rho$ of pointer-value bindings.
@@ -114,10 +114,10 @@ $\K$ has multiple backends, including a fast execution LLVM backend
 that can only handle \emph{ground} patterns, i.e. patterns with logical
 variables, and a haskell backend that can handle ML patterns in their
 full generality \cite{KFrameworkBackendsUrl}. Symbolic execution requires the use of $\K$'s haskell
-backend, which presented signficant performance related challenges when
+backend, which presented significant performance related challenges when
 handling $\MediK{}$ programs as large as the pediatric sepsis management
 guidelines presented in our work. Our abstraction-based model checking was in part motivated by
-said performance issues. We leave moving to symbolic execution based
+said performance issues. We leave moving to symbolic execution-based
 program analysis as part of future work.
 
 \section{Semantics Based Visual Representation Generation}\label{subsec:visual-representation-generation}
@@ -227,7 +227,7 @@ $\text{output} = \llbracket p \rrbracket\left[\text{in}_1,\text{in}_2\right]$
 if $p$ terminates.
 We can now express partial evaluation of program p, using another
 program $\mix$, called so since performs a mix of both execution and code
-generation. Now, we get a two stage execution process:
+generation. Now, we get a two-stage execution process:
 $$ p_{\text{in}_1} = \llbracket \mix \rrbracket [p, \text{in}_1]$$
 $$ \text{output} = \llbracket p_{\text{in}_1} \rrbracket \text{in}_2$$
 %  $$\llbracket \llbracket \mix \rrbracket \left[p, \text{in}_1\right] \rrbracket
@@ -254,7 +254,7 @@ by \emph{merging} multiple rules that take smaller steps into
 one rule that \emph{summarizes} all of them. This is similar
 to the translation from \SOS{} to abstract machine presented in
 \cite{KoppelICFP22}. In the future, we plan to generate such
-\emph{summaries} soundly, and utilize them to generate visualizations
+\emph{summaries} soundly and utilize them to generate visualizations
 of \MediK{} programs. Note, that both $\K$ Summarizer and the work
 in \cite{KoppelICFP22} have been tried in \emph{deterministic} settings,
 and we anticipate additional challenges in translating it to concurrent
