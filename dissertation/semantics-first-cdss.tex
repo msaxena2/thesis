@@ -37,14 +37,15 @@ we discussed how existing approaches have attempted to
 address said challenges, and their limitations. Specifically,
 in \autoref{sec:related-work-discussion}, we outlined major
 themes that these approaches adopt to tackle these challenges.
-This is further illustrated by the pyramid diagram in \autoref{fig:existing-work-pyramid}, where aforementioned themes are
-underlined in the pyramid's various rungs.
+This is further illustrated by the pyramid diagram in
+\autoref{fig:existing-work-pyramid}, with \emph{solution themes}
+making up the pyramid's various rungs.
 As is typical, approaches that appear in higher rungs also
 have characteristics of ones below them. For example, while guidelines expressed in
 the Arden Syntax eliminate the specification-implementation gap by being
 both \HCP{}-comprehensible and interpretable, they cannot be formally analyzed
 due to lack of analysis tools in the ecosystem. Asbru-based guidelines
-on the other hand not only eliminate the specification-implementation gap, but can also be
+on the other hand not only eliminate the specification-implementation gap but can also be
 formally analyzed using support for KIV-based verification in the Asbru
 ecosystem (see \autoref{sec:kiv-verification}).
 
@@ -117,7 +118,7 @@ disadvantages:
     in mainstream web browsers behaved differently from each other
     for certain complex JavaScript programs.
   \item As newer versions of a language are introduced, each
-    tool for the language has to be updated to ensure support for the latest
+    tool for the language must be updated to ensure support for the latest
     version. This again results in duplicated work.
 \end{itemize}
 \begin{figure}[t!]
@@ -130,7 +131,7 @@ disadvantages:
 
 In section \ref{sec:semantics-first}, we described benefits
 of using the semantics-first approach for developing regular programming
-language. But, these differences become starker when semantics-first
+language. But these differences become starker when semantics-first
 is compared against the conventional approach shown in \autoref{fig:conventional-pl-development} in context of domain-specific language for
 expressing medical guidelines. Specifically, as such a language will be utilized
 in safety-critical settings, it is vital that the language:
@@ -140,7 +141,7 @@ in safety-critical settings, it is vital that the language:
     This is necessary to ensure that
     tools are free of behavioral inconsistencies due to ambiguities in the
     semantics.
-  \item Is supported by a rich formal analysis tools that can
+  \item Is supported by a rich ecosystem of formal analysis tools that can
     be used to analyze programs.
     Implementing such tools from scratch would require significant effort.
   \item Can evolve quick to incorporate
@@ -169,22 +170,21 @@ Javascript \cite{ParkPLDI15}, and analyze non-trivial programs
 The remainder of this section introduces relevant features of
 $\K{}$ by describing the $\K{}$ semantics of an example language called
 Imp. This introduction to $\K{}$ provides necessary background
-for upcoming chapters that discuss the $\MediK{}$ \DSL{} through the
-use of $\K{}$ notation and concepts.
+for upcoming chapters that discuss the $\MediK{}$ \DSL{} using $\K{}$ notation and concepts.
 
 \subsection{Defining Languages in $\K$}\label{sec:semantics-in-k}
 
 A typical $\K$ definition of a language consists of the following components:
 \begin{itemize}
-  \item Syntax: Defined in \BNF{}-like notation, and utilized by $\K$
+  \item Syntax: Defined in \BNF{}-like notation and utilized by $\K$
     to generate a parser for the language.
   \item Configuration: Organizes the program execution state
     into units called \emph{cells} that may be nested.
   \item Rules: Operate over configuration segments and define program
     evolution via rewrites.
 \end{itemize}
-We now discuss aforementioned components in the context of the Imp
-language. Imp is a simple imperative programming language
+We now explain these components using an example language called
+Imp. Imp is a simple imperative programming language
 inspired by C and Java that supports arithmetic and boolean expressions and
 statements such as variable declaration and assignment, branching (\inlinek{if})
 and looping (\inlinek{while}).
@@ -192,7 +192,7 @@ and looping (\inlinek{while}).
 \autoref{lst:imp-syntax} and \autoref{lst:imp-semantics},
 define syntax and semantics of Imp respectively.
 $\K{}$ code must be place inside an organizational unit called a
-\inlinek{module} that has a name, and can import other \inlinek{module}(s).
+\inlinek{module} that has a name and can import other \inlinek{module}(s).
 For example, \inlinek{module IMP-SYNTAX ... endmodule}
 between \autoref{lstline:imp-module-start} and
 \autoref{lstline:imp-module-end} of \autoref{lst:imp-syntax} defines
@@ -263,7 +263,7 @@ To enforce a particular order, or, to choose a subset of the operands, a
 list of operand positions specifying the desired order can be supplied to
 \inlinek{strict}. For example, \inlinek{strict(2, 1)} would make $\K$
 evaluate the second argument before the first. This is particularly
-useful for defining constructs like short-curcuit (\inlineimp{&&}) boolean
+useful for defining constructs like short-circuit (\inlineimp{&&}) boolean
 expression on \autoref{lstline:imp-bexp-and}, where \inlinek{strict(1)}
 ensures that the left operand is evaluated first, allowing the right to only
 be evaluated if the left evaluates to \inlinek{true}.
@@ -284,7 +284,7 @@ while loop have higher precedence, indicated by \inlinek{>} on \autoref{lstline:
 
 On \autoref{lstline:imp-pgm}, an Imp program is defined to start with a list of program variable
 declarations (\inlinek{"int" Ids ";"}) followed by other statements. Note the
-definition of a list of identifier (\inlinek{Ids}) on \autoref{lstline:imp-ids}. In $\K{}$,
+definition of a list of identifiers (\inlinek{Ids}) on \autoref{lstline:imp-ids}. In $\K{}$,
 \inlinek{List\{...\}} is used to define syntactic-lists, where the first
 argument is the production of list elements, and the second the list de-limiter.
 Thus, \inlinek{List\{Id, ","\}} defines a comma-separated list of program identifiers.
@@ -300,10 +300,10 @@ The $\K$ semantics of any language has two components:
   \item A \emph{Configuration} that organizes the state
     into units called \emph{cells}, that may be nested.
   \item \emph{Rules} that operate over \emph{configuration}-segments
-    to desribe evolution of state during execution.
+    to describe evolution of state during execution.
 \end{itemize}
-For Imp, \autoref{lst:imp-semantics} has aforementioned
-components inside \inlinek{module IMP}.
+For Imp, \autoref{lst:imp-semantics} has these
+components under \inlinek{module IMP}.
 Note that the syntax and semantics exist in separate modules,
 where the semantics module \inlinek{imports}
 the syntax module. This is by convention, and
@@ -316,7 +316,7 @@ has the following advantages:
     This allows users to define additional syntactic constructs in the semantics module
     for use in rules. If a combined syntax and semantics module is used instead,
     any constructs defined solely for use in rules
-    would unintentionally become part of the language's syntax,
+    would unintentionally become part of the language's syntax
     and be accepted by the parser.
 \end{enumerate}
 
@@ -405,7 +405,7 @@ enhancing readability and making them easier to write. For example,
 consider the rule for addition on \autoref{lstline:imp-add-rule}.
 Simply put, the rule specifies that if the term at the top of the \inlinek{<k>}
 cell is an addition expression, then it should be \emph{rewritten} to
-addition in the integer domain \inlinek{+Int}. But, even though the
+addition in the integer domain \inlinek{+Int}. But even though the
 rule is intended to simplify the top of the \inlinek{<k>} cell,
 no cells are explicitly mentioned. This is because:
 \begin{itemize}
@@ -459,7 +459,7 @@ list of program identifiers, and \inlinek{.Map} is the map identity
 from the initial configuration declaration on \autoref{lstline:imp-pgm-state}.
 Now the rule for variable declaration on
 Lines \ref{lstline:imp-vardec-rule-begin}-\ref{lstline:imp-vardec-rule-end}
-can match with substition \inlinekmath{(X $\ \mapsto\ $ x, Xs\ $ \mapsto\ $ .Ids,
+can match with substitution \inlinekmath{(X $\ \mapsto\ $ x, Xs\ $ \mapsto\ $ .Ids,
 Rho $\ \mapsto\ $.Map)}
 to rewrite the configuration to:
 \begin{lstlisting}[language=k,style=ksty,frame=single]
@@ -472,7 +472,7 @@ Note the following conveniences that \K{} offers to make writing rules easier:
 \begin{enumerate}[label=\roman*)]
   \item The use of parenthesis limits scope of the rewrite to the
     list of program identifiers. Localized rewriting reduces redundancy
-    as only relevant parts of a term have to be mentioned on the \RHS{} of the
+    as only relevant parts of a term must be mentioned on the \RHS{} of the
     rule.
   \item The underscore \inlinek{_} following \inlinek{int (X, Xs => Xs);}
     on Lines \ref{lstline:imp-vardec-rule-begin}-\ref{lstline:imp-vardec-rule-end}
@@ -511,7 +511,7 @@ Next, consider the assignment rule on \autoref{lstline:imp-assgn-rule} of
 with sorts \inlinek{Id} and \inlinek{Int} respectively. Since the \inlinek{<k>}
 cell in our running example has \inlinek{x = 2 + 3;}, we expect the assignment
 rule to apply at some point and update the \inlinek{<state>} accordingly.
-But, the rule cannot apply as the \RHS{} of the assignment, i.e., the expression
+But the rule cannot apply as the \RHS{} of the assignment, i.e., the expression
 \inlinek{2 + 3}, is not of sort \inlinek{Int}, which needs to be evaluated
 first. This in \K{} is enabled by evaluation strategies.
 Recall that the attribute assignment statement has the attribute
@@ -561,9 +561,8 @@ to only contain relevant rules assigning semantics to various constructs.
 Also note the use of \inlinek{...} in the assignment rule. In $\K{}$,
 the \inlinek{...} is used to refer to parts of the term
 not relevant to the rule. For instance, in the \inlinek{<state>}
-cell, it signifies that there may be other other identifier-value
-pairs in the map, but we are only concerned with the
-the binding that has the program identifier on the \LHS{} of
+cell, it signifies that there may be other identifier-value
+pairs in the map, but we are only concerned with the binding that has the program identifier on the \LHS{} of
 the rule. Similarly, the \inlinek{...} after the assignment statement
 in the \inlinek{<k>} cell signifies that there may be other statements
 to evaluate, but they are irrelevant to the assignment rule.
@@ -615,18 +614,18 @@ rewrite the assignment \inlinek{x = 5;} to nothing (denoted by
 
 We had earlier mentioned that, in \K{},
 any rule that doesn't mention
-a cell by default, is explicity assumed to operate on top
+a cell by default, is explicitly assumed to operate on top
 of the \inlinek{<k>} cell. We can now explain this in greater
 detail. Essentially, \K{} considers any rule $\varphi \To \psi$
 where $\varphi$, $\psi$ don't mention any cells equivalent
 \inlinekmath{<k> ($\varphi \To \psi$) ... </k>}.
 This both simplifies the process of specifying semantics in \K{}, and,
 greatly improves readability of \K{} definition. Moreover, the
-ability to use strictness atributes further reduces the
+ability to use strictness attributes further reduces the
 need to write rules to specify evaluation strategies, enabling
 the semantics to serve as language specifications that are both
 concise and mathematically precise. This is demonstrated well
-by the example Imp defintion as:
+by the example Imp definition as:
 \begin{itemize}
   \item Only the rules for variable lookup (\autoref{lstline:imp-lookup-rule}),
     variable declaration (Lines
@@ -634,7 +633,7 @@ by the example Imp defintion as:
     variable assignment (\autoref{lstline:imp-assgn-rule}) explicitly
     mention cells. All other rules use terms \emph{only involving} constructs
     whose semantics they define. For instance, the semantics of
-    short curcuit boolean and (\inlinek{&&}) is concisely captured
+    short circuit boolean and (\inlinek{&&}) is concisely captured
     by two rules depicting:
     \begin{enumerate*}[label=(\alph*)]
       \item the need to evaluate the second argument
@@ -678,7 +677,7 @@ describe in this section. We only present concepts that are
 relevant to this proposal, and direct the reader to \cite{RosuLMCS17,ChenLICS19}
 for a more thorough introduction to ML.
 
-Traditionally, program verification approraches have
+Traditionally, program verification approaches have
 relied on an axiomatic semantics for deduction, i.e., a proof system with
 \emph{language-specific} proof rules, such as Hoare logic \cite{HoareACM69}.
 In $\K$ however, the semantics are defined in an operational style, as
@@ -772,12 +771,12 @@ ML's proof system utilizing $\Gamma$ as additional axioms. This
 provability relation is \emph{sound}, i.e., $\Gamma \vdash \varphi \implies \Gamma
 \vDash \varphi$.
 
-Next, we give an intuive description of the semantics of ML.
+Next, we give an intuitive description of the semantics of ML.
 Given signature $\MLSigma$, a $\Sigma$-model
 $\mathbb{M} = \left(M,\_.\_,\left\{M_{\sigma}\right\}_{\sigma \in \Sigma}\right)$,
 $\MLSigma$-patterns evaluate to sets of elements in $M$ that \emph{match} them.
 For instance, variable $x \in \EV$ evaluates to a \emph{singleton}
-containing \emph{element}, while $X \in \SV$ evalutes to some subset of $M$. $\bot$
+containing \emph{element}, while $X \in \SV$ evaluates to some subset of $M$. $\bot$
 evaluates to the $\emptyset$.
 $\varphi_1 \imp \varphi_2$ is matched by all elements that match $\varphi_2$
 if they also match $\varphi_1$. $\exists x \ld \varphi$ allows abstracting
@@ -786,7 +785,7 @@ away irrelevant parts (i.e. $x$) of the pattern $\varphi$. $\varphi_1\
 i.e. $\varphi_1$, to its arguments, i.e. $\varphi_2$. $\mu X \ld \varphi$
 evaluates to the \emph{smallest} set $X$ s.t. $\varphi$ evaluates to $X$.
 Other patterns such as $\neg \varphi$, $\varphi_1 \vee \varphi_2$ can all be
-derived from the basic ones mentioned above, and have expected semantics.
+derived from the basic ones mentioned above and have expected semantics.
 For instance, $\neg \varphi$ matches everything \emph{not} matched by
 $\varphi$. $\varphi_1 \vee \varphi_2$ matches everything that either
 $\varphi_1$ or $\varphi_2$ matches. We refer the reader to \cite{ChenTR20}
@@ -800,18 +799,18 @@ Note that this compilation involves generation of additional axioms
 to capture $\K{}$ concepts such as definedness, order-sortedness, etc.
 For an in-depth discussion, see \cite{ChenTR19}.
 The key idea behind ML is that it is simple, yet expressive to
-formally capture capture the semantics of a $\K$ definition.
+formally capture the semantics of a $\K$ definition.
 Element variables can be used to \emph{abstract} away parts of terms through
 existential quantification ($\exists$).
 Set variables range over sets and behave as modal logic propositional variables be
 by fixed-point quantification $\mu$. Symbols can represent functions,
 constructors and modal operators in a uniform way. Together with
 application ($\varphi_1 \varphi_2$), symbols can construct complex patterns
-from a simple signature. For example a symbol $f$ applied to
+from a simple signature. For example, a symbol $f$ applied to
 arguments $a_1,a_2,\dots$ (see \cite{ChenLICS19} for encoding tuples as
-patterns) can behave as a function. Similarly a symbol \inlinek{<k>}
+patterns) can behave as a function. Similarly, a symbol \inlinek{<k>}
 can be used to construct \inlinek{Configuration} terms.
-Recall from section \ref{sec:semantics-first} that a $\K$-defintion
+Recall from section \ref{sec:semantics-first} that a $\K$-definition
 consists of rewrite rules of the form $\varphi \To \psi$. These rules
  define a \emph{transition system} over computation configurations.
 This is captured in ML by adding a symbol $\snext \in \Sigma$, called
@@ -833,7 +832,7 @@ $\varphi_{\text{final}}$ is showing $\Gamma^{L} \vdash \varphi_{\text{init}} \To
 
 \section{Pitfalls of the Semantics-First Approach}\label{sec:semantics-first-pitfalls}
 
-In section \autoref{sec:semantics-first}, we outlined advantages of the
+In \autoref{sec:semantics-first}, we outlined advantages of the
 semantics-fist approach.
 In this section, we outline potential pitfalls of the
 approach, applicable specifically in context of clinical decision support
@@ -846,7 +845,7 @@ $\K$ has been used to define several large real-world languages such as C
 \cite{ParkPLDI15}. However, all these languages, had existing
 highly optimized language-specific compilers and interpreters
 for optimal performance, such as GCC \cite{GCCUrl}, OpenJDK's compiler and java
-virtual machine for Java, and javascript engines such as the V8 engine
+virtual machine for Java, and Javascript engines such as the V8 engine
 \cite{V8Url} that runs Chrome and Node, and firefox's SpiderMonkey
 \cite{SpiderMonkeyUrl}. Thus, even though $\K$-derived tools helped
 discover issues with either the language semantics or documentation,
@@ -877,7 +876,7 @@ such languages involves:
 \end{enumerate}
 
 Unlike existing $\K$-semantics,
-in our case, we intend to implement the language from scratch,
+in our case, we intend to implement the language from scratch
 and come up with reference tests for it at the same time,
 where both the definition and the corresponding tests
 need to be comprehensive enough to enable independent development
