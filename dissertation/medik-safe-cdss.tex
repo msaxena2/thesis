@@ -10,7 +10,7 @@ Next, we described the process of
 expressing state machines as \K{} definition, where \K{} features
 such as configuration abstraction and local rewriting
 enable \emph{conciseness}. We then combined the \K{} definition
-with a simple javascript-based frontend to develop a \CDSS{}
+with a simple Javascript-based frontend to develop a \CDSS{}
 for assisting healthcare practitioners (\HCPs{}) follow the
 Advanced Cardiac Life Support (\ACLS{}) guidelines for managing
 cardiac arrest published by the American Heart Association.
@@ -49,16 +49,16 @@ best of our knowledge, is the first such system with formal safety
 guarantees.
 
 The rest of this chapter is organized as follows. In \autoref{sec:sepsis-bpg}
-we recall the example \BPG{} from section \autoref{sec:bpg-background}
+we recall the example \BPG{} from \autoref{sec:bpg-background}
 for management of sepsis, to illustrate common requirements
 that \DSL{} for modeling \BPGs{} should satisfy.
-In \autoref{sec:medik}, we introduce the \MediK{} \DSL{}, and illustrate how
+In \autoref{sec:medik}, we introduce the \MediK{} \DSL{} and illustrate how
 it has been specifically designed to address said requirements.
 In \autoref{sec:medik-psepsis}, we evaluate the effectiveness of our approach
 by utilizing it to build a \CDSSs{} intended for real-world use.
-In section \autoref{sec:discussion}, we discuss how \MediK{} builds on
+In \autoref{sec:discussion}, we discuss how \MediK{} builds on
 existing approaches in \autoref{chapter:related-work} to advance the
-tate-of-art in addressing challenges from \autoref{chapter:hurdles-cdss-adoption}.
+state-of-art in addressing challenges from \autoref{chapter:hurdles-cdss-adoption}.
 
 \section{Pediatric Sepsis Management \BPG{}}\label{sec:sepsis-bpg}
 
@@ -66,7 +66,7 @@ In \autoref{sec:bpg-background}, we presented a best practice
 guideline for management of sepsis in pediatric cases.
 We briefly describe the guidelines here. Recall that
 sepsis is life-threatening condition caused by the body's extreme response to
-an infection, and is a major cause of morbidity and mortality
+an infection and is a major cause of morbidity and mortality
 in children. Evidence indicates that timely
 identification and prompt treatment with antibiotics and
 intravenous (IV) fluids is \emph{vital} for avoiding
@@ -78,7 +78,7 @@ which we recall here. Specifically, \BPGs{}:
   \item Involve \stress{concurrent} workflows, such as administering drugs,
     monitoring vitals, performing treatment, etc. There may also be
     inter-workflow interactions. For instance, a diagnosis of sepsis during the
-    screening may require modifications to an ongoing course antibitiotics.
+    screening may require modifications to an ongoing course antibiotics.
   \item Often specified in a \stress{flowchart-like}
     notation. See \cite{AHAFlowcharts} and \cite{CancerCareFlowcharts} for other flowchart-based \BPGs{} for management of \emph{cardiac arrest}, and
     screening, risk-reduction, treatment and survivorship in
@@ -86,7 +86,7 @@ which we recall here. Specifically, \BPGs{}:
   \item Require communication between \stress{heterogeneous agents} such as
      monitors and Electronic Health Records (EHRs).
   \item Often use \stress{tables} indexed by parameters such as age, weight,
-    etc to present normal/abnormal ranges for measurements, or recommended dosages for drugs.
+    etc. to present normal/abnormal ranges for measurements, or recommended dosages for drugs.
 \end{itemize}
 %While section
 %\autoref{sec:bpg-background} briefly discussed some sepsis workflows, here
@@ -218,7 +218,7 @@ Thus, it has:
     need to be changed an all tools evolve automatically.
 \end{itemize}
 
-The remainder of this section introduces the \MediK{} \DSL{}, and describes how it's
+The remainder of this section introduces the \MediK{} \DSL{} and describes how it's
 designed to accommodate characteristics of \BPGs{} discussed in
 \autoref{sec:bpg-background}.
 
@@ -231,7 +231,7 @@ among which is the fact that \HCPs{} are typically not trained to understand
 conventionally programming languages. Thus, \HCPs{} need to work collaboratively
 to translate the \BPG{} into a computable medium.
 In essence, the \BPG{} serves as a functional
-specification for implementing the \CDSS{}. But, this may lead to
+specification for implementing the \CDSS{}. But this may lead to
 a gap in the \HCPs{}' understanding of the system, and the actual
 behavior.
 To address this, we designed \MediK{}
@@ -258,7 +258,7 @@ edges are represented as state transitions. During execution,
 instances of these machines are created, which interact with each other by
 passing events. Note the distinction between
 machine and its instance. A machine
-is analogous to an Object Oriented Programming (OOP) class, whereas
+is analogous to an Object-Oriented Programming (OOP) class, whereas
 its instance is analogous to an OOP object.
 
 
@@ -469,7 +469,7 @@ a machine definition consists of:
     state has a name, an optional entry block (Lines
     \ref{lstline:entry-block-start}-\ref{lstline:entry-block-end}),
     and a set of event handlers (Lines \ref{lstline:handler-block-start}-\ref{lstline:handler-block-end}).
-    The entry block begins with the keyword \inlinemedik{entry}, and may contain a list of variables
+    The entry block begins with the keyword \inlinemedik{entry} and may contain a list of variables
     that are bound to values when an instance enters the state during execution.
     One state in the machine may be prefixed with \inlinemedik{init}, specifying the
     initial state that an instance starts execution in.
@@ -535,7 +535,7 @@ are written over expressions given by the syntax in
 Recall from \autoref{sec:semantics-in-k}, in $\K$, productions
 are defined using the keyword \inlinek{syntax}, where
 terminals are enclosed in quotes (\inlinek{""}), and non-terminals
-begin with an upppercase character.
+begin with an uppercase character.
 
 \MediK{} uses statement over expressions resemble counterparts in many commonly
 used programming languages. For instance, Lines
@@ -637,7 +637,7 @@ and will be explained in upcoming sections.
 Next, we use the $\K$ definition to describe $\MediK{}'s$ semantics.
 Recall the semantics in \K{} has two components:
 \begin{enumerate}[label=(\arabic*)]
-  \item Description of program state expressed as a configurations.
+  \item Description of program state expressed as a configuration.
   \item Rewrite rules over configuration segments that define the program's
     transition system.
 \end{enumerate}
@@ -660,7 +660,7 @@ semantics.
 
 Recall that the keyword \inlinek{configuration}
 (\autoref{lstline:instances-cell-begin}) defines a $\K{}$-configuration,
-followed by xml-like notation for the $\K$-cells. For example \inlinek{<foo> ... </foo>}
+followed by xml-like notation for the $\K$-cells. For example, \inlinek{<foo> ... </foo>}
 corresponds to a $\K$-cell with the name \inlinek{foo}.
 
 A \MediK{} program consists of instances of concurrently executing state machines
@@ -704,7 +704,7 @@ relevant to a state, such as the entry block in cell
 \inlinek{<entryBlock>} (\autoref{lstline:entry-block}) and event handlers in cell
 \inlinek{<eventHandlers>} (Lines \ref{lstline:event-handler-begin}-\ref{lstline:event-handler-end}).
 Similarly, an \inlinek{<interface>} cell holds information regarding interface definitions.
-In $\MediK$, interfaces facilitate communication with the external world, and will be discussed
+In $\MediK$, interfaces facilitate communication with the external world and will be discussed
 in upcoming sections.
 
 Recall that on execution, $\K{}$ replaces \inlinek{\$PGM} (\autoref{lstline:start-cell})
@@ -724,7 +724,7 @@ is defined (using rewrite rules) to recursively traverse the program AST
 translate each \inlinemedik{machine} in the \MediK{} program to a
 corresponding \inlinek{<machine> ... </machine>} sub-configuration.
 Next, the \inlinek{createInitInstances} creates an instance for the machine
-with the \inlinek{init} keyword, and schedules its \inlinemedik{entry} block
+with the \inlinek{init} keyword and schedules its \inlinemedik{entry} block
 for execution. Recall that \inlinek{\~>} symbol (\autoref{lstline:start-cell})
 is interpreted by $\K$ as \say{followed-by}, i.e., execution of \inlinek{populateCells}
 is followed by execution of \inlinek{createInitInstances}. During execution,
@@ -738,7 +738,8 @@ Interface definitions will be discussed in detail in upcoming sections.
 Also note cells \inlinek{<executorAvailable>}, \inlinek{<epoch>}, \inlinek{<stuck>}
 and \inlinek{<shouldAdvanceEpoch>}
 (Lines \ref{lstline:scheduling-cell-begin}-\ref{lstline:scheduling-cell-end}).
-These cells are utilized in implementing the scheduling strategy \MediK{} uses, and will be
+These cells are utilized in implementing the scheduling strategy \MediK{} uses
+that shall be
 discussed in subsequent sections.
 
 \section{Rules}\label{sec:rules}
@@ -755,7 +756,7 @@ obtained by replacing each variable $v$ in $\phi$ with $\theta(v)$.
 During execution, if the current configuration $C$, i.e. program execution state,
 matches $\phi$ with substitution $\theta$, then it is rewritten to
 $\psi\theta$. We say pattern $\phi$ matches configuration $C$ iff
-there exists a substition $\theta$ s.t. $C = \phi\theta$.
+there exists a substitution $\theta$ s.t. $C = \phi\theta$.
 For example, consider the rule in \autoref{lst:variable-assignment} for updating the value of a local program variable.
 \begin{lstlisting}[
   float=h
@@ -774,7 +775,7 @@ while program variables are simply identifiers, $\K$-variables have logical mean
 The \inlinek{...} is used to denote parts of the configuration
 not relevant to the rule.
 Typically, the top of the \inlinek{<k>} cell contains the statement currently
-being executed. Suppose we're executing the statment \inlinek{i = 2;}. In this
+being executed. Suppose we're executing the statement \inlinek{i = 2;}. In this
 case, the current configuration will have a \inlinek{<k>} cell of the form
 \inlinek{<k> i = 2 ... </k>}, an environment cell \inlinek{env} where variable
 \inlinek{i} maps to some pointer $pt$, and cell
@@ -823,9 +824,9 @@ rule <id> SourceId </id>
 
 Next, we explain several features of \MediK{} relevant to
 defining \BPGs{} using their corresponding $\K$-rules. Note that
-we only discuss rules related to idiosyntacries of \MediK{}. Other
+we only discuss rules related to idiosyncrasies of \MediK{}. Other
 rules, that implement statement that resemble other definitions
-are omittted for brevity. For instance, the rules for
+are omitted for brevity. For instance, the rules for
 Arithmetic Expressions and boolean expressions, that
 resemble counterparts in other languages are ignored.
 
@@ -835,7 +836,7 @@ and instances created using keyword \inlinemedik{new} behave
 as objects. The rule in \autoref{lst:new-rule} depicts
 the semantics of the \inlinemedik{new} operator. The
 rule will match any \inlinek{<k>} cell that has \inlinek{new}
-at the top of the cell, and rewrite it to a temporary \inlinek{wait} construct (\autoref{lstline:source-k-cell}).
+at the top of the cell and rewrite it to a temporary \inlinek{wait} construct (\autoref{lstline:source-k-cell}).
 Note that the same \K{} variable, \inlinek{MName}, is used at the following places in the rule's \LHS{}:
 \begin{itemize}
   \item On \autoref{lstline:source-k-cell} to match against the name of the machine whose instance is being created.
@@ -867,7 +868,7 @@ with most OOP languages where an object is considered instantiated and ready
 for use only after all relevant constructors have been executed.
 While \MediK{} machines
 do not have direct analogues to OOP constructors, we treat the \inlinek{entry}
-blocks of intial states as such, and typically place code commonly found
+blocks of initial states as such, and typically place code commonly found
 in constructors, such as initialization of instance variables, under them.
 Upcoming sections shall discuss \MediK{}'s scheduling semantics, and
 our motivations behind them in greater depth.
@@ -929,8 +930,8 @@ When an instance the top of the \inlinek{<k>} cell has
     buffer of incoming events of the instance
     with \inlinek{id} \inlinek{RecvId} (Lines
     \ref{lstline:instance-b-begin}-\ref{lstline:instance-b-end}).
-  \item The \epoch{} decides when the machine can run, and is discussed in
-    Section \ref{sec:scheduling-semantics}.
+  \item The \epoch{} decides when the machine can run and is discussed in
+    \autoref{sec:scheduling-semantics}.
 \end{enumerate}
 
 While the \inlinemedik{send} construct enables communication between pairs of
@@ -1000,8 +1001,7 @@ machine TreatmentMachine { ...
 \end{lstlisting}
 
 We achieve this by treating all external agents as state machines
-with transition systems defined outside the \MediK{} program, similar
-to other languages, such as Object-Oriented Maude, \cite{OOPMaudeUrl}.
+with transition systems defined outside the \MediK{} program, like other languages, such as Object-Oriented Maude, \cite{OOPMaudeUrl}.
 These external agents are modeled in \MediK{} as \inlinemedik{interface}s.
 We define an interface as a state machine that has its
 transition system defined externally.
@@ -1015,7 +1015,7 @@ Next, instead of using \inlinemedik{new} to create an instance, we use
 a builtin \MediK{} construct \inlinemedik{createFromInterface}, which takes as
 arguments
 \begin{enumerate*}[label=(\alph*)]
-  \item the inteface name
+  \item the interface name
   \item a unique identifier string used to identify the
     instance outside the \MediK{} process \autoref{lstline:sensor-creation}.
 \end{enumerate*}
@@ -1035,8 +1035,8 @@ this involves reading from an external heart rate sensor and sending the data ba
 a pre-specified format that also contains the unique transaction id of the request
 needs to be written to the \emph{write-end} of the input pipe. Note that the \inlinemedik{obtainFrom}
 construct implements a \emph{request-response} mechanism, where a request initiated from \MediK{} is
-responded to by an external agent. But, external agents can also initiate communicate
-using the \inlinemedik{broacast} construct described in \autoref{sec:messaging}.
+responded to by an external agent. But external agents can also initiate communicate
+using the \inlinemedik{broadcast} construct described in \autoref{sec:messaging}.
 
 \subsection{Tables}\label{sec:tables}
 
@@ -1073,8 +1073,8 @@ to improve overall readability and \HCP{} comprehensibility, as \HCPs{} are
 already familiar with them from paper-based guidelines.
 If the heart rate lies any of the intervals (closed on the left, open on the right) on
 Lines \ref{lstline:interval-begin}-\ref{lstline:interval-end}, the
-corresponding statement to the right of the colon (\inlinemedik{:}) is run. Otherwise
-the default clause (\autoref{lstline:default-clause}) is run.
+corresponding statement to the right of the colon (\inlinemedik{:}) is run.
+Otherwise, the default clause (\autoref{lstline:default-clause}) is run.
 We can then define the semantics of tables in terms of \inlinemedik{if-else} as shown in \autoref{lst:table-rules}.
 \begin{lstlisting}[
   float=hb
@@ -1126,7 +1126,7 @@ Since the $\K{}$-generated interpreter is single-threaded,
 \MediK{} employs interleaving-semantics
 for concurrency, using a single \inlinemedik{executor} thread shared
 between machine instances. A machine instance that is either at the start of
-an entry block, or has an event in the input buffer that it can handle is
+an entry block or has an event in the input buffer that it can handle is
 said to be \emph{enabled}, i.e. one that can run once the \inlinemedik{executor}
 becomes available. Recall from \autoref{sec:k-rules} that if multiple
 $\K$ rules can match the current configuration, then for execution,
@@ -1205,7 +1205,7 @@ of the \emph{initial machine} $\Instance_{\Machine_0,0}$ becomes scheduled (\aut
 On \autoref{algline:choose}, an instance $\Instance_{\Machine_{i},j}^{\tau}$ is
 non-deterministically chosen from all machines that are both scheduled to run when
 $\tau \leq \epoch{}$ and \textit{enabled}. We use
-$\textit{execute}(\Instance_{\Machine_{i},j}^{\tau}, \scheduled{})$ on Line \autoref{algline:execute}
+$\textit{execute}(\Instance_{\Machine_{i},j}^{\tau}, \scheduled{})$ on \autoref{algline:execute}
 to denote this execution process. Execution of the entry or event handler block is atomic,
 i.e., a context-switch can only occur at the end of the block. Note that when
 a new instance of a machine is created using the keyword \inlinemedik{new}, the
@@ -1219,8 +1219,8 @@ During execution, if an instance $\Instance_{\Machine_i,j}$ sends an event
 to another instance $\Instance_{\Machine_{i'},j'}$, then
 the event is scheduled to be handled by $\Instance_{\Machine_{i'},j'}$ in or
 after the next epoch, i.e., $\scheduled{} \gets \scheduled{} \cup
-\{\Instance_{\Machine_{i'}, j'}^{\epoch{}+1}\}$. Similary, if a \inlinemedik{goto}
-statement is encoutered, the entry block of the target state is scheduled
+\{\Instance_{\Machine_{i'}, j'}^{\epoch{}+1}\}$. Similarly, if a \inlinemedik{goto}
+statement is encountered, the entry block of the target state is scheduled
 for execution at \epoch{} + 1. If no other machine is both \textit{scheduled} to run
 in the current \epoch{}, and \textit{enabled}, then the \epoch{} advances by one (\autoref{algline:epoch-advance}).
 
@@ -1329,10 +1329,10 @@ rule <k> sleep(Duration:Int) ;                    @\label{lstline:sleep-stmt}@
 
 \inlinemedik{sleep} results in a JSON message being sent to a remote
 endpoint (Lines \ref{lstline:json-start}-\ref{lstline:json-end})
-specified when the \MediK{} process is launched. This mimics
+specified when the \MediK{} process is launched, mimicing
 sending an event to an external \emph{timer} machine, with the desired duration
 as the payload. At the remote endpoint,
-code must be provided (in any programming language) to parse the message, and
+code must be provided (in any programming language) to parse the message and
 respond with a JSON message indicating the expiration of the timer
 once the desired duration has passed. A unique transaction-id
 (Lines \ref{lstline:transaction-id}, \ref{lstline:wait-for-response} and \ref{lstline:tid-increment}),
@@ -1343,7 +1343,7 @@ releasing the executor lock to process other \emph{scheduled} machines.
 
 When a message signifying the expiration of the timer is sent to
 the \MediK{} process, along with the transaction id of source instance,
-the corresponding event signalling the completion of the sleep statement
+the corresponding event signaling the completion of the sleep statement
 is placed at the \emph{beginning} of the source machine instance's input buffer,
 and the instance is scheduled to resume execution in the next epoch.
 The rule that handles the external response is shown in \autoref{lst:sleep-completion}.
@@ -1380,7 +1380,7 @@ Once the response is received, the machine instance resumes execution when
 
 An \inlinemedik{obtainFrom} statement also results in a context switch as
 shown in \autoref{lst:obtain-from-request}.
-Just as in the case of sleep, a json message is sent to the remote
+Just as in the case of sleep, a JSON message is sent to the remote
 endpoint with the \emph{name} of the parameter being requested and a unique transaction
 (Lines \ref{lstline:obtain-from-begin}-ref{lstline:obtain-from-end}),
 while the machine instance releases the execution lock (\autoref{lstline:obtain-from-release}),
@@ -1423,8 +1423,8 @@ rule <k> obtainFrom(instance(Id:Int), Field:String)
 As depicted in \autoref{lst:obtain-from-response},
 once data for the requested field is available, it's communicated as an
 event to the \MediK{} process as a JSON message, where the response
-consists of a JSON message with the requested data and the unqiue \inlinemedik{transactionId},
-placed at the \emph{head} of the \inlinemedik{<inBuffer>} cell, and scheduled for
+consists of a JSON message with the requested data and the unique \inlinemedik{transactionId},
+placed at the \emph{head} of the \inlinemedik{<inBuffer>} cell and scheduled for
 execution in the next epoch (Lines \ref{lstline:response-buffer-begin}-\ref{lstline:response-buffer-end}).
 
 \begin{lstlisting}[
@@ -1481,11 +1481,11 @@ permits communication with heterogeneous external agents for obtaining
 required parameters. For instance, on \autoref{lstline:instruct-get-age}, an
 \inlinemedik{Instruct} event is sent to an external \inlinemedik{tablet} machine
 with the payload \inlinemedik{"get age"}. The recipient process
-runs on a tablet held by the Healthcare Provider, and handles
+runs on a tablet held by the Healthcare Practitioner and handles
 the event by prompting the provider to enter the patient's age.
 A \inlinemedik{ConfirmAgeEntered} event, emitted once the age
 is obtained, enables the screening machine to proceed to the next
-step . Once all appropriate measurements have been obtained,
+step. Once all appropriate measurements have been obtained,
 they are checked for abnormality (Lines \ref{lstline:calculate-score-begin}-\ref{lstline:calculate-score-end})
 using tables shown in
 to arrive upon a diagnosis.
@@ -1534,7 +1534,7 @@ machine SepsisScreening receives .. {
 Apart from structurally resembling the workflow, the code
 permits communication with heterogenous external agents, and
 \emph{obtains} patient parameters such as age and weight, and
-uses them to evaluate the patient for sepsis. For instance on
+uses them to evaluate the patient for sepsis. For instance, on
 \autoref{lstline:instruct-get-age},
 we send an event to the external machine that is the tablet held by the \HCP{},
 to obtain the patient's age. Once the age is entered, an event
@@ -1694,9 +1694,9 @@ formalisms such as P \cite{DesaiPLDI13}.
 For program analysis, \emph{ghost} machines substitute external agents,
 permitting exploration of the state space.
 During execution, \emph{ghosts} are discarded and replaced by actual external agents.
-Due to this, ghosts machines may have statements to express non-determinism
-in processes. Consider, for instance, on a positive sepsis diagnosis, a
-\HCP{} may chose to either administer fluids first, followed by antibiotics, or
+Due to this, ghost machines may have statements to express non-determinism
+in processes. Consider, for instance, on a positive sepsis diagnosis, an
+\HCP{} may choose to either administer fluids first, followed by antibiotics, or
 vice-versa. \MediK{} supports such non-determinism using \inlinemedik{either-or}
 statements as shown in \autoref{lst:non-determinism}.
 \begin{lstlisting}[
@@ -1753,12 +1753,12 @@ Recall from Section \ref{sec:bpg-background} that we needed to:
 \end{enumerate*}
 For example, determining whether the patient's heart rate is abnormal
 is performed using the \inlinemedik{in-interval} construct as shown in \autoref{lst:hr-table}.
-Recall that the \inlinemedik{in-interval} construct is merely syntatic
+Recall that the \inlinemedik{in-interval} construct is merely syntactic
 sugar for nested \inlinemedik{if-else} statements. When using ghost machines for
 model checking, since the actual measurement is an abstract value, we know the
-final result of this abnormality checking operation is an abstract boolean value. Thus,
+result of this abnormality checking operation is an abstract boolean value. Thus,
 instead of exploring each branch of \inlinemedik{if-else} statements
-corresponding to \inlinemedik{in-interval} constructs in \autoref{lst:hr-table}, we replace the entire checking process with an
+corresponding to \inlinemedik{in-interval} constructs in \autoref{lst:hr-table}, we replace the entire checking process with a
 final abstract boolean value.
 This reduces the state space but still allows us to explore all treatment options for both the normal and abnormal cases.
 
@@ -1859,7 +1859,7 @@ towards addressing them. We measured progress along the following lines:
 When compared to existing approaches from \autoref{chapter:related-work},
 \MediK{} is the first computer-interpretable guideline language that has
 a complete executable semantics. As \MediK{}'s tools are derived from its
-semantics, they are by definition correct-by-construction. As the tools
+semantics, they are, by definition, correct-by-construction. As the tools
 don't have to be maintained independently, updates to the language to
 accommodate \HCP{} feedback only require corresponding changes to the
 semantics, and tools evolve automatically.
@@ -1882,12 +1882,13 @@ Medical Center. \MediK{}'s support for modeling external agents as
 to model-check the sepsis \CDSSs{} for responsiveness, To the best of our knowledge,
 knowledge, our is the first system for sepsis management with any form of formal
 analysis.
-We be briefly summarize how \MediK{} compares against existing approaches in \autoref{table:medik-comparison}.
+We briefly summarize how \MediK{} compares against existing approaches in \autoref{table:medik-comparison}.
 
 In \autoref{chapter:semantics-first-cdss}, we described incremental progress made
-by existing approaches towards enabling greater \CDSS{} adoption through the
-use of \autoref{fig:our-contribution}. Specifically, upper rungs of the
-pyramid incorporate features and learnings of the lower rungs. Our contribution
+by existing approaches towards enabling greater \CDSS{} adoption through
+\emph{solution themes} discussed in \autoref{sec:related-work-discussion} and
+shown in \autoref{fig:our-contribution}. Specifically, upper rungs of the
+pyramid incorporates features and learnings of the lower rungs. Our contribution
 can be described by the run marked in red, as our work incorporates the ability
 to implement \HCP{}-comprehensible, computable \BPGs{} of earlier approaches
 with a complete formal semantics, comprehensive support for formal analysis,
