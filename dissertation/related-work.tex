@@ -14,7 +14,7 @@ to computer programming, cannot validate the accuracy of the encoding.
 To address this, \DSLs{} designed specifically for expressing
 \BPGs{} in a computer-interpretable format are utilized. \BPGs{} expressed
 in such languages can serve as both textual guideline documents and knowledge
-bases in \CDSSs{}. But, medical knowledge in \BPGs{} has also been expressed
+bases in \CDSSs{}. But medical knowledge in \BPGs{} has also been expressed
 and formalized using other non-domain-specific approaches. The discussion in
 this chapter has also been split along the same lines. In \autoref{sec:dsl-based-approaches}, we discuss approaches involving \DSLs{} for
 computer interpretable guidelines. In \autoref{sec:general-approaches}, we
@@ -46,7 +46,7 @@ include:
 \end{itemize}
 
 Being one of the earliest \DSLs{} specifically designed for \CDSSs{}, the
-Arden Syntax has found widespread adoption. But, the language also has several
+Arden Syntax has found widespread adoption. But the language also has several
 limitations. Notably:
 \begin{itemize}
   \item Support on simple, independent guidelines instead of complex treatment
@@ -183,7 +183,7 @@ Guidelines are modeled using three hierarchical \say{abstraction levels}:
 \end{enumerate}
 Like \GLIF{}, \GLIF3{} has also  been used to implement several \CDSSs{}, including
 systems for depression screening and management \cite{ChoiJMI07} and
-hyperkalemia patient screening \cite{WangBook04}. But, despite its use
+hyperkalemia patient screening \cite{WangBook04}. But despite its use
 in several systems, the semantics of the \GLIF{} framework remain only informally
 defined.
 
@@ -341,7 +341,7 @@ In \cite{TenAIM06}, a formal-methods approach to improve Asbru-based guidelines
 is presented. The authors identify that using formal methods
 for systematic verification of guidelines and protocols requires
 an appropriate representation language with a clear and well-defined semantics.
-Two real-world guidelines were chosen, and analyzed using a
+Two real-world guidelines were chosen and analyzed
 by gradually transforming them into more formal representations.
 First, the protocols are transformed from plain text into Asbru plans. Then,
 the Asbru plans are transformed into KIV programs encoding said plans, for analysis
@@ -365,7 +365,7 @@ The formalization process required significant effort, where the
 following problems were observed:
 \begin{itemize}
   \item \textbf{Ambiguity}: Several terms presented interpretation
-    related challenges, were details were left to the \HCP{}. While
+    related challenges, where details were left to the \HCP{}. While
     missing details may be overlooked in paper versions, they needed
     accurate descriptions in the computer-interpretable counterparts.
   \item \textbf{Incompleteness}: Expected guidance or information
@@ -375,7 +375,7 @@ following problems were observed:
   \item \textbf{Inconsistencies}: Certain guidelines were found to lead
     to conflicting advice for the same patient data. Such scenarios
     were deemed to be very serious, as following the guideline could
-    potentially result in non optimal treatment.
+    potentially result in suboptimal treatment.
   \item \textbf{Redundancies}: Instances of repeated recommendation were
     often discovered during the process of formalizing the guidelines in Asbru.
 \end{itemize}
@@ -398,7 +398,7 @@ unit that abstract signals to the said plans.
 The semantics of plan execution are described by
 expressing the transition system using statecharts \cite{DammCOMPOS97}.
 Statecharts are directed graphs representing state machines \cite{BalserICIDP02}.
-Plan states represents statechart nodes, and edges transitions. The transitions
+Plan states represent statechart nodes, and edges transitions. The transitions
 can then be conveniently formalized as \SOS{} rules. For instance, the rule:
 $$
 \inference{\llbracket \text{P.State}=\text{considered}\rrbracket_{\sigma} &
@@ -413,7 +413,7 @@ to transition from state \say{$\text{consider}$}
 to state \say{$\text{ready}$}. The \SOS{} rule expresses that
 if, under the environment $\sigma$,
 \begin{enumerate*}[label=(\roman*)]
-  \item the filter condition $\Omega$ evalutes to $\true$ by the data
+  \item the filter condition $\Omega$ evaluates to $\true$ by the data
     abstraction unit $\text{da}$, and,
   \item the plan's current state is $\text{consider}$
 \end{enumerate*},
@@ -424,14 +424,14 @@ translated to programs into KIV. In KIV, program behavior is
 specified using standard dynamic logic program constructs,
 such as variable assignments $v := \tau$, conditional $\text{if}(\Psi)\ S_1
 \ \text{else}\ S_2 $, iteration $\text{while}(\psi)\ \text{do}\ S$,
-parellel execution $S_1 \parallel S_2$. The translation from Asbru
+parallel execution $S_1 \parallel S_2$. The translation from Asbru
 to KIV is performed in a structure-preserving way, as most
 Asbru constructs can directly be mapped into a corresponding KIV one.
 For certain features of Asbru, additional encoding is required.
 The KIV encoding makes KIV's theorem proving capabilities available
 for formal verification, where properties are stated as
 Interval Temporal Logic (\ITL{}) formulas \cite{AllenJLC94}.
-Notably, plan intentions can be encoded as logical formulas,
+Notably, plan intentions can be encoded as logical formulas
 and verified against the plan's KIV translation. However,
 the verification may require experience with theorem proving
 when dealing with properties of interest.
@@ -443,7 +443,7 @@ several issues with both protocols, some of which were
 deemed very serious. Moreover, the corresponding Asbru plans
 were verified to satisfy their stated intentions, improving
 system safety.
-But, the approach has the following limitations:
+But the approach has the following limitations:
 \begin{itemize}
   \item While the formal semantics of Asbru intends to serve
     as a manual for implementing execution engines for Asbru,
@@ -476,11 +476,11 @@ down further, and can be one of the following:
   \item Decision actions: Selecting alternate actions in the guideline
     based on guideline-specified criteria.
   \item Conclusion actions: Finalizing the outcome of
-    executing the guideline .
+    executing the guideline.
 \end{itemize}
-Atomic actions provide the elementary primitives for modeling
-medical knowledge, but, to specify a guideline, additional mechanisms for
-expressing relations over said actions is needed. Relations in
+While atomic actions provide the elementary primitives for modeling
+medical knowledge, specifying a guideline requires additional mechanisms for
+expressing relations over said actions. Relations in
 \GLARE{} can either be structure-related or control-related.
 Structural relations enable building trees from actions, where
 nodes represent composite actions, and leaves atomic ones.
@@ -520,7 +520,7 @@ aspects.
 The structure window is used to represent relations
 between different actions through a tree. Each node represents
 an action, and its children represent sub-actions that must be performed
-as a part of executing the main-action.
+as a part of executing the main action.
 A separate control window is utilized to enforce execution
 ordering on actions. For a given action, its sub-actions
 are represented as nodes in a control graph, where edges
@@ -535,7 +535,7 @@ following two types of checks:
 Writing guidelines in \GLARE{} occurs in one of two modes: safe and
 advanced. In safe mode, when a new term is introduced as a part of
 an action's description, \GLARE{} checks if the term has already been
-defined in its existing database, and disallows the introduction if
+defined in its existing database and disallows the introduction if
 the term is not found. This ensures standard terminology and range of values
 is used throughout the system. In advanced mode, new terms can be introduced,
 and a warning is issued, under the assumption that the reason for ignoring
@@ -543,7 +543,7 @@ existing checks is intentional.
 
 \paragraph{Logical Inconsistencies:}
 
-The checks for logical inconsistencies ensures that certain \say{logical design
+Checks for logical inconsistencies ensures that certain \say{logical design
 criteria} are followed. The following inconsistencies are disallowed:
 
 \begin{itemize}
@@ -614,7 +614,7 @@ blocks and relations between blocks to represent medical guidelines. Blocks belo
 \begin{itemize}
   \item Activity blocks that contain various guideline actions that \HCPs{} must perform.
     Said actions are expressed through activities.
-    Atomic activities represent actions that cannot be further decomposed, and
+    Atomic activities represent actions that cannot be further decomposed and
     can be combined to form more complex composite activities.
   \item Gateway blocks that dictate divergence and convergence of control flow.
     These blocks enable fork and join constructs for modeling concurrent
@@ -628,14 +628,14 @@ The modeled guideline is mechanically translated to Sciff --
 a constraint logic programming framework. This translation
 consists of various constraints describing expectations of what
 should or should not happen. During runtime,
-a log of the actually observed events is generated from guideline execution.
+a log of the observed events is generated from guideline execution.
 The log is then checked against the generated constraints, and a violation is
 raised if the log does not satisfy the said constraints \cite{ChesaniBook08}.
 
 The \GPROVE{} framework is motivated by a different objective than other
-framework described in this chapter. Notably, \GPROVE{} focuses on proving
+frameworks described in this chapter. Notably, \GPROVE{} focuses on proving
 a-posteriori compliance to guidelines, and intends to serve as a complementary
-tool, instead of a standalone one \cite{BottrighiBook10}. But, the
+tool, instead of a standalone one \cite{BottrighiBook10}. But the
 approach has some limitations.
 First, the \GPROVE{} modeling language does not have a formally defined
 semantics. Instead, the semantics are embedded in the Sciff translator and
@@ -665,7 +665,7 @@ that allows \HCPs{} to view the guideline logic.
 
 The framework also includes the Guideline Execution Engine (\GEE{}) that
 facilitates \BPGs{} to be used in \CDSSs{}. The \GEE{} traverses the guideline
-in order to:
+to:
 \begin{itemize}
   \item Communicate with \HCPs{} about recommendations and scheduled actions.
   \item Evaluate guideline logic to determine execution flow.
@@ -675,7 +675,7 @@ in order to:
 \end{itemize}
 
 As HELEN was developed at the Heidelberg University Medical Center's Department
-of Neonatalogy, it was used to implement diverse \BPGs{} for use at the
+of Neonatology, it was used to implement diverse \BPGs{} for use at the
 department. In particular, the following \BPGs{} were modeled:
 \begin{itemize}
   \item Management of hyperbilirubinemia in healthy newborns, published by the
@@ -704,7 +704,7 @@ The Prodigy initiative was an effort by the UK's National Health Service
 (\NHS{}) to develop \CDSSs{} for use by general practitioners (\GPs{}). There have
 been several iterations of the Prodigy system to address limitations
 observed in practice. The Prodigy I and Prodigy II were closely coupled with
-the \EHR{} systems, and were not amenable to sharing. Prodigy II found wide
+the \EHR{} systems and were not amenable to sharing. Prodigy II found wide
 use, demonstrating benefits of such systems to \GPs{}, but was found to be
 inadequate to express important guidelines for chronic diseases. As a result,
 Prodigy III was developed to support modeling of such diseases \cite{JohnsonAMIA00}.
@@ -728,7 +728,7 @@ guidelines resemble their paper-based counterparts.
 Prodigy, like most \CDSSs{} frameworks, depends on patient data to
 be available through \EHRs{} or \HCP{} assessments. In real clinical settings
 however, it is unreasonable to expect perfect data to be consistently
-available.It is often the case that
+available. It is often the case that
 \begin{enumerate*}[label=(\alph*)]
   \item decision support is started after some treatment has already
     been performed, leading to an inconsistency between the perceived
@@ -737,7 +737,7 @@ available.It is often the case that
 \end{enumerate*}
 To address this, in Prodigy III:
 \begin{itemize}
-  \item Scenarios can be broad and flexible, and serve as intuitive access points for
+  \item Scenarios can be broad and flexible and serve as intuitive access points for
     the clinicians in situations where perceived digital state may be
     inaccurate.
   \item Default values for patient parameters and other assessments are utilized
@@ -748,8 +748,8 @@ Prodigy III differs in its approach towards decision support, in comparison
 to alternative approaches such as \GLIF{} (\autoref{sec:glif}), EON (\autoref{sec:eon})
 or Asbru (\autoref{sec:asbru}). Unlike said alternatives,
 that offer complex concurrency and synchronization primitives to capture
-treatment details, Prodigy relies employs a simpler action plans-based approach
-that Prodigy's developers argue is sufficiently expressive for most guidelines.
+treatment details, Prodigy employs a simpler action plans-based approach
+that its developers argue is sufficiently expressive for most guidelines.
 Other approaches emphasize \HCP{}-system interactions and access to good quality
 and up-to-date clinical data to make complex assessments about patient state and dispense detailed
 advice. Prodigy, on the other hand, leaves the complex assessment of patient
@@ -759,8 +759,8 @@ expected outcomes and associated steps to reach said outcomes \cite{JohnsonAMIA0
 Prodigy, as an early \CDSS{} framework, enabled greater adoption among
 \HCPs{}. The focus of the Prodigy initiative was to standardize guidelines and
 improve uptake and adoption. Thus, efforts weren't expended into ensuring that
-the guidelines had a well defined semantics, and tools that were based on
-on it.
+the guidelines had a well-defined semantics, and tools that were based on
+it.
 
 \subsection{\SAGE{}}\label{sec:sage}
 
@@ -804,7 +804,7 @@ sources of information, and, de-duplicating replication across \EHR{}
 implementations \cite{TuAMIA07}. This is reflected in the fact that
 \SAGE{} has been used to implement guidelines at \EHR{} systems
 at the University of Nebraska Medical Center and the Mayo Clinic \cite{TuAMIA07}.
-But, \SAGE{} does not provide tools for validating guideline content, and,
+But \SAGE{} does not provide tools for validating guideline content, and,
 execution engine doesn't have any correctness guarantees either. While
 the execution engine does provide some validation checks \cite{RamMEDINFO04},
 \SAGE{} does not have dedicated validation or verification tools.
@@ -822,7 +822,7 @@ The T/Gen tool takes as input a GLIF guideline encoded as a
 Lisp program, and an initial condition set that defines
 possible clinical scenarios for a program, and additional
 logical constraints that define when said clinical scenarios are
-feasible. T/Gen takes these initial conditions and constraints, and
+feasible. T/Gen takes these initial conditions and constraints and
 generates a set of meaningful clinical scenarios under which the
 guideline can be tested \cite{MillerJAMIA01}.
 
@@ -845,12 +845,12 @@ the number of test cases \cite{MillerJAMIA01}.
 \end{figure}
 
 T/Gen's white-box testing approach allows significant reductions in the
-number of test cases required for high test-coverage, and has demonstrated
-effectiveness in real-world use cases \cite{MillerJAMIA01}. But, it still has
+number of test cases required for high test-coverage and has demonstrated
+effectiveness in real-world use cases \cite{MillerJAMIA01}. But it still has
 many limitations. Notably:
 \begin{itemize}
-  \item T/Gen can work with any \CIG{} language, and supports
-  a simplified version of \GLIF{}. But, this requires the \CIG{} to
+  \item T/Gen can work with any \CIG{} language and supports
+  a simplified version of \GLIF{}. But this requires the \CIG{} to
   be re-expressed in T/Gen's simplified language,
   which requires additional effort, especially in cases of languages that differ
     significantly from \GLIF{}. Moreover, the translation effort itself may
@@ -859,11 +859,11 @@ many limitations. Notably:
     As acknowledged in \cite{MillerJAMIA01}, a compromise must be made between
     finding constraints and allowing some redundancy in tests. Moreover,
     introducing constraints can omit certain scenarios, such
-    as those dependant on ordering of actions, from being tested.
+    as ones dependent on ordering of actions, from being tested.
     Thus, using the tool effectively may require significant effort, depending
     on the complexity of the system under test.
   \item T/Gen utilizes an ad-hoc semantics of \GLIF{}, which may differ from
-    that used by \GLIF{} execution engines. Morover, changes to the \GLIF{} language
+    that used by \GLIF{} execution engines. Moreover, changes to the \GLIF{} language
     over time would also necessitate corresponding updates to T/Gen.
 \end{itemize}
 
@@ -916,11 +916,11 @@ about knowledge bases is provided. A knowledge-base $\mathcal{K} = \mathcal{R}
 \end{enumerate}
 An environment $E$ is defined as a subset of input literals s.t. $E \to
 \neg(C\rho)$ for some $c \in \mathcal{C}$ and any substitution $\rho$.
-The set of inferrable hypotheses $\mathcal{H}$ is defined as literals
+The set of inferable hypotheses $\mathcal{H}$ is defined as literals
 that can be inferred using rules, i.e., for $H \in \mathcal{H}$,
 $\exists R \in \mathcal{R}$ s.t. $H = \consequent{R}\rho$ for any
 substitution $\rho$. $\left(\mathcal{R} \cup E \right) \vdash H$
-denotes that $H$ is inferrable from rule base $\mathcal{R}$ if there
+denotes that $H$ is inferable from rule base $\mathcal{R}$ if there
 is some environment $E$ s.t. $H$ is the logical consequence of supplying
 $E$ to rule $R$.
 
@@ -954,7 +954,7 @@ $\MPS{}$ has rules encoding states such as:
 
 Next, Asbru plan $i$ in the guideline need to be transformed into
 its corresponding rule base $PC_i$. For instance, a plan for
-treatment of non-insulation dependandant gestation diabetes militus,
+treatment of non-insulation dependent gestation diabetes mellitus,
 in patients with normal blood glucose levels, called GDM-TYPE-II,
 contains rules of the form:
 \begin{itemize}
@@ -965,13 +965,13 @@ contains rules of the form:
   \item $\text{State}(\text{blood-glucose-high}, pa) \to \text{suspend}(\text{GDM-TYPE-II},pa)$
     encodes that if the plan be suspended in case of high blood sugar.
   \item $\text{State}(\text{blood-glucose-normal}, pa) \to \text{reactivated}(\text{GDM-TYPE-II},pa)$
-    similary encodes that the guideline be reactivated when blood sugar returns
+    similarly encodes that the guideline be reactivated when blood sugar returns
     to normal.
 \end{itemize}
 
 Once the guideline has been encoded as a rule base using the above mentioned
 transformation, important properties can be checked against the rule base.
-For instance, conditions in a plan must be satisfiable in order to
+For instance, conditions in a plan must be satisfiable to
 have an effect on the plan. Formally, this is equivalent to checking
 all rules in the rule base are \emph{fireable}. If a condition,
 such as $\text{Male}(pa) \wedge \text{Pregnant}(pa) \to \filter(\text{plan}, pa)$
@@ -979,7 +979,7 @@ contains a conjunction that cannot be satisfied, then it does not contribute
 to the plan's execution, and, is not \emph{meaningful}.
 
 The work methodology describe above represents significant progress towards
-verification of meaningful properties on real guidelines. But, the methodology
+verification of meaningful properties on real guidelines. But the methodology
 also has limitations, such as:
 \begin{itemize}
   \item It only works for certain pre-defined anomalies.
@@ -1019,10 +1019,10 @@ medical properties, or properties that are not implementation-related,
 dealing with aspects such as  medical parameters, \HCP{} actions,
 and overall guideline intentions. As specifying properties
 requires expertise and a mathematical background. The \MDA{}
-approach includes a number of common patterns applicable
+approach includes several common patterns applicable
 to all guidelines that can be
 used as templates for writing actual properties. Thus,
-through the use of these patterns, the authors attempt
+by using these patterns, the authors attempt
 to enable even non-experts to use the \MDA{} verification
 methodology.
 
@@ -1036,7 +1036,7 @@ as computation tree logic (\CTL{}) and linear temporal logic (\LTL{})
 
 To ensure that that patterns presented under the \MDA{} framework
 cover a wide spectrum of possible properties, the authors
-collected properties relevant to \BPGs{} from literature, and attempted
+collected properties relevant to \BPGs{} from literature and attempted
 to represent them using specification patterns proposed by Dwyer et al.
 in \cite{DwyerFM98}. However, they realized that Dwyer patterns
 were insufficient to represent all properties of interest. To
@@ -1061,7 +1061,7 @@ important patterns were identified during the verification process,
 which are also applicable to other guidelines. For instance,
 it is important to ensure
 that if an empirical treatment has not been ordered, then
-it is not removed later on. This is identified as
+it is not removed later. This is identified as
 an instance of the absence-after pattern, and can
 be represented by the \LTL{} formula
 $\eventually\neg\left(\text{removeTreatment} == \text{Empirical} \to
@@ -1081,16 +1081,16 @@ The \MDA{} approach has several strengths. Notably:
     systems and verify important properties against them,
     as demonstrated in \cite{PorresECBS08}.
   \item Utilizes existing work in modeling large concurrent
-    systems as Statecharts, instead of implementing a \DSL{} from
+    systems as statecharts, instead of implementing a \DSL{} from
     scratch, allowing existing tools for visualization to be used.
   \item Unlike other approaches, emphasis is given to ensuring
     that expertise in mathematics is not needed for verification,
-    through the use of property patterns for property specification,
+    using property patterns for property specification,
     and automated translations of the \BPG{} and property to PROMELA
     for verification using SPIN.
 \end{itemize}
 
-However, the approach also has some limitations. First, in order to execute the
+However, the approach also has some limitations. First, to execute the
 Statecharts-based \BPG{} in a \CDSS{}, a translation from the OMG Systems
 Modeling Language \cite{OMGSpecUrl} to Java is utilized, and for
 verification via SPIN, a translation to PROMELA is utilized. Thus, it
@@ -1133,22 +1133,22 @@ workflows.
 \end{enumerate}
 
 In \autoref{sec:addressing-hurdles}, we outlined major
-themes behind addressing aforementioned challenges. We briefly
+\emph{solution themes} behind addressing challenges mentioned above. We briefly
 recap those themes here:
 
 \paragraph{Implementation-Specification Gap}
 
-Textual \BPGs{} are often written by medical experts, but,
+Textual \BPGs{} are often written by medical experts, but
 the translation into an executable computer program is
 provided is performed by software developers and knowledge
 engineers who typically lack the necessary expertise to ensure
 medical knowledge is correctly encoded. The textual \BPG{} is
 utilized as a functional specification to develop the \CDSSs{}.
-This make it possible for the specification to diverge from the
+This makes it possible for the specification to diverge from the
 implementation, leading to an implementation-specification gap.
 
 \DSLs{} for computer-interpretable guidelines aim to eliminate
-the aforementioned gap by emphasizing \HCP{} comprehensibility,
+this gap by emphasizing \HCP{} comprehensibility,
 thereby enabling the \CIG{} to also serve as the guideline's
 textual description, eliminating the implementation-specification gap,
 and are vital to developing trusted guidelines with validated content.
@@ -1212,22 +1212,22 @@ each with correctness guarantees.
   \end{table}
 
 
-Next, we discuss how approaches discusses in this chapter compare
-w.r.t. aforementioned themes. In \autoref{table:dsl-comparison}, we
+Next, we discuss where approaches discussed in this chapter fall under
+\emph{solution themes}. In \autoref{table:dsl-comparison}, we
 show whether each approach fully addressed ($\greencheck$), partly
 addresses $\circ$ or doesn't address ($\redcross$) issues related
 to said theme. For example, all $\DSLs{}$ specifically designed
 with comprehensibility to \HCPs{} in mind eliminate the
 implementation-specification gap, as guidelines expressed using these \DSLs{}
-can serve as both the \HCP{}-readable textual representation, and
+can serve as both the \HCP{}-readable textual representation and
 its computable translation as a \CDSS' \BPGLogic{}.
 
 The outlined languages can be categorized into either \DSLs{} for \CIGs{},
 or, general ones for building concurrent systems. For instance,
 the Arden Syntax (\autoref{sec:arden-syntax})
 was among the first languages specifically designed to be
-comprehensible to \HCPs{}, and is still widely used for expressing medical
-knowledge. But, it's designed for simpler, independent guidelines, and
+comprehensible to \HCPs{} and is still widely used for expressing medical
+knowledge. But it's designed for simpler, independent guidelines, and
 is unsuitable for complex workflows. Other approaches
 such DILLEMA (\autoref{sec:dilemma}) and \GEODECM{}
 (\autoref{sec:geodecm}) enabled expressing more complex guidelines,
@@ -1253,9 +1253,9 @@ systems can both
   \item be modular and portable to accommodate hospital-specific customizations,
     and integrate with their \EHR{} systems.
 \end{enumerate*}
-But, system safety and correctness wasn't a challenge that these approaches
+But system safety and correctness wasn't a challenge that these approaches
 were directly attempting to address.
-Thus, they lack a complete formal semantics, and a suite of tools accompanying
+Thus, they lack a complete formal semantics and a suite of tools accompanying
 analysis tools.
 
 The need for a complete formal semantics to enable development of tools for
@@ -1267,7 +1267,7 @@ semantics has already been recognized as a limitation of the framework.
 Asbru (\autoref{sec:asbru}) attempt to address this by having formal
 semantics, albeit incomplete semantics, that are intended to guide tool
 development. The Asbru language has an incomplete, but formal
-\SOS{} paper-based semantics. But, according to the authors of
+\SOS{} paper-based semantics. But according to the authors of
 \cite{SuttonAMIA03}, it is insufficient for developing tools for the language.
 Despite its incompleteness, Asbru language's semantics has served as a calculus for deductive verification
 using KIV, as described \autoref{sec:kiv-verification}.
@@ -1275,11 +1275,11 @@ Along similar lines, a formal but incomplete paper-based semantics
 of the PROforma language is
 presented in \cite{SuttonAMIA03}, with the aim of serving as a manual for
 developing PROforma tools. Both approaches take significant steps towards using
-recognizing formal semantics, and using them in some ways
-to establish \CDSS{} safety. But, the support for formal analysis is very
+recognizing formal semantics and using them in some ways
+to establish \CDSS{} safety. But the support for formal analysis is very
 limited. Moreover, the tools aren't directly derived
 from the semantics, and need to be updated every time the language evolves,
-which can potential lead to a divergence between the official semantics, and
+which can potentially lead to a divergence between the official semantics, and
 the ones utilized by said tools.
 
 Approaches such as \GLARE{} (\autoref{sec:glare}) and \GPROVE (\autoref{sec:gprove}), also have tools that allow complex guidelines to
@@ -1292,7 +1292,7 @@ has capabilities to enable a-posteriori compliance checking, i.e., checking whet
 generated during execution indicates adherence (or lack thereof) to the guideline.
 To this end, \GOSPEL{} (the language for expressing guidelines in \GPROVE{})
 is translated to Sciff -- a constraint logic programming framework.
-But, both \GLARE{} and \GPROVE{} lack formal semantics. \GLARE{}'s analysis
+But both \GLARE{} and \GPROVE{} lack formal semantics. \GLARE{}'s analysis
 and \GPROVE{}'s Sciff translator and execution trace generator are based on
 ad-hoc semantics of the underlying languages, making it possible for the
 analysis results to not hold on the actual programs.
@@ -1300,11 +1300,11 @@ analysis results to not hold on the actual programs.
 Next, we consider approaches that rely on general solutions for building
 concurrent systems for building and analyzing \CDSSs{}. The verification methodology
 defined in \autoref{sec:asbru-verification} utilizes foundational work in
-reasoning with knowledge bases to reason about Asbru guidelines. But, it
+reasoning with knowledge bases to reason about Asbru guidelines. But it
 can work with any language that utilizes a plan-based approach to
 represent guidelines. Similarly, the \MDA{}-based approach relies
-on guidelines expressed as Statecharts in the OMG systems modeling language.
-The OMG Statecharts are then translated to PROMELA for verification using the SPIN,
+on guidelines expressed as statecharts in the OMG systems modeling language.
+The OMG statecharts are then translated to PROMELA for verification using the SPIN,
 and into executable Java code for use as a \CDSS{}.
 For convenience, we refer to the representation that guidelines are directly
 encoded in as \say{\HCP{}-friendly}, and the translated representation
@@ -1324,7 +1324,7 @@ Thus, for both these approaches:
     notation.
 \end{enumerate*}
 Moreover, in case of the \MDA{}-based approach, the \say{\HCP{}-friendly}
-notation is translated to Java for execution. But, as the Java and
+notation is translated to Java for execution. But as the Java and
 PROMELA translations are not proven to be equivalent, it is possible for
 the results of model checking through SPIN may not be applicable to the
 corresponding Java code.
