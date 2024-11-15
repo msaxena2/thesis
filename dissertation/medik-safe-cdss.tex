@@ -1700,7 +1700,7 @@ in processes. Consider, for instance, on a positive sepsis diagnosis, an
 vice-versa. \MediK{} supports such non-determinism using \inlinemedik{either-or}
 statements as shown in \autoref{lst:non-determinism}.
 \begin{lstlisting}[
-  float=tb
+  float=b!
   ,frame=single
   ,language=medik
   ,style=mediksty
@@ -1727,7 +1727,9 @@ we need to use an abstract value, representing all possible concrete values.
 To this end, we allow using an abstract value \inlinemedik{#nondet} in ghost machines,
 that have semantics shown in \autoref{lst:abstract-semantics}.
 \begin{lstlisting}[
-  style=ksty
+  float=t!
+  ,style=ksty
+  ,frame=single
   ,language=k
   ,numbers=left
   ,numbersep=5pt,
@@ -1770,7 +1772,7 @@ a machine in an active state with an unhandled event at the
 head of the input buffer to a terminal \inlinemedik{stuck} state.
 
 \begin{lstlisting}[
-  float=tb
+  float=b!
   ,frame=single
   ,language=k
   ,style=ksty
@@ -1800,6 +1802,12 @@ analysis.
 
 \section{Discussion}\label{sec:discussion}
 
+\begin{figure}[b!]
+  \centering
+  \includegraphics[width=0.65\textwidth]{medik-pyramid}
+  \caption{Our Contribution}\label{fig:our-contribution}
+\end{figure}
+
 In \autoref{sec:sepsis-bpg}, we described several characteristics
 of \BPGs{} that a language for expressing computer interpretable
 best practice guidelines should ideally accommodate. These include
@@ -1825,6 +1833,15 @@ towards addressing them. We measured progress along the following lines:
   \item \textbf{Holistic Safety:} Comprehensive support for formal analysis
     and tools, including execution engines, with correctness guarantees.
 \end{itemize}
+
+
+When compared to existing approaches from \autoref{chapter:related-work},
+\MediK{} is the first computer-interpretable guideline language that has
+a complete executable semantics. As \MediK{}'s tools are derived from its
+semantics, they are, by definition, correct-by-construction. As the tools
+don't have to be maintained independently, updates to the language to
+accommodate \HCP{} feedback only require corresponding changes to the
+semantics, and tools evolve automatically.
 
   \begin{table}[b!]
     \begin{tabularx}{\textwidth}
@@ -1855,20 +1872,6 @@ towards addressing them. We measured progress along the following lines:
     \caption{\MediK{} vs Existing Approaches}\label{table:medik-comparison}
   \end{table}
 
-
-When compared to existing approaches from \autoref{chapter:related-work},
-\MediK{} is the first computer-interpretable guideline language that has
-a complete executable semantics. As \MediK{}'s tools are derived from its
-semantics, they are, by definition, correct-by-construction. As the tools
-don't have to be maintained independently, updates to the language to
-accommodate \HCP{} feedback only require corresponding changes to the
-semantics, and tools evolve automatically.
-
-\begin{figure}[th!]
-  \centering
-  \includegraphics[width=0.5\textwidth]{medik-pyramid}
-  \caption{Our Contribution}\label{fig:our-contribution}
-\end{figure}
 
 
 This work attempted to establish that the semantics-first approach
