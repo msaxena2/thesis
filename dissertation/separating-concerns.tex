@@ -11,7 +11,7 @@ rewriting, and associated issues.
 
 \section{Control Theory and \CDSSs{}}\label{sec:control-theory-cdss-comparison}
 Control theory deals with the design and analysis of \emph{closed-loop}
-systems, i.e., systems where the inputs are affected at-least in part by
+systems, i.e., systems where the inputs are affected at-least in part
 by outputs. Typically, such systems are characterized by:
 \begin{itemize}
   \item The \emph{plant} represents the part of the system \emph{to be
@@ -27,7 +27,7 @@ as the plant, and the goal is optimizing patient outcomes
 collects patient data through sensor, assessments and electronic
 health records and recommends treatment strategies to optimize patient
 outcomes. But, unlike traditional closed-loop systems
-\CDSSs{} have to additionally account for:
+\CDSSs{} must additionally account for:
 \begin{itemize}
   \item \textbf{Patient Physiology:} While typical systems have
   plants whose dynamics can be mathematically described, doing so
@@ -35,17 +35,17 @@ outcomes. But, unlike traditional closed-loop systems
   can partially be attributed to factors such as diversity among patients,
   age, etc. Moreover, unlike traditional systems, patient state is
   almost always \emph{partially observable}. For instance,
-  while data about a patient blood counts might be a few hours old,
+  while data about a patient's blood counts might be a few hours old,
   the heart rate might be almost real-time.
   \item \textbf{Absence of Direct Control:} While some medical devices
   (such as insulin pumps) may directly administer treatment, most
   complex \CDSSs{} rely on \HCPs{} to perform recommended treatment.
-  But, there is no guarantee of the recommendation being followed,
+  But there is no guarantee of the recommendation being followed,
   leading to a \emph{divergence} between expected and actual scenarios.
-  Thus, the \CDSS{} has to reconcile said divergences over time.
+  Thus, the \CDSS{} must reconcile said divergences over time.
   \item \textbf{Customizations:} \CDSSs{} rely on User Interfaces (UIs) for
   a significant part of their interaction with the physical world.
-  The effectiveness of these interactions directly affect quality of care.
+  The effectiveness of these interactions directly affects quality of care.
   To maximize effectiveness, \CDSSs{} need to accommodate
   hospitals divergences in specializations and
   degrees of expertise, adaptations of \BPGs{}, available pharmacy and medical devices,
@@ -63,7 +63,7 @@ that can describe most guidelines.
 
 We observed that most guidelines consisted of statements that fit
 into the form ``\inlinekmath{if $\ \varphi$ do $\ \alpha$}''. Note
-statements without a condition can be representated simply as \inlinekmath{if
+statements without a condition can be represented simply as \inlinekmath{if
 $\ true$ do $\ \alpha$}.
 Thus, we can represent each statement as a tuple $\CR{}$.
 Given a \BPG{} $B$, we say
@@ -71,9 +71,9 @@ Given a \BPG{} $B$, we say
 \Statements{B} =
 \left\{\left(\varphi_1,\alpha_1\right),\left(\varphi_2,\alpha_2\right),\dots,\left(\varphi_n,\alpha_n\right)\right\}
 \]
-to refer to all statements within $B$. Next we observed that:
+to refer to all statements within $B$. Next, we observed that:
 \begin{itemize}
-  \item Statement were often required to be carried out \emph{concurrently}.
+  \item Statements were often required to be carried out \emph{concurrently}.
   \item There may be \emph{ordering} between statements.
 \end{itemize}
 To capture this, first, we define the concept of a \emph{workflow}
@@ -141,7 +141,7 @@ decompose \CDSSs{} into three main components:
     \item a \emph{backend} that encapsulates encoded medical knowledge, and,
     \item a \emph{middleware} that connects the aforementioned two components.
 \end{enumerate*}
-Next we describe each of these components in detail.
+Next, we describe each of these components in detail.
 
 \begin{figure}[t]
 \centering
@@ -187,8 +187,7 @@ non-executable \BPG{}.
 As mentioned in \autoref{chapter:hurdles-cdss-adoption}, having
 high-quality, guidelines with mechanism that enable systematic
 validation of content and ease of sharing is vital to wider
-adoption. This work argues that this is enabled through
-the use of computer-interpretable guidelines that can serve as
+adoption. This work argues that this is enabled by computer-interpretable guidelines that can serve as
 both textual \BPGs{} and their computer interpretable counterparts. Thus,
 ideally, the backend should comprise of a computer-interpretable guideline.
 
@@ -199,7 +198,7 @@ approaches also stress on using formal methods-based techniques to further
 ensure system correctness. Thus, good \BPGs{}, and
 their computer-interpretable translations, require significant
 effort to develop and verify. This cost can be
-be offset by ensuring that the backend can be shared
+ offset by ensuring that the backend can be shared
 across \CDSSs{} implementations. Thus, in this work, we
 build \CDSSs{} using an architecture where the backend
 is a \emph{standalone} component that be composed with
@@ -220,7 +219,7 @@ a frontend and backend implemented completely independently of each
 other, in unrelated languages, require standardized communication
 protocols. Moreover, as \CDSSs{} rely on a diverse spectrum of devices for
 data, such as patient health records, real-time monitors and sensors, additional
-code has to be written to connect the data to places where it's used in
+code must be written to connect the data to places where it's used in
 the backend and frontend.
 
 In this work, we refer to any additional code outside the frontend and
@@ -233,7 +232,7 @@ Notionally, we use \say{digital twins} as virtual entities that encapsulate
 actual physical processes or objects,
 as is typical in modeling and simulation \cite{TaoJMS22}.
 In practice, however, we recognize that such abstractions may be
-imprecise, due to differences between \CDSSs{} and traditional
+imprecise, due to differences between \CDSSs{}, and traditional
 closed-loop systems discussed at the start of this chapter. Thus,
 digital twins in our context may simply be simple structures that
 hold linked data. For example, while we may notionally refer to an abstract data type
