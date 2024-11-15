@@ -9,7 +9,7 @@ the traditional state-of-art for programming language design that
 leads to tools based on ad-hoc language semantics and duplicated effort.
 In \autoref{sec:semantics-first-pitfalls}, we also touched upon
 some additional considerations for using $\K$ in the context of
-developing a language for developing a computer interpretretable giudeline DSL.
+developing a language for developing a computer-interpretable-guideline DSL.
 We outlined the following concerns:
 \begin{enumerate}[label=(Q\arabic*)]
  \item Can the $\K$ generated tools be performant enough to serve as
@@ -20,7 +20,7 @@ We outlined the following concerns:
   and, comprehensive tests to go long with the same? Can the semantics
   serve as a comprehensive document to implement other tools for the language?
 \end{enumerate}
-In the following sections attempt to answer aforementioned questions.
+In the following sections attempt to answer these questions.
 Specifically, in \autoref{sec:kevm}, we describe work on modeling the
 formal semantics of the Ethereum Virtual Machine (\EVM{}) in $\K$, where
 the generated interpreter's performance compares favorably against a
@@ -28,14 +28,14 @@ custom C++ implementation, providing evidence that (Q1) can be addressed.
 Moreover, given the executable nature of the semantics, the $\K$ semantics
 elaborate on ambiguities in the Yellow Paper---the official paper-based
 specification of the \EVM{}. Not only can the $\K$-semantics replace an informal
-language description, their detailed nature can provide a solid foundation
+language description, their detailed nature can also serve as a solid foundation
 to base other tools on, addressing (Q2).
 
 In \autoref{sec:ethereum-abi-dsl}, we discuss work on implementing a
-\DSL{} for calling functions in ethereum smart contracts using the
+\DSL{} for calling functions in Ethereum smart contracts using the
 Application Binary Interface. Unlike previous $\K$ languages, this
 \DSL{} neither has an informal semantics, nor existing test suites.
-But, the language and tests were developed concurrently with the $\K$
+But the language and tests were developed concurrently with the $\K$
 definition, providing evidence that (Q3) can addressed.
 
 \section{\KEVM: Semantics of the Ethereum Virtual Machine}\label{sec:kevm}
@@ -44,7 +44,7 @@ The Ethereum ecosystem is a blockchain-based platform where accounts
 have snippets of computer code called \emph{smart contracts}, that
 enable programmatic governance of transactions on the Ethereum network.
 All \emph{smart contracts} on the blockchain
-must be specified in is an stack-based assembly-like language called
+must be specified in an assembly-like stack-based language called
 the Ethereum Virtual Machine (\EVM{}). The semantics of the
 Ethereum Virtual Machine are described semi-formally in a specification
 called the Ethereum Yellow Paper \cite{WoodReport14}.
@@ -85,7 +85,7 @@ For a more complete reading, please see
 \cite{HildenbrandtCSF18}. Here, we only present arguments that
 help answer the questions we posed at the beginning of this chapter.
 The $\K{}$ semantics of \EVM{} presented in \cite{HildenbrandtCSF18}
-has 2644 lines of non-blank and non-literate code, and passes
+has 2644 lines of non-blank and non-literate code and passes
 all reference tests published by the Ethereum Foundation for testing
 EVM implementations. For reference,
 the EVM specific C++ implementation has 4588 lines of code.
@@ -173,12 +173,12 @@ The Yellow Paper is the official document describing the execution of the EVM
     and parameters required to build consensus-compatible
     EVM clients and Ethereum implementations.
 It cannot be tested against the conformance test-suite;
-instead it serves as a guide for implementations to follow.
+instead, it serves as a guide for implementations to follow.
 Much of the machine definition is supplied as several mutually
 recursive functions from machine-state to machine-state.
 The Yellow Paper is occasionally unclear or incomplete about
 the exact operational behavior of the EVM;
-in these cases it is often easier to simply consult one of the executable implementations.
+in these cases, it is often easier to simply consult one of the executable implementations.
 
 \paragraph{Cpp-ethereum:}
 Cpp-ethereum is the
@@ -198,14 +198,14 @@ Lem compiles to various interactive theorem provers,
     including Coq, Isabelle/HOL, and HOL4.
 The Lem semantics does not capture inter-contract
 execution precisely as it models function calls as non-deterministic events with an external (speculated) relation dictating the ``allowed non-determinism''.
-This semantics is executable and passes all of the VMTests
+This semantics is executable and passes all tests in the VMTests
 test-suite except for those dealing with more complicated inter-contract execution,
   providing high levels of confidence in its correctness.
 
 \paragraph{GMS small-step specification:}
 A small-step specification of the EVM inspired by the
 EtherLite semantics of \cite{LuuReport16}.
-The specification is non-executable, but provides a precise guide for
+The specification is non-executable but provides a precise guide for
 implementers of the EVM \cite{GrishchenkoTR18}.
 
 \begin{table}[th]
@@ -230,7 +230,7 @@ implementers of the EVM \cite{GrishchenkoTR18}.
 
 \paragraph{Oyente:}
 Oyente is an EVM symbolic execution engine written in Python supporting most of
-the EVM, with heuristics-based drivers of the engine for bugfinding \cite{OyenteUrl}.
+the EVM, with heuristics-based drivers of the engine for bug-finding \cite{OyenteUrl}.
 
 \paragraph{Manticore:}
 Manticore is symbolic execution engine for virtual machines, including models for x86, x86\_64, ARMv7, and EVM
@@ -260,13 +260,13 @@ semantics-derived interpreter compares favorably against a language-specific
 C++ implementation, and other tools are able to perform as well as
 other language-specific tools on metrics from \autoref{table:comparison}.
 
-We based our $\K$ semantics on the Yellow Paper, and
+We based our $\K$ semantics on the Yellow Paper and
 found several inconsistencies that were confirmed by its developers \cite{HildenbrandtCSF18}.
 This stems from the fact that unlike the $\K$ semantics,
 the Yellow Paper is an informal document in natural language.
 Often, the Yellow Paper was found to be unclear, underspecified
 or inconsistent with the behavior of actual implementations.
-As the $\K$ semantics are executable, all details have to
+As the $\K$ semantics are executable, all details must be
 considered for our interpreter to pass all tests in the reference
 test-suite. We utilized the developer documentation for our semantics
 to generate an alternative to the Yellow Paper itself, called the Jello Paper
@@ -279,7 +279,7 @@ one.
 
 \section{Ethereum ABI \DSL{}}\label{sec:ethereum-abi-dsl}
 
-EVM lacks high level constructs including functions and explicit data types.
+EVM lacks high-level constructs including functions and explicit data types.
 Any invocation of an EVM program always begins with the VM’s program counter set to 0.
 Higher level languages such as Solidity and Viper, however, have functions and types, allowing users to directly call functions in contracts without dealing with low-level EVM code.
 This lack of high level constructs makes writing specifications for programs
@@ -300,12 +300,12 @@ an official part of the Ethereum protocol, it's not a part of the Yellow Paper.
 Since most smart contracts needing formal verification are written in a high-level
 language like Solidity \cite{SolidityUrl} that produce ABI-compliant code, we
 created a Domain Specific Language (\DSL{}) for interacting with ABI-compliant compiled
-code. Through the use of our DSL, in \cite{ParkFSE18} \footnote{Joint work with Park et al.},
+code. By using our DSL, in \cite{ParkFSE18} \footnote{Joint work with Park et al.},
 we demonstrated that verification of complex smart contracts at the level of the
 EVM bytecode, was feasible. Operating at the EVM-level had many benefits,
 namely:
 \begin{itemize}
-  \item Our methodology worked for any high-level language as long as it
+  \item Our methodology worked for any high-level language, as long as it
     compiled down to ABI-compliant code.
   \item As our \DSL{} is built atop the EVM semantics, updates to the semantics
     are automatically accommodated.
@@ -339,8 +339,9 @@ the HackerGold (HKG) ERC20 token\footnote{\url{https://github.com/ether-camp/vir
 and OpenZeppelin's ERC20 token\footnote{\url{https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/token/ERC20/StandardToken.sol}}.
 Of these, the Vyper ERC20 token was written in Vyper, and the others are written in Solidity.
 We compiled the source code down to the EVM bytecode using each language compiler,
-and executed our verifier to verify that the compiled EVM bytecode satisfies the aforementioned specification.
-During this verification process, and found divergent behaviors across these contracts that do not conform to the ERC20 standard.
+and executed our verifier to verify that the compiled EVM bytecode satisfies the
+ERC20 standard.
+During this verification process, and found divergent behaviors across these contracts that do not conform to the standard.
 
 \subsection{Discussion}
 Note that for a more thorough introduction to our \DSL{} and corresponding
@@ -371,7 +372,7 @@ questions:
  \item Can the $\K$ semantics replace an informal language description/manual?
  \item Can the $\K$-based semantics first approach be used to develop
  a semantics from scratch, without even an informal description of the language,
-  and, comprehensive tests to go long with the same? Can the semantics
+  and, comprehensive tests to go along with the same? Can the semantics
   serve as a comprehensive document to implement other tools for the language?
 \end{enumerate}
 By \emph{solely}, we meant that we intend the semantics-based tools to be
@@ -380,7 +381,7 @@ semantics-derived tools should supplant any language specific ones.
 
 In \autoref{sec:kevm}, we presented a formalization of the
 Ethereum Virtual Machine (\EVM{}) in \K{}, called \KEVM{}.
-\KEVM{} was developed using an informal semantics of the
+\KEVM{} was developed using an informal semantics of
 the EVM described in a document known as the Yellow Paper.
 We demonstrated that the $\K{}$ semantics-derived
 interpreter not only passed all tests in EVM's conformance test suite,
