@@ -1,4 +1,3 @@
-% For copyright and license information, see uiucthesis2021.dtx and derivatives.
 \documentclass[edeposit,tocnosub,noragright,centerchapter,fullpagesingle,12pt]{uiuc_csthesis21}
 
 \makeatletter
@@ -24,41 +23,61 @@
 	}
 }
 
-\usepackage[utf8]{inputenc}
-\usepackage[inference]{semantic}
-\usepackage[english]{babel}
-\usepackage{csquotes}
-\usepackage{pifont}
-\usepackage{stmaryrd}
-\usepackage{microtype}
-\usepackage{amsmath,amsthm,amssymb}
-\usepackage[bookmarksdepth=3,linktoc=all,colorlinks=true,urlcolor=blue,linkcolor=blue,citecolor=blue]{hyperref}
-\usepackage[capitalize]{cleveref}
-%\usepackage[style=ieee]{biblatex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FIGURE PACKAGES
+%
+\usepackage{graphicx}  % Please import figures that are *high resolution* PDFs
+%\usepackage{epsfig}   % or EPS files
+\usepackage{caption}
+%\usepackage{subfigure}  % Useful for subfigures
+%\usepackage{subcaption}  % Useful for captioning subfigures
+
+%\usepackage[utf8]{inputenc}
+%\usepackage[inference]{semantic}
+%\usepackage[english]{babel}
+%\usepackage{csquotes}
+%\usepackage{pifont}
+%\usepackage{stmaryrd}
+%\usepackage{microtype}
+%\usepackage{amsmath,amsthm,amssymb}
+%\usepackage[bookmarksdepth=3,linktoc=all,colorlinks=true,urlcolor=blue,linkcolor=blue,citecolor=blue]{hyperref}
+%%\usepackage[style=ieee]{biblatex}
 \usepackage[inline]{enumitem}
-\usepackage{dirtytalk}
-\usepackage{graphicx}
-\usepackage{wrapfig}
-\usepackage{subcaption}
-\usepackage{listings}
-\usepackage{xcolor}
-\usepackage{longtable}
-\usepackage{tabularx}
+%\usepackage{dirtytalk}
+%\usepackage{graphicx}
+%\usepackage{wrapfig}
+%\usepackage{subcaption}
+%\usepackage{listings}
+%\usepackage{xcolor}
+%\usepackage{longtable}
+%\usepackage{tabularx}
 \usepackage{mathtools}
-\usepackage{varwidth}
-\usepackage{proof}
-\usepackage[bottom]{footmisc}
-\usepackage[bbgreekl]{mathbbol}
+%\usepackage{varwidth}
+%\usepackage{proof}
+%\usepackage[bottom]{footmisc}
+%\usepackage[bbgreekl]{mathbbol}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TABLE PACKAGES
+%
+\usepackage{booktabs}  % Useful for high quality tables (e.g., you can replace \hrule with \toprule, \midrule, and \bottomrule).
+%\usepackage{multicol}
+%\usepackage{multirow}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MATH PACKAGES (Comment out this section if unnecessary for your dissertation)
+%
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amsthm}
+\usepackage[capitalize]{cleveref}
 
 
-\DeclareSymbolFontAlphabet{\mathbbm}{bbold}
-\DeclareSymbolFontAlphabet{\mathbb}{AMSb}%
+%\DeclareSymbolFontAlphabet{\mathbbm}{bbold}
+%\DeclareSymbolFontAlphabet{\mathbb}{AMSb}%
 
-% \usepackage{ruledchapters}  % example of compliant heading format, uncomment to use
-
-% uncomment the below to show a grid on all pages
-% \usepackage[grid, gridunit=in, gridcolor=blue!40, subgridcolor=blue!20]{eso-pic}
-
+% Change numbering of definitions, lemmas, theorems, etc to meet the Graduate College standards
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{lemma}{Lemma}[chapter]
@@ -72,33 +91,34 @@
 % ALGORITHM AND CODE PACKAGES (Comment out this section if unnecessary for your dissertation)
 %
 \usepackage{listings}  % Useful for formatting code blocks, see here for further information about formatting code: https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
-\usepackage[ruled,linesnumbered]{algorithm2e}  % Useful for formatting algorithms (pseudocode)
+\usepackage[ruled]{algorithm2e}  % Useful for formatting algorithms (pseudocode)
 \numberwithin{algocf}{chapter}     % Change numbering of algorithms to meet the Graduate College standards
 
-
-\input{lst-styles.tex}
-\newcommand{\inlinemedik}[1]{\lstinline[style=inlinemediksty,language=medik]{#1}}
-\newcommand{\inlinek}[1]{\lstinline[style=inlineksty,language=k]{#1}}
-\newcommand{\inlineimp}[1]{\lstinline[style=impsty,language=imp]{#1}}
-\newcommand{\inlinekmath}[1]{\lstinline[mathescape,style=inlineksty,language=k,keepspaces]!#1!}
-\newcommand{\inlinemedikmath}[1]{\lstinline[mathescape,style=inlinemediksty,language=medik]!#1!}
-\newcommand{\inlinemedikimp}[1]{\lstinline[mathescape,style=inlineimpsty,language=imp]!#1!}
-\lstset{ literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1} }
-\lstset{captionpos=b,escapeinside={@}{@}}
-\providecommand*{\lstnumberautorefname}{Line}
-\def\boxit#1{%
-  \smash{\color{red}\fboxrule=1pt\relax\fboxsep=2pt\relax%
-  \llap{\rlap{\fbox{\vphantom{0}\makebox[#1]{}}}~}}\ignorespaces
-}
-
+%\input{lst-styles.tex}
+%\newcommand{\inlinemedik}[1]{\lstinline[style=inlinemediksty,language=medik]{#1}}
+%\newcommand{\inlinek}[1]{\lstinline[style=inlineksty,language=k]{#1}}
+%\newcommand{\inlineimp}[1]{\lstinline[style=impsty,language=imp]{#1}}
+%\newcommand{\inlinekmath}[1]{\lstinline[mathescape,style=inlineksty,language=k,keepspaces]!#1!}
+%\newcommand{\inlinemedikmath}[1]{\lstinline[mathescape,style=inlinemediksty,language=medik]!#1!}
+%\newcommand{\inlinemedikimp}[1]{\lstinline[mathescape,style=inlineimpsty,language=imp]!#1!}
+%\lstset{ literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1} }
+%\lstset{captionpos=b,escapeinside={@}{@}}
+%\providecommand*{\lstnumberautorefname}{Line}
+%\def\boxit#1{%
+%  \smash{\color{red}\fboxrule=1pt\relax\fboxsep=2pt\relax%
+%  \llap{\rlap{\fbox{\vphantom{0}\makebox[#1]{}}}~}}\ignorespaces
+%}
+%
 \graphicspath{{./figures}}
-
-%\addbibresource{./references.bib}
-
-%\newcounter{counterforappendices}
-
 \input{newcommands.tex}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% COVERPAGE
+%
+
+% Uncomment the appropriate one of the following four lines:
+%\msthesis
 \phdthesis
 %\otherdoctorate[abbrev]{Title of Degree}
 %\othermasters[abbrev]{Title of Degree}
@@ -140,7 +160,8 @@
 \frontmatter
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+% ABSTRACT
+%
 \begin{abstract}
   Preventable medical errors (PMEs), characterized by misdiagnosis or mistreatment,
   pose a significant challenge in healthcare.
@@ -195,25 +216,6 @@
   We outline how our approach improves upon the existing state-of-art,
   optimizations to address domain-specific needs of healthcare practitioners,
   and discuss challenges for future work.
-  %Our CDSS is Institutional Review Board (IRB) approved and is slated to undergo clinical simulations.
-
-
-  %Despite their benefits, widespread CDSS adoption is hindered by several
-  %challenges.
-
-  %Several Domain-Specific Languages (DSLs) have been proposed to facilitate expressing BPGs
-  %in a computer-interpretable format that is easily comprehensible to HCPs.
-  %Given the safety-critical nature of CDSSs, the need for such languages to have complete
-  %formal semantics and an ecosystem of formal analysis tools has been recognized.
-  %Moreover, since these languages evolve over time to accommodate complexities in modeling BPGs,
-  %tools for them must also be adaptable to changes. But, existing languages lack complete formal semantics,
-  %or analysis tools and execution tools derived from them.
-
-  %This work presents a semantics-first approach to building safe CDSSs.
-  %By semantics-first, we mean that (i) semantics of medical knowledge is
-  %accurately captured in the CDSS, and, (ii)
-  %This work introduces MediK: a new DSL for expressing BPGs with a complete executable formal semantics, and formal analysis tools, including a model checker, symbolic execution engine, and deductive verifier. As MediK's tools are derived from its semantics, any update to the language is automatically reflected across all tools. To evaluate our approach, we collaborated with a major pediatric hospital to develop a MediK-based CDSS for the screening and management of Pediatric Sepsis and validated that it satisfies desired safety properties. Our CDSS is Institutional Review Board (IRB) approved and is slated to undergo clinical simulations.
-
 \end{abstract}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -229,7 +231,6 @@ and for always believing in me, even when challenges ensued.
 % ACKNOWLEDGMENTS
 %
 \begin{acknowledgments}
-
 While my journey at the University of Illinois has been long and challenging,
   I have been fortunate to have had the support of several wonderful people.
 
@@ -266,112 +267,53 @@ I would like to extend my deepest gratitude to my family,
 I'd like to thank my uncle, aunt, and cousins, who always made sure I had a home away from home.
 And to my parents and sister--thank you for the unconditional love, support, and unwavering belief in me, even during my moments of doubt.
 
-
-
 \end{acknowledgments}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-%According to a September 2023 President's Council on Science and Technology Report,
-%a quarter of medicare patients suffer adverse outcomes during hospitalization,
-%of which 40\% were \emph{preventable}
-%Clinical Best Practice Guidelines (BPGs) are systematically developed,
-%evidence-based statements published by medical institutions and associations
-%that standardize diagnosis and treatment for various clinical scenarios. When
-%expressed in an executable medium, BPGs can be utilized to build systems that
-%assist healthcare professionals (HCPs) with situation-specific advice. Such
-%systems, known as Guideline-based Clinical Decision Support Systems (CDSSs),
-%  have been shown to improve patient outcomes.
+% TABLE OF CONTENTS
 %
-%Several Domain-Specific Languages (DSLs) have been proposed to facilitate expressing BPGs in a computer-interpretable format that is easily comprehensible to HCPs.
-%Given the safety-critical nature of CDSSs, the need for such languages to have complete formal semantics and an ecosystem of formal analysis tools has been recognized.
-%Moreover, since these languages evolve over time to accommodate complexities in modeling BPGs, tools for them must also be adaptable to changes.
-%But, existing languages lack complete formal semantics, or analysis tools derived from them.
-%
-%This work introduces \MediK{}: a new DSL for expressing BPGs with a complete executable formal semantics,
-%and formal analysis tools, including a model checker, symbolic execution engine, and deductive verifier.
-%As MediK's tools are derived from its semantics, any update to the language is automatically reflected across all tools. To evaluate our approach, we collaborated with a major pediatric hospital to develop a MediK-based CDSS for the screening and management of Pediatric Sepsis and validated that it satisfies desired safety properties.
-%Our CDSS is Institutional Review Board (IRB) approved and is slated to undergo clinical simulations.
-%\end{abstract}
-%
-%{
-%    \hypersetup{linkcolor=black}  % disable link coloring locally
-%    \tableofcontents
-%    % the Graduate College doesn't recommend including lot or lof
-%    % \listoftables
-%    % \listoffigures
-%}
-
-%\chapter{List of Abbreviations}
-%
-%\begin{abbrevlist}
-%\item[AAP]      American Academic of Pediatrics
-%\item[AAP]      American Academy of Pediatrics
-%\item[ACLS]     Advanced Cardiovascular Life Support
-%\item[AED]      Automatic Emergency Defibrillator
-%\item[AHA]      American Heart Association
-%\item[ALS]      Advanced Life Support
-%\item[BLS]      Basic Life Support
-%\item[BNF]      Backus-Naur Form
-%\item[BPG]      Best Practice Guideline
-%\item[CAST]     Commercial Aviation Safety Team
-%\item[CDSS]     Clinical Decision Support System
-%\item[CPR]      Cardiopulmonary Resuscitation
-%\item[CSM]      Communicating State Machines
-%\item[CTL]      Computation Tree Logic
-%\item[DeGeL]    Digital Electronic Guideline Library
-%\item[EHR]      Electronic Health Record
-%\item[EVM]      Ethereum Virtual Machine
-%\item[GEE]      Guideline Execution Engine
-%\item[GEODE-CM] Guided Entry of Data Elements for Clinical Management
-%\item[GLARE]    Guideline Acquisition, Representation, and Execution
-%\item[GLIF]     Guideline Interchange Format
-%\item[GOSpeL]   Guideline prOcess Specification Language
-%\item[GPROVE]   Guideline PRocess cOnformance VErification Framework
-%\item[GP]       General Practitioner
-%\item[HCP]      Healthcare Practitioner
-%\item[ITL]      Interval Temporal Logic
-%\item[LTL]      Linear Temporal Logic
-%\item[MBA]      Model-based Architecture
-%\item[MLM]      Medical Logic Module
-%\item[NAM]      National Academy of Medicine
-%\item[NHS]      National Health Service
-%\item[ONC]      Office of the National Coordinator for Health Information Technology
-%\item[P-CAPE]   Partners Computerized Algorithm Processor and Editor
-%\item[PCAST]    President's Council of Advisors on Science and Technology
-%\item[PME]      Preventable Medical Error
-%\item[ROSC]     Return of Spontaneous Circulation
-%\item[SAGE]     Standards-based Guidelines Environment
-%\item[SMT]      Satisfiability Modulo Theories
-%\item[SOS]      Structural Operational Semantics
-%\end{abbrevlist}
-%
-%\chapter{List of Symbols}
-%
-%\begin{symbollist}[0.7in]
-%\item[$\tau$] Time taken to drink one cup of coffee.
-%\item[$\mu$g] Micrograms (of caffeine, generally).
-%\end{symbollist}
-
 \tableofcontents
+
 \mainmatter
 
-\include{introduction}
-\include{background}
-\include{challenges}
-\include{related-work}
-\include{semantics-first-cdss}
-\include{evaluating-k}
-\include{separating-concerns}
-\include{rewriting-based-guidelines}
-\include{medik-safe-cdss}
-\include{future-work}
-\include{conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% INSERT REAL CONTENT HERE
+%
 
+\chapter{Introduction}
+\label{chp:intro}
+%\input{introduction}  % Inserts content from "introduction.tex" here
+
+ NOTE 1: The Graduate College standards allow sections to be numbered by chapter number, section number, and subsection number. This means you can use the following commands within a chapter:
+ \cite{RosuJLAP10}
+ \section{}
+% \subsection{}
+% \paragraph{} (does not produce a number)
+% In other words, do not use the command \subsubsection{} and beyond!
+
+% NOTE 2: The Graduate College is picky about access white space, so you should attempt to minimize access whitespace when possible. For example, Latex will move a section header and subsequent paragraph onto the next page to avoid having a section header followed by a single line of text. In this case, you should use the command "\clearpage \noindent" at the end of the first line text in the paragraph to try to bump the header and one line of text back onto the previous page.
+
+%\chapter{Conclusions}
+%\label{chp:concl}
+%\input{conclusions}  % Inserts content from "conclusions.tex" here
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% BIBLIOGRAPHY
+%
 \bibliographystyle{IEEE_ECE}
 \bibliography{references}  % Put references in BibTeX format in thesisrefs.bib.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% APPENDIX
+%
+% NOTE: Appendices go *after* the bibliography (see here: https://grad.illinois.edu/thesis/format). However, if appendices contain citations, then you may move the appendices *before* the bibliography section.
+\appendix
+
+%\chapter{Something}
+%\label{apx:something}
+%\input{appendix-something}  % inserts content from "appendix-name.tex"
+
+\backmatter
+
 \end{document}
+\endinput

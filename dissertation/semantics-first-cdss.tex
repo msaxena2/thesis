@@ -520,6 +520,9 @@ Recall that the attribute assignment statement has the attribute
 construct must be evaluated first. Thus,
 $\K$ will \emph{heat}, or pull-out the second
 argument for evaluation. This results in the configuration:
+
+\newpage
+
 \begin{lstlisting}[language=k,style=ksty,frame=single]
 <T>
   <k> 2 + 3 ~> x = []; </k>
@@ -571,6 +574,7 @@ we slightly modify the imp program to have two simple statements
 after the variable declaration instead of one.
 Assume the program has the form \inlinek{int x; x = 5; x = x + 2}.
 variable declaration, we would have:
+\newpage
 \begin{lstlisting}[language=k,style=ksty,frame=single]
 <T>
   <k> x = 5; x = x + 2; </k>
