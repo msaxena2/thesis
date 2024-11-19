@@ -400,14 +400,14 @@ expressing the transition system using statecharts \cite{DammCOMPOS97}.
 Statecharts are directed graphs representing state machines \cite{BalserICIDP02}.
 Plan states represent statechart nodes, and edges transitions. The transitions
 can then be conveniently formalized as \SOS{} rules. For instance, the rule:
-$$
+\begin{equation}
 \inference{\llbracket \text{P.State}=\text{considered}\rrbracket_{\sigma} &
 \text{da}\left(\Omega, \sigma \right) \rightarrow \ast\text{da}\left(\true{},
 \sigma^{\prime}\right)}
 {\text{psm}_P\left(\sigma\right) \rightarrow
 \text{psm}_P\left(\sigma^{\prime}\left[\text{P.State} \leftarrow
 \text{ready}\right]\right)}
-$$
+\end{equation}
 expresses the semantics of a plan $P$ (expressed as a statechart $\text{psm}$)
 to transition from state \say{$\text{consider}$}
 to state \say{$\text{ready}$}. The \SOS{} rule expresses that
