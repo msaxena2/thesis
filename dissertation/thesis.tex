@@ -5,7 +5,7 @@
 \usepackage{setspace}  % Useful for single, 1.5, and double spacing
 \usepackage[numbers, sort]{natbib}  % Useful for formatting reference section
 \usepackage{url}  % Useful for URLs
-\usepackage{hyperref}  % Another package useful for URLs
+%\usepackage{hyperref}  % Another package useful for URLs
 
 \usepackage{lscape}  % Useful for wide tables or figures.
 % Following command definition is from Stack Exchange: https://tex.stackexchange.com/questions/278113/single-landscape-page-with-page-number-at-the-bottom
@@ -33,7 +33,7 @@
 \usepackage{stmaryrd}
 \usepackage{microtype}
 \usepackage{amsmath,amsthm,amssymb}
-%\usepackage[bookmarksdepth=3,linktoc=all,colorlinks=true,urlcolor=blue,linkcolor=blue,citecolor=blue]{hyperref}
+\usepackage[bookmarksdepth=3,linktoc=all,colorlinks=true,urlcolor=blue,linkcolor=blue,citecolor=blue]{hyperref}
 %%\usepackage[style=ieee]{biblatex}
 \usepackage[inline]{enumitem}
 \usepackage{dirtytalk}
@@ -84,7 +84,7 @@
 % ALGORITHM AND CODE PACKAGES (Comment out this section if unnecessary for your dissertation)
 %
 \usepackage{listings}  % Useful for formatting code blocks, see here for further information about formatting code: https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
-\usepackage[ruled]{algorithm2e}  % Useful for formatting algorithms (pseudocode)
+\usepackage[ruled,linesnumbered]{algorithm2e}  % Useful for formatting algorithms (pseudocode)
 \numberwithin{algocf}{chapter}     % Change numbering of algorithms to meet the Graduate College standards
 
 \input{lst-styles.tex}
