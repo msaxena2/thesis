@@ -5,7 +5,7 @@
 \usepackage{setspace}  % Useful for single, 1.5, and double spacing
 \usepackage[numbers, sort]{natbib}  % Useful for formatting reference section
 \usepackage{url}  % Useful for URLs
-%\usepackage{hyperref}  % Another package useful for URLs
+\usepackage{hyperref}  % Another package useful for URLs
 
 \usepackage{lscape}  % Useful for wide tables or figures.
 % Following command definition is from Stack Exchange: https://tex.stackexchange.com/questions/278113/single-landscape-page-with-page-number-at-the-bottom
@@ -24,38 +24,31 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FIGURE PACKAGES
-%
-\usepackage{graphicx}  % Please import figures that are *high resolution* PDFs
-%\usepackage{epsfig}   % or EPS files
-\usepackage{caption}
-%\usepackage{subfigure}  % Useful for subfigures
-%\usepackage{subcaption}  % Useful for captioning subfigures
 
-%\usepackage[utf8]{inputenc}
-%\usepackage[inference]{semantic}
+\usepackage[utf8]{inputenc}
+\usepackage[inference]{semantic}
 %\usepackage[english]{babel}
-%\usepackage{csquotes}
-%\usepackage{pifont}
-%\usepackage{stmaryrd}
-%\usepackage{microtype}
-%\usepackage{amsmath,amsthm,amssymb}
+\usepackage{csquotes}
+\usepackage{pifont}
+\usepackage{stmaryrd}
+\usepackage{microtype}
+\usepackage{amsmath,amsthm,amssymb}
 %\usepackage[bookmarksdepth=3,linktoc=all,colorlinks=true,urlcolor=blue,linkcolor=blue,citecolor=blue]{hyperref}
 %%\usepackage[style=ieee]{biblatex}
 \usepackage[inline]{enumitem}
-%\usepackage{dirtytalk}
-%\usepackage{graphicx}
-%\usepackage{wrapfig}
-%\usepackage{subcaption}
-%\usepackage{listings}
-%\usepackage{xcolor}
-%\usepackage{longtable}
-%\usepackage{tabularx}
+\usepackage{dirtytalk}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{longtable}
+\usepackage{tabularx}
 \usepackage{mathtools}
-%\usepackage{varwidth}
-%\usepackage{proof}
-%\usepackage[bottom]{footmisc}
-%\usepackage[bbgreekl]{mathbbol}
+\usepackage{varwidth}
+\usepackage{proof}
+\usepackage[bottom]{footmisc}
+\usepackage[bbgreekl]{mathbbol}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TABLE PACKAGES
@@ -74,8 +67,8 @@
 \usepackage[capitalize]{cleveref}
 
 
-%\DeclareSymbolFontAlphabet{\mathbbm}{bbold}
-%\DeclareSymbolFontAlphabet{\mathbb}{AMSb}%
+\DeclareSymbolFontAlphabet{\mathbbm}{bbold}
+\DeclareSymbolFontAlphabet{\mathbb}{AMSb}%
 
 % Change numbering of definitions, lemmas, theorems, etc to meet the Graduate College standards
 \theoremstyle{definition}
@@ -94,21 +87,21 @@
 \usepackage[ruled]{algorithm2e}  % Useful for formatting algorithms (pseudocode)
 \numberwithin{algocf}{chapter}     % Change numbering of algorithms to meet the Graduate College standards
 
-%\input{lst-styles.tex}
-%\newcommand{\inlinemedik}[1]{\lstinline[style=inlinemediksty,language=medik]{#1}}
-%\newcommand{\inlinek}[1]{\lstinline[style=inlineksty,language=k]{#1}}
-%\newcommand{\inlineimp}[1]{\lstinline[style=impsty,language=imp]{#1}}
-%\newcommand{\inlinekmath}[1]{\lstinline[mathescape,style=inlineksty,language=k,keepspaces]!#1!}
-%\newcommand{\inlinemedikmath}[1]{\lstinline[mathescape,style=inlinemediksty,language=medik]!#1!}
-%\newcommand{\inlinemedikimp}[1]{\lstinline[mathescape,style=inlineimpsty,language=imp]!#1!}
-%\lstset{ literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1} }
-%\lstset{captionpos=b,escapeinside={@}{@}}
-%\providecommand*{\lstnumberautorefname}{Line}
-%\def\boxit#1{%
-%  \smash{\color{red}\fboxrule=1pt\relax\fboxsep=2pt\relax%
-%  \llap{\rlap{\fbox{\vphantom{0}\makebox[#1]{}}}~}}\ignorespaces
-%}
-%
+\input{lst-styles.tex}
+\newcommand{\inlinemedik}[1]{\lstinline[style=inlinemediksty,language=medik]{#1}}
+\newcommand{\inlinek}[1]{\lstinline[style=inlineksty,language=k]{#1}}
+\newcommand{\inlineimp}[1]{\lstinline[style=impsty,language=imp]{#1}}
+\newcommand{\inlinekmath}[1]{\lstinline[mathescape,style=inlineksty,language=k,keepspaces]!#1!}
+\newcommand{\inlinemedikmath}[1]{\lstinline[mathescape,style=inlinemediksty,language=medik]!#1!}
+\newcommand{\inlinemedikimp}[1]{\lstinline[mathescape,style=inlineimpsty,language=imp]!#1!}
+\lstset{ literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1} }
+\lstset{captionpos=b,escapeinside={@}{@}}
+\providecommand*{\lstnumberautorefname}{Line}
+\def\boxit#1{%
+  \smash{\color{red}\fboxrule=1pt\relax\fboxsep=2pt\relax%
+  \llap{\rlap{\fbox{\vphantom{0}\makebox[#1]{}}}~}}\ignorespaces
+}
+
 \graphicspath{{./figures}}
 \input{newcommands.tex}
 
@@ -165,10 +158,6 @@
 \begin{abstract}
   Preventable medical errors (PMEs), characterized by misdiagnosis or mistreatment,
   pose a significant challenge in healthcare.
-  %According to a September 2023 report
-  %by the President's Council on Science and Technology (PCAST) on patient safety,
-  %a quarter of Medicare patients experience adverse outcomes during hospitalization,
-  %of which 40\% were due to PMEs.
   In the United States, PMEs were estimated to have caused between
   44,000 and 98,000 deaths in 1997,
   rising to more than 250,000 in 2013. Additionally, the
@@ -178,14 +167,6 @@
   clinical best practice guidelines (BPGs). BPGs are systematically developed,
   evidence-based statements published by medical institutions and associations
   that standardize diagnosis and treatment for various clinical scenarios.
-  %Growing evidence indicates BPG-conformant treatment lowers the risk of preventable
-  %medical errors.
- % However, following these guidelines in practice can be
- % challenging.
-  %To assist with BPG-conformance, computerized
-  %decision support systems that encode
-  %medical knowledge in BPGs, and provide HCPs with relevant, situation-specific,
-  %guideline-prescribed advice can be utilized.
   BPG-conformance has been linked with reduced rates of PMEs, but,
   following BPGs in practice can be challenging.
   Computerized Decision Support Systems (CDSSs) aim to improve conformance
@@ -278,24 +259,18 @@ And to my parents and sister--thank you for the unconditional love, support, and
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % INSERT REAL CONTENT HERE
-%
 
-\chapter{Introduction}
-\label{chp:intro}
-%\input{introduction}  % Inserts content from "introduction.tex" here
-
- NOTE 1: The Graduate College standards allow sections to be numbered by chapter number, section number, and subsection number. This means you can use the following commands within a chapter:
- \cite{RosuJLAP10}
- \section{}
-% \subsection{}
-% \paragraph{} (does not produce a number)
-% In other words, do not use the command \subsubsection{} and beyond!
-
-% NOTE 2: The Graduate College is picky about access white space, so you should attempt to minimize access whitespace when possible. For example, Latex will move a section header and subsequent paragraph onto the next page to avoid having a section header followed by a single line of text. In this case, you should use the command "\clearpage \noindent" at the end of the first line text in the paragraph to try to bump the header and one line of text back onto the previous page.
-
-%\chapter{Conclusions}
-%\label{chp:concl}
-%\input{conclusions}  % Inserts content from "conclusions.tex" here
+\include{introduction}
+\include{background}
+\include{challenges}
+\include{related-work}
+\include{semantics-first-cdss}
+\include{evaluating-k}
+\include{separating-concerns}
+\include{rewriting-based-guidelines}
+\include{medik-safe-cdss}
+\include{future-work}
+\include{conclusion}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BIBLIOGRAPHY
