@@ -24,19 +24,19 @@ Intuitively, given a configuration
 pattern $\gamma$, the pattern $\snext \gamma$ matches all possible
 configurations that $\gamma$ can rewrite to in one-step. Thus,
 the one-step rewrite relation can be defined as:
-$$
+\begin{equation}
   \varphi \To^1 \psi \equiv \varphi \to \snext \psi
-$$
+\end{equation}
 
 Next, the reflexive, transitive closure of the one-step rewrite relation
 can be defined using fixed-points as:
-$$
+\begin{equation}
   \eventually \varphi \equiv \mu X \ldot \varphi \vee \snext X
-$$
+\end{equation}
 and the rewrite $\varphi \To \psi$ as:
-$$
+\begin{equation}
   \varphi \To \psi \equiv \varphi \to \eventually \psi
-$$
+\end{equation}
 In other words, if a configuration matches
 $\varphi$ then it matches $\varphi$ in zero or more steps.
 Note that the existence of a fixed point of $\eventually\varphi$
@@ -153,27 +153,32 @@ while some correspond to none. To address this, the authors utilize an algorithm
 to construct an Abstract Machines (AM) style semantics from the SOS.
 
 Consider for example, the following SOS rules for assignment:
-$$
-\infer[AssnCong]
-{x := e, \mu\; \leadsto\; x := e^{\prime}, \mu^{\prime}}{e, \mu\; \leadsto\; e^{\prime}\mu^{\prime}}
-\quad \quad
-\infer[AssnEval]
+\begin{equation}
+  \begin{gathered}
+  \infer[AssnCong]
+{x := e, \mu\; \leadsto\; x := e^{\prime}, \mu^{\prime}}{e, \mu\; \leadsto\; e^{\prime}\mu^{\prime}} \\
+  \end{gathered}
+\end{equation}
+\begin{equation}
+  \begin{gathered}
+  \infer[AssnEval]
 {x := v,\mu\; \leadsto\; \left(\text{skip}, \mu\left[x \rightarrow v\right]\right)}{}
-$$
+  \end{gathered}
+\end{equation}
 
 The authors then automatically generate an AM, written
 $\left\langle \left(t, \mu\right) \;\mid\; K\right\rangle$ where $K$ is the
 \emph{context} or \emph{continuation} composed of frames of the form $[x\ :=\
 (\Box_{t}, \Box_{\mu})]$ indicating holes for an evaluated value and
 environment. Thus, the AM rules are:
-$$
+\begin{equation}
 \left\langle \left( x := e, \mu \right)\;\mid\; k \right\rangle \rightarrow
 \left\langle \left( e, \mu \right)\;\mid\; k \circ \left[x := \left(\Box_t,\Box_{\mu}\right) \right]\right\rangle
-$$
-$$
+\end{equation}
+\begin{equation}
 \left\langle \left( v, \mu \right)\;\mid\; k \right\rangle \rightarrow
 \left\langle \left(\text{skip}, \mu\left[x \rightarrow v \right] \right) \;\mid\; k \right\rangle
-$$
+\end{equation}
 
 Next, as it's possible for the AM to have an infinitely-many states, an
 abstraction is required to collapse the states and make the transition system
@@ -228,8 +233,12 @@ if $p$ terminates.
 We can now express partial evaluation of program p, using another
 program $\mix$, called so since performs a mix of both execution and code
 generation. Now, we get a two-stage execution process:
-$$ p_{\text{in}_1} = \llbracket \mix \rrbracket [p, \text{in}_1]$$
-$$ \text{output} = \llbracket p_{\text{in}_1} \rrbracket \text{in}_2$$
+\begin{equation}
+  \begin{gathered}
+  p_{\text{in}_1} = \llbracket \mix \rrbracket [p, \text{in}_1] \\
+ \text{output} = \llbracket p_{\text{in}_1} \rrbracket \text{in}_2
+  \end{gathered}
+\end{equation}
 %  $$\llbracket \llbracket \mix \rrbracket \left[p, \text{in}_1\right] \rrbracket
 %  \left[\text{in}_2\right]
 %  = \llbracket p \rrbracket \left[\text{in}_1, \text{in}_2\right]$$

@@ -66,11 +66,11 @@ into the form ``\inlinekmath{if $\ \varphi$ do $\ \alpha$}''. Note
 statements without a condition can be represented simply as \inlinekmath{if
 $\ true$ do $\ \alpha$}.
 Thus, we can represent each statement as a tuple $\CR{}$.
-Given a \BPG{} $B$, we say
-\[
+Given a \BPG{} $B$, we say:
+\begin{equation}
 \Statements{B} =
 \left\{\left(\varphi_1,\alpha_1\right),\left(\varphi_2,\alpha_2\right),\dots,\left(\varphi_n,\alpha_n\right)\right\}
-\]
+\end{equation}
 to refer to all statements within $B$. Next, we observed that:
 \begin{itemize}
   \item Statements were often required to be carried out \emph{concurrently}.
@@ -81,17 +81,17 @@ $W = \left(S_W, \leq_W\right)$ as a \emph{lower semi-lattice} on a partition $S_
 Specifically, for any pair $\left(\left(\varphi_1,\alpha_1\right),
 \left(\varphi_2, \alpha_2\right)\right)$, there exists some
 $\left(\varphi,\alpha\right) \in S_W$ s.t.
-\[
+\begin{equation}
     \left(\varphi,\alpha\right) \leq_W
     \left(\varphi_1,\alpha_1\right)\quad\bigwedge\quad
     \left(\varphi,\alpha\right) \leq_W \left(\varphi_2,\alpha_2\right)
-\]
+\end{equation}
 \noindent and there is no $\left(\varphi',\alpha'\right) \in S_W$ s.t.
-\[
+\begin{equation}
     \left(\varphi',\alpha'\right) \leq_W
     \left(\varphi_1,\alpha_1\right)\quad\bigwedge\quad\left(\varphi',\alpha'\right) \leq_W
     \left(\varphi_2,\alpha_2\right)
-\]
+\end{equation}
 \noindent and $\left(\varphi,\alpha\right) \leq_W \left(\varphi',\alpha'\right)$.
 %\begin{align*}
 %   \text{there exists some} \left(\varphi,\alpha\right) \in S_W \text{ s.t.}
@@ -115,9 +115,9 @@ $\left(\varphi,\alpha\right) \in S_W$ s.t.
 %\end{itemize}
 
 We can then define the guideline $B$ as the \emph{partial order}:
-\[
+\begin{equation}
   \left(\left\{W_1,W_2,\dots,W_n\right\}, \leq\right)
-\]
+\end{equation}
 where, $W_i$ is the workflow $\left(S_{W_i}, <_{W_i}\right)$ and
 $S_{W_1} \cup S_{W_2} \cup \dots \cup S_{W_n} = \Statements{B}$. Note that a
 workflow can contain a single statement to enable partitioning $\Statements{B}$
@@ -125,11 +125,11 @@ into disparate workflows. Thus, given a workflow $W =\left(S_{W_i},
     <_{W_i}\right)$  an execution
 $\alpha_1,\alpha_2,\dots,\alpha_n$ is a valid execution of actions of a workflow
 iff:
-\[
+\begin{equation}
   \left(\varphi_1,\alpha_1\right) \leq_W \left(\varphi_2,\alpha_2\right) \leq_W \dots \leq_W \left(\varphi_n,\alpha_n\right)
   \quad\text{ and }\quad
   \varphi_1 \wedge \varphi_2 \wedge \dots \wedge \varphi_n \text{ is satisfiable.}
-\]
+\end{equation}
 
 \section{A Modular Architecture For \CDSSs{}}\label{sec:modular-cdss-architecture}
 This section describes the architecture for \CDSSs{}

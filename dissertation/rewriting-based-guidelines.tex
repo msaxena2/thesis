@@ -356,14 +356,14 @@ any machine \inlinekmath{$\mathcal{M}$}, with initial state \inlinek{u}
 %the CPR Machine to start in state \inlinek{idle} corresponding to the
 %entry state of the machine in \autoref{fig:cpr-machine}.
 
-\begin{lstlisting}[float=ht,
+\begin{lstlisting}[float=h!,
   mathescape=true,
   frame=single,
   style=ksty,
   language=k,
   numbers=left,
   numbersep=5pt,
-  caption={CPR Initialization},
+  caption={General Initialization Rule for Machine $\mathcal{M}$},
   label={lst:machine-initialization},
   xleftmargin=3ex
   ]
@@ -400,12 +400,14 @@ JSON elements. Thus, \inlinekmath{"$\mathcal{M}$.init" , IN} matches any list wi
 the list). When the rule fires, the list is rewritten to
 just the tail, resulting in the removal \inlinekmath{"$\mathcal{M}$.init"}
 event from the \inlinek{<inputBuffer>} cell. For instance, in case of the CPR
-machine, the initialization rule is:
+machine, the initialization rule is show in \autoref{lst:cpr-init}.
 
-\begin{lstlisting}[float=ht,
+\begin{lstlisting}[float=h!,
   frame=single,
   style=ksty,
   language=k,
+  caption={CPR Initialization \K{} Rule},
+  label=lst:cpr-init
   ]
 <machines>
   .Bag => ( <machine>
