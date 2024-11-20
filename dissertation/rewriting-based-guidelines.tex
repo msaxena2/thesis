@@ -60,7 +60,7 @@ Advanced Cardiovascular Life Support (\ACLS{}) are a set of \BPGs{} periodically
 published by the American Heart Association (\AHA{}) for management of
 life-threatening cardiac conditions that will cause of have caused cardiac
 arrest. The conditions that the guidelines treat range from dangerous arrhythmias, i.e.,
-irregularities in heart's rhythm, to cardiac arrest.---a cardiac emergency where
+irregularities in heart's rhythm, to cardiac arrest---a cardiac emergency where
 the heart stop pumping \cite{ACLSWikiEntry}.
 The guidelines, according to the AHA{}, \say{are based on the most current
 and comprehensive review of resuscitation science, systems, protocols, and
@@ -239,7 +239,7 @@ to the frontend that cause popups or messages to be displayed
 on associated parts of the screen. Thus, the frontend itself contains
 no medical logic.
 
-\subsection{$\KACLS$ backend}\label{sec:kacls-backend}
+\subsection{$\KACLS$ Backend}\label{sec:kacls-backend}
 
 As described at the start of \autoref{sec:kacls-cdss},
 the backend receives events from the frontend, processes them and
@@ -306,21 +306,21 @@ program itself.
   xleftmargin=3ex
 ]
 configuration
-    <machines>                                @\label{lstline:machines-cell-start}@
-        <machine multiplicity="*" type="Set"> @\label{lstline:machine-cell-start}@
+    <machines>                                @\label{lstline:kacls-machines-cell-start}@
+        <machine multiplicity="*" type="Set"> @\label{lstline:kacls-machine-cell-start}@
             <id>    .K   </id>
             <state> .K   </state>
             <store> .Map </store>
-        </machine>                           @\label{lstline:machine-cell-end}@
-    </machines>                              @\label{lstline:machines-cell-end}@
+        </machine>                           @\label{lstline:kacls-machine-cell-end}@
+    </machines>                              @\label{lstline:kacls-machines-cell-end}@
     <inputBuffer>  .JSONs </inputBuffer>     @\label{lstline:input-buffer-cell}@
     <outputBuffer> .JSONs </outputBuffer>    @\label{lstline:output-buffer-cell}@
 \end{lstlisting}
 
-Lines \ref{lstline:machines-cell-start}-\ref{lstline:machines-cell-end} declare
+Lines \ref{lstline:kacls-machines-cell-start}-\ref{lstline:kacls-machines-cell-end} declare
 a cell \inlinek{<machines>} that will be used to multiple
 \inlinek{<machine> ... </machine>} cells, declared between Lines
-\ref{lstline:machine-cell-start} and \ref{lstline:machine-cell-end}, where
+\ref{lstline:kacls-machine-cell-start} and \ref{lstline:kacls-machine-cell-end}, where
 each cell stores all data related to a particular state machine. The
 \inlinek{<id>} and \inlinek{<state>} cells store the machine's name and
 active state respectively. The \inlinek{<store>} cell
@@ -350,34 +350,7 @@ events intended for the frontend are consumed from head of the \inlinek{<outputB
 Initialization involves populating the configuration with the
 initial state of each state machine. \autoref{lst:machine-initialization}
 depicts the template of a rule for initializing machine
-any machine \inlinekmath{$\mathcal{M}$}, with initial state \inlinek{u}
-
-%For instance, \autoref{lst:-initialization} shows the rule that initializes
-%the CPR Machine to start in state \inlinek{idle} corresponding to the
-%entry state of the machine in \autoref{fig:cpr-machine}.
-
-\begin{lstlisting}[float=h!,
-  mathescape=true,
-  frame=single,
-  style=ksty,
-  language=k,
-  numbers=left,
-  numbersep=5pt,
-  caption={General Initialization Rule for Machine $\mathcal{M}$},
-  label={lst:machine-initialization},
-  xleftmargin=3ex
-  ]
-<machines>
-  .Bag => ( <machine>                                      @\label{lstline:machine-add-begin}@
-              <id> $\mathcal{M}$ </id>
-              <state> u </state>
-              ...
-            </machine> )                                   @\label{lstline:machine-add-end}@
-  ...
-<machines>
-<inputBuffer> $\mathcal{M}$.init, IN => IN </inputBuffer> @\label{lstline:init-inputBuffer}@
-\end{lstlisting}
-
+any machine \inlinekmath{$\mathcal{M}$}, with initial state \inlinek{u}.
 Instead of starting \inlinek{<machines>} cell that is pre-populated with
 \inlinek{<machine>} cells, we dynamically initialize
 machines once the corresponding frontend component is rendered and ready.
@@ -402,11 +375,38 @@ just the tail, resulting in the removal \inlinekmath{"$\mathcal{M}$.init"}
 event from the \inlinek{<inputBuffer>} cell. For instance, in case of the CPR
 machine, the initialization rule is show in \autoref{lst:cpr-init}.
 
+%For instance, \autoref{lst:-initialization} shows the rule that initializes
+%the CPR Machine to start in state \inlinek{idle} corresponding to the
+%entry state of the machine in \autoref{fig:cpr-machine}.
+
+\begin{lstlisting}[float=t!,
+  mathescape=true,
+  frame=single,
+  style=ksty,
+  language=k,
+  numbers=left,
+  numbersep=5pt,
+  caption={Template For Machine Initialization Rule},
+  label={lst:machine-initialization},
+  xleftmargin=3ex
+  ]
+<machines>
+  .Bag => ( <machine>                                      @\label{lstline:machine-add-begin}@
+              <id> $\mathcal{M}$ </id>
+              <state> u </state>
+              ...
+            </machine> )                                   @\label{lstline:machine-add-end}@
+  ...
+<machines>
+<inputBuffer> $\mathcal{M}$.init, IN => IN </inputBuffer> @\label{lstline:init-inputBuffer}@
+\end{lstlisting}
+
+
 \begin{lstlisting}[float=h!,
   frame=single,
   style=ksty,
   language=k,
-  caption={CPR Initialization \K{} Rule},
+  caption={\inlinek{cprMachine} Initialization Rule},
   label=lst:cpr-init
   ]
 <machines>

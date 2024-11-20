@@ -479,7 +479,7 @@ with Variables Declared}]
 
 \newpage
 
-Note the following conveniences that \K{} offers to make writing rules easier:
+\noindent Note the following conveniences that \K{} offers to make writing rules easier:
 \begin{enumerate}[label=\roman*)]
   \item The use of parenthesis limits scope of the rewrite to the
     list of program identifiers. Localized rewriting reduces redundancy
@@ -492,20 +492,25 @@ Note the following conveniences that \K{} offers to make writing rules easier:
     explicit variable name.
 \end{enumerate}
 Also that the rule has a side condition, expressed through the keyword \inlinek{requires}
-on \autoref{lstline:imp-vardec-requires}. This forces the rule to only apply if
+on \autoref{lstline:imp-vardec-requires} of \autoref{lst:imp-semantics}. This forces the rule to only apply if
 the program identifier has not already been declared. For instance,
 a program that starts with \inlineimp{int x, x;} will not execute to completion,
 as the side condition prohibits already declared variables from being
 re-declared.
-Next, the rule on \autoref{lstline:imp-emptydec-rule} will eliminate
-\inlinek{int .Ids;}, leaving the following configuration after the rewrite:
-\begin{lstlisting}[language=k,style=ksty]
+Next, the rule on \autoref{lstline:imp-emptydec-rule} of
+\autoref{lst:imp-semantics} will eliminate
+\inlinek{int .Ids;}, leaving the configuration shown in
+\autoref{lst:id-elim-configuration} after the rewrite.
+\begin{lstlisting}[float=h!,language=k,style=ksty,caption={Configuration Post
+\inlinek{.Ids} Elimination},label=lst:id-elim-configuration]
 <T>
   <k> x = 2 + 3; </k>
   <state> x |-> 0 </state>
 </T>
 \end{lstlisting}
-Also note that the rule does not explicitly mention the cell on which
+
+Also note that the rule on \autoref{lstline:imp-emptydec-rule}
+does not explicitly mention the cell on which
 it is intended to operate. In $\K$, a rule that doesn't
 mention any cells is implicitly assumed to apply on top of the
 \inlinek{<k>} cell. As the \inlinek{<k>} cell typically
@@ -534,7 +539,7 @@ argument for evaluation. This results in the configuration show in
 \autoref{lst:heated-rule-configuration}.
 
 \begin{lstlisting}[float=h!,language=k,style=ksty,frame=single,label=lst:heated-rule-configuration,caption={Post
-Heating Configuration}]
+\emph{Heating} Configuration}]
 <T>
   <k> 2 + 3 ~> x = []; </k>
   <state> x |-> 0 </state>
@@ -556,7 +561,7 @@ or plugged-back into its corresponding hole, resulting in the configuration
 shown in \autoref{lst:cooled-rule-configuration}.
 
 \begin{lstlisting}[float=h!,language=k,style=ksty,frame=single,label=lst:cooled-rule-configuration,caption={Post
-Cooling Configuration}]
+\emph{Cooling} Configuration}]
 <T>
   <k> x = 5; </k>
   <state> x |-> 0 </state>
@@ -748,16 +753,18 @@ where in $\mu X \ld \varphi$ it's required that $\varphi$ has no negative occurr
 $\varphi_1\varphi_2$ is an \emph{application} pattern representing application
   of $\varphi_1$ to $\varphi_2$. All other constructs can be derived as follows:
 \begin{align}
-  \neg \varphi &\equiv \varphi \imp \bot \\
-  \top &\equiv \neg \varphi  \\
-  \phi_1 \wedge \phi_2 & \equiv \neg \left(\phi_1 \vee \phi_2 \right) \\
-  \phi_1 \vee \phi_2 &\equiv \neg\phi_1 \imp \phi_2 \\
-  \forall x \ld \varphi &\equiv \neg\exists x \ld \neg\varphi \\
-  \nu X\ld\varphi &\equiv \neg \mu X \ld\neg\varphi\left[\neg X / X\right]
+  \begin{split}
+    \neg \varphi &\equiv \varphi \imp \bot \\
+    \top &\equiv \neg \varphi  \\
+    \phi_1 \wedge \phi_2 & \equiv \neg \left(\phi_1 \vee \phi_2 \right) \\
+    \phi_1 \vee \phi_2 &\equiv \neg\phi_1 \imp \phi_2 \\
+    \forall x \ld \varphi &\equiv \neg\exists x \ld \neg\varphi \\
+    \nu X\ld\varphi &\equiv \neg \mu X \ld\neg\varphi\left[\neg X / X\right]
+  \end{split}
 \end{align}
 
-$\varphi\left[\psi / x\right] (\text{respectively} \varphi\left[\psi / X\right])$ is the result of
-substituting $\psi$ for $x (\text{respectively} X)$, where bound variables in
+$\varphi\left[\psi / x\right]$ (respectively $\varphi\left[\psi / X\right]$) is the result of
+substituting $\psi$ for $x$ (respectively $X$), where bound variables in
 $\psi$ are renamed to avoid capture.
 
 \subsubsection{Semantics}
@@ -775,30 +782,25 @@ Given a model $\mathbb{M} = \left(M,\_.\_,\left\{M_{\sigma}\right\}_{\sigma \in
 \Sigma}\right)$, an $M$-valuation of variables
 $\rho:\left(\SV{}\cup\EV{}\right) \to \left(M \cup \powerset{M}\right)$, define
 interpretation $\interpret{\varphi}{\rho}$ of a pattern $\varphi$ in $M$ as:
-\begin{align}
-  \interpret{x}{\rho} &= \left\{\rho\left(x\right)\right\} \text{ for }x \in \EV \\
-  \interpret{X}{\rho} &= \rho\left(x\right) \text{ for } X \in \SV \\
-  \interpret{\sigma}{\rho} &= M_{\sigma} \text{for} \sigma \in \Sigma \\
-  \interpret{\varphi_1\varphi_2}{\rho} &= \interpret{\varphi}{\rho_1} . \interpret{\varphi}{\rho_2} \\
-  \interpret{\bot}{\rho} &= \emptyset \\
-  \interpret{\varphi_1 \to \varphi_2}{\rho} &= M \setminus
-    \left(\interpret{\varphi_1}{\rho} \setminus \interpret{\varphi_2}{\rho}\right)
-\end{align}
-\begin{equation}
-  \begin{gathered}
-  \interpret{\exists x \ldot \varphi}{\rho} = \bigcup_{a \in
-    M}\interpret{\varphi}{\rho\left[a / x\right]} \text{, where,} \\\rho\left[a / x\right] \text{ and }\rho \text{ agree on all
-    variables except } x\text{ and } \rho\left[a / x\right](x) = a
-  \end{gathered}
-\end{equation}
-\begin{equation}
-  \begin{gathered}
-  \interpret{\mu X \ldot \varphi}{\rho} = \mu\mathcal{F}^{\rho}_{X,\varphi} \text{, where,} \\
-    \mathcal{F}^{\rho}_{X,\varphi} = \interpret{\varphi}{\rho\left[A / X\right]} \text { for every } A \subseteq M \text{, and,} \\
-    \rho\left[A / X\right] \text{ and } \rho \text{ agree on all variables except } X \text{ and } \rho\left[A / X\right](X) = A
-  \end{gathered}
-\end{equation}
-\noindent For proof of existence of a unique least-fixed point for $\mathcal{F}^{\rho}_{X,\varphi}$, referred to as $\mu\mathcal{F}^{\rho}_{X,\varphi}$, see \cite{ChenLICS19}.
+\begin{itemize}
+  \item $\interpret{x}{\rho} = \left\{\rho\left(x\right)\right\}$ for $x \in \EV$.
+  \item $\interpret{X}{\rho} = \rho\left(x\right)$ for $X \in \SV$.
+  \item $\interpret{\sigma}{\rho} = M_{\sigma}$ for $\sigma \in \Sigma$.
+  \item $\interpret{\varphi_1\varphi_2}{\rho} = \interpret{\varphi}{\rho_1} . \interpret{\varphi}{\rho_2}$
+  \item $\interpret{\bot}{\rho} = \emptyset$
+  \item $\interpret{\varphi_1 \to \varphi_2}{\rho} = M \setminus
+    \left(\interpret{\varphi_1}{\rho} \setminus \interpret{\varphi_2}{\rho}\right)$.
+  \item $\interpret{\exists x \ldot \varphi}{\rho} = \bigcup_{a \in
+    M}\interpret{\varphi}{\rho\left[a / x\right]}$, where $\rho\left[a /
+    x\right]$ and $\rho$ agree on all variables except $x$, and $\rho\left[a /
+    x\right](x) = a$.
+  \item $\interpret{\mu X \ldot \varphi}{\rho} =
+    \mu\mathcal{F}^{\rho}_{X,\varphi}$ where $\mathcal{F}^{\rho}_{X,\varphi} =
+    \interpret{\varphi}{\rho\left[A / X\right]}$ for every $A \subseteq M$,
+    where $\rho\left[A / X\right]$ and $\rho$ agree on all variables except $X$
+    and $\rho\left[A / X\right](X) = A$.  For proof of existence of a unique least-fixed point
+    for $\mathcal{F}^{\rho}_{X,\varphi}$, referred to as $\mu\mathcal{F}^{\rho}_{X,\varphi}$, see \cite{ChenLICS19}.
+\end{itemize}
 
 A pattern $\varphi$ is said to hold in model $\mathbb{M}$, denoted $\mathbb{M} \vDash \varphi$ iff
 $\interpret{\varphi}{\rho} = M$ for any $\mathbb{M}$ evaluation $\rho$. Similarly,

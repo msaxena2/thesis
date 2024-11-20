@@ -156,11 +156,8 @@ Consider for example, the following SOS rules for assignment:
 \begin{equation}
   \begin{gathered}
   \infer[AssnCong]
-{x := e, \mu\; \leadsto\; x := e^{\prime}, \mu^{\prime}}{e, \mu\; \leadsto\; e^{\prime}\mu^{\prime}} \\
-  \end{gathered}
-\end{equation}
-\begin{equation}
-  \begin{gathered}
+{x := e, \mu\; \leadsto\; x := e^{\prime}, \mu^{\prime}}{e, \mu\; \leadsto\; e^{\prime}\mu^{\prime}}
+\quad\quad
   \infer[AssnEval]
 {x := v,\mu\; \leadsto\; \left(\text{skip}, \mu\left[x \rightarrow v\right]\right)}{}
   \end{gathered}
@@ -172,12 +169,11 @@ $\left\langle \left(t, \mu\right) \;\mid\; K\right\rangle$ where $K$ is the
 (\Box_{t}, \Box_{\mu})]$ indicating holes for an evaluated value and
 environment. Thus, the AM rules are:
 \begin{equation}
+  \begin{gathered}
 \left\langle \left( x := e, \mu \right)\;\mid\; k \right\rangle \rightarrow
-\left\langle \left( e, \mu \right)\;\mid\; k \circ \left[x := \left(\Box_t,\Box_{\mu}\right) \right]\right\rangle
-\end{equation}
-\begin{equation}
-\left\langle \left( v, \mu \right)\;\mid\; k \right\rangle \rightarrow
-\left\langle \left(\text{skip}, \mu\left[x \rightarrow v \right] \right) \;\mid\; k \right\rangle
+\left\langle \left( e, \mu \right)\;\mid\; k \circ \left[x := \left(\Box_t,\Box_{\mu}\right) \right]\right\rangle \\
+\left\langle \left( v, \mu \right)\;\mid\; k \right\rangle \rightarrow \left\langle \left(\text{skip}, \mu\left[x \rightarrow v \right] \right) \;\mid\; k \right\rangle
+  \end{gathered}
 \end{equation}
 
 Next, as it's possible for the AM to have an infinitely-many states, an

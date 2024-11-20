@@ -211,8 +211,8 @@ the semantics-first approach discussed in \autoref{sec:semantics-first}.
 Thus, it has:
 \begin{itemize}
   \item A formally defined, unambiguous semantics.
-  \item A correct-by-construction interpreter derived from the semantics.
-    As discussed in \autoref{chapter:evaluating-k},
+  \item A correct-by-construction interpreter derived from the semantics,
+    as discussed in \autoref{chapter:evaluating-k}.
   \item A comprehensive suite of formal program analysis tools.
   \item The ability to quickly adapt physician feedback, as only the semantics
     need to be changed an all tools evolve automatically.
@@ -445,8 +445,8 @@ syntax Stmt ::=
     | StateDecl
     > "machine" Id Block                        [macro]
     | "machine" Id "receives" Ids Block
-    | "interface" Id Block                      [macro]    @\label{lstline:interface-declaration}@
-    | "interface" Id "receives" Ids Block                  @\label{lstline:interface-declaration}@
+    | "interface" Id Block                      [macro]    @\label{lstline:interface-declaration-begin}@
+    | "interface" Id "receives" Ids Block                  @\label{lstline:interface-declaration-end}@
     | "init" "machine" Id Block                 [macro]
     | "init" "machine" Id "receives" Ids Block
     | "yield" ";"
@@ -556,12 +556,12 @@ has several constructs not commonly found in other languages, such as
 in upcoming sections.
 
 \begin{lstlisting}[
-  float=t!,
+  float=b!,
   frame=single,
   style=ksty,
   language=k,
   numbers=left,
-  basicstyle=\ttfamily\small,
+  basicstyle=\ttfamily\footnotesize,
   numberstyle=\tiny,
   numbersep=5pt,
   xleftmargin=3ex,
@@ -580,8 +580,8 @@ configuration
       <inBuffer> .List </inBuffer>                             @\label{lstline:in-buffer-cell}@
     </instance>                                                @\label{lstline:instance-cell-end}@
   </instances>                                                 @\label{lstline:instances-cell-end}@
-  <machines>                                                   @\label{lstline:machine-cell-begin}@
-    <machine multiplicity="*" type="Map">                      @\label{lstline:machine-cell-begin}@
+  <machines>                                                   @\label{lstline:medik-machines-cell-begin}@
+    <machine multiplicity="*" type="Map">                      @\label{lstline:medik-machine-cell-begin}@
       <machineName> . </machineName>                           @\label{lstline:machine-name-cell}@
       <declarationCode> nothing; </declarationCode>
       <isInitMachine> false </isInitMachine>
@@ -597,9 +597,10 @@ configuration
               <handlerCode> nothing; </handlerCode>
             </eventHandler>                                    @\label{lstline:event-handler-end}@
           </eventHandlers>
-        </state>                                               @\label{lstline:machine-cell-end}@
+        </state>
       </states>                                                @\label{lstline:states-cell-end}@
-  </machines>
+    </machine>                                                 @\label{lstline:medik-machine-cell-end}@
+  </machines>                                                  @\label{lstline:medik-machines-cell-end}@
   <interfaces>                                                 @\label{lstline:interfaces-cell-begin}@
     <interface multiplicity="*" type="Map">                    @\label{lstline:interface-cell-begin}@
       <interfaceName> . </interfaceName>
@@ -613,7 +614,7 @@ configuration
   <shouldAdvanceEpoch> false </shouldAdvanceEpoch>             @\label{lstline:scheduling-cell-end}@
 \end{lstlisting}
 
-As reflected in \autoref{lst:medik-stmt-syntax} \MediK{} support many statements
+As reflected in \autoref{lst:medik-stmt-syntax}, \MediK{} support many statements
 commonly found in conventional programming languages, such as
 variable assignment (\autoref{lstline:assignment-stmt}), \inlinemedik{if-else}
 (Lines \ref{lstline:if-stmt} and \ref{lstline:if-else-stmt}) and \inlinemedik{while}
@@ -671,13 +672,13 @@ each with a similar composition:
 \begin{enumerate}[label=(\alph*)]
   \item An \inlinek{<instances>} cell (Lines \ref{lstline:instances-cell-begin}-\ref{lstline:instances-cell-end})
     that encapsulates \inlinek{<instance>} cells.
-  \item A \inlinek{<machines>} cell (Lines \ref{lstline:machine-cell-begin}-\ref{lstline:machine-cell-end})
+  \item A \inlinek{<machines>} cell (Lines \ref{lstline:medik-machines-cell-begin}-\ref{lstline:medik-machines-cell-end})
     that holds \inlinek{<machine>} cells.
   \item An \inlinek{<instances>} cell (Lines \ref{lstline:interfaces-cell-begin}-\ref{lstline:interfaces-cell-end})
     that holds \inlinek{<interface>} cells.
 \end{enumerate}
 The sub-cells under each of the aforementioned cells the attribute \inlinek{multiplicity=*} (Lines
-\ref{lstline:instance-cell-begin}, \ref{lstline:machine-cell-begin}, \ref{lstline:interface-cell-begin}),
+\ref{lstline:instance-cell-begin}, \ref{lstline:medik-machine-cell-begin}, \ref{lstline:interface-cell-begin}),
 denoting that zero-or-more copies of the cell may exist in the configuration. We briefly describe
 the purpose of each such sub-cell.
 
@@ -694,7 +695,7 @@ At runtime, if multiple rewrite rules can apply on the configuration, $\K$ non-d
 a rule and applies it, allowing one to specify concurrency through interleavings. However,
 for $\MediK{}$, we utilize a structured scheduling algorithm, which will be discussed in upcoming sections.
 
-The \inlinek{<machine>} cell (Lines \ref{lstline:machine-cell-begin}-\ref{lstline:machine-cell-end})
+The \inlinek{<machine>} cell (Lines \ref{lstline:medik-machine-cell-begin}-\ref{lstline:medik-machine-cell-end})
 holds information relevant to
 a machine definition, such as the name in the \inlinek{<machineName>}
 cell (\autoref{lstline:machine-name-cell}) and states in the \inlinek{<states>} cell
@@ -758,8 +759,9 @@ matches $\phi$ with substitution $\theta$, then it is rewritten to
 $\psi\theta$. We say pattern $\phi$ matches configuration $C$ iff
 there exists a substitution $\theta$ s.t. $C = \phi\theta$.
 For example, consider the rule in \autoref{lst:variable-assignment} for updating the value of a local program variable.
+
 \begin{lstlisting}[
-  float=h
+  float=h!
   ,style=ksty
   ,language=k
   ,label={lst:variable-assignment}
@@ -769,7 +771,8 @@ rule <k> I:Id = V:Val => V ... </k>
      <env> (I |-> Loc) ... </env>
      <store> Store => Store[Loc <- V] </store>
 \end{lstlisting}
-In the rule, \inlinek{I}, \inlinek{V}, \inlinek{Loc}, and \inlinek{Store}
+
+\noindent In the rule, \inlinek{I}, \inlinek{V}, \inlinek{Loc}, and \inlinek{Store}
 are $\K$-variables. Note the distinction between program variables and $\K$-variables:
 while program variables are simply identifiers, $\K$-variables have logical meaning.
 The \inlinek{...} is used to denote parts of the configuration
@@ -787,8 +790,32 @@ and pointer $pt$ updated to point to $2$ in $\rho$.
 Execution is a sequence of rule applications that continues until
 no rule can match the current configuration.
 
+Next, we explain several features of \MediK{} relevant to
+defining \BPGs{} using their corresponding $\K$-rules. Note that
+we only discuss rules related to idiosyncrasies of \MediK{}. Other
+rules, that implement statement that resemble other definitions
+are omitted for brevity. For instance, the rules for
+Arithmetic Expressions and boolean expressions, that
+resemble counterparts in other languages are ignored.
+
+\subsection{Instance Creation}
+
+In \MediK{}, machine definitions are analogous to OOP classes,
+and instances created using keyword \inlinemedik{new} behave
+as objects. The rule in \autoref{lst:new-rule} depicts
+the semantics of the \inlinemedik{new} operator. The
+rule will match any \inlinek{<k>} cell that has \inlinek{new}
+at the top of the cell and rewrite it to a temporary \inlinek{wait} construct (\autoref{lstline:source-k-cell}).
+Note that the same \K{} variable, \inlinek{MName}, is used at the following places in the rule's \LHS{}:
+\begin{itemize}
+  \item On \autoref{lstline:source-k-cell} to match against the name of the machine whose instance is being created.
+  \item On \autoref{lstline:machine-name} to identify the \inlinek{<machine>}
+    (Lines \ref{lstline:instance-creation-machine-cell-begin}-\ref{lstline:instance-creation-machine-cell-end})
+    with the same name as the one being initialized.
+\end{itemize}
+
 \begin{lstlisting}[
-  float=b!,
+  float=h!,
   frame=single,
   style=ksty,
   language=k,
@@ -810,40 +837,17 @@ rule <id> SourceId </id>
                </instance> )                                           @\label{lstline:new-instance-end}@
      <nextLoc> Loc => Loc +Int 1 </nextLoc>
      <store> ( .Map => (Loc |-> instance(Loc))) ... </store>
-     <machine>                                                         @\label{lstline:machine-cell-begin}@
+     <machine>                                                         @\label{lstline:instance-creation-machine-cell-begin}@
       <machineName> MName </machineName>                               @\label{lstline:machine-name}@
       <declarationCode> MachineDecls </declarationCode>                @\label{lstline:declaration-code}@
       <state>                                                          @\label{lstline:init-state-begin}@
         <stateName> InitState </stateName>
         <isInitState> true </isInitState> ...
       </state> ...                                                     @\label{lstline:init-state-end}@
-     </machine>                                                        @\label{lstline:machine-cell-end}@
+     </machine>                                                        @\label{lstline:instance-creation-machine-cell-end}@
      <activeInstances> ... (.Set => SetItem(Loc)) </activeInstances>   @\label{lstline:active-instances-update}@
 \end{lstlisting}
 
-
-Next, we explain several features of \MediK{} relevant to
-defining \BPGs{} using their corresponding $\K$-rules. Note that
-we only discuss rules related to idiosyncrasies of \MediK{}. Other
-rules, that implement statement that resemble other definitions
-are omitted for brevity. For instance, the rules for
-Arithmetic Expressions and boolean expressions, that
-resemble counterparts in other languages are ignored.
-
-\subsection{Instance Creation}
-\MediK{}, machine definitions are analogous to OOP classes,
-and instances created using keyword \inlinemedik{new} behave
-as objects. The rule in \autoref{lst:new-rule} depicts
-the semantics of the \inlinemedik{new} operator. The
-rule will match any \inlinek{<k>} cell that has \inlinek{new}
-at the top of the cell and rewrite it to a temporary \inlinek{wait} construct (\autoref{lstline:source-k-cell}).
-Note that the same \K{} variable, \inlinek{MName}, is used at the following places in the rule's \LHS{}:
-\begin{itemize}
-  \item On \autoref{lstline:source-k-cell} to match against the name of the machine whose instance is being created.
-  \item On \autoref{lstline:machine-name} to identify the \inlinek{<machine>}
-    (Lines \ref{lstline:machine-cell-begin}-\ref{lstline:machine-cell-end})
-    with the same name as the one being initialized.
-\end{itemize}
 By matching a \inlinek{<machineName>} cell that has the same name as the
 one being using \inlinek{new} on \autoref{lstline:source-k-cell}, appropriate
 instance variable and the state marked with the \inlinek{init} keyword
@@ -859,6 +863,7 @@ Finally, a new \inlinek{<instance>} cell can be added to the configuration (Line
     and enter the initial state, obtained by matching on appropriate parts of the \inlinek{<machine>} cell
     as described earlier.
 \end{itemize}
+
 Note that when \inlinek{new} is executed, control is transferred from the
 caller, i.e., the original instance, to the callee, i.e., the created instance.
 Once the entry block of the callee completes execution, control is transferred
@@ -890,7 +895,7 @@ a reference to the receiver machine. This is captured
 by the rule in \autoref{lst:send-stmt}.
 
 \begin{lstlisting}[
-  float=ht
+  float=h!
   ,style=ksty
   ,language=k
   ,numbers=left
@@ -949,8 +954,8 @@ and use \inlinek{send} to add the \inlinemedik{EventName} to each machine's
 \inlinemedik{<inputBuffer>} (\autoref{lstline:broadcast-helper-end}).
 
 \begin{lstlisting}[
-  float=ht
-  ,frame=ht
+  float=h
+  ,frame=single
   ,style=ksty
   ,language=k
   ,numbers=left
@@ -980,8 +985,18 @@ specific details of external agents it interacts with, and for
 machines to utilize a \emph{uniform} communication mechanism
 that serves both external and internal communication.
 
+We achieve this by treating all external agents as state machines
+with transition systems defined outside the \MediK{} program, like other languages, such as Object-Oriented Maude, \cite{OOPMaudeUrl}.
+These external agents are modeled in \MediK{} as \inlinemedik{interface}s.
+We define an interface as a state machine that has its
+transition system defined externally.
+In case of \CDSSs{}, it is common to utilize external sensors to obtain
+various patient parameters. \autoref{lst:external-interaction} shows
+such as example, where data is obtained from an external Heart Rate sensor.
+
 \begin{lstlisting}[
-  frame=hb
+  float=t!
+  ,frame=single
   ,style=mediksty
   ,language=medik
   ,numbers=left
@@ -999,15 +1014,6 @@ machine TreatmentMachine { ...
   var heartRate = obtainFrom(hrSensor, "heartRate");         @\label{lstline:obtain-from-sensor}@
 }
 \end{lstlisting}
-
-We achieve this by treating all external agents as state machines
-with transition systems defined outside the \MediK{} program, like other languages, such as Object-Oriented Maude, \cite{OOPMaudeUrl}.
-These external agents are modeled in \MediK{} as \inlinemedik{interface}s.
-We define an interface as a state machine that has its
-transition system defined externally.
-In case of \CDSSs{}, it is common to utilize external sensors to obtain
-various patient parameters. \autoref{lst:external-interaction} shows
-such as example, where data is obtained from an external Heart Rate sensor.
 
 Since we don't have the transition system for
 the heart rate sensor, we declare it as an interface (\autoref{lstline:hr-interface-decl}).
@@ -1180,9 +1186,7 @@ We show this execution strategy in \autoref{alg:scheduling-semantics}.
   \caption{\MediK{} Scheduling Semantics}\label{alg:scheduling-semantics}
 \end{algorithm}
 
-
-
-Recall from Section \ref{sec:syntax} that a \MediK{} program consists of a set
+Recall from \autoref{sec:syntax} that a \MediK{} program consists of a set
 of machines, of which one, prefixed with the keyword \inlinemedik{init}, is the \emph{initial} machine.
 Each machine has one state prefixed with \inlinemedik{init}, referred to as the
 \emph{initial} state.
@@ -1303,7 +1307,9 @@ before evaluating their effectiveness. This waiting behavior in
 \MediK{} is implemented using a \inlinemedik{sleep(duration)} statement.
 Formalizing the execution semantics of such a statement in $\K{}$ presents
 a challenge as $\K{}$ does not provide builtin support for timers. Therefore,
-in \MediK{}, \inlinemedik{sleep(duration)} is described by the rule in \autoref{lst:sleep-rule}:
+in \MediK{}, \inlinemedik{sleep(duration)} is described by the rule in
+\autoref{lst:sleep-rule}.
+
 \begin{lstlisting}[
   float=ht
   ,frame=single
@@ -1327,7 +1333,7 @@ rule <k> sleep(Duration:Int) ;                    @\label{lstline:sleep-stmt}@
      <tidCount> TId => TId +Int 1 </tidCount>     @\label{lstline:tid-increment}
 \end{lstlisting}
 
-\inlinemedik{sleep} results in a JSON message being sent to a remote
+The \inlinemedik{sleep} statement results in a JSON message being sent to a remote
 endpoint (Lines \ref{lstline:json-start}-\ref{lstline:json-end})
 specified when the \MediK{} process is launched, mimicing
 sending an event to an external \emph{timer} machine, with the desired duration
@@ -1382,7 +1388,7 @@ An \inlinemedik{obtainFrom} statement also results in a context switch as
 shown in \autoref{lst:obtain-from-request}.
 Just as in the case of sleep, a JSON message is sent to the remote
 endpoint with the \emph{name} of the parameter being requested and a unique transaction
-(Lines \ref{lstline:obtain-from-begin}-ref{lstline:obtain-from-end}),
+(Lines \ref{lstline:obtain-from-begin}-\ref{lstline:obtain-from-end}),
 while the machine instance releases the execution lock (\autoref{lstline:obtain-from-release}),
 and waits for a response, as shown in \autoref{lst:obtain-from-request}.
 
@@ -1699,8 +1705,9 @@ in processes. Consider, for instance, on a positive sepsis diagnosis, an
 \HCP{} may choose to either administer fluids first, followed by antibiotics, or
 vice-versa. \MediK{} supports such non-determinism using \inlinemedik{either-or}
 statements as shown in \autoref{lst:non-determinism}.
+
 \begin{lstlisting}[
-  float=b!
+  float=h!
   ,frame=single
   ,language=medik
   ,style=mediksty
@@ -1726,8 +1733,9 @@ For instance, when modeling entering a parameter such as the Heart Rate,
 we need to use an abstract value, representing all possible concrete values.
 To this end, we allow using an abstract value \inlinemedik{#nondet} in ghost machines,
 that have semantics shown in \autoref{lst:abstract-semantics}.
+
 \begin{lstlisting}[
-  float=t!
+  float=h!
   ,style=ksty
   ,frame=single
   ,language=k
